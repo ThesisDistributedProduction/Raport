@@ -1,8 +1,26 @@
 \chapter{Introduction}
 
 \section{Thesis motivation}
+Today windmills in a windmill farm are connected to a single server that aggregates data, perform calculations, store data and handle communication with the outside world. 
+These servers do not scale well with the size of the windmill farm, and they are a single point of failure. 
+Therefor Siemens wishes to remove the servers by utilizing free capacity of the computers already residing in every windmill. 
+Currently there is some limited redundancy in data and availability but this could be greatly improved by distributing data and communication to the windmills. 
+Ease of access must be maintained even though computation and data is distributed. 
+This means routing traffic to a windmill with free capacity through. 
+This means routing traffic to a windmill with free capacity through  a single interface.
 
 \section{Thesis aim}
+We aim to investigate the possibility of making a framework and associated tools for developing a distributed system with  and associated tools for developing a distributed system with distributed computing. 
+This framework must be able to handle computation distributed on several nodes, communication between those nodes and distribution of data. 
+The communication can be built on top of existing standards as for instance DDS. Data distribution can be built using existing systems like MongoDB. 
+Distribution of computation tasks is the main research area and will be the focus of this thesis.
+
+In order to achieve distributed computation on several nodes the framework must be able to perform load balancing and control the distribution of tasks on the nodes in the system. 
+Furthermore the framework must have a single interface for control of, and interaction with, all the nodes.  
+The goal is to create a test system, that can distribute and perform tasks but also to be able to plan ahead of time and know if there is available computation time.
+
+The case from Siemens Windpower is an example of a production environment where the framework could be utilized. 
+Our goal is not to make a framework that is only  specific for this case but to make a general framework for this and similar cases.
 
 \section{Approach}
 
