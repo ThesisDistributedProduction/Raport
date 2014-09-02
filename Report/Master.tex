@@ -1,0 +1,206 @@
+\documentclass[a4paper,11pt]{memoir}
+%\documentclass[b5paper,10pt,twoside]{memoir}
+% Ved a4 format skal nedenstående nok justeres en del
+\setlrmarginsandblock{3.5cm}{2.5cm}{*}
+\setulmarginsandblock{3cm}{*}{1.2}
+
+\usepackage[retainorgcmds]{IEEEtrantools}
+\usepackage{graphicx}
+\usepackage{pstricks,pst-node,pst-text,pst-3d}
+\usepackage{marginnote}
+\usepackage{array,booktabs,longtable}
+\usepackage{url}
+\usepackage{color}
+\definecolor{webblue}{rgb}{0.0,0.05,0.45}
+\definecolor{MyDarkBlue}{rgb}{0,0.08,0.45}
+\definecolor{webred}{rgb}{0.75,0,0}
+
+\usepackage[T1]{fontenc}
+\checkandfixthelayout
+% opsætning af pagestyles
+\makepagestyle{book} % laver en ny tom pagestyle
+\makeevenhead{book}{}{\small\sffamily\leftmark}{}
+\makeoddhead{book}{}{\small\sffamily\rightmark}{}
+\makeevenfoot{book}{\small\sffamily\thepage}{}{}
+\makeoddfoot{book}{}{}{\small\sffamily\thepage}
+\makeatletter
+
+\makepsmarks{book}{%
+\renewcommand\chaptermark[1]{%
+\markboth{%
+\ifnum \value{secnumdepth} > 1
+\if@mainmatter % indenfor frontmatter er der intet kapitel nummer
+\@chapapp\ \thechapter. \ % \@chapapp er lidt dum, se nedenfor
+\fi
+\fi
+##1}{}}%
+\renewcommand\tocmark{\markboth{\contentsname}{\contentsname}}%
+\renewcommand\lofmark{\markboth{\listfigurename}{\listfigurename}}%
+\renewcommand\lotmark{\markboth{\listtablename}{\listtablename}}%
+\renewcommand\bibmark{\markboth{\bibname}{\bibname}}%
+\renewcommand\indexmark{\markboth{\indexname}{\indexname}}%
+\renewcommand\sectionmark[1]{\markright{##1}}%
+\renewcommand\subsectionmark[1]{\markright{##1}}%
+\renewcommand\subsubsectionmark[1]{\markright{##1}}%
+}
+\makeatother
+
+\pagestyle{book}
+% laver om på plain stilen
+\copypagestyle{plain}{book}
+\makeevenhead{plain}{}{}{}
+\makeoddhead{plain}{}{}{}
+
+%**************** Headlines ****************************************************
+% konfiguration af kapitel titel font samt fonte til sections
+\renewcommand\chapnamefont{\Huge\bfseries\sffamily}
+\renewcommand\chapnumfont{\chapnamefont}
+\renewcommand\chaptitlefont{\color{webred}\Huge\usefont{OT1}{phv}{bc}{n}\selectfont\raggedright}
+\setsubsecheadstyle{\color{MyDarkBlue}\large\bfseries\sffamily\raggedright}
+\setsubsubsecheadstyle{\color{webred}\Huge\usefont{OT1}{phv}{bc}{n}\selectfont\raggedright}
+% Rule under headline.. (Underline section headlines med de 4 linier herunder) 
+%\newcommand{\ruledsec}[1]{%
+%\Large\usefont{OT1}{phv}{b}{n}\selectfont\raggedright #1 %\color{webred}\rule[15pt]{\textwidth}{1.0pt}} 
+%\setsecheadstyle{\ruledsec} %ud-kommenter linie herunder
+\setsecheadstyle{\Large\usefont{OT1}{phv}{b}{n}\selectfont\raggedright}
+
+\usepackage{titlesec}
+\usepackage{titletoc}
+% Afstande mellem overskrifter og tekst
+\titleformat{\subsection}
+{\color{MyDarkBlue}\usefont{OT1}{phv}{b}{n}\selectfont}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+{\color{MyDarkBlue}\usefont{OT1}{phv}{b}{n}\selectfont}{\thesubsubsection}{1em}{}
+\titlespacing{\subsection}{15pt}{15pt}{10pt}
+\titlespacing{\subsubsection}{15pt}{15pt}{10pt}
+\titlespacing{\section}{15pt}{35pt}{10pt}
+%***********  section number in margin ****************************************
+\makeatletter
+\def\@seccntformat#1{\@ifundefined{#1@cntformat}%
+{\csname the#1\endcsname\quad}% default
+{\csname #1@cntformat\endcsname}% individual control
+}
+\def\section@cntformat{\color{webred}\protect\makebox[0pt][r]{\thesection.\quad}}
+\makeatother
+
+
+% søg for at hvis en \section el.lign. flyttes til en ny side
+% da skal siden før ikke strækkes
+\raggedbottomsectiontrue
+% justering af afsnitsnummerering og ToC dybde
+\setsecnumdepth{subsubsection} % til og med
+\maxsecnumdepth{subsubsection} % underligt koncept
+\settocdepth{subsection} %til og med
+% nogle pakker man ofte anvender
+\usepackage[ansinew]{inputenc} % eller ansinew hvis Windows
+%*******************************************************************************
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{fix-cm,fixltx2e}
+\usepackage{soul}
+
+\DeclareRobustCommand{\SetFourierSpace}{%
+\fontdimen2\font=1.13\fontdimen2\font}
+\sodef\an{}{0.13em}{0em}{0em} \sodef\ann{}{0.13em}{0.5em}{0em}
+%******************************************************************************
+\let\footruleskip\relax % for compatibility of memoir and fancyhdr
+%% Use fancy chapter headers, with Jos Dingjan's modifications,
+%% plus my own tweaks. This style is not part of teTeX,
+%% so we are using a local (and renamed) copy.
+\usepackage[Lenny]{fncychapleo}
+\usepackage{fancyhdr}
+%*******************************************************************************
+
+\makeatletter
+\newcommand\figcaption{\def\@captype{figure}\caption}
+\newcommand\tabcaption{\def\@captype{table}\caption}
+\makeatother
+
+\newenvironment{narrow}[2]{%
+\begin{list}{}{%
+\setlength{\topsep}{0pt}%
+\setlength{\leftmargin}{#1}%
+\setlength{\rightmargin}{#2}%
+\setlength{\listparindent}{\parindent}%
+\setlength{\itemindent}{\parindent}%
+\setlength{\parsep}{\parskip}}%
+\item[]}{\end{list}}
+
+\newlength{\marginwidth}
+\setlength{\marginwidth}{2.0\oddsidemargin} %bredden af billeder ud i margin'en
+
+% Picture Handling
+\usepackage{subfig}
+\usepackage[leftcaption]{sidecap}
+\usepackage{varioref} %For smarte referencer med \vref istedet for \ref
+\usepackage{calc}% auto udregn
+
+\graphicspath{{figures/}}
+\sidecaptionvpos{figure}{t} %sidecaption aligned med toppen af billede
+\usepackage{caption}
+\DeclareCaptionFont{red}{\color{webred}}
+\captionsetup{singlelinecheck=false,font=footnotesize,labelfont={bf,red},format=hang}
+
+\DeclareCaptionFormat{llap}{\llap{#1#2}#3\par}
+\strictpagechecktrue
+\makeatletter
+\DeclareRobustCommand*{\bfseries}{%
+  \not@math@alphabet\bfseries\mathbf
+  \fontseries\bfdefault\selectfont
+  \boldmath
+}
+\makeatother
+
+% andre pakker og konfigurationer
+\usepackage{makeidx}
+\usepackage{mflogo} 
+\makeindex % hvis man anvender sådan en
+
+
+\renewcommand*{\cftchaptername}{Chapter\space}
+\renewcommand*{\cftfigurename}{Fig.\space}
+\renewcommand{\contentsname}{Table of Contents}
+\renewcommand*\abstractname{Summary}
+
+%\includeonly{introduction} %Hvis man ikke vil kompilere det hele hver gang
+\begin{document}
+\include{frontpage}
+\frontmatter
+\include{abstract}
+\cleartorecto
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+\include{introduction}
+\include{dedication}
+\include{Nomenclature}
+
+\mainmatter
+\include{chapter1}
+\include{chapter2}
+\include{Conclusion}
+\appendix
+\addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
+\appendixpage
+\include{appendix1}
+\include{appendix2}
+\include{appendix3}
+
+\backmatter
+\renewcommand{\bibsection}{%
+\chapter{\bibname}
+\prebibhook}
+\bibliographystyle{plain} % eller en anden stil
+%\bibliographystyle{IEEEbib}
+\bibliography{my-bibliography-file}
+%\bibliography{minbib}
+% print indeks hvis det er noget man anvender
+\printindex
+\end{document}
+
+
+
