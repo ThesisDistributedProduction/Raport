@@ -192,29 +192,18 @@
 	"buffers":
 	[
 		{
+			"file": "Report/my-bibliography-file.bib",
+			"settings":
+			{
+				"buffer_size": 14697,
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "Report/Master.tex",
 			"settings":
 			{
-				"buffer_size": 6905,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Report/MasterFrontpage.tex",
-			"settings":
-			{
-				"buffer_size": 6138,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "\\chapter{Siemens case}\n\nSiemens Wind power is among the leading windmill manufacturers in the world.\nThey primarily do mill farms as parks, although the system handles single mills as well as entire parks.\nSimens has a need for their system to scale better and provide better redundancy.\nIn the current system \n\n\\begin{figure}\n	\\centering\n	\\includegraphics[width=0.8\\textwidth,natwidth=610,natheight=642]{SystemOverviews.png} \n	\\captionsetup{format=plain,font=footnotesize,labelfont={bf,red},labelsep=quad,singlelinecheck=no}\n	\\caption[Illustrates the current Siemens windmill farm setup]{\n		\\label{fig:currentSiemensSetup} \n		\\footnotesize{%\n			This figure illustrates the current Siemens windmill farm setup.\n		}\n	}\n\\end{figure}\n",
-			"file": "Report/SiemensCase.tex",
-			"file_size": 660,
-			"file_write_time": 130542165148533037,
-			"settings":
-			{
-				"buffer_size": 731,
+				"buffer_size": 6926,
 				"line_ending": "Windows"
 			}
 		}
@@ -431,9 +420,11 @@
 	],
 	"file_history":
 	[
+		"/C/Web/ThesisReport/Report/Master.tex",
+		"/C/Web/ThesisReport/Report/MasterFrontpage.tex",
+		"/C/Web/ThesisReport/Report/SiemensCase.tex",
 		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/PDFLatex.sublime-build",
-		"/C/Web/ThesisReport/Report/SiemensCase.tex",
 		"/C/Web/ThesisReport/reportPrj.sublime-project",
 		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/LaTeX Memoir.sublime-settings",
 		"/C/Web/ThesisReport/5tqljbey.rug.txt",
@@ -556,9 +547,7 @@
 		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/services/telephonecompanysService.js",
 		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.UnitTests/Frontend/Unit/Filter.applyLineChange.spec.js",
 		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.UnitTests/Frontend/Unit/Filter.letterLimit.spec.js",
-		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/filters/applyLineChange.js",
-		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.UnitTests/Frontend/.jshintrc",
-		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/.jshintrc"
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/filters/applyLineChange.js"
 	],
 	"find":
 	{
@@ -800,32 +789,34 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "Report/Master.tex",
+					"file": "Report/my-bibliography-file.bib",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6905,
+						"buffer_size": 14697,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6438,
-								6438
+								14119,
+								14119
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/LaTeXing/support/LaTeX.tmLanguage"
+							"syntax": "Packages/LaTeX/Bibtex.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3038.0,
+						"translation.y": 5094.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -833,47 +824,19 @@
 				},
 				{
 					"buffer": 1,
-					"file": "Report/MasterFrontpage.tex",
-					"semi_transient": false,
+					"file": "Report/Master.tex",
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 6138,
+						"buffer_size": 6926,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6119,
-								6106
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/LaTeXing/support/LaTeX.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 2495.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "Report/SiemensCase.tex",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 731,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								206,
-								311
+								861,
+								861
 							]
 						],
 						"settings":
