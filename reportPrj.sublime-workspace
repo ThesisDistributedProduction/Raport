@@ -1,0 +1,983 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"data",
+				"dataMap"
+			],
+			[
+				"r",
+				"rssi"
+			],
+			[
+				"req",
+				"require"
+			],
+			[
+				"mo",
+				"module"
+			],
+			[
+				"or",
+				"ordinal"
+			],
+			[
+				"re",
+				"replace"
+			],
+			[
+				"up",
+				"updateUIFunc"
+			],
+			[
+				"join",
+				"joinedTablesNames"
+			],
+			[
+				"get",
+				"getTotalCss"
+			],
+			[
+				"i",
+				"iElement"
+			],
+			[
+				"p",
+				"promise"
+			],
+			[
+				"mobil",
+				"mobilContractsFiltered"
+			],
+			[
+				"btn-",
+				"btn-danger"
+			],
+			[
+				"btn",
+				"btn-primary"
+			],
+			[
+				"bt",
+				"btn"
+			],
+			[
+				"bu",
+				"button"
+			],
+			[
+				"col",
+				"col-sm-"
+			],
+			[
+				"$sc",
+				"$scope	AngularJS"
+			],
+			[
+				"Lo",
+				"LocalNumber"
+			],
+			[
+				"input-g",
+				"input-group-addon"
+			],
+			[
+				"ng-op",
+				"ng-options	AngularJS"
+			],
+			[
+				"mouse",
+				"ng-mouseenter	AngularJS"
+			],
+			[
+				"ng-in",
+				"ng-init	AngularJS"
+			],
+			[
+				"result",
+				"module._resolveLookupPaths(request, parent);"
+			],
+			[
+				"album",
+				"albumDoc"
+			],
+			[
+				"ng-re",
+				"ng-repeat	AngularJS"
+			],
+			[
+				"ng-cl",
+				"ng-click	AngularJS"
+			],
+			[
+				"pu",
+				"pull-left"
+			],
+			[
+				"de",
+				"divider"
+			],
+			[
+				"motiva",
+				"motivatorHandler"
+			],
+			[
+				"cons",
+				"console.log(message);"
+			],
+			[
+				"nod",
+				"nodejs"
+			],
+			[
+				"cl",
+				"clear"
+			],
+			[
+				"pro",
+				"projectName"
+			],
+			[
+				"pa",
+				"parametersLogin"
+			],
+			[
+				"co",
+				"command"
+			],
+			[
+				"po",
+				"postData"
+			],
+			[
+				"sh",
+				"shell"
+			],
+			[
+				"cal",
+				"callback"
+			],
+			[
+				"sc",
+				"score"
+			],
+			[
+				"score",
+				"scores"
+			],
+			[
+				"ng-",
+				"ng-click"
+			],
+			[
+				"ro",
+				"routes"
+			],
+			[
+				"btn-d",
+				"btn-default"
+			],
+			[
+				"form",
+				"form-control"
+			],
+			[
+				"fun",
+				"function"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Report/Master.tex",
+			"settings":
+			{
+				"buffer_size": 6905,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Report/MasterFrontpage.tex",
+			"settings":
+			{
+				"buffer_size": 6138,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "\\chapter{Siemens case}\n\nSiemens Wind power is among the leading windmill manufacturers in the world.\nThey primarily do mill farms as parks, although the system handles single mills as well as entire parks.\nSimens has a need for their system to scale better and provide better redundancy.\nIn the current system \n\n\\begin{figure}\n	\\centering\n	\\includegraphics[width=0.8\\textwidth,natwidth=610,natheight=642]{SystemOverviews.png} \n	\\captionsetup{format=plain,font=footnotesize,labelfont={bf,red},labelsep=quad,singlelinecheck=no}\n	\\caption[Illustrates the current Siemens windmill farm setup]{\n		\\label{fig:currentSiemensSetup} \n		\\footnotesize{%\n			This figure illustrates the current Siemens windmill farm setup.\n		}\n	}\n\\end{figure}\n",
+			"file": "Report/SiemensCase.tex",
+			"file_size": 660,
+			"file_write_time": 130542165148533037,
+			"settings":
+			{
+				"buffer_size": 731,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "Packages/LaTeXing/LaTeX.sublime-build",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"html",
+				"HTMLBeautify"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"comment",
+				"Toggle Comment"
+			],
+			[
+				"rub",
+				"Set Syntax: Ruby"
+			],
+			[
+				"java",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"for",
+				"Format: Javascript"
+			],
+			[
+				"indentation",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"fo",
+				"Format: Javascript"
+			],
+			[
+				"form",
+				"Format: Javascript"
+			],
+			[
+				"fro",
+				"Format: Javascript"
+			],
+			[
+				"coffe",
+				"Set Syntax: CoffeeScript"
+			],
+			[
+				"jade",
+				"Set Syntax: Jade"
+			],
+			[
+				"vb",
+				"Set Syntax: VBScript"
+			],
+			[
+				"f",
+				"Format: Javascript"
+			],
+			[
+				"be",
+				"HTMLBeautify"
+			],
+			[
+				"xml",
+				"Set Syntax: XML"
+			],
+			[
+				"beu",
+				"HTMLBeautify"
+			],
+			[
+				"htm",
+				"HTMLBeautify"
+			],
+			[
+				"jva",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"gist",
+				"Gist: Insert Gist"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"gis",
+				"Git: Status"
+			],
+			[
+				"ht",
+				"Set Syntax: HTML (Angular.js)"
+			],
+			[
+				"ja",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"git",
+				"Git: Status"
+			],
+			[
+				"git st",
+				"Git: Status"
+			],
+			[
+				"jso",
+				"Set Syntax: JSON"
+			],
+			[
+				"buil",
+				"Build: Build"
+			],
+			[
+				"node",
+				"Nodejs::Default File Settings"
+			],
+			[
+				"doc",
+				"Set Syntax: JavaDoc"
+			],
+			[
+				"update",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"project",
+				"Project: Add Folder"
+			],
+			[
+				"pro",
+				"Project: Add Folder"
+			],
+			[
+				"comme",
+				"Toggle Comment"
+			],
+			[
+				"set",
+				"Set Syntax: Tcl"
+			],
+			[
+				"js",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"forma",
+				"Format: Javascript"
+			],
+			[
+				"json",
+				"Set Syntax: JSON"
+			],
+			[
+				"Packa",
+				"Package Control: Remove Package"
+			],
+			[
+				"mar",
+				"Set Syntax: Markdown"
+			]
+		],
+		"width": 416.0
+	},
+	"console":
+	{
+		"height": 357.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Web/ThesisReport/Report"
+	],
+	"file_history":
+	[
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/PDFLatex.sublime-build",
+		"/C/Web/ThesisReport/Report/SiemensCase.tex",
+		"/C/Web/ThesisReport/reportPrj.sublime-project",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/LaTeX Memoir.sublime-settings",
+		"/C/Web/ThesisReport/5tqljbey.rug.txt",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/Latex.sublime-settings",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Installed Packages/JsFormat.sublime-package",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/Jade.sublime-settings",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/latex.sublime-settings",
+		"/C/Tools/SumatraPDF/SumatraPDF-settings.txt",
+		"/C/Web/ThesisReport/Report/my-bibliography-file.bib",
+		"/C/Web/gitmon/build/scripts-2.7/gitmon",
+		"/C/Web/p_prj/noter.txt",
+		"/C/Web/ThesisReport/.gitignore",
+		"/C/Web/p_prj/ReserchPrj/data_collectoer/calcPDF.js",
+		"/C/Web/p_prj/ReserchPrj/data_collectoer_Outdoor/calcFiltered.js",
+		"/C/Web/p_prj/ReserchPrj/data_collectoer_Outdoor/agregatedData/boxplotDataFiltered.csv",
+		"/C/Web/p_prj/ReserchPrj/testApp/bin/www",
+		"/C/Users/Stefan/Desktop/side.html",
+		"/C/Web/p_prj/ReserchPrj/kzvouhdy.vqr.txt",
+		"/C/Web/p_prj/ReserchPrj/data_collectoer_Outdoor/indexFiltered.js",
+		"/C/Web/p_prj/ReserchPrj/t113l5pa.box.txt",
+		"/C/Web/p_prj/ReserchPrj/data_collectoer_Indoor/calcPDF.js",
+		"/C/Web/p_prj/ReserchPrj/data_collectoer_Indoor/indoorTest.csv",
+		"/C/Web/p_prj/ReserchPrj/data_collectoer_Indoor/calc.js",
+		"/C/Web/p_prj/ReserchPrj/data_collectoer_pi/outsideTest.csv",
+		"/C/Web/p_prj/ReserchPrj/.gitattributes",
+		"/C/Users/Stefan/.gitconfig",
+		"/C/Web/p_prj/ReserchPrj/ebditwxt.3wc.txt",
+		"/C/Web/ReserchProject-RSSI-Login/noter.txt",
+		"/C/Web/ReserchProject-RSSI-Login/testApp/views/template/bluetoothDevice.jade",
+		"/C/Web/ReserchProject-RSSI-Login/testApp/views/index.jade",
+		"/C/Web/ReserchProject-RSSI-Login/testApp/Gruntfile.js",
+		"/C/Web/ReserchProject-RSSI-Login/testApp/routes/index.js",
+		"/C/Web/ReserchProject-RSSI-Login/testApp/public/controller.js",
+		"/C/Web/ReserchProject-RSSI-Login/data_collectoer/index.js",
+		"/C/Web/ReserchProject-RSSI-Login/testApp/views/layout.jade",
+		"/C/Web/ReserchProject-RSSI-Login/testApp/package.json",
+		"/C/Web/ReserchProject-RSSI-Login/testApp/.gitignore",
+		"/C/Web/ReserchProject-RSSI-Login/.gitignore",
+		"/C/Web/mongo/hw03/mongod-sec/mongod-sec.conf",
+		"/C/Web/mongo/hw03/mongod-arb/mongod-arb.conf",
+		"/C/Web/mongo/hw03/mongod-pri/mongod-pri.conf",
+		"/E/sources/ei.cfg",
+		"/C/Web/ReserchProject-RSSI-Login/data_collectoer_Indoor/index.js",
+		"/C/Web/ReserchProject-RSSI-Login/testApp/routes/api.js",
+		"/C/Web/ReserchProject-RSSI-Login/testApp/app.js",
+		"/C/Users/Stefan/AppData/Local/Temp/Temp1_node-tutorial-for-frontend-devs-master.zip/node-tutorial-for-frontend-devs-master/routes/users.js",
+		"/C/Users/Stefan/AppData/Local/Temp/Temp1_node-tutorial-for-frontend-devs-master.zip/node-tutorial-for-frontend-devs-master/routes/index.js",
+		"/F/Others/ID_RM588_MC036_2.0_2G.txt",
+		"/C/Web/mongo/MongoDBU/Vagrantfile",
+		"/C/Web/mongo/hw01/hw1-3/src/main/java/com/tengen/Week1Homework3.java",
+		"/C/Web/mongo/nodejs/eksam/opg1.js",
+		"/C/Web/mongo/nodejs/eksam/opg2.js",
+		"/C/Web/mongo/exam/final7/pictureCleanup/pom.xml",
+		"/C/Web/esbjerg_tlfApp/Gruntfile.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/services/contractService.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/directives/mobileContractsTableView.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/jade_views/templates/settingsDialog.jade",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Styles/styles.css",
+		"/C/Web/mongo/nodejs/eksam/Final4/blog/posts.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/jade_views/templates/leftSideBar.jade",
+		"/C/Web/mongo/exam/enron2.js",
+		"/C/Web/mongo/exam/final-problem4/final-problem4/src/main/java/course/BlogPostDAO.java",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/C/Web/mongo/exam/enron.js",
+		"/C/Web/mongo/nodejs/eksam/enron/messages.metadata.json",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/jade_views/templates/dateRangePicker.jade",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/directives/singleWrapper.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/jade_views/layout.jade",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/jade_views/templates/mobileContractsTableView.jade",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/directives/bsHasError.js",
+		"/C/Web/esbjerg_tlfApp/README.md",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/jade_views/index.jade",
+		"/C/Web/esbjerg_tlfApp/node_server.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/directives/leftSideBar.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/controllers/controller.js",
+		"/C/Users/Stefan/AppData/Roaming/npm/node_modules/grunt-cli/package.json",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/directives/fixedBottom.js",
+		"/C/Users/Stefan/AppData/Roaming/npm/node_modules/grunt-cli/bin/grunt",
+		"/C/Web/esbjerg_tlfApp/ipklnn5b.diw.txt",
+		"/C/Web/esbjerg_tlfApp/tgxp24wd.p1m.txt",
+		"/C/Users/Stefan/AppData/Local/GitHub/PortableGit_054f2e797ebafd44a30203088cd3d58663c627ef/libexec/git-core/mergetools/p4merge",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/directives/snapToBottom.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/modulePhoneapp.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/jade_views/templates/editContractDialog.jade",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.UnitTests/Frontend/Unit/Service.functionService.spec.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/services/functionsService.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.UnitTests/Frontend/karma.conf.js",
+		"/C/Web/esbjerg_tlfApp/.gitignore",
+		"/C/Web/esbjerg_tlfApp/node_modules/karma-jasmine/lib/jasmine.js",
+		"/C/Web/esbjerg_tlfApp/package.json",
+		"/C/Web/esbjerg_tlfApp/node_modules/karma-jasmine/lib/index.js",
+		"/C/Web/esbjerg_tlfApp/node_modules/karma-jasmine/lib/adapter.js",
+		"/C/Web/esbjerg_tlfApp/1glhyt4p.yxu.txt",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/controllers/controller.js.LOCAL.11404.js",
+		"/C/Web/esbjerg_tlfApp/ixbiy0nb.glu.txt",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/ScriptsLibs/angular-1.3.0-beta.14/i18n/angular-locale_da.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/ScriptsLibs/angular-1.3.0-beta.14/i18n/angular-locale_da-gl.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/ScriptsLibs/angular-1.3.0-beta.14/errors.json",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/ScriptsLibs/angular-1.3.0-beta.14/angular-csp.css",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/ScriptsLibs/angular-1.3.0-beta.14/version.json",
+		"/C/Users/Stefan/AppData/Local/Temp/Temp1_angular-1.3.0-beta.14.zip/angular-1.3.0-beta.14/version.txt",
+		"/C/Web/esbjerg_tlfApp/zxgjmq5x.wau.txt",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/ScriptsLibs/angular-loading-bar-0.4.3/loading-bar.js",
+		"/C/Web/esbjerg_tlfApp/.git/config",
+		"/C/Web/esbjerg_tlfApp/.gitattributes",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/ScriptsLibs/ng-infinite-scroll.js",
+		"/C/Web/ngInfiniteScroll/src/infinite-scroll.coffee",
+		"/C/Web/esbjerg_tlfApp/xxxpnzqw.bt5.txt",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/controllers/editContractCtr.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/controllers/exportCtrl.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/controllers/importCtrl.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Views/Home/Index.cshtml",
+		"/C/Web/angular-loading-bar/test/karma.conf.js",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/Default/Default (Windows).sublime-keymap",
+		"/C/Users/Stefan/Downloads/Index.cshtml",
+		"/C/Users/Stefan/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
+		"/C/Users/Stefan/Desktop/python.txt",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/jade_views/templates/modalWindowTemplate.jade",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/services/pricegroupsService.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/services/telephonecompanysService.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.UnitTests/Frontend/Unit/Filter.applyLineChange.spec.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.UnitTests/Frontend/Unit/Filter.letterLimit.spec.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/filters/applyLineChange.js",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.UnitTests/Frontend/.jshintrc",
+		"/C/Web/esbjerg_tlfApp/Telefoniwebapp.Web/Scripts/.jshintrc"
+	],
+	"find":
+	{
+		"height": 26.0
+	},
+	"find_in_files":
+	{
+		"height": 102.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"</span>",
+			"<span style=\"font-size:11px\">",
+			"		</tr>\n		<tr>\n",
+			"rssiThresshold",
+			"push",
+			"rssi",
+			"blueToothResults",
+			"data",
+			"group1",
+			"    ",
+			"tab",
+			"tap",
+			"inden",
+			"opret",
+			"optet",
+			"btn",
+			"Time ",
+			"updateContracts",
+			"Status",
+			"d",
+			"']",
+			"d['",
+			"useDocumentBottom",
+			"infiniteScrollUseDocumentBottom",
+			"infiniteScrollContainer",
+			"\")",
+			"(bo-text=\"",
+			"i",
+			"addMatchers",
+			"\\^",
+			"^",
+			"addMatchers",
+			"actual",
+			"result",
+			"rest",
+			"compareObjects_",
+			"equals_",
+			"toEqual",
+			"toEq",
+			"toE",
+			"not",
+			"Function",
+			"filterObj",
+			"\"filter\\.",
+			"\"filter.",
+			"$filter",
+			"data",
+			"$scope.data",
+			"data",
+			"]\\}\\}",
+			" \\{\\{",
+			" {{",
+			"ngClass",
+			"comment",
+			"$scope",
+			"response",
+			"\"\\)\\n",
+			"\\\")\\n",
+			"\")\\n",
+			"\")\\s\\n",
+			"\")\\s?\\n",
+			"\")\\n",
+			"single-wrapper-test\\(label=\"",
+			"single-wrapper-test(label=\"",
+			"pricegroups",
+			"single-wrapper",
+			"d\\[",
+			"d[",
+			"\\}\\}",
+			"}}",
+			"\\{\\{",
+			"\\}\\}",
+			"}}",
+			"input ",
+			":",
+			";",
+			"\\n",
+			"generate",
+			"plugins",
+			"%2B",
+			"%21",
+			"%5C",
+			"%2C",
+			"%7D",
+			"%7B",
+			"%22",
+			"%3F",
+			"%25",
+			"%2F",
+			"%3A",
+			"&",
+			"field-",
+			"ngrs-join",
+			"jqu",
+			"jquer",
+			"col-md-",
+			"span",
+			"<",
+			"build-customizer-html",
+			"\\\\\"",
+			"\"",
+			"popover",
+			"htmlSanitizeWriter",
+			"sanitizeText",
+			"</option>",
+			"dateTableEntry",
+			"\\n\"",
+			"\\n'",
+			"\\n\\}",
+			" ",
+			"\\n'",
+			" ",
+			"\\s",
+			"\\n'",
+			"\\n\\}",
+			"\\n}",
+			"\\n'",
+			"\\n",
+			" \\n",
+			" \\n\\'",
+			" \\n'",
+			" ",
+			"\\s",
+			"\\d\\.\\d ",
+			",",
+			"Har ikke fået overført budget vedr. 2010",
+			"Byhistorisk Arkiv",
+			"\\\\n"
+		],
+		"highlight": false,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"",
+			"		</tr>\n		\n		<tr>\n",
+			"  ",
+			"Date ",
+			"",
+			"contract.",
+			"}}",
+			" {{::",
+			"~",
+			"function(){}",
+			"\"filterObj.",
+			"\"filter.",
+			"\"filterObj.",
+			"mobilContracts",
+			"]\")",
+			"(bo-text=\"",
+			"\\n    ",
+			".row\\n            .col-sm-3\\n                | ",
+			".row\\n            .col-sm-3                | ",
+			"singleWrapperTest",
+			"priceGroups",
+			"single-wrapper-test",
+			"contract[",
+			"contract",
+			"",
+			"}}\")",
+			"input(ng-model=\"",
+			":\\n",
+			";\\n",
+			"",
+			"+",
+			"!",
+			"\\",
+			"<",
+			"}",
+			"{",
+			"\"",
+			"_",
+			"%",
+			"/",
+			":",
+			"&\\n",
+			"",
+			"col-sm-",
+			"col-md-",
+			"\"",
+			"'",
+			"",
+			"\"",
+			"'",
+			"}",
+			"",
+			"'",
+			"",
+			"'",
+			"}",
+			"'",
+			"",
+			";\\n",
+			",",
+			",\\n",
+			"v",
+			"l",
+			"h",
+			"    ",
+			"$1\\\\n",
+			"isGroupNameConflicting",
+			"\\\\n",
+			"/",
+			"&\\n",
+			"&",
+			"\" \\n",
+			".leftSidebar .",
+			"",
+			"persistent",
+			"Motivator",
+			"Motivators",
+			"motivators"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Report/Master.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6905,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6438,
+								6438
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LaTeXing/support/LaTeX.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 3038.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Report/MasterFrontpage.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6138,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6119,
+								6106
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LaTeXing/support/LaTeX.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 2495.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Report/SiemensCase.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 731,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								206,
+								311
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LaTeXing/support/LaTeX.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 35.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 220.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 433.0
+	},
+	"output.nodejs":
+	{
+		"height": 323.0
+	},
+	"project": "reportPrj.sublime-project",
+	"replace":
+	{
+		"height": 48.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+		],
+		"width": 582.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 206.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
