@@ -29,7 +29,7 @@ The following chapter describes the motivation for this thesis. First a case fro
 \label{sec:SiemensCase}
 Siemens Wind Power is among the leading windmill manufacturers in the world. Siemens builds wind farms of different sizes ranging form single mills to well above one hundred windmills \cite{simensOffShoreProjects, simensOnShoreProjects}.
 
-Today windmills in a windmill farm at Siemens are equipped with a computer for the purpose of regulating power production parameters, data collection and for communication with the rest of the system. The current setup is illustrated on \cref{fig:currentSiemensSetup}. Every windmill is connected to a Wind Power Supervisor (WPS), which is a central component that aggregates data, perform calculations, store data and handle windmill farm communication with the outside world. At Siemens up to 8 WPS's are present pr. windmill farm.
+Today windmills in a windmill farm at Siemens are equipped with a computers for the purpose of regulating power production parameters, data collection and for communication with the rest of the system. The current setup is illustrated on \cref{fig:currentSiemensSetup}. Every windmill is connected to a Wind Power Supervisor (WPS), which is a central component that aggregates data, perform calculations, store data and handle windmill farm communication with the outside world. At Siemens up to 8 WPS's are present pr. windmill farm.
 
 A database is deployed on every WPS, for aggregated data collected from each windmill. Every windmill has a database as well for data logging purposes. The windmills, WPS's and Park Regulator are connected with a gigabit network, which currently has plenty of extra capacity. The system handles more than 50 control points and 200 measurement points and samples these every 50 ms. The Park Regulator regulates the power production when needed. See \cref{fig:dataComputationSequence} for the regulation sequence.
 
@@ -92,8 +92,10 @@ Todays setup at Siemens Wind Power (\cref{sec:SiemensCase}) is an example of a s
 
 \begin{itemize} 
 	\item Single point of failure. Should a WPS fail, a part of the windmill farm will become unavailable.
-	\item Low scalability. The WPS's does not scale with the number of windmills.
-	\item Low park regulation performance. Every windmill needs to return their current status to the Park Regulator, the set point for each windmill is calculated in the Park Regulator and finally the new set points can be pushed to the mills.
+	\item Low scalability. The WPS's and Park Regulator does not scale with the number of windmills.
+	\begin{itemize}
+		\item Low park regulation performance. Every windmill needs to return their current status to the Park Regulator, the set point for each windmill is calculated in the Park Regulator and finally the new set points can be pushed to the mills.
+	\end{itemize}
 \end{itemize}
 
 Siemens wishes to remove the WPS's by distributing their functionality to the windmills, utilizing the free capacity of the computers already residing in every windmill. This would increase redundancy and scalability and lower the possibility of a single point of failure. Furthermore, Siemens would like to look for ways to optimize the regulation sequence (see \cref{fig:dataComputationSequence}).
@@ -108,11 +110,11 @@ Siemens wishes to remove the WPS's by distributing their functionality to the wi
 
 \section{Thesis aim}
 
-The purpose of this thesis is to design, implement and evaluate a framework and associated tools for distributed computing systems development. The case from Siemens Windpower is an example of a production environment where the framework could be utilized. The goal is not to make a framework that is specific to the Siemens case but to make a general framework for the Siemens case and similar cases. 
+The purpose of this thesis is to design, implement and evaluate a framework and associated tools for distributed computing systems development. The case from Siemens Wind Power is an example of a production environment where the framework could be utilized. The goal is not to make a framework that is specific to the Siemens case but to make a general framework for the Siemens case and similar cases. 
 
-The framework must be able to handle computation distributed on several nodes, communication between those nodes and distribution of data. This roughly leaves two essential components: A component that handles the virtual shared memory and a component that handles communication and distribution of tasks, with regards to the available resources on each node. Furthermore the framework must have a single interface for control of, and interaction with, all the nodes, in order to maintain the illusion of the windmill park serving as a single system. This means ease of access must be maintained even though computation and data is distributed among nodes. Traffic must be routed to a windmill with free capacity through a single interface, without external systems being aware of it.
+The framework must be able to handle computation distributed on several nodes, communication between those nodes and distribution of data. This roughly leaves two essential components: A component that handles the virtual shared memory and a component that handles communication and distribution of tasks, with respect to the available resources on each node. Furthermore the framework must have a single interface for control of, and interaction with, all the nodes, in order to maintain the illusion of the windmill park serving as a single system. This means ease of access must be maintained even though computation and data is distributed among nodes. Traffic must be routed to a windmill with free capacity through a single interface, without external systems being aware of it.
 
-The aim is to investigate and choose components, such that the best configuration is achieved with regards to distribution of data and computation across a production environment like the Siemens case. 
+The aim is to investigate and choose components, such that the best configuration is achieved with respect to distribution of data and computation across a production environment like the Siemens case. 
 
 % % SKAL MÅSKE SÆTTES IND ???:
 %To determine the best solution the different components will be weighed in terms of:
@@ -124,17 +126,13 @@ The aim is to investigate and choose components, such that the best configuratio
 %\end{itemize}
 
 The solution must work with the Siemens case, which presents the following constraints to the project:
-\begin{itemize} 
-	\item CPU power pr. node. Our solution must be able to run on a standard consumer x64 Intel CPU, since that is what each windmill are equipped with.
-	\item Network bandwidth. Siemens told to assume close to unlimited bandwidth for the solution. 
+\begin{itemize}
+	\item CPU power. Our solution must be able to run on a standard consumer hardware.
+	\item Network bandwidth. Siemens uses gigabit network. 
 \end{itemize}
-
-Furthermore we aim to develop a prototype, which runs the developed framework, for proof of concept purposes. The framework will be compared to the existing Siemens solution with regards to availability and redundancy. 
+Furthermore we aim to develop a prototype, which runs the developed framework, for proof of concept purposes. The framework will be compared to the existing Siemens solution with respect to availability and redundancy. 
 
 %Distribution of computation tasks is the main research area and will be the focus of this thesis.
-
-
-
 
 %\begin{itemize}
 %	\item How do we distribute a database and computation across a production environment in the best possible way?
