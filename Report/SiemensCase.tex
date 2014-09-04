@@ -32,3 +32,49 @@ The system needs to minimum handle 50 control points and 200 measurement points.
 		}
 	}
 \end{figure}
+
+\begin{figure}
+	\centering
+	\begin{sequencediagram} %Created using pgf-umlsd
+		\newthread{reg}{:Park Regulartor}
+		\newinst[2]{mill}{:Mill}
+	
+		\begin{sdblock}{each mill}{}
+			\mess[1]{reg}{getCurrentStatus}{mill}
+			\mess[1]{mill}{status}{reg}	
+	%		\begin{messcall}{reg}{getCurrentStatus()}{mill}{status}
+	%		\end{messcall}
+		\end{sdblock}
+		
+		\begin{call}{reg}{calculateAllSetpoints()}{reg}{}
+		\end{call}
+	
+		\begin{sdblock}{each mill}{}
+			\mess[1]{reg}{setNewSetpoint}{mill}
+		\end{sdblock}
+			
+		
+	\end{sequencediagram}
+
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,red},labelsep=quad,singlelinecheck=no}
+	\caption[Regulator calculation sequence]{
+		\label{fig:dataComputationSetup} 
+		\footnotesize{%
+			Regulator calculation sequence.
+		}
+	}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
