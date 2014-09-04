@@ -39,24 +39,31 @@ Therefor Siemens wishes to remove the servers by making every windmill farm a Di
 
 \section{Thesis aim}
 
-\begin{itemize}
-	\item How do we distribute a database and computation across a production environment in the best possible way?
-	\item How do we define and measure performance?
-	\item Can it provide data redundancy and outperform current systems?
-	\item How many windmills are needed before it makes sense to makes sense to distribute the server?
-\end{itemize}
+The purpose of this thesis is to design, implement and evaluate a framework and associated tools for distributed computing systems development. The case from Siemens Windpower is an example of a production environment where the framework could be utilized. The goal is not to make a framework that is specific to the Siemens case but to make a general framework for this and similar cases. 
 
-We aim to investigate the possibility of making a framework and associated tools for developing a distributed system. 
 This framework must be able to handle computation distributed on several nodes, communication between those nodes and distribution of data. 
-The communication can be built on top of existing standards as for instance DDS. Data distribution can be built using existing systems like MongoDB. 
-Distribution of computation tasks is the main research area and will be the focus of this thesis.
 
-In order to achieve distributed computation on several nodes the framework must be able to perform load balancing and control the distribution of tasks on the nodes in the system. 
-Furthermore the framework must have a single interface for control of, and interaction with, all the nodes.  
-The goal is to create a test system, that can distribute and perform tasks but also to be able to plan ahead of time and know if there is available computation time.
+The framework will be evaluated with regards to the existing Siemens solution using the following parameters: ... and will be done by comparing results obtained from a protocol 
 
-The case from Siemens Windpower is an example of a production environment where the framework could be utilized. 
-Our goal is not to make a framework that is only  specific for this case but to make a general framework for this and similar cases.
+
+%\begin{itemize}
+%	\item How do we distribute a database and computation across a production environment in the best possible way?
+%	\item How do we define and measure performance?
+%	\item Can it provide data redundancy and outperform current systems?
+%	\item How many windmills are needed before it makes sense to makes sense to distribute the server?
+%\end{itemize}
+%
+%We aim to investigate the possibility of making a framework and associated tools for developing a distributed system. 
+%This framework must be able to handle computation distributed on several nodes, communication between those nodes and distribution of data. 
+%The communication can be built on top of existing standards as for instance DDS. Data distribution can be built using existing systems like MongoDB. 
+%Distribution of computation tasks is the main research area and will be the focus of this thesis.
+%
+%In order to achieve distributed computation on several nodes the framework must be able to perform load balancing and control the distribution of tasks on the nodes in the system. 
+%Furthermore the framework must have a single interface for control of, and interaction with, all the nodes.  
+%The goal is to create a test system, that can distribute and perform tasks but also to be able to plan ahead of time and know if there is available computation time.
+%
+%The case from Siemens Windpower is an example of a production environment where the framework could be utilized. 
+%Our goal is not to make a framework that is only  specific for this case but to make a general framework for this and similar cases.
 
 \section{Approach}
 
