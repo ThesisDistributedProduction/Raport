@@ -37,6 +37,9 @@ Today windmills in windmill farm at Siemens are equipped with a computer for reg
 
 Therefor Siemens wishes to remove the servers by making every windmill farm a Distributed Computing System, utilizing free capacity of the computers already residing in every windmill. This would up the redundancy and scalability and the remove possibility of a single point of failure. A windmill farm must serve as single server which means ease of access must be maintained even though computation and data is distributed. This means routing traffic to a windmill with free capacity through a single interface, without external systems being aware of it.
 
+
+% Masser båndbredde
+
 % Today windmills in windmill farm are connected to a single server that aggregates data, perform calculations, store data and handle communication with the outside world. These servers do not scale well with the size of the windmill farm, and they are a single point of failure. Therefor Siemens wishes to remove the servers by utilizing free capacity of the computers already residing in every windmill. 
 %Currently there is some limited redundancy in data and availability but this could be greatly improved by distributing data and communication to the windmills. 
 %Ease of access must be maintained even though computation and data is distributed. 
@@ -44,11 +47,30 @@ Therefor Siemens wishes to remove the servers by making every windmill farm a Di
 
 \section{Thesis aim}
 
-The purpose of this thesis is to design, implement and evaluate a framework and associated tools for distributed computing systems development. The case from Siemens Windpower is an example of a production environment where the framework could be utilized. The goal is not to make a framework that is specific to the Siemens case but to make a general framework for this and similar cases. 
+The purpose of this thesis is to design, implement and evaluate a framework and associated tools for distributed computing systems development. The case from Siemens Windpower is an example of a production environment where the framework could be utilized. The goal is not to make a framework that is specific to the Siemens case but to make a general framework for the Siemens case and similar cases. 
 
-This framework must be able to handle computation distributed on several nodes, communication between those nodes and distribution of data. 
+The framework must be able to handle computation distributed on several nodes, communication between those nodes and distribution of data. This roughly leaves two essential components: A component that handles the virtual shared memory and a component that handles communication and distribution of tasks, with regards to the available resources on each node. Furthermore the framework must have a single interface for control of, and interaction with, all the nodes.
 
-The framework will be evaluated with regards to the existing Siemens solution using the following parameters: ... and will be done by comparing results obtained from a protocol 
+The aim is to investigate and choose right components, in terms of how best to distribute a database and computation across a production environment like the Siemens case. 
+
+%To determine the best solution the different components will be weighed in terms of:
+%\begin{itemize} 
+%	\item Functionality. Does this component have the wanted functionality?
+%	\item Scalability. Does this component scale well according to the Siemens case?
+%	\item Redundancy. Doe
+%	\item Performance. Does this component 
+%\end{itemize}
+
+The solution must work with the Siemens case, which presents the following constraints to the project:
+\begin{itemize} 
+	\item CPU power pr. node. Our solution must be able to run on a standard consumer x64 Intel CPU, since that is what each windmill are equipped with.
+	\item Network bandwidth. Siemens told to assume close to unlimited bandwidth for the solution. 
+\end{itemize}
+
+Furthermore we aim to develop a prototype, which runs the developed framework, for proof of concept purposes. The framework will be compared to the existing Siemens solution with regards to availability and redundancy and will be done using results obtained from the prototype. 
+
+%Distribution of computation tasks is the main research area and will be the focus of this thesis.
+
 
 
 %\begin{itemize}
