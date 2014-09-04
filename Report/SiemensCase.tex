@@ -46,8 +46,6 @@ Also Siemens would like to look for ways to optimise the calculations done by th
 		\begin{sdblock}{each mill}{}
 			\mess[1]{reg}{getCurrentStatus}{mill}
 			\mess[1]{mill}{status}{reg}	
-	%		\begin{messcall}{reg}{getCurrentStatus()}{mill}{status}
-	%		\end{messcall}
 		\end{sdblock}
 		
 		\begin{call}{reg}{calculateAllSetpoints()}{reg}{}
@@ -56,8 +54,7 @@ Also Siemens would like to look for ways to optimise the calculations done by th
 		\begin{sdblock}{each mill}{}
 			\mess[1]{reg}{setNewSetpoint}{mill}
 		\end{sdblock}
-			
-		
+					
 	\end{sequencediagram}
 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,red},labelsep=quad,singlelinecheck=no}
