@@ -14,19 +14,27 @@ Should a node become unavailable another node can communicate the same data in e
 This chapter contains a description of a number of relevant storage technologies and a discussion of which technology is the best suited for a system like the Siemens case.
 
 \section{Relational storage}
-The traditional way of storing data is in a Relational Database Management System.
-These databases rely on a schema in order to make sense of data.
+The traditional way of storing data is in a Relational Database Management System(RDBMS).
+These databases rely on a schema to arrange data in entities and their relations.
+Using SQL it is easy to query data and to do aggregate operations.
+RDBMSs support ACID transactions which ensures operations in the database are processed reliably.
 
+A shortcoming of the RDBMSs is the problem with object-relational mapping also known as the Impedance Mismatch Problem\cite{Fowler:IntroNoSQL, Neward:TheVietnamOfComputerScience}.
+The relational structure of the RDBMSs does not map well to the object-oriented structure the most popular programming languages encourage.
+Often an object is an aggregate of a number of attributes.
+In the context of the object-oriented program the object is seen as one entity.
+In the context of the RDBMS the attributes of the object-oriented object is often scattered between multiple tables in the database to ensure consistency and avoid duplicate data.
+This mismatch between object representation and relational representation can cause both performance problems (the JOIN operation in SQL is very costly) as well as considerable development time spent mapping one structure to the other.
+The performance problem multiplies in a distributed database if the RDBMS must do JOIN operations across the network in order to aggregate data.
+Therefore traditional RDBMSs does not scale well.
 
--Traditional
--Shortcomings
-	-Impedance mismatch
-	-Distribution of data
+Alternative RDBMSs has been created to enable relational storage in a distributed system\cite{Cattell:ScalableSQLAndNoSQLDataStores}.
+However these systems still suffer from the fact that cross-network operations has a high performance cost.
 
-\section{Schemaless storage}
+\section{Schema-less storage}
 
-\section{Relational versus schemaless}
+\section{Relational versus schema-less}
 
-\section{Schemaless databases}
+\section{Schema-less databases}
 
 \section{Conclusion}
