@@ -1,4 +1,4 @@
-\documentclass[a4paper,11pt]{memoir}
+\documentclass[a4paper,11pt, oldfontcommands]{memoir}
 %\documentclass[b5paper,10pt,twoside]{memoir}
 % Ved a4 format skal nedenstående nok justeres en del
 \setlrmarginsandblock{3.5cm}{2.5cm}{*}
@@ -11,9 +11,9 @@
 \usepackage{array,booktabs,longtable}
 \usepackage{url}
 \usepackage{color}
-\definecolor{webblue}{rgb}{0.0,0.05,0.45}
+%\definecolor{webblue}{rgb}{0.0,0.05,0.45}
 \definecolor{MyDarkBlue}{rgb}{0,0.08,0.45}
-\definecolor{webred}{rgb}{0.75,0,0}
+%\definecolor{webred}{rgb}{0.75,0,0}
 
 \usepackage[T1]{fontenc}
 \checkandfixthelayout
@@ -56,11 +56,11 @@
 \renewcommand\chapnamefont{\Huge\bfseries\sffamily}
 \renewcommand\chapnumfont{\chapnamefont}
 %\renewcommand\chaptitlefont{\color{webred}\Huge\usefont{OT1}{phv}{bc}{n}\selectfont\raggedright}
-\renewcommand\chaptitlefont{\color{black}\Huge\usefont{OT1}{phv}{bc}{n}\selectfont\raggedright}
+\renewcommand\chaptitlefont{\Huge\usefont{OT1}{phv}{bc}{n}\selectfont\raggedright}
 %\setsubsecheadstyle{\color{MyDarkBlue}\large\bfseries\sffamily\raggedright}
-\setsubsecheadstyle{\color{black}\large\bfseries\sffamily\raggedright}
+\setsubsecheadstyle{\large\bfseries\sffamily\raggedright}
 %\setsubsubsecheadstyle{\color{webred}\Huge\usefont{OT1}{phv}{bc}{n}\selectfont\raggedright}
-\setsubsubsecheadstyle{\color{black}\Huge\usefont{OT1}{phv}{bc}{n}\selectfont\raggedright}
+\setsubsubsecheadstyle{\Huge\usefont{OT1}{phv}{bc}{n}\selectfont\raggedright}
 % Rule under headline.. (Underline section headlines med de 4 linier herunder) 
 %\newcommand{\ruledsec}[1]{%
 %\Large\usefont{OT1}{phv}{b}{n}\selectfont\raggedright #1 %\color{webred}\rule[15pt]{\textwidth}{1.0pt}} 
@@ -72,11 +72,11 @@
 % Afstande mellem overskrifter og tekst
 \titleformat{\subsection}
 %{\color{MyDarkBlue}\usefont{OT1}{phv}{b}{n}\selectfont}{\thesubsection}{1em}{}
-{\color{black}\usefont{OT1}{phv}{b}{n}\selectfont}{\thesubsection}{1em}{}
+{\usefont{OT1}{phv}{b}{n}\selectfont}{\thesubsection}{1em}{}
 \titleformat{\subsubsection}
 %{\color{MyDarkBlue}\usefont{OT1}{phv}{b}{n}\selectfont}{\thesubsubsection}{1em}{}
 {\color{black}\usefont{OT1}{phv}{b}{n}\selectfont}{\thesubsubsection}{1em}{}
-\titlespacing{\subsection}{15pt}{15pt}{10pt}
+\titlespacing{\subsection}{0pt}{15pt}{10pt}
 \titlespacing{\subsubsection}{15pt}{15pt}{10pt}
 \titlespacing{\section}{15pt}{35pt}{10pt}
 %***********  section number in margin ****************************************
@@ -86,7 +86,6 @@
 {\csname #1@cntformat\endcsname}% individual control
 }
 %\def\section@cntformat{\color{webred}\protect\makebox[0pt][r]{\thesection.\quad}}
-\def\section@cntformat{\color{black}\protect\makebox[0pt][r]{\thesection.\quad}}
 \makeatother
 
 
@@ -96,7 +95,7 @@
 % justering af afsnitsnummerering og ToC dybde
 \setsecnumdepth{subsubsection} % til og med
 \maxsecnumdepth{subsubsection} % underligt koncept
-\settocdepth{subsection} %til og med
+%\settocdepth{subsection} %til og med
 % nogle pakker man ofte anvender
 \usepackage[ansinew]{inputenc} % eller ansinew hvis Windows
 %*******************************************************************************
@@ -115,8 +114,12 @@
 %% Use fancy chapter headers, with Jos Dingjan's modifications,
 %% plus my own tweaks. This style is not part of teTeX,
 %% so we are using a local (and renamed) copy.
-\usepackage[Lenny]{fncychapleo}
+% \usepackage[Lenny]{fncychapleo}
+\usepackage[Lenny]{fncychap}
 \usepackage{fancyhdr}
+
+\ChTitleVar{\Huge\usefont{OT1}{phv}{bc}{n}\selectfont\raggedright}
+
 %*******************************************************************************
 
 \makeatletter
