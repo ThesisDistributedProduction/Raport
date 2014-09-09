@@ -1,1 +1,19 @@
-\chapter{Loadbalancing}
+\chapter{Load balancing}
+
+When dealing with redundant distributed systems, there often exists more than one node capable of doing some work.
+However one node is not able to handle the workload in a satisfying manner.
+This means the nodes must cooperate and balance out the workload.
+This is done using a load balancer with a node balancing algorithm.
+
+In this solution the load balancer needs to balance external connections to different protocols like HTTP and Modbus, however a solution witch can be extended to any restful protocol is needed. Also balancing of node roles depending on incoming traffic will be needed.
+
+
+The following requirements to the system exists:
+\begin{itemize}
+	\item Robustness
+	\item Protocol flexible
+	\item Must be a distributed component
+\end{itemize}
+
+
+\cite{Ludwig:SwarmIntelligenceGridLoadBalancing} Implements a particle swam based algorithm, and discuses quality parameters.
