@@ -1,1 +1,32 @@
 \chapter{Data storage}
+Data storage is important in a system like a windmill farm.
+A lot of data must be persisted like weather data, health data of the different parts of every windmill and production data.
+These records are important both for immediate use to view the current state of the system but also for review in the future for instance to predict weather trends or replace worn down parts of windmill before they break completely.
+
+Currently data is aggregated from each windmill and stored on a central node.
+This node will over time aggregate hundreds of gigabytes of information.
+The data on the node is secured by backup but it is still a single point of failure.
+Take out the data storage node or the communication to it and a lot of information will be lost.
+
+By distributing the data of the system between all the connected nodes we achieve better redundancy because the data is present on many different nodes.
+Should a node become unavailable another node can communicate the same data in effect strengthening the availability of the system.
+
+This chapter contains a description of a number of relevant storage technologies and a discussion of which technology is the best suited for a system like the Siemens case.
+
+\section{Relational storage}
+The traditional way of storing data is in a Relational Database Management System.
+These databases rely on a schema in order to make sense of data.
+
+
+-Traditional
+-Shortcomings
+	-Impedance mismatch
+	-Distribution of data
+
+\section{Schemaless storage}
+
+\section{Relational versus schemaless}
+
+\section{Schemaless databases}
+
+\section{Conclusion}
