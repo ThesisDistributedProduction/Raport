@@ -55,9 +55,12 @@
 % konfiguration af kapitel titel font samt fonte til sections
 \renewcommand\chapnamefont{\Huge\bfseries\sffamily}
 \renewcommand\chapnumfont{\chapnamefont}
-\renewcommand\chaptitlefont{\color{webred}\Huge\usefont{OT1}{phv}{bc}{n}\selectfont\raggedright}
-\setsubsecheadstyle{\color{MyDarkBlue}\large\bfseries\sffamily\raggedright}
-\setsubsubsecheadstyle{\color{webred}\Huge\usefont{OT1}{phv}{bc}{n}\selectfont\raggedright}
+%\renewcommand\chaptitlefont{\color{webred}\Huge\usefont{OT1}{phv}{bc}{n}\selectfont\raggedright}
+\renewcommand\chaptitlefont{\color{black}\Huge\usefont{OT1}{phv}{bc}{n}\selectfont\raggedright}
+%\setsubsecheadstyle{\color{MyDarkBlue}\large\bfseries\sffamily\raggedright}
+\setsubsecheadstyle{\color{black}\large\bfseries\sffamily\raggedright}
+%\setsubsubsecheadstyle{\color{webred}\Huge\usefont{OT1}{phv}{bc}{n}\selectfont\raggedright}
+\setsubsubsecheadstyle{\color{black}\Huge\usefont{OT1}{phv}{bc}{n}\selectfont\raggedright}
 % Rule under headline.. (Underline section headlines med de 4 linier herunder) 
 %\newcommand{\ruledsec}[1]{%
 %\Large\usefont{OT1}{phv}{b}{n}\selectfont\raggedright #1 %\color{webred}\rule[15pt]{\textwidth}{1.0pt}} 
@@ -68,9 +71,11 @@
 \usepackage{titletoc}
 % Afstande mellem overskrifter og tekst
 \titleformat{\subsection}
-{\color{MyDarkBlue}\usefont{OT1}{phv}{b}{n}\selectfont}{\thesubsection}{1em}{}
+%{\color{MyDarkBlue}\usefont{OT1}{phv}{b}{n}\selectfont}{\thesubsection}{1em}{}
+{\color{black}\usefont{OT1}{phv}{b}{n}\selectfont}{\thesubsection}{1em}{}
 \titleformat{\subsubsection}
-{\color{MyDarkBlue}\usefont{OT1}{phv}{b}{n}\selectfont}{\thesubsubsection}{1em}{}
+%{\color{MyDarkBlue}\usefont{OT1}{phv}{b}{n}\selectfont}{\thesubsubsection}{1em}{}
+{\color{black}\usefont{OT1}{phv}{b}{n}\selectfont}{\thesubsubsection}{1em}{}
 \titlespacing{\subsection}{15pt}{15pt}{10pt}
 \titlespacing{\subsubsection}{15pt}{15pt}{10pt}
 \titlespacing{\section}{15pt}{35pt}{10pt}
@@ -80,7 +85,8 @@
 {\csname the#1\endcsname\quad}% default
 {\csname #1@cntformat\endcsname}% individual control
 }
-\def\section@cntformat{\color{webred}\protect\makebox[0pt][r]{\thesection.\quad}}
+%\def\section@cntformat{\color{webred}\protect\makebox[0pt][r]{\thesection.\quad}}
+\def\section@cntformat{\color{black}\protect\makebox[0pt][r]{\thesection.\quad}}
 \makeatother
 
 
@@ -145,8 +151,9 @@
 \graphicspath{{figures/}}
 \sidecaptionvpos{figure}{t} %sidecaption aligned med toppen af billede
 \usepackage{caption}
-\DeclareCaptionFont{red}{\color{webred}}
-\captionsetup{singlelinecheck=false,font=footnotesize,labelfont={bf,red},format=hang}
+%\DeclareCaptionFont{red}{\color{webred}}
+\DeclareCaptionFont{defaultCapFont}{\color{black}}
+\captionsetup{singlelinecheck=false,font=footnotesize,labelfont={bf,defaultCapFont},format=hang}
 
 \DeclareCaptionFormat{llap}{\llap{#1#2}#3\par}
 \strictpagechecktrue
@@ -164,7 +171,8 @@
 \makeindex % hvis man anvender sådan en
 
 
-\renewcommand*{\cftchaptername}{Chapter\space}
+%\renewcommand*{\cftchaptername}{Chapter\space}
+\renewcommand*{\cftchaptername}{}
 \renewcommand*{\cftfigurename}{Fig.\space}
 \renewcommand{\contentsname}{Table of Contents}
 \renewcommand*\abstractname{Summary}
@@ -173,20 +181,19 @@
 \begin{document}
 \frontmatter
 \include{abstract}
+
 \cleartorecto
 \tableofcontents
-\clearpage
-\listoffigures
-\clearpage
-\listoftables
 
 \mainmatter
 \include{introduction}
 %\include{SiemensCase}
 %\include{dedication}
-\include{Nomenclature}
-\include{StateOfTheArt}
-\include{Analysis}
+%\include{StateOfTheArt}
+%\include{Analysis}
+\include{DataStorage}
+\include{Loadbalancing}
+\include{DistributedComputing}
 \include{PrototypeDevelopment}
 \include{Comparison}
 \include{Conclusion}
@@ -209,6 +216,14 @@
 \bibliography{my-bibliography-file}
 %\bibliography{minbib}
 % print indeks hvis det er noget man anvender
+
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+\include{Nomenclature}
+
+
 \printindex
 \end{document}
 
