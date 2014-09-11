@@ -61,18 +61,18 @@ A database is deployed on every WPS, for aggregated data collected from each win
 	\centering
 	\begin{sequencediagram} %Created using pgf-umlsd
 		\newthread{reg}{:Park Regulartor}
-		\newinst[2]{mill}{:Mill}
+		\newinst[2]{turbine}{:Turbine}
 	
-		\begin{sdblock}{each mill}{}
-			\mess[1]{reg}{getCurrentStatus}{mill}
-			\mess[1]{mill}{status}{reg}	
+		\begin{sdblock}{each turbine}{}
+			\mess[1]{reg}{getCurrentStatus}{turbine}
+			\mess[1]{turbine}{status}{reg}
 		\end{sdblock}
 		
 		\begin{call}{reg}{calculateAllSetpoints()}{reg}{}
 		\end{call}
 	
-		\begin{sdblock}{each mill}{}
-			\mess[1]{reg}{setNewSetpoint}{mill}
+		\begin{sdblock}{each turbine}{}
+			\mess[1]{reg}{setNewSetpoint}{turbine}
 		\end{sdblock}
 					
 	\end{sequencediagram}

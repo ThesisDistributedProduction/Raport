@@ -1,3 +1,4 @@
+% !TeX spellcheck = en_GB
 \chapter{Load balancing}
 
 When dealing with redundant distributed systems, there often exists more than one node capable of doing some work.
@@ -5,15 +6,30 @@ However one node is not able to handle the workload in a satisfying manner.
 This means the nodes must cooperate and balance out the workload.
 This is done using a load balancer with a node balancing algorithm.
 
-In this solution the load balancer needs to balance external connections to different protocols like HTTP and Modbus, however a solution witch can be extended to any restful protocol is needed. Also balancing of node roles depending on incoming traffic will be needed.
+In this solution the load balancer needs to balance external connections to different protocols like HTTP and Modbus, however a solution witch can be extended to any restful protocol is needed. Also balancing of node roles depending on the amount incoming traffic on different interfaces will be needed.
 
+Load balancers can also provide different features like bundling requests, security, discovering bad nodes and caching (Squid). This can offload the servers behind.
 
 The following requirements to the system exists:
-\begin{itemize}
+\begin{description}
 	\item Robustness
 	\item Protocol flexible
+	\item support TCP Handoffs (for non restful applications)
 	\item Must be a distributed component
-\end{itemize}
+\end{description}
 
+\section{Levels of balancing}
+\begin{description}
+	\item[OSI 3] Network/IP
+	\item[OSI 4] Network/IP
+	\item[OSI 7] {Application level, like http balancing, allows balancing strategies based on url and user location.}
+\end{description}
 
+What we would like is a transport layer protocol.
 \cite{Ludwig:SwarmIntelligenceGridLoadBalancing} Implements a particle swam based algorithm, and discuses quality parameters.
+
+\section{Existing solutions}
+\begin{description}
+	\item[Linux Virtual Server: IPVS] Is implemented in the linux kernal version 2.4 and 2.6. Works at the IP level. Useed byt big sites sourceforge.net, layer 3.
+	\item[Google Compute Engine: Load Balancer]: Proprietary. layer 3 and 7.
+\end{description}
