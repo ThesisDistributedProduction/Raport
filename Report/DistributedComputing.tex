@@ -1,18 +1,34 @@
 \chapter{Distributed computing}
-As mentioned, low scalability is a problem in a Siemens windmill farm. The Wind Power Supervisor (WPS) and the Park Regulator does not scale well with the number of mills, which introduces performance issues to the solution. Both in terms handling external requests, which is done by the WPS, but also when regulating the park through the Park Regulator. 
+As mentioned, low scalability is a problem in a Siemens windmill farm. The Wind Power Supervisor (WPS) and the Park Regulator does not scale well with the number of turbines, which introduces performance issues to the solution. Both in terms handling external requests, which is done by the WPS, but also when regulating the windmill farm through the Park Regulator. 
 
 An example of this is the Regulator calculation sequence illustrated on \cref{fig:dataComputationSequence}. Today this sequence takes approximately 150 ms. Siemens wishes this time reduced to 10 ms.
 
-When distributing the Wind Power Supervisor onto the mills, the mills obviously needs to be able to handle these external requests and park regulations. For the heavy tasks, in terms of CPU power, distributed computing becomes relevant as a way of improving performance by combining the CPU power residing inside the mills to compute a common task. 
+When distributing the Wind Power Supervisor onto the turbines, the turbines obviously needs to be able to handle these external requests and windmill farm regulations. For the heavy tasks, in terms of CPU power, distributed computing becomes relevant as a way of improving performance by combining the CPU power residing inside the turbines to compute a common task. 
 
-This chapter describes relevant distributed computing communication technologies and discusses which technology that is the best for the Siemens case. 
-
-
-%In parallel computing, all processors may have access to a shared memory to exchange information between processors.[17]
-%In distributed computing, each processor has its own private memory (distributed memory). Information is exchanged by passing messages between the processors.[18]
+In distributed computing, each node or process has its own local memory and communication happens via message passing \cite{andrews2000foundations}. This chapter describes relevant distributed computing communication paradigms and discusses which technology that is the best for the Siemens case. 
 
 
-\section{Krav til distribueret computing. Hvad kræver det?}
+\section{Message passing}
+
+Message passing is a low-level communication paradigm, where processors communicate by sending messages via bidirectional channels. It's a highly used paradigm and other communication paradigms are usually implemented on top of an underlying message-passing system.  
+
+With message passing being a low-level communication paradigm, the communication overhead is low compared to paradigms build on top of it. It is entirely up to the application developer to handle communication. This will in many cases result in better performance, which is the most compelling argument for choosing message passing as communication paradigm \cite{lu1995message}. The problem with it being up to the developer, is that the developer needs to deal with configurations setup, exception handling, who and when to communicate with, etc., when developing the application. This makes it hard to develop using message passing, compared to distributed shared memory, especially when dealing with more complex applications \cite{lu1995message}. 
+
+%Results?
+
+\section{Distributed shared memory}
 
 
-\section{Holistic}
+
+
+\section{Publish/subscribe}
+
+
+\section{Remote message invocation}
+
+
+\section{Conclusion}
+
+%Ens
+%Valg med vægt på arkitektur og development tid. 
+%RMI fravalg
