@@ -146,10 +146,11 @@
 % Picture Handling
 \usepackage{subfig}
 \usepackage[leftcaption]{sidecap}
-\usepackage{varioref} %For smarte referencer med \vref istedet for \ref
+%\usepackage{varioref} %For smarte referencer med \vref istedet for \ref
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
 \usepackage{calc}% auto udregn
 
-\usepackage{cleveref}
 \usepackage{tikz}
 \usepackage{pgf-umlsd}
 \usetikzlibrary{arrows}
@@ -175,7 +176,6 @@
 \usepackage{makeidx}
 \usepackage{mflogo} 
 \makeindex % hvis man anvender sådan en
-
 
 %\renewcommand*{\cftchaptername}{Chapter\space}
 \renewcommand*{\cftchaptername}{}
