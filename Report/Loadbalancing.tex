@@ -3,10 +3,10 @@
 
 When dealing with redundant distributed systems, there exists more than one node capable of doing some work.
 In such a system the workload needs to be distributed and balanced across all nodes.
-This is done using a load balancer with a node balancing algorithm and some performance optimising features.
+Load balancing for large systems can be split in tiers. The top tier being region based load balancing using DNS servers using knowledge of where the request was revived \cite{Amazon:Route53}. At a lower tier it could be machine level based on performance parameters like \cite{zhang2000linuxVirtualServer}, to application level based on the content of the request \cite{Citation is missing and I need to find it}. There exists a lot of solution specific load balancers.
 A node balancer is a service witch distributes incoming requests, among the services registered on the network.
 The distribution is based on different policies like dividing packages or picking the one with most free CPU capacity.
-The load balancer could be a single point of failure and there should therefore always be more than one as seen in \cref{fig:loadBalancingSetup}.
+The load balancer could be a single point of failure, it should for this reason always have one or more backups as seen in \cref{fig:loadBalancingSetup}.
 The load balancer monitors the real servers and only parses on requests to running servers.
 A secondary needs to monitor the primary load balancer and step in if it stops responding. This can be done using a virtual private IP, which is the address for all incoming requests.
 
@@ -25,6 +25,37 @@ A secondary needs to monitor the primary load balancer and step in if it stops r
 In this solution the load balancer needs to balance external connections to different protocols like HTTP and Modbus, however a solution witch can be extended to any restful protocol is needed.
 Also balancing of node roles depending on the amount incoming traffic on different interfaces will be needed.
 Load balancers can also provide features like bundling requests, authentication, discovering bad nodes and caching, all of this offloads the servers behind.
+
+ 
+\paragraph{consider the} 
+\begin{itemize}
+\item job migration cost
+\item resource heterogeneity
+\item network heterogeneity
+
+\item traffic
+\item resource usage
+\item error
+\item conditions
+\end{itemize}
+
+\paragraph{performance parameters}
+\begin{itemize}
+\item job size
+\item data transfer rate
+\item status exchange period
+\item migration limit
+\end{itemize}
+
+\paragraph{Algorithms/policies}
+\begin{itemize}
+	%(On the Design of Adaptive and Decentralized	Load-Balancing Algorithms with Load Estimation for Computational Grid Environments)	
+	\item MELISA Modified ELISA (used for large scale system (interGrid))
+	\item LBA Load Balancing on Arrival
+	
+	%Netflix Ereka https://github.com/Netflix/eureka/wiki/Eureka-at-a-glance
+	\item Round-robin
+\end{itemize}
 
 \paragraph{The following requirements to the system exists}
 \begin{itemize}
@@ -46,10 +77,22 @@ Load balancers can also provide features like bundling requests, authentication,
 \end{description}
 
 What we would like is a transport layer protocol.
-\cite{Ludwig:SwarmIntelligenceGridLoadBalancing} Implements a particle swam based algorithm, and discuses quality parameters.
+\\
+
+\noindent\cite{Ludwig:SwarmIntelligenceGridLoadBalancing} Implements a particle swam based algorithm, and discuses quality parameters.
+\\
+
+\noindent\cite{MayuriMehta:HybridDynamicLB} Central and distributed Balancing (hybrid). Central(3) dosn't scale, distributed (6 refs) has a larger overhead.
+
+
 
 \section{Existing solutions}
 \begin{description}
-	\item[Linux Virtual Server: IPVS] Is implemented in the linux kernal version 2.4 and 2.6. Works at the IP level. Useed byt big sites sourceforge.net, layer 3.
-	\item[Google Compute Engine: Load Balancer]: Proprietary. layer 3 and 7.
+	\item [Linux Virtual Server: IPVS] Is implemented in the linux kernal version 2.4 and 2.6. Works at the IP level. Useed byt big sites sourceforge.net, layer 3.
+	\item [Google Compute Engine: Load Balancer]: Proprietary. layer 3 and 7.
+	%http://aws.amazon.com/route53/
+	\item [Amazon Route 53] DNS based server, provides region based balancing and latency balancing.
+	\item [AWS ELB] Amazons load balancer, Proxy based, top tier
+	%https://github.com/Netflix/eureka/wiki/Eureka-at-a-glance
+	\item [Eureka] Netflix Load Balancer, client based, middle tier
 \end{description}
