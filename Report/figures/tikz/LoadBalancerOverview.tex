@@ -5,12 +5,17 @@
 %		minimum height=45pt,
 		on chain,
 		join
-	}
+	},
+	diagram item seperated/.style={
+			minimum width=80pt,
+	%		minimum height=45pt,
+			on chain
+		}
 ]
 \node [
 	diagram item,
   label=center:Internet
-] {\includegraphics{Cisco_BW/cloud}};
+] (Internet) {\includegraphics{Cisco_BW/cloud}};
 
 %\node [
 %	continue chain=going below,
@@ -20,15 +25,15 @@
 
 \node [
 	start branch=1 going below right,
-	diagram item,
-	label={[align=center]left:Load\\Balancer\\Backup}
+	diagram item seperated,
+	label={[align=center]right:Load\\Balancer\\(Secondary)}
 ] (LB2) {\includegraphics{Cisco_BW/distributed_director}};
 
 \node [
 	continue chain=going below left,
 	diagram item,
-	label={[align=center]right:Load\\Balancer}
-] {\includegraphics{Cisco_BW/distributed_director}};
+	label={[align=center]left:Load\\Balancer\\(Primary)}
+] (LB1) {\includegraphics{Cisco_BW/distributed_director}};
 
 \node [
 	continue chain = going below right,
@@ -36,18 +41,20 @@
 	label={[align=center]right:Services in distrinbuted\\across the wind farm}
 ] (farm) {\includegraphics{Cisco_BW/web_cluster}};
 
-\draw (LB2) -> (farm);
+\draw[loosely dotted] (LB1) -> (LB2) node[fill=white,midway]{heatbeat};
+\draw[dashed] (Internet) -> (LB2);
+\draw[dashed] (LB2) -> (farm);
 
 \node [
 	start branch=1 going below right,
 	diagram item,
-	label=below:Http interface
+	label=below:Other interface
 ] {\includegraphics{Cisco_BW/PC}};
 
 \node [
 	start branch=1 going below left,
 	diagram item,
-	label=below:OPC XML interface
+	label=below:Http interface
 ] {\includegraphics{Cisco_BW/PC}};
 
 \node [

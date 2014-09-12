@@ -4,34 +4,36 @@
 When dealing with redundant distributed systems, there exists more than one node capable of doing some work.
 In such a system the workload needs to be distributed and balanced across all nodes.
 This is done using a load balancer with a node balancing algorithm and some performance optimising features.
-
 A node balancer is a service witch distributes incoming requests, among the services registered on the network.
 The distribution is based on different policies like dividing packages or picking the one with most free CPU capacity.
-The load balancer could be a single point of failure and there should therefore always be more than one. 
+The load balancer could be a single point of failure and there should therefore always be more than one as seen in \cref{fig:loadBalancingSetup}.
+The load balancer monitors the real servers and only parses on requests to running servers.
+A secondary needs to monitor the primary load balancer and step in if it stops responding. This can be done using a virtual private IP, which is the address for all incoming requests.
 
-\begin{figure}[h!]
+\begin{figure}
 	\centering	
 	\scalebox{0.7}{\input{figures/tikz/LoadBalancerOverview}}
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[Distributed System with 2 load balancing nodes]{
-		\label{fig:distributedCoputingSystem} 
+		\label{fig:loadBalancingSetup} 
 		\footnotesize{%
 			A Distributed System with 2 load balancing nodes.
 		}
 	}
 \end{figure}
 
-In this solution the load balancer needs to balance external connections to different protocols like HTTP and Modbus, however a solution witch can be extended to any restful protocol is needed. Also balancing of node roles depending on the amount incoming traffic on different interfaces will be needed.
-Load balancers can also provide different features like bundling requests, security, discovering bad nodes and caching (Squid). This can offload the servers behind.
+In this solution the load balancer needs to balance external connections to different protocols like HTTP and Modbus, however a solution witch can be extended to any restful protocol is needed.
+Also balancing of node roles depending on the amount incoming traffic on different interfaces will be needed.
+Load balancers can also provide features like bundling requests, authentication, discovering bad nodes and caching, all of this offloads the servers behind.
 
-The following requirements to the system exists:
-\begin{description}
-	\item[Robustness]
-	\item[Protocol flexible]
-	\item[Distributed component] Must be a distributed component
-\end{description}
+\paragraph{The following requirements to the system exists}
+\begin{itemize}
+	\item Robustness
+	\item Protocol flexible
+	\item Must be a distributed component
+\end{itemize}
 
-Preferred features
+\paragraph{Preferred features}
 \begin{itemize}
 	\item support TCP Handoffs (for non restful applications)
 \end{itemize}

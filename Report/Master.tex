@@ -130,15 +130,15 @@
 \newcommand\tabcaption{\def\@captype{table}\caption}
 \makeatother
 
-\newenvironment{narrow}[2]{%
-\begin{list}{}{%
-\setlength{\topsep}{0pt}%
-\setlength{\leftmargin}{#1}%
-\setlength{\rightmargin}{#2}%
-\setlength{\listparindent}{\parindent}%
-\setlength{\itemindent}{\parindent}%
-\setlength{\parsep}{\parskip}}%
-\item[]}{\end{list}}
+%\newenvironment{narrow}[2]{%
+%\begin{list}{}{%
+%\setlength{\topsep}{0pt}%
+%\setlength{\leftmargin}{#1}%
+%\setlength{\rightmargin}{#2}%
+%\setlength{\listparindent}{\parindent}%
+%\setlength{\itemindent}{\parindent}%
+%\setlength{\parsep}{\parskip}}%
+%\item[]}{\end{list}}
 
 \newlength{\marginwidth}
 \setlength{\marginwidth}{2.0\oddsidemargin} %bredden af billeder ud i margin'en
@@ -183,7 +183,7 @@
 \renewcommand{\contentsname}{Table of Contents}
 \renewcommand*\abstractname{Summary}
 
-%\includeonly{introduction} %Hvis man ikke vil kompilere det hele hver gang
+\includeonly{Loadbalancing} %Hvis man ikke vil kompilere det hele hver gang
 \begin{document}
 \frontmatter
 \include{abstract}
