@@ -5,82 +5,36 @@ When dealing with redundant distributed systems, there exists more than one node
 In such a system the workload needs to be distributed and balanced across all nodes.
 This is done using a load balancer with a node balancing algorithm and some performance optimising features.
 
-A node balancer is the 
+A node balancer is a service witch distributes incoming requests, among the services registered on the network.
+The distribution is based on different policies like dividing packages or picking the one with most free CPU capacity.
+The load balancer could be a single point of failure and there should therefore always be more than one. 
 
-%icons from http://www.cisco.com/web/about/ac50/ac47/2.html
-\begin{tikzpicture}[
-	start chain=going right,
-	diagram item/.style={
-		minimum width=90pt,
-%		minimum height=45pt,
-		on chain,
-		join
+\begin{figure}[h!]
+	\centering	
+	\scalebox{0.7}{\input{figures/tikz/LoadBalancerOverview}}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Distributed System with 2 load balancing nodes]{
+		\label{fig:distributedCoputingSystem} 
+		\footnotesize{%
+			A Distributed System with 2 load balancing nodes.
+		}
 	}
-]
-\node [
-	diagram item,
-  label=center:Internet
-] {\includegraphics{Cisco_BW/cloud}};
-
-\node [
-	continue chain=going below,
-	diagram item,
-	label=right:Router
-] {\includegraphics{Cisco_BW/router}};
-
-\node [
-	start branch=1 going below right,
-	diagram item,
-	label=right:Load Balancer 2
-] (LB2) {\includegraphics{Cisco_BW/distributed_director}};
-
-\node [
-	continue chain=going below left,
-	diagram item,
-	label=right:Load Balancer 1
-] {\includegraphics{Cisco_BW/distributed_director}};
-
-\node [
-	continue chain = going below right,
-	diagram item,
-	label=right:Services in the distrinbuted in teh farm
-] (farm) {\includegraphics{Cisco_BW/web_cluster}};
-
-\draw (LB2) -> (farm);
-
-\node [
-	start branch=1 going below right,
-	diagram item,
-	label=below:Http interface
-] {\includegraphics{Cisco_BW/PC}};
-
-\node [
-	start branch=1 going below left,
-	diagram item,
-	label=below:OPC XML interface
-] {\includegraphics{Cisco_BW/PC}};
-
-
-\node [
-	continue chain = going below,
-	diagram item,
-	label=below:mod Bus interface
-] {\includegraphics{Cisco_BW/PC}};
-
-
-\end{tikzpicture}
+\end{figure}
 
 In this solution the load balancer needs to balance external connections to different protocols like HTTP and Modbus, however a solution witch can be extended to any restful protocol is needed. Also balancing of node roles depending on the amount incoming traffic on different interfaces will be needed.
-
 Load balancers can also provide different features like bundling requests, security, discovering bad nodes and caching (Squid). This can offload the servers behind.
 
 The following requirements to the system exists:
 \begin{description}
-	\item Robustness
-	\item Protocol flexible
-	\item support TCP Handoffs (for non restful applications)
-	\item Must be a distributed component
+	\item[Robustness]
+	\item[Protocol flexible]
+	\item[Distributed component] Must be a distributed component
 \end{description}
+
+Preferred features
+\begin{itemize}
+	\item support TCP Handoffs (for non restful applications)
+\end{itemize}
 
 \section{Levels of balancing}
 \begin{description}
