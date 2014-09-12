@@ -41,10 +41,6 @@
 	label={[align=center]right:Services in distrinbuted\\across the wind farm}
 ] (farm) {\includegraphics{Cisco_BW/web_cluster}};
 
-\draw[loosely dotted] (LB1) -> (LB2) node[fill=white,midway]{heatbeat};
-\draw[dashed] (Internet) -> (LB2);
-\draw[dashed] (LB2) -> (farm);
-
 \node [
 	start branch=1 going below right,
 	diagram item,
@@ -62,5 +58,10 @@
 	diagram item,
 	label=below:Modbus interface
 ] {\includegraphics{Cisco_BW/PC}};
+
+%Lines to/from LB2
+\draw[loosely dotted] (LB1) -> (LB2) node[fill=white,midway]{heatbeat};
+\draw[dashed] (Internet) -> (LB2);
+\draw[dashed] (LB2) -> (farm);
 
 \end{tikzpicture}
