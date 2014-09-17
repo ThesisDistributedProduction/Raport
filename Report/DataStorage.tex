@@ -276,20 +276,40 @@ Primary use includes pattern detection and mapping of networks.
 \section{Relational storage that scale, NewSQL}
 \label{sec:newsql}
 NewSQL data stores aim to bring the relational data model into the world of horizontal scalability and flexible data models while maintaining the ACID properties and transactions of the traditional RDBMS\cite{Cattell:ScalableSQLAndNoSQLDataStores}.
-NewSQL data stores does not necessarily implement a strict schema and neither do they necessarily use SQL as the query language. 
-In fact many of them are implemented with a completely new architecture\cite{CORBETT:SpannerGooglesGloballyDistributedDatabase}.
-Starting from scratch with a new architecture allows the NewSQL data stores to be designed to take the advantage of the distributed paradigms and to incorporate more flexibility into the schema structure.
+This is obtained by implementing a completely new architecture\cite{CORBETT:SpannerGooglesGloballyDistributedDatabase}.
+Starting from nothing with a new architecture allows the NewSQL data stores to be designed to take advantage of the distributed paradigms and to incorporate more flexibility into the schema structure.
+The key differences between traditional SQL data stores and the NewSQL data stores are therefore found in the way the NewSQL data stores are built for scalability and performance.
+They try to avoid the major performance barriers which are locking, write-ahead logging, buffer pool overhead and latching\cite{Stonebraker:NewSQLvsNoSQLForNewOLTP}.
+
+Locking can be avoided by performing transactions in timestamp order or using multi version concurrency control.
+Write-ahead logging can be avoided by doing automatic replication and failover.
+To avoid buffer pool overhead the NewSQL data stores can run in main memory, either entirely or have a hot store in memory for active data and a cold store on disk for stale data.
+To avoid latching transactions can be run single-threaded, meaning transactions must run to completion without descheduling.
+
+Using some or all of these performance upgrades the NewSQL data stores can achieve higher performance than the traditional SQL data stores.
+Other features like distributed concurrency control and distributed query processing allows the NewSQL data stores to scale horizontally.
+
+NewSQL data stores are divided into three categories\cite{Prasanns:NewSQLTheNewWayToHandleBigData}:
+
+\begin{itemize}
+\item New databases: Completely new systems designed for scalability and performance.
+\item New MySQL storage engine: Keep the existing MySQL interface and redesign the storage engine in order to achieve scalability.
+\item Transparent clustering/sharding: Provide extra features for transparent clustering/sharding on top of existing database systems. 
+\end{itemize}
 
 \section{SQL, NoSQL or NewSQL?}
 This thesis aims to create a distributed system with scalability and redundancy as the most important parameters.
 This means that traditional SQL is not an option because of the poor scalability.
-NoSQL and NewSQL has clear advantages because they are built as a consequence of the struggle with the traditional SQL database and distributed systems.
-NoSQL has the advantage of high scalability and high performance on data analysis, but the cost is lack of ACID and transactions.
-NewSQL promises to keep the virtues of the traditional SQL databases while simultaneously allowing horizontal scalability and high performance.
 
+NoSQL and NewSQL has clear advantages because they are built as a consequence of the shortcomings of the traditional database systems when it comes to distributed systems.
+NoSQL has the advantage of high scalability and high performance on data analysis, but the cost is a lack of ACID and transactions.
+NewSQL promises to keep the virtues of the traditional databases systems while simultaneously allowing horizontal scalability and high performance.
 
+Since both NoSQL and NewSQL seems like fitting technologies for data management in the Siemens case a further comparison between two state of the art implementations must be done in order to decide which technology will be the best suited.
 
+\section{State of the art NoSQL and NewSQL}
+To identify state of the NoSQL and NewSQL databases a website called db-engines.com\cite{db-engines} is used. This website maintain a list of more than 200 different databases ranked by popularity. The list is updated monthly based on search engine popularity, discussion threads, job-offers, mentions on LinkedIn and tweets. This does not give the complete and objective ranking but it gives a pointer to the most popular items in their respective category.
 
-\section{Schema-less databases}
+\section{Comparison of MongoDB and VoltDB}
 
 \section{Conclusion}
