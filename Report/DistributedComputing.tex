@@ -1,9 +1,9 @@
 \chapter{Distributed computing}
 As mentioned, low scalability is a problem in a Siemens windmill farm. The Wind Power Supervisor (WPS) and the Park Regulator does not scale well with the number of turbines, which introduces performance issues to the solution. Both in terms handling external requests, which is done by the WPS, but also when regulating the windmill farm through the Park Regulator. 
 
-An example of this is the Regulator calculation sequence illustrated on \cref{fig:dataComputationSequence}. Today this sequence takes approximately 150 ms. Siemens wishes this time reduced to 10 ms.
+An example of this is the Regulator calculation sequence illustrated on \cref{fig:dataComputationSequence}. Today this sequence takes approximately 150 ms. Siemens wishes this time reduced to 10 ms. This is a major performance improvement and for that reason, performing the regulation sequence using a distributed database only is not enough, since reading/writing to the disk decreases performance.
 
-When distributing the Wind Power Supervisor onto the turbines, the turbines obviously needs to be able to handle these external requests and windmill farm regulations. For the heavy tasks, in terms of CPU power, distributed computing becomes relevant as a way of improving performance by combining the CPU power residing inside the turbines to compute a common task. 
+When distributing the Wind Power Supervisor onto the turbines, the turbines obviously needs to be able to handle these external requests and windmill farm regulations. For the heavy tasks, in terms of CPU power, distributed computing becomes relevant as a way of improving performance by combining the CPU power residing inside the turbines to compute a common task.
 
 In distributed computing, each node or process has its own local memory and communication happens via message passing \cite{andrews2000foundations}. This chapter describes relevant distributed computing communication paradigms and discusses which technology that is the best for the Siemens case. 
 
@@ -55,7 +55,33 @@ The primary advantage of DSM over message passing is the shared memory abstracti
  
 Comparing DSM with message passing with regards to performance is not entirely fair since DSM is build on top of message passing. However the comparison is necessary when considering what technology to use for a given system and in this case, the comparison results in a trade off between performance and the shared memory abstraction. 
 
-Honghui \cite{lu1995message} has studied the trade-off between message passing performance and the shared memory abstraction. He ported nine different parallel programs to a DSM system called ThreadMarks and a message passing system called PVM and compared the two technologies with regards to programmability and performance. He argues that given DSM is an abstraction built on top of message passing, DSM cannot achieve better performance than message passing. Therefore the goal is to achieve the same performance as message passing using DSM. Hongui concludes that TreadMarks performs comparably with PVM PVM on a variety of problems, with a performance difference of 2-30\%.
+Honghui \cite{lu1995message} has studied the trade-off between message passing performance and the shared memory abstraction. He ported 12 different parallel program scenarios to a DSM system called TreadMarks and a message passing system called PVM and compared the two technologies with regards to programmability and performance. He argues that given DSM is an abstraction built on top of message passing, DSM cannot achieve better performance than message passing, given the larger software-overhead. Therefore the goal is to achieve the same performance as message passing using DSM. For 5 of the scenarios, TreadMarks performed within 10\% of PVM. For 6 of the programs the difference were between 10\% - 30\%. For the last scenario, PVM performed twice as well as TreadMarks. 
+
+Honghui argues that the performance is dependent of the logical flow of the scenario. More messages and more data are sent in TreadMarks, explaining the performance differences. He gives the following reasons for the extra communication in TreadMarks:
+
+\begin{itemize}
+	\item Separation of synchronization and data transfer in TreadMarks. 
+	\item Extra messages to request updates for data in the invalidate protocol used in TreadMarks.
+	\item False sharing.
+	\item Diff accumulation for migratory data in TreadMarks.
+\end{itemize} 
+
+Honghui concludes that the performance of a well optimized DSM system is comparable to that of a message passing system. Furthermore, development of systems with complex communication patterns takes a lot less effort using the DSM paradigm.
+
+In contrast to Honghui, Stumm and Zhou \cite{stumm1990algorithms} argues that applications using DSM can in fact outperform their message passing counterparts, in a few cases. They argue, that this is possible for the following reasons:
+
+\begin{itemize}
+ 	\item DSM algorithms typically move data on demand as they are being accessed, which spreads communication load over a longer period of time, allowing for a greater degree of concurrency. If for example a node uses the shared memory more than others, the node does not need to communicate for every write operation made to the shared memory.
+ 	\item For DSM algorithms that sends data in large blocks, communication overhead is reduced. 
+\end{itemize} 
+ 
+
+%DSM pass by reference
+
+%The advantages of distrbuted shared memory have made it the focus of recent study and have promted the development of various algorithms for implementing the shared data model. REF
+
+%Several implementations have demonstrated that, in turns of performance, distributed shared memory can compete with direct use of data passing in loosely coupled distributed systems. REF
+
 
 %1) Seperation of synchronization
 % Lazy release consistency: Against data races (which may result uin wrong results). Only the next processor that acquires the lock can access x --> only that processor is informormed of the change to x --> reduce message traffic. Ex: Barriers - No processor overites values before all processors have read the value computed in the previous interation.
@@ -70,6 +96,8 @@ Honghui \cite{lu1995message} has studied the trade-off between message passing p
 % Multiple-writer protocol to allow wrinting on same page at the same time. Uses a diff algorithm to reduce false sharing effects.
 
 \section{Publish/subscribe}
+
+
 
 
 \section{Remote message invocation}
