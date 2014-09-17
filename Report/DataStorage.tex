@@ -14,6 +14,7 @@ Should a node become unavailable another node can communicate the same data in e
 This chapter contains a description of a number of relevant storage technologies and a discussion of which technology is the best suited for a system like the Siemens case.
 
 \section{Relational storage, SQL}
+\label{sec:sql}
 The traditional way of storing data is in a Relational Database Management System(RDBMS).
 These databases rely on a schema to arrange data in tables and their relations.
 Using SQL it is easy to query data and to do aggregate operations.
@@ -30,6 +31,7 @@ The performance problem multiplies in a distributed database if the RDBMS must d
 Another problem with a traditional RDBMS is that they are designed for vertical scaling\cite{Atzeni:TheRelationalModelIsDead}. If a traditional RDBMS has problems handling data the solution is to add a bigger harddrive or invest in a faster CPU. This makes sense in a world were hardware is very expensive like it was when the traditional RDBMSs saw the light of day\cite{Stonebraker:TheEndOfAnArchitecturalEra}. Today horizontal scaling is preferred. If a system has a problem with the data load add another machine or add five others if that is what it takes.
 
 \section{Schema-less storage, NoSQL}
+\label{sec:nosql}
 Since 2009 the schema-less storage methods have become increasingly popular.
 Relational databases could no longer keep up with the task of storing and querying big data.
 A new breed of schema-less storage systems became popular because they could handle some of the problems big data caused for the relational storage systems.
@@ -49,15 +51,41 @@ Primary use include storing actual documents like emails and blog posts, or stor
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.8]{Document.png} 
+
+	\begin{tikzpicture}
+		\node[draw, rectangle, minimum height=4.5cm] (a) {
+			\begin{tabular}{c l}
+				\{ & \\
+				& ``ID'': 1, \\
+				& ``Firstname'': ``Thomas'', \\
+				& ``Lastname'': ``Steffensen'', \\
+				& ``Age'': 27, \\
+				& ``Zip'': ``8000'', \\
+				& ``City'': ``Aarhus'' \\
+				\} &
+			\end{tabular}};
+	\end{tikzpicture}
+
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Document store]{
-		\label{fig:DocumentStore}
-		\footnotesize{%
-			Document store structure.
-		} 
+		\caption[Document store]{
+			\label{fig:DocumentStore}
+			\footnotesize{%
+				Document store structure.
+			} 
 	}
 \end{figure}
+
+% \begin{figure}
+% 	\centering
+% 	\includegraphics[scale=0.8]{Document.png} 
+% 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+% 	\caption[Document store]{
+% 		\label{fig:DocumentStore}
+% 		\footnotesize{%
+% 			Document store structure.
+% 		} 
+% 	}
+% \end{figure}
 
 \subsection{Key-value stores}
 The key-value stores can be compared to a hashmap since every entry has a key and an associated value. 
@@ -68,15 +96,45 @@ Primary use includes fast lookup for instance for user sessions or product lists
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.8]{KeyValue.png} 
+
+	\begin{tikzpicture} [
+			diagram item/.style={
+				minimum width=3cm,
+				minimum height=1cm,
+				draw,
+				rectangle
+			}
+		]
+		\node[diagram item] (a) {Key: User1};
+		\node[diagram item, right=.5cm of a] (b) {Value: Stefan};
+
+		\node[diagram item, below=.2cm of a] (c) {Key: User2};
+		\node[diagram item, right=.5cm of c] (d) {Value: Thomas};
+
+	    \draw[arrows=->] (a) to (b);
+	    \draw[arrows=->] (c) to (d);
+	\end{tikzpicture}
+
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Key-value store]{
-		\label{fig:KeyValueStore}
-		\footnotesize{%
-			Key-value store structure.
-		} 
-	}
+		\caption[Key-value store]{
+			\label{fig:KeyValueStore}
+			\footnotesize{%
+				Key-value store structure.
+			} 
+		}
 \end{figure}
+
+% \begin{figure}
+% 	\centering
+% 	\includegraphics[scale=0.8]{KeyValue.png} 
+% 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+% 	\caption[Key-value store]{
+% 		\label{fig:KeyValueStore}
+% 		\footnotesize{%
+% 			Key-value store structure.
+% 		} 
+% 	}
+% \end{figure}
 
 \subsection{Column-family stores}
 Column-family stores keep related data stored together.
@@ -86,8 +144,50 @@ Primary use includes distributed data storage, batch processing of data and anal
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.8]{ColumnFamily.png} 
-	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+
+	\begin{tikzpicture} [
+			diagram item/.style={
+				minimum width=3cm,
+				minimum height=1cm,
+				draw,
+				rectangle
+			},
+			diagram bigitem/.style={
+				minimum width=3cm,
+				minimum height=2cm,
+				draw,
+				rectangle
+			}
+		]
+
+
+		\node (a) {Row key};
+		\node [right=5.7cm of a] (b) {Columns};
+		\node[diagram bigitem, below=0cm of a] (c) {User1};
+		
+		%Attribute names
+		\node[diagram item, right=1.5cm of c, anchor=south] (d) {Firstname};
+		\node[diagram item, right=0cm of d] (e) {Lastname};
+		\node[diagram item, right=0cm of e] (f) {Age};
+		\node[diagram item, right=0cm of f] (g) {Zip};
+
+		%Attribute values
+		\node[diagram item, below=0cm of d] (h) {Thomas};
+		\node[diagram item, below=0cm of e] (i) {Steffensen};
+		\node[diagram item, below=0cm of f] (j) {27};
+		\node[diagram item, below=0cm of g] (k) {8000};
+
+		\node[diagram bigitem, below=.2cm of c] (l) {User2};
+		
+		%Attribute names
+		\node[diagram item, right=1.5cm of l, anchor=south] (m) {Firstname};
+		\node[diagram item, right=0cm of m] (n) {Zip};
+
+		%Attribute values
+		\node[diagram item, below=0cm of m] (o) {Thomas};
+		\node[diagram item, below=0cm of n] (p) {8000};
+	\end{tikzpicture}
+
 	\caption[Column-family store]{
 		\label{fig:ColumnFamilyStore}
 		\footnotesize{%
@@ -95,6 +195,18 @@ Primary use includes distributed data storage, batch processing of data and anal
 		} 
 	}
 \end{figure}
+
+% \begin{figure}
+% 	\centering
+% 	\includegraphics[scale=0.8]{ColumnFamily.png} 
+% 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+% 	\caption[Column-family store]{
+% 		\label{fig:ColumnFamilyStore}
+% 		\footnotesize{%
+% 			Column-family store structure.
+% 		} 
+% 	}
+% \end{figure}
 
 \subsection{Graph databases}
 Graph databases divides data according to nodes and relations between nodes.
@@ -105,22 +217,78 @@ Primary use includes pattern detection and mapping of networks.
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.8]{Graph.png} 
-	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Graph store]{
-		\label{fig:GraphStore}
-		\footnotesize{%
-			Graph store structure.
-		} 
-	}
+	\begin{tikzpicture} [
+			diagram item/.style={
+				minimum width=5.3cm,
+				minimum height=1.5cm,
+				draw,
+				rectangle
+			}
+		]
+
+		\node[diagram item] (a) {
+			\begin{tabular}{rl}
+				Firstname:&Thomas \\
+				Lastname:&Steffensen
+			\end{tabular}};
+
+		\node[diagram item, right=3 of a] (b) {
+			\begin{tabular}{rl}
+				Firstname:&Stefan \\
+				Age:&27
+			\end{tabular}};
+
+		\node[diagram item, below=3 of a] (c) {
+			\begin{tabular}{rl}
+				Firstname:&Mette \\
+				Occupation:&Student
+			\end{tabular}};
+
+		\node[diagram item, right=3 of c] (d) {
+			\begin{tabular}{rl}
+				Name:&Aarhus Universitet
+			\end{tabular}};
+
+		\path (a) -- node[sloped] (knows) {knows} (b);
+		\path (a) -- node[sloped] (married) {married to} (c);
+		\path (a) -- node[sloped] (studies1) {studies at} (d);
+		\path (b) -- node[sloped] (studies2) {studies at} (d);
+
+	    \draw[->] (a)--(knows)--(b);
+	    \draw[->] (a)--(married)--(c);
+	    \draw[->] (a)--(studies1)--(d);
+	    \draw[->] (b)--(studies2)--(d);
+	\end{tikzpicture}
 \end{figure}
 
-\section{Relational storage that scale, NewSQL}
-NewSQL data stores aim to bring the relational data model into the world of horizontal scalability and flexible data models while maintaining the ACID properties and transactions of the traditional RDBMS\cite{Cattell:ScalableSQLAndNoSQLDataStores}.
-NewSQL data stores does not necessarily implement a strict schema and neither do they necessarily use SQL as the query language. In fact some of them are implemented with a completely new architecture\cite{CORBETT:SpannerGooglesGloballyDistributedDatabase}.
+% \begin{figure}
+% 	\centering
+% 	\includegraphics[scale=0.8]{Graph.png} 
+% 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+% 	\caption[Graph store]{
+% 		\label{fig:GraphStore}
+% 		\footnotesize{%
+% 			Graph store structure.
+% 		} 
+% 	}
+% \end{figure}
 
+\section{Relational storage that scale, NewSQL}
+\label{sec:newsql}
+NewSQL data stores aim to bring the relational data model into the world of horizontal scalability and flexible data models while maintaining the ACID properties and transactions of the traditional RDBMS\cite{Cattell:ScalableSQLAndNoSQLDataStores}.
+NewSQL data stores does not necessarily implement a strict schema and neither do they necessarily use SQL as the query language. 
+In fact many of them are implemented with a completely new architecture\cite{CORBETT:SpannerGooglesGloballyDistributedDatabase}.
+Starting from scratch with a new architecture allows the NewSQL data stores to be designed to take the advantage of the distributed paradigms and to incorporate more flexibility into the schema structure.
 
 \section{SQL, NoSQL or NewSQL?}
+This thesis aims to create a distributed system with scalability and redundancy as the most important parameters.
+This means that traditional SQL is not an option because of the poor scalability.
+NoSQL and NewSQL has clear advantages because they are built as a consequence of the struggle with the traditional SQL database and distributed systems.
+NoSQL has the advantage of high scalability and high performance on data analysis, but the cost is lack of ACID and transactions.
+NewSQL promises to keep the virtues of the traditional SQL databases while simultaneously allowing horizontal scalability and high performance.
+
+
+
 
 \section{Schema-less databases}
 
