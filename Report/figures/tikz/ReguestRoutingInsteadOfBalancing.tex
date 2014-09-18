@@ -1,0 +1,80 @@
+\begin{tikzpicture}[
+start chain=going right,
+diagram item/.style={
+	minimum width=80pt,
+	on chain,
+	join
+},
+diagram item seperated/.style={
+	minimum width=90pt,
+	on chain
+}]
+
+\node [
+diagram item,
+label=above:Client 1
+] (client1) {\includegraphics{Cisco_BW/PC}};
+
+\node [
+start branch=1 going right,
+diagram item seperated,
+label=above:Client 2
+] (client2){\includegraphics{Cisco_BW/PC}};
+
+\node [
+continue branch=1 going right,
+diagram item seperated,
+label=above:Client 3
+] (client3) {\includegraphics{Cisco_BW/PC}};
+
+\node [
+continue chain=going below right,
+diagram item,
+label=center:Internet
+] (Internet) {\includegraphics{Cisco_BW/cloud}};
+
+\node [
+start branch=1 going below right,
+diagram item seperated,
+label={[align=center]right:Load\\Balancer\\(Secondary)}
+] (LB2) {\includegraphics{Cisco_BW/distributed_director}};
+
+\node [
+continue chain=going below left,
+diagram item,
+label={[align=center]left:Load\\Balancer\\(Primary)}
+] (LB1) {\includegraphics{Cisco_BW/distributed_director}};
+
+\node [
+continue chain = going below right,
+diagram item
+] (farm) {};
+
+\node [
+start branch=1 going below right,
+diagram item,
+label=below:Client 3 Handler
+] {\includegraphics{Cisco_BW/PC}};
+
+\node [
+start branch=1 going below left,
+diagram item,
+label=below:Client 1 Handler
+] {\includegraphics{Cisco_BW/PC}};
+
+\node [
+continue chain = going below,
+diagram item,
+label=below:Client 2 Handler
+] {\includegraphics{Cisco_BW/PC}};
+
+%Lines to/from LB2
+\draw[loosely dotted] (LB1) -> (LB2) node[fill=white,midway]{heatbeat};
+\draw[dashed] (Internet) -> (LB2);
+\draw[dashed] (LB2) -> (farm);
+
+\draw (Internet) -> (client2);
+\draw (Internet) -> (client3);
+
+
+\end{tikzpicture}

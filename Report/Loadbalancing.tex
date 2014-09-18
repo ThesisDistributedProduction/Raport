@@ -1,14 +1,20 @@
 % !TeX spellcheck = en_GB
-\chapter{Load balancing}
+\chapter{Resource Management} % Load balancing
 
-When dealing with redundant distributed systems, there exists more than one node capable of doing some work.
-In such a system the workload needs to be distributed and balanced across all nodes.
-Load balancing for large systems can be split in tiers. The top tier being region based load balancing using DNS servers using knowledge of where the request was revived \cite{Amazon:Route53}. At a lower tier it could be machine level based on performance parameters like \cite{zhang2000linuxVirtualServer}, to application level based on the content of the request \cite{Citation is missing and I need to find it}. There exists a lot of solution specific load balancers.
+When dealing with redundant distributed systems, there exists more than one node capable of doing specific work.
+In such a system the workload needs to be distributed and balanced across all nodes and available node resources like Memory, cpu time and IO tasks.
+A resource management system is therefore a essential component.
+Having redundant systems provides a number of favourable traits like scalability and availability.
+Load balancing for large systems can be split in tiers.
+The top tier being DNS base load balancing distributing in a round robin manner as well as using region knowledge of where the request was revived from \cite{Amazon:Route53}.
+At a lower tier it could be machine level based on performance parameters like \cite{zhang2000linuxVirtualServer}, and finally application level based on the content of the request \cite{Citation is missing and I need to find it}.
+There exists a lot of solution specific load balancers.
 A node balancer is a service witch distributes incoming requests, among the services registered on the network.
 The distribution is based on different policies like dividing packages or picking the one with most free CPU capacity.
 The load balancer could be a single point of failure, it should for this reason always have one or more backups as seen in \cref{fig:loadBalancingSetup}.
 The load balancer monitors the real servers and only parses on requests to running servers.
-A secondary needs to monitor the primary load balancer and step in if it stops responding. This can be done using a virtual private IP, which is the address for all incoming requests.
+A secondary needs to monitor the primary load balancer and step in if it stops responding.
+This can be done using a virtual private IP, which is the address for all incoming requests. Also there exists solutions witch does all this in a completely distributed manner avoiding having a central server as load balancer \cite{Some cite I ahven't found yet}, this is even in some cases extended to include the clients in the act of load balancing \cite{SOme cite to netflic eureka balancer}.
 
 \begin{figure}
 	\centering	
@@ -24,7 +30,9 @@ A secondary needs to monitor the primary load balancer and step in if it stops r
 
 In this solution the load balancer needs to balance external connections to different protocols like HTTP and Modbus, however a solution witch can be extended to any restful protocol is needed.
 Also balancing of node roles depending on the amount incoming traffic on different interfaces will be needed.
-Load balancers can also provide features like bundling requests, authentication, discovering bad nodes and caching, all of this offloads the servers behind.
+Should all this be done automatically or is it better to define this manually???
+
+Load balances can provide various features, related to offloading the real server and node management. % SSL decryprtion, caching, authentication, ...
 
  
 \paragraph{consider the} 
@@ -53,8 +61,8 @@ Load balancers can also provide features like bundling requests, authentication,
 	\item MELISA Modified ELISA (used for large scale system (interGrid))
 	\item LBA Load Balancing on Arrival
 	
-	%Netflix Ereka https://github.com/Netflix/eureka/wiki/Eureka-at-a-glance
-	\item Round-robin
+	\item Round-robin (Weighted/unweighed)
+	\item Least-Connection (Weighted/unweighed)
 \end{itemize}
 
 \paragraph{The following requirements to the system exists}
@@ -71,6 +79,7 @@ Load balancers can also provide features like bundling requests, authentication,
 
 \section{Levels of balancing}
 \begin{description}
+	\item[??] DDNS / Round robin DNS
 	\item[OSI 3] Network/IP %google says network layer LVS says transport layer
 	\item[OSI 4] Network/IP
 	\item[OSI 7] {Application level, like http balancing, allows balancing strategies based on url and user location.}
@@ -79,16 +88,19 @@ Load balancers can also provide features like bundling requests, authentication,
 What we would like is a transport layer protocol.
 \\
 
-\noindent\cite{Ludwig:SwarmIntelligenceGridLoadBalancing} Implements a particle swam based algorithm, and discuses quality parameters.
+\noindent\cite{Ludwig:SwarmIntelligenceGridLoadBalancing} 
+Implements a particle swam based and an ant based algorithm. 
+It discuses quality parameters.
+It compares with a version using distributed knowledge (SBA State Broadcast Algorithm)
 \\
 
-\noindent\cite{MayuriMehta:HybridDynamicLB} Central and distributed Balancing (hybrid). Central(3) dosn't scale, distributed (6 refs) has a larger overhead.
+\noindent\cite{MayuriMehta:HybridDynamicLB} Central and distributed Balancing (hybrid). Central(3) dosn't scale, distributed (6 refs) has a larger overhead. Implements node selection algorithms.
 
 
 
 \section{Existing solutions}
 \begin{description}
-	\item [Linux Virtual Server: IPVS] Is implemented in the linux kernal version 2.4 and 2.6. Works at the IP level. Useed byt big sites sourceforge.net, layer 3.
+	\item [Linux Virtual Server: IPVS] Is implemented in the linux kernal version 2.4 and 2.6. Works at the IP level. Used by big sites sourceforge.net, layer 3.
 	\item [Google Compute Engine: Load Balancer]: Proprietary. layer 3 and 7.
 	%http://aws.amazon.com/route53/
 	\item [Amazon Route 53] DNS based server, provides region based balancing and latency balancing.
@@ -96,3 +108,48 @@ What we would like is a transport layer protocol.
 	%https://github.com/Netflix/eureka/wiki/Eureka-at-a-glance
 	\item [Eureka] Netflix Load Balancer, client based, middle tier
 \end{description}
+
+\begin{itemize}
+	\item batch schedulers
+	\item workflow engines
+	\item operating systems (build in scheduler)
+\end{itemize}
+
+\begin{figure}
+	\centering	
+	\scalebox{0.7}{\input{figures/tikz/ReguestRoutingInsteadOfBalancing}}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Routing requests as load balancing]{
+		\label{fig:loadBalancingSetup} 
+		\footnotesize{%
+			Routing requests as load balancing.
+		}
+	}
+\end{figure}
+
+\begin{figure}
+	\centering	
+	\scalebox{0.7}{\input{figures/tikz/SystemOverviewFromLoadBalancer}}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[System overview from the load balancer viewpoint]{
+		\label{fig:loadBalancingSetup} 
+		\footnotesize{%
+			A system overview from the load balancer viewpoint.
+		}
+	}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
