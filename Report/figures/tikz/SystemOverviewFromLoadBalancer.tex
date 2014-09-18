@@ -1,0 +1,124 @@
+\begin{tikzpicture}[
+start chain=going right,
+diagram item/.style={
+	minimum width=30pt,
+	on chain,
+	join
+}]
+
+\newcommand\millFigure{\includegraphics[width=0.5cm]{MillSiluet}}
+
+\node [
+diagram item,
+label={[align=center]left:T11\\Spare}
+] {\millFigure};
+
+\begin{scope}[start branch=1 going right]
+\node [
+diagram item,
+label={[align=center]right:T12\\Spare} %M2
+] {\millFigure};
+
+\node [	
+continue chain=going below right,
+diagram item,
+label={[align=center]right:T14\\DB Shard}
+] {\millFigure};
+
+\node [
+continue chain = going below,
+diagram item,
+label={[align=center]right:T16\\DB Shard}
+] {\millFigure};
+
+\node [
+continue chain = going below left,
+diagram item,
+label={[align=center]right:T18\\LoadBalancer\\Secondary}
+] (endBranch1) {\millFigure};
+
+
+\end{scope}
+
+\node [
+continue chain = going below left,
+diagram item,
+label={[align=center]left:T13\\Spare}
+] {\millFigure};
+
+\node [
+continue chain = going below,
+diagram item,
+label={[align=center]left:T15\\External\\Interface}
+] {\millFigure};
+
+\node [
+continue chain = going below right,
+diagram item,
+label={[align=center]left:T17\\LoadBalancer\\Primary}
+] (end1) {\millFigure};
+
+
+%Lower ring
+\node [
+continue chain = going below,
+diagram item,
+label={[align=center]left:T21\\LoadBalancer\\Secondary}
+](start) {\millFigure};
+
+\begin{scope}[start branch=1 going right]
+\node [
+diagram item,
+label={[align=center]right:T22\\DB Shard}
+](startBranch) {\millFigure};
+
+\node [	
+continue chain=going below right,
+diagram item,
+label={[align=center]right:T24\\DB Shard}
+] {\millFigure};
+
+\node [
+continue chain = going below,
+diagram item,
+label={[align=center]right:T26\\DB Shard}
+] {\millFigure};
+
+\node [
+continue chain = going below left,
+diagram item,
+label={[align=center]right:T28\\Spare}
+] (endBranch2) {\millFigure};
+
+
+\end{scope}
+
+\node [
+continue chain = going below left,
+diagram item,
+label={[align=center]left:T23\\External\\Interface}
+] {\millFigure};
+
+\node [
+continue chain = going below,
+diagram item,
+label={[align=center]left:T25\\Spare}
+] {\millFigure};
+
+\node [
+continue chain = going below right,
+diagram item,
+label={[align=center]left:T27\\Spare}
+] (end2) {\millFigure};
+
+
+\draw (endBranch1) -> (end1) node{};
+\draw (endBranch1) -> (startBranch) node{};
+\draw (endBranch1) -> (start) node{};
+\draw (end1) -> (startBranch) node{};
+
+
+
+\draw (endBranch2) -> (end2) node{};
+
+\end{tikzpicture}
