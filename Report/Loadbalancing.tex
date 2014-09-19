@@ -1,10 +1,32 @@
 % !TeX spellcheck = en_GB
 \chapter{Resource Management} % Load balancing
+%Below should
+%Having redundant systems provides a number of favourable traits like scalability and availability.
 
-When dealing with redundant distributed systems, there exists more than one node capable of doing specific work.
-In such a system the workload needs to be distributed and balanced across all nodes and available node resources like Memory, cpu time and IO tasks.
-A resource management system is therefore a essential component.
-Having redundant systems provides a number of favourable traits like scalability and availability.
+Resource management is a key activity in a distributed system.
+A distributed system consists of a number of nodes with various resources available. 
+Resources like 
+\begin{itemize}
+	\item Memory
+	\item Processing time
+	\item Network bandwidth
+	\item Hard drive I/O operation
+	\item and more...
+\end{itemize}
+
+Resource management should fair meaning the nodes should have as the workload distributed as evenly as possible.
+There are different ways to handle this, some systems are able to split a single task up in equally large chunks for each node.
+In this case the system has achieved fairness by design, and dos not need a system to manage resources.
+Much af the work that the turbine controller does today, is done in parallel on every controller.
+It will in most cases be preferred to achieve fairness in this way because the system has no overhead associated with a resource management system.
+
+However there exists tasks that are not possible to split evenly or perhaps splitting them would add too much extra overhead.
+In this case some other mean of resource management is needed.
+This can be split into two categories: Passive and active resource management.
+With the passive version each nodes has specific tasks assigned to them and all these tasks are being routed to them.
+In this way the resource management system is only tasked with distributing the tasks and not monitoring the nodes current available resources.
+This has the advantage of being very simple and can achieve some fairness if the tasks are known to be of equal size.
+
 Load balancing for large systems can be split in tiers.
 The top tier being DNS base load balancing distributing in a round robin manner as well as using region knowledge of where the request was revived from \cite{Amazon:Route53}.
 At a lower tier it could be machine level based on performance parameters like \cite{zhang2000linuxVirtualServer}, and finally application level based on the content of the request \cite{Citation is missing and I need to find it}.
