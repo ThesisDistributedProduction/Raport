@@ -307,9 +307,127 @@ NewSQL promises to keep the virtues of the traditional databases systems while s
 
 Since both NoSQL and NewSQL seems like fitting technologies for data management in the Siemens case a further comparison between two state of the art implementations must be done in order to decide which technology will be the best suited.
 
-\section{State of the art NoSQL and NewSQL}
-To identify state of the NoSQL and NewSQL databases a website called db-engines.com\cite{db-engines} is used. This website maintain a list of more than 200 different databases ranked by popularity. The list is updated monthly based on search engine popularity, discussion threads, job-offers, mentions on LinkedIn and tweets. This does not give the complete and objective ranking but it gives a pointer to the most popular items in their respective category.
+\section{State of the art NoSQL}
+To identify state of the NoSQL and NewSQL databases a website called db-engines.com\cite{db-engines} is used.
+This website maintain a list of more than 200 different databases ranked by popularity. The list is updated monthly based on search engine popularity, discussion threads, job-offers, mentions on LinkedIn and tweets. This does not give the complete and objective ranking but it gives a pointer to the most popular database in their respective category.
+
+Since we expect a stream of measured values from a wide range of parameters on every turbine a key-value store seems to be the obvious choice of NoSQL storage method. On top of the continuous stream of measured values aggregated measures must be obtained for the entire farm. This implies that custom software must be built to aggregate data from all the data stores and calculate aggregated values or that the data store has built in features for aggregation and calculation of aggregate values. Furthermore it is important that the database management system is able to do replication of data and automatic failover in order to achieve high availability.
+
+Within the top 20 databases on the list we find 5 NoSQL databases:
+
+\begin{itemize}
+\item MongoDB ranked 5.
+\item Cassandra ranked 9.
+\item Redis ranked 12.
+\item HBase ranked 15.
+\item Memcached ranked 18.
+\end{itemize}
+
+Redis and Memcached are both key-value stores. Memcached is a very simply yet powerful distributed memory caching system.
+It operates with a key for every entry and a value of raw data.
+Memcached does not understand data structures so data must be serialized before upload.
+Memcache does not support replication neither does it support advanced aggregate operations.
+
+Redis is a more advanced key-value store.
+It allows storing of data structures like lists, sets, hashmaps and so on.
+Redis does not support aggregate operations.
+Redis does not itself allow sharding but an extension called Redis Cluster do. This extension has just entered beta test phase and is not yet production ready.
+
+Since both the key-value stores in the top 20 databases are used more like distributed memory than data stores they maintain a very simplistic approach to the interaction with data.
+None of them support aggregate operations which is crucial for doing calculation over the entire farm.
+
+The remaining NoSQL data stores are either document stores, MongoDB, or column-family stores, Cassandra and HBase.
+Since data mostly has the structure of a parameter and a value it seems excessive to use a column-family data store. 
+Column-family data stores are used for columns of related data which is sparse in this system.
+
+That leaves the document store. MongoDB uses JSON-style documents to store data.
+It can replicate and shard data. 
+There is support for automatic failover if an instance is unavailable.
+MongoDB supports data aggregation and mapreduce allowing aggregate operations before data is returned from the database.
+In terms of availability, data distribution and aggregate operations MongoDB is the best of the NoSQL data stores.
+
+\section{State of the art NewSQL}
+Looking at the db-engines.com database list once more we find that the four highest ranking NewSQL databases are within the top 100 databases:
+
+\begin{itemize}
+\item SAP HANA ranked 23.
+\item Drizzle ranked 74.
+\item NouDB ranked 83.
+\item VoltDB ranked 90.
+\end{itemize}
+
+SAP HANA is developed by SAP.
+It combines database and data processing in-memory.
+SAP HANA supports planning, text processing and business analytics.
+The platform has a lot of features but it is too excessive for this system.
+
+Drizzle is an open source fork of MySQL reimplemented to support a plugin-based architecture.
+The reimplementation is mainly focused on optimization for cloud infrastructure and web applications.
+Lately it seems that the development has slowed and the project stalled.
+The project homepage have several dead links and the last modification to the code was in may 2014.
+
+NuoDB is a peer-to-peer oriented approach to the scalable database. Certain processes called Transaction Managers and Storage Managers share data on a peer-to-peer basis with no single point of failure.
+This architecture supports sharding and replication, even though it is not in the traditional way but with a peer-to-peer twist.
+What further separates NuoDB from the other NewSQL data stores is its ease of configuration and deployment. When a new instance is started it will automatically start communication with its peers. Administration of the database is done through a simple interface or administration can be set to run automatic.
+
+VoltDB is a database built with the limitations of the traditional database systems in mind. Its focus is to avoid these limitations to achieve speed and scalability. The database is promoted on its extreme performance  compared to both traditional SQL databases and to other NoSQL and NewSQL databases. VoltDB allows partitioning of data on several nodes.
+
+Since all NewSQL databases are built for scalability, availability and use SQL as the query language they are able to scale, replicate and aggregate data.
+In terms of ease of use NuoDB is the best choice but in terms of performance VoltDB has some impressive benchmarks.
+Since this system is a production system with a lot of feedback loops running performance is important and that is why VoltDB is the best NewSQL alternative.
 
 \section{Comparison of MongoDB and VoltDB}
+Since MongoDB and VoltDB are the best fit to the Siemens Case in their respective categories a comparison of the two will determine which to use.
+There are several parameters relevant for the Siemens case as shown in table \ref{tab:mongovolt}.
+\begin{table}
+	\begin{tabular}{l >{\centering}m{5cm} c}
+		\hline
+		\hline
+		\textbf{Parameters} & \textbf{MongoDB} & \textbf{VoltDB} \\
+		\hline
+		\hline
+		Horizontal scalability & \checkmark & \checkmark \\
+		\hline
+		High availability & \checkmark & \checkmark \\
+		\hline
+		Replication & \checkmark & \checkmark \\
+		\hline
+		Failover & \checkmark & \checkmark \\
+		\hline
+		Sharding & \checkmark & \checkmark \\
+		\hline
+		Aggregation & \checkmark & \checkmark \\
+		\hline
+		Performance & High & Very high \\
+		\hline
+		Query language & JSON & SQL \\
+		\hline
+		Flexible schema & \checkmark & \text{x}  \\
+		\hline
+		Transactions & \text{x} & \checkmark  \\
+		\hline
+		ACID & \text{x} & \checkmark  \\
+		\hline
+		Industrial solutions & Orange, Forbes, Cisco, eBay, IBM, Microsoft, The Guardian & Schneider Electronics, Openet \\
+		\hline
+		\hline
+	\end{tabular}
+	
+	\caption[MongoDB VoltDB]{
+		\label{tab:mongovolt}
+		\footnotesize{%
+			Comparison of MongoDB and VoltDB.
+		} 
+	}
+\end{table}
 
 \section{Conclusion}
+Choosing a data store these days is not easy. The data store business has been the disrupted by the amount of data generated by web 2.0. 
+A number of new databases has spawned trying to solve the problems of traditional RDBMSs. 
+The industry has not yet come to terms with the correct solution to the big data problem and therefore the best fitting solution as of now must be found.
+MongoDB and VoltDB are two very different approaches to solve one problem.
+MongoDB provides a tested solution that is very popular. VoltDB is the new solution promising even better features than MongoDB but the adaptation is still narrow.
+For the Siemens case we choose MongoDB as the data store.
+The wider industry adaptation is a clear sign that MongoDB is a mature and stable solution.
+The popularity of MongoDB also means that a lot of resources and help is available.
+MongoDB is a proven solution compared to the promising but yet untested VoltDB.
