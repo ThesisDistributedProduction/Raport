@@ -1,49 +1,51 @@
+% !TeX spellcheck = en_US
 \chapter{Introduction}
 
-A Distributed Computing System is a network of multiple computers(nodes) which collaborate in order to solve tasks. In Distributed Computing a task is divided into smaller parts and solved by different nodes. The nodes can be physically close, connected via a local network, or geographically distant, connected by a wide area network. From the outside a Distributed Computing System acts as a single computer even though it is comprised of several nodes.
+% Hvorfor starter ved med at forklare DIstributed systems burde vi ikke starte med problem stillingen og derefeter forklare at vi tager tilgangen til det med distributed system og til dels peer to Peer network.
+
+A distributed system is a network of hardware or software components, which communicates and coordinate their actions only by message passing\cite{coulouris2005distributed}, as illustrated on \cref{fig:distributedSystem}. Each component have their own local memory every component and interact with each other in order to achieve a common goal. The nodes can be physically close, connected via a local network, or geographically distant, connected by a wide area network. An important goal of a distributed system is location transparency\cite{coulouris2005distributed} to create the illusion of the entire system acting as a single computer even though it is comprised of several nodes. Examples of distributed systems vary from aircraft control systems to the Internet to massively multiplayer online games. 
+% Er det bare mig eller er det lidt rigeligt at sige at systemet agere som en enkelt computer? Lad hellere sige noget om at opnå et fælles mål? Multiplayer spil er vel ikke distribuerede systemer, men mere server client systemer.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.8\textwidth,natwidth=610,natheight=642]{DistributedComputingSystemWith2nodes.jpg} 
+	\includegraphics[width=0.7\textwidth,natwidth=510,natheight=542]{DistributedSystem.jpg} 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[Distributed Computing System with 2 nodes]{
-		\label{fig:distributedCoputingSystem} 
+		\label{fig:distributedSystem} 
 		\footnotesize{%
-			A Distributed Computing System with 2 nodes.
+			A distributed system with 4 nodes.
 		}
 	}
 \end{figure}
 
-Figure \cref{fig:distributedCoputingSystem} illustrates the idea of a Distributed Computing System. Nodes 1 and 2 shares virtual memory and/or event queue. The Middleware handles communication between the nodes and ensures the virtual memory is consistent throughout the network. The shared virtual memory is transparent to each node. 
-
-Distributed systems offer many benefits over centralized systems including the following:
+Distributed systems offer many benefits over centralized systems including the following\cite{IBM2005TXSeries}:
 \begin{itemize}
-	\item Scalability: It is easy to add notes to the system, should the size of the system increase.
+	\item Scalability: It is easy to add nodes to the system, should the size of the system increase.
 	\item Redundancy: Several nodes can provide the same service, so if a node crashes, there are many to replace it. Additionally, from a cost perspective, each node does not have to be expensive, because many smaller nodes can be used as replacement.
 \end{itemize}
+% Vi burde nok også snakke om ulemper? Og det er vel bare ting som er mulige at opnå?
 
-\section{Thesis motivation}
-The following chapter describes the motivation for this thesis. First a case from Siemens Wind Power is presented, followed by the thesis motivation.
-
-\subsection{Siemens Wind Power case}
+\section{Siemens Wind Power case}
 
 % Beskriv topologi
 
 \label{sec:SiemensCase}
-Siemens Wind Power is among the leading windmill manufacturers in the world. Siemens builds wind farms of different sizes ranging form single mills to well above one hundred windmills \cite{simensOffShoreProjects, simensOnShoreProjects}.
+Siemens Wind Power is among the leading wind turbine manufacturers in the world. Siemens builds wind farms of different sizes ranging form single turbines to well above one hundred turbines. \cite{simensOffShoreProjects, simensOnShoreProjects}.
 
-Today windmills in a windmill farm at Siemens are equipped with a computers for the purpose of regulating power production parameters, data collection and for communication with the rest of the system. The current setup is illustrated on \cref{fig:currentSiemensSetup}. Every windmill is connected to a Wind Power Supervisor (WPS), which is a central component that aggregates data, perform calculations, store data and handle windmill farm communication with the outside world. At Siemens up to 8 WPS's are present pr. windmill farm.
+Today turbines in a wind farm at Siemens are equipped with computers for the purpose of regulating power production parameters, data collection and for communication with the rest of the system. The current setup is illustrated on \cref{fig:currentSiemensSetup}. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, perform calculations, store data and handle wind farm communication with the outside world. At Siemens up to 8  Wind Power Supervisors are present pr. wind farm.
 
-A database is deployed on every WPS, for aggregated data collected from each windmill. Every windmill has a database as well for data logging purposes. The windmills, WPS's and Park Regulator are connected with a gigabit network, which currently has plenty of extra capacity. The system handles more than 50 control points and 200 measurement points and samples these every 50 ms. The Park Regulator regulates the power production when needed. See \cref{fig:dataComputationSequence} for the regulation sequence.
+For every transformer station there is a High Performance Park Pilot from here on refereed to as Park Pilot. The Park Pilots job is to monitor all turbines performance parameters and issue correct set points for power production.
+
+A database is deployed on every  Wind Power Supervisor, for aggregated data collected from each turbine. Every turbine has a database as well for data logging purposes. The turbines, Wind Power Supervisors and Park Pilots are connected with a gigabit network, which currently has plenty of extra capacity. The system handles more than 50 control points and 200 measurement points and samples these every 50 ms. The Park Pilots the power production when needed. See \cref{fig:dataComputationSequence} for the regulation sequence.
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\textwidth,natwidth=610,natheight=642]{SystemOverviews.png} 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Illustrates the current Siemens windmill farm setup]{
+	\caption[The current Siemens wind farm system overview]{
 		\label{fig:currentSiemensSetup} 
 		\footnotesize{%
-			The current Siemens windmill farm setup.
+			The current Siemens wind farm system overview.
 		}
 	}
 \end{figure}
@@ -63,7 +65,7 @@ A database is deployed on every WPS, for aggregated data collected from each win
 \begin{figure}
 	\centering
 	\begin{sequencediagram} %Created using pgf-umlsd
-		\newthread{reg}{:Park Regulartor}
+		\newthread{reg}{:Park Pilot}
 		\newinst[2]{turbine}{:Turbine}
 	
 		\begin{sdblock}{each turbine}{}
@@ -89,71 +91,32 @@ A database is deployed on every WPS, for aggregated data collected from each win
 	}
 \end{figure}
 
-\subsection{Motivation}
+\section{Thesis motivation}
 
 Todays setup at Siemens Wind Power (\cref{sec:SiemensCase}) is an example of a system wished to be made less centralized. The current setup poses the following problems to Siemens:  
 
 \begin{itemize} 
-	\item Single point of failure. Should a WPS fail, a part of the windmill farm will become unavailable.
-	\item Low scalability. The WPS's and Park Regulator does not scale with the number of windmills.
-	\begin{itemize}
-		\item Low park regulation performance. Every windmill needs to return their current status to the Park Regulator, the set point for each windmill is calculated in the Park Regulator and finally the new set points can be pushed to the mills.
-	\end{itemize}
+	\item Single point of failure. Should a  Wind Power Supervisor fail, a part of the windmill farm will become unavailable.
+	\item Low scalability. The  Wind Power Supervisors and Park Pilots does not scale with the number of windmills. This is also reflected in the park regulation performance. Every turbine needs to return their current status to the Park Pilot, the set points for each turbine is calculated in the Park Pilots and finally the new set points can be pushed to the turbines.
 \end{itemize}
 
-Siemens wishes to remove the WPS's by distributing their functionality to the windmills, utilizing the free capacity of the computers already residing in every windmill. This would increase redundancy and scalability and lower the possibility of a single point of failure. Furthermore, Siemens would like to look for ways to optimize the regulation sequence (see \cref{fig:dataComputationSequence}).
+Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by distributing their functionality to the turbines, utilizing the free capacity of the computers already residing in every turbines. This would increase redundancy and scalability and lower the possibility of a single point of failure. Furthermore, Siemens would like to look for ways to optimize the Park Pilots regulation sequence (see \cref{fig:dataComputationSequence}).
 
-
-
-
-% Today windmills in windmill farm are connected to a single server that aggregates data, perform calculations, store data and handle communication with the outside world. These servers do not scale well with the size of the windmill farm, and they are a single point of failure. Therefor Siemens wishes to remove the servers by utilizing free capacity of the computers already residing in every windmill. 
-%Currently there is some limited redundancy in data and availability but this could be greatly improved by distributing data and communication to the windmills. 
-%Ease of access must be maintained even though computation and data is distributed. 
-%This means routing traffic to a windmill with free capacity through  a single interface.
 
 \section{Problem statement}
 
-The purpose of this thesis is to design, implement and evaluate a framework and associated tools for distributed computing systems development. The case from Siemens Wind Power is an example of a production environment where the framework could be utilized. The goal is not to make a framework that is specific to the Siemens case but to make a general framework for the Siemens case and similar cases. 
+The purpose of this thesis is to design, implement and evaluate a distributed system solution for the Siemens Wind Power case. The solution must be able to provide the same features as the current solution. The goal of the new solution is to improve scalability, availability and performance by distributing the Park Pilot and the Wind Power Supervisor onto the turbines and thereby eliminate single point of failures and make performance scale with the amount of turbines within the wind farm. 
 
-The framework must be able to handle computation distributed on several nodes, communication between those nodes and distribution of data. This roughly leaves two essential components: A component that handles the virtual shared memory and a component that handles communication and distribution of tasks, with respect to the available resources on each node. Furthermore the framework must have a single interface for control of, and interaction with, all the nodes, in order to maintain the illusion of the windmill park serving as a single system. This means ease of access must be maintained even though computation and data is distributed among nodes. Traffic must be routed to a windmill with free capacity through a single interface, without external systems being aware of it.
+To realize this the system must be redesigned as a distributed system. The solution must be able to handle external requests, communication between the nodes and distribution of data, according to the Siemens case. Furthermore the solution must have a single interface for control of, and interaction with, all the nodes, in order to maintain the illusion of the wind farm serving as a single system. This means ease of access must be maintained even though computation and data is distributed among nodes. Traffic must be routed to a turbine controllers with free capacity through a single interface, without external systems being aware of it.
 
-The aim is to investigate and choose components, such that the best configuration is achieved with respect to distribution of data and computation across a production environment like the Siemens case. 
+This roughly leaves three essential components: A component that handles distribution of data, a component that handles communication between nodes and a load balancer, to keep track of available resources on each node. The aim to investigate, analyze and evaluate state of the art technologies within each component area and choose the technologies best suited for the Siemens case. The technologies will be weighed in terms of features with regards to the Siemens case and performance.
 
-% % SKAL MÅSKE SÆTTES IND ???:
-%To determine the best solution the different components will be weighed in terms of:
-%\begin{itemize} 
-%	\item Functionality. Does this component have the wanted functionality?
-%	\item Scalability. Does this component scale well according to the Siemens case?
-%	\item Redundancy. Doe
-%	\item Performance. Does this component 
-%\end{itemize}
+Furthermore we aim to develop a prototype, which runs the developed solution, for proof of concept purposes. The prototype will be compared to the existing Siemens solution with respect to performance, availability and redundancy. ASK SIEMENS HOW TO COMPARE AND MORE CONSTRAINTS??? YOLO 
 
-The solution must work with the Siemens case, which presents the following constraints to the project:
+The Siemens case presents the following constraints to the project:
 \begin{itemize}
 	\item CPU power. Our solution must be able to run on a standard consumer hardware.
-	\item Network bandwidth. Siemens uses gigabit network. 
+	\item Network bandwidth. Siemens uses gigabit network.
+	\item Topology. Siemens wind farms uses ring and star topology.
 \end{itemize}
-Furthermore we aim to develop a prototype, which runs the developed framework, for proof of concept purposes. The framework will be compared to the existing Siemens solution with respect to availability and redundancy. 
 
-%Distribution of computation tasks is the main research area and will be the focus of this thesis.
-
-%\begin{itemize}
-%	\item How do we distribute a database and computation across a production environment in the best possible way?
-%	\item How do we define and measure performance?
-%	\item Can it provide data redundancy and outperform current systems?
-%	\item How many windmills are needed before it makes sense to makes sense to distribute the server?
-%\end{itemize}
-%
-%We aim to investigate the possibility of making a framework and associated tools for developing a distributed system. 
-%This framework must be able to handle computation distributed on several nodes, communication between those nodes and distribution of data. 
-%The communication can be built on top of existing standards as for instance DDS. Data distribution can be built using existing systems like MongoDB. 
-%Distribution of computation tasks is the main research area and will be the focus of this thesis.
-%
-%In order to achieve distributed computation on several nodes the framework must be able to perform load balancing and control the distribution of tasks on the nodes in the system. 
-%Furthermore the framework must have a single interface for control of, and interaction with, all the nodes.  
-%The goal is to create a test system, that can distribute and perform tasks but also to be able to plan ahead of time and know if there is available computation time.
-%
-%The case from Siemens Windpower is an example of a production environment where the framework could be utilized. 
-%Our goal is not to make a framework that is only  specific for this case but to make a general framework for this and similar cases.
-
-\section{Approach}

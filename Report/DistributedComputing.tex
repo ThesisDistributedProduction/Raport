@@ -1,7 +1,7 @@
 \chapter{Distributed computing}
-As mentioned, low scalability is a problem in a Siemens windmill farm. The Wind Power Supervisor (WPS) and the Park Regulator does not scale well with the number of turbines, which introduces performance issues to the solution. Both in terms handling external requests, which is done by the WPS, but also when regulating the windmill farm through the Park Regulator. 
+As mentioned, low scalability is a problem in a Siemens windmill farm. The Wind Power Supervisor (WPS) and the HPPP does not scale well with the number of turbines, which introduces performance issues to the solution. Both in terms handling external requests, which is done by the WPS, but also when regulating the windmill farm through the HPPP. 
 
-An example of this is the Regulator calculation sequence illustrated on \cref{fig:dataComputationSequence}. Today this sequence takes approximately 150 ms. Siemens wishes this time reduced to 10 ms. This is a major performance improvement and for that reason, performing the regulation sequence using a distributed database only is not enough, since reading/writing to the disk decreases performance.
+An example of this is the HPPP regulation sequence illustrated on \cref{fig:dataComputationSequence}. Today this sequence takes approximately 150 ms. Siemens wishes this time reduced to 10 ms. This is a major performance improvement and for that reason, performing the regulation sequence using a distributed database only is not enough, since reading/writing to the disk decreases performance.
 
 When distributing the Wind Power Supervisor onto the turbines, the turbines obviously needs to be able to handle these external requests and windmill farm regulations. For the heavy tasks, in terms of CPU power, distributed computing becomes relevant as a way of improving performance by combining the CPU power residing inside the turbines to compute a common task.
 
