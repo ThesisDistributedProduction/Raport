@@ -35,7 +35,7 @@ Siemens Wind Power is among the leading wind turbine manufacturers in the world.
 
 Today turbines in a wind farm at Siemens are equipped with computers for the purpose of regulating power production parameters, data collection and for communication with the rest of the system. The current setup is illustrated on \cref{fig:currentSiemensSetup}. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, perform calculations, store data and handle wind farm communication with the outside world. At Siemens up to 8  Wind Power Supervisors are present pr. wind farm.
 
-For every transformer station there is a High Performance Park Pilot from here on refereed to as Park Pilot. The Park Pilots are responsible for park regulation. This is done by monitoring all the turbines performance parameters and issue correct set points for power production.
+For every transformer station there is a High Performance Park Pilot from here on refereed to as Park Pilot. The Park Pilots are responsible for park regulation. This is done by monitoring all the turbines performance parameters and issue correct set points for power production as illustrated on \cref{fig:dataComputationSequence}. Every turbine returns their current status to the Park Pilot, then the set points for each turbine is calculated in the Park Pilots and finally the new set points can be pushed to the turbines. 
 
 A database is deployed on every  Wind Power Supervisor, for aggregated data collected from each turbine. Every turbine has a database as well for data logging purposes. The turbines, Wind Power Supervisors and Park Pilots are connected with a gigabit network, which currently has plenty of extra capacity. The system handles more than 50 control points and 200 measurement points and samples these every 50 ms. 
 
@@ -98,10 +98,10 @@ Todays setup at Siemens Wind Power (\cref{sec:SiemensCase}) is an example of a s
 
 \begin{itemize} 
 	\item Single point of failure. Should a Wind Power Supervisor or a Park Pilot fail, a part of the windmill farm will become unavailable.
-	\item Low scalability. The Wind Power Supervisors and Park Pilots does not scale with the number of windmills. This is reflected in the park regulation performance. Today a park regulation cycle-time is 150 ms. This time is set after worst case number of turbines, network overhead and network congestions pr. Park Pilot. Every turbine needs to return their current status to the Park Pilot, the set points for each turbine is calculated in the Park Pilots and finally the new set points can be pushed to the turbines, as illustrated on \cref{fig:dataComputationSequence}. 
+	\item Low scalability. The Wind Power Supervisors and Park Pilots does not scale with the number of windmills. This is reflected in the park regulation performance. Today a park regulation cycle-time is 150 ms. This cycle-time is set after worst case set point retrieval time, worst case new setpoint calculations and worst case time it takes to broadcast new setpoints. This ultimately depends on worst case number of turbines pr. Park Pilot.
 \end{itemize}
 
-Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by distributing their functionality to the turbines, utilizing the free capacity of the computers already residing in every turbines. This would increase availability by lowering the possibility of single point of failure and increase scalability, which would make Siemens able to lower the park regulation cycle-time. 
+Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by distributing their functionality to the turbines, utilizing the free capacity of the computers already residing in every turbines. This would increase availability by lowering the possibility of single point of failure. Furthermore this would increase scalability of the system, opening for performance optimizations of the park regulation cycle-time by detaching regulation performance from number of turbines pr. Park Pilot. 
 
 
 \section{Problem statement}
@@ -112,7 +112,7 @@ To realize this the system must be redesigned as a distributed system. The solut
 
 This roughly leaves three essential components: A component that handles distribution of data, a component that handles communication between nodes and a load balancer, to keep track of available resources on each node. The aim to investigate, analyze and evaluate state of the art technologies within each component area and choose the technologies best suited for the Siemens case. The technologies will be weighed in terms of features with regards to the Siemens case and performance.
 
-Furthermore we aim to develop a prototype, which runs the developed solution, for proof of concept purposes. The prototype will be compared to the existing Siemens solution with respect to performance, availability and redundancy. ASK SIEMENS HOW TO COMPARE AND MORE CONSTRAINTS??? YOLO 
+Furthermore we aim to develop a prototype, which runs the developed solution, for proof of concept purposes. The prototype will be compared to the existing Siemens solution with respect to performance, availability and redundancy. ASK SIEMENS HOW TO COMPARE AND MORE CONSTRAINTS??? 
 
 The Siemens case presents the following constraints to the project:
 \begin{itemize}
