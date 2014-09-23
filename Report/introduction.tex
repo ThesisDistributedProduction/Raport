@@ -30,13 +30,18 @@ Distributed systems offer many benefits over centralized systems including the f
 % Beskriv topologi
 
 \label{sec:SiemensCase}
-Siemens Wind Power is among the leading wind turbine manufacturers in the world. Siemens builds wind farms of different sizes ranging form single turbines to well above one hundred turbines. \cite{simensOffShoreProjects, simensOnShoreProjects}.
+Siemens Wind Power is among the leading wind turbine manufacturers in the world. Siemens builds wind farms of different sizes ranging from single turbines to well above one hundred turbines. \cite{simensOffShoreProjects, simensOnShoreProjects}.
 
-Today turbines in a wind farm at Siemens are equipped with computers for the purpose of regulating power production parameters, data collection and for communication with the rest of the system. The current setup is illustrated on \cref{fig:currentSiemensSetup}. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, perform calculations, store data and handle wind farm communication with the outside world. At Siemens up to 8  Wind Power Supervisors are present pr. wind farm.
+Today turbines in a wind farm at Siemens are equipped with computers for the purpose of regulating power production parameters, data collection and for communication with the rest of the system. The current setup is illustrated on \cref{fig:currentSiemensSetup}. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, perform calculations, store data and handle wind farm communication with the outside world. At Siemens up to eight Park pilots are present pr. wind farm and one Wind Power Supervisor.
 
-For every transformer station there is a High Performance Park Pilot from here on refereed to as Park Pilot. The Park Pilots job is to monitor all turbines performance parameters and issue correct set points for power production.
+For every transformer station there is a High Performance Park Pilot from here on refereed to as Park Pilot. The Park Pilots job is to monitor all turbines current and available power and issue correct set points for power production. See \cref{fig:dataComputationSequence} for the regulation sequence.
 
-A database is deployed on every  Wind Power Supervisor, for aggregated data collected from each turbine. Every turbine has a database as well for data logging purposes. The turbines, Wind Power Supervisors and Park Pilots are connected with a gigabit network, which currently has plenty of extra capacity. The system handles more than 50 control points and 200 measurement points and samples these every 50 ms. The Park Pilots the power production when needed. See \cref{fig:dataComputationSequence} for the regulation sequence.
+Every turbine has a database for raw data logging purposes, this database is replicated to the Wind Power Supervisor.
+The Wind Power Supervisor does 
+data aggregation on data from each turbine as well as store a copy of the replicated data.
+The turbines, Wind Power Supervisor and Park Pilots are connected with a gigabit network, which currently has plenty of extra capacity.
+The system handles more than 50 control points and 200 measurement points and samples these every 50 ms.
+
 
 \begin{figure}
 	\centering
@@ -92,12 +97,11 @@ A database is deployed on every  Wind Power Supervisor, for aggregated data coll
 \end{figure}
 
 \section{Thesis motivation}
-
 Todays setup at Siemens Wind Power (\cref{sec:SiemensCase}) is an example of a system wished to be made less centralized. The current setup poses the following problems to Siemens:  
 
 \begin{itemize} 
-	\item Single point of failure. Should a  Wind Power Supervisor fail, a part of the windmill farm will become unavailable.
-	\item Low scalability. The  Wind Power Supervisors and Park Pilots does not scale with the number of windmills. This is also reflected in the park regulation performance. Every turbine needs to return their current status to the Park Pilot, the set points for each turbine is calculated in the Park Pilots and finally the new set points can be pushed to the turbines.
+	\item Single point of failure. Should a  Wind Power Supervisor or Park pilot fail, a part of the wind farm will become unavailable.
+	\item Low scalability. The  Wind Power Supervisors and Park Pilots does not scale with the number of turbines. This is also reflected in the park regulation performance. Every turbine needs to return their current status to the Park Pilot, the set points for each turbine is calculated in the Park Pilots and finally the new set points can be pushed to the turbines.
 \end{itemize}
 
 Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by distributing their functionality to the turbines, utilizing the free capacity of the computers already residing in every turbines. This would increase redundancy and scalability and lower the possibility of a single point of failure. Furthermore, Siemens would like to look for ways to optimize the Park Pilots regulation sequence (see \cref{fig:dataComputationSequence}).
