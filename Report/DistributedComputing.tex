@@ -14,26 +14,6 @@ Message passing is a low-level communication paradigm, where processors communic
 
 With message passing being a low-level communication paradigm, the communication overhead is low compared to paradigms build on top of it. It is entirely up to the application developer to handle communication. This will in many cases result in better performance, which is the most compelling argument for choosing message passing as communication paradigm. The problem with it being up to the developer, is that the developer needs to deal with configurations setup, exception handling, who and when to communicate with, etc., when developing the application. This makes it hard to develop using message passing, compared to distributed shared memory, especially when dealing with more complex applications \cite{lu1995message}. 
 
-%Results?
-
-
-%\section{Shared memory}
-%
-%In a shared memory system, several nodes communicate via a global memory area that contains a set of shared variables. This paradigm (illustrated on \cref{fig:sharedMemorySystem}) is an extension of message passing and requires a server or node dedicated to the global memory area.
-%
-%\begin{figure}
-%	\centering
-%	\includegraphics[width=0.8\textwidth,natwidth=610,natheight=642]{SharedMemory.jpg} 
-%	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-%	\caption[Distributed Computing System with 2 nodes]{
-%		\label{fig:sharedMemorySystem} 
-%		\footnotesize{%
-%			A shared memory system with 2 nodes.
-%		}
-%	}
-%\end{figure}
-
-
 
 \section{Distributed shared memory}
 
@@ -66,23 +46,6 @@ Honghui argues that the performance is dependent of the logical flow of the scen
 	\item Diff accumulation for migratory data in TreadMarks.
 \end{itemize} 
 
-Honghui concludes that the performance of a well optimized DSM system is comparable to that of a message passing system. Furthermore, development of systems with complex communication patterns takes a lot less effort using the DSM paradigm.
-
-In contrast to Honghui, Stumm and Zhou \cite{stumm1990algorithms} argues that applications using DSM can in fact outperform their message passing counterparts, in a few cases. They argue, that this is possible for the following reasons:
-
-\begin{itemize}
- 	\item DSM algorithms typically move data on demand as they are being accessed, which spreads communication load over a longer period of time, allowing for a greater degree of concurrency. If for example a node uses the shared memory more than others, the node does not need to communicate for every write operation made to the shared memory.
- 	\item For DSM algorithms that sends data in large blocks, communication overhead is reduced. 
-\end{itemize} 
- 
-
-%DSM pass by reference
-
-%The advantages of distrbuted shared memory have made it the focus of recent study and have promted the development of various algorithms for implementing the shared data model. REF
-
-%Several implementations have demonstrated that, in turns of performance, distributed shared memory can compete with direct use of data passing in loosely coupled distributed systems. REF
-
-
 %1) Seperation of synchronization
 % Lazy release consistency: Against data races (which may result uin wrong results). Only the next processor that acquires the lock can access x --> only that processor is informormed of the change to x --> reduce message traffic. Ex: Barriers - No processor overites values before all processors have read the value computed in the previous interation.
 
@@ -95,7 +58,52 @@ In contrast to Honghui, Stumm and Zhou \cite{stumm1990algorithms} argues that ap
 %4) diff accumulation for migratory data in TreadMarks
 % Multiple-writer protocol to allow wrinting on same page at the same time. Uses a diff algorithm to reduce false sharing effects.
 
+Honghui concludes that the performance of a well optimized DSM system is comparable to that of a message passing system. Furthermore, development of systems with complex communication patterns takes a lot less effort using the DSM paradigm.
+
+In contrast to Honghui, Stumm and Zhou \cite{stumm1990algorithms} argues that applications using DSM can in fact outperform their message passing counterparts, in a few cases. They argue, that this is possible for the following reasons:
+
+\begin{itemize}
+ 	\item DSM algorithms typically move data on demand as they are being accessed, which spreads communication load over a longer period of time, allowing for a greater degree of concurrency. If for example a node uses the shared memory more than others, the node does not need to communicate for every write operation made to the shared memory.
+ 	\item For DSM algorithms that sends data in large blocks, communication overhead is reduced. 
+\end{itemize} 
+ 
+
+%DSM pass by reference
+
+%In distribted system there might be scenarios in which a task waits for a service at the queue of one resource, while at the same time another resource which is capable of serving the task is idle. The purpose of a load balancing algorithm is to prevent these scenarios as much as possible.
+
+%three phases.
+%Information collection: Gathers info of workload
+%decision making: Calc optimal data dist.
+%data migration: Transfer excess amount of workload from on overloaded processor to another underloaded processor
+
+%Centralized: Size of grid increases, keppeing all the inforation about the state of all the resources is a bottlebeck. Scalability becomes an issue. Page 281. 
+
+%The benifits of this technique stems from Load Balancing
+%State Broadcast Algorithm (SBA). Page 282
+
+%Basic assumptions Page 289.
+
+%Scalability and makespan (Y). Page 298, conclusion.
+
+
 \section{Publish/subscribe}
+
+Publish/subscribe is a messaging pattern where communication is interest based instead of address based. Messages are characterized into classes and sent by publishers, without knowledge of how many subscribers there may be. Nodes can then subscribe to one or more classes of interest, without knowledge of how many publishers there are, providing a more decoupled, scalable and flexible interaction model.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{PublishSubscribe.jpg} 
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Distributed Computing System with 2 nodes]{
+		\label{fig:publishSubscribe} 
+		\footnotesize{%
+			A simple publish/subscribe system.
+		}
+	}
+\end{figure}
+
+The publish/subscribe paradigm is event driven. The paradigm relies on an event notification service providing storage and management for subscriptions and efficient delivery of events, as illustrated on \cref{fig:publishSubscribe} \cite{eugster2003many}. The subscribers are notified subsequently of any event, generated by a publisher, matching the registered interest. The strength of this event-based communication is the full decoupling in time, space and synchronization between publishers and subscribers \cite{eugster2003many}.
 
 
 
