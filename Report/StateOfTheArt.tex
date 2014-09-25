@@ -1,1 +1,37 @@
 \chapter{State of the art}
+Wind energy is by far one of the most popular green energy forms.
+It is predicted that by the end of 2014 the worlds collected wind energy production will be near 360GW\cite{worldwidewindcapacity}.
+Despite the focus on and popularity of wind energy there is still a lot of engineering challenges to be overcome.
+The following sections will describe state of the art research with respect to control and communication within the wind energy sector.
+
+\section{Control}
+One area that is still open for optimization is the control of turbines both as a single unit but also as a farm. 
+Calculating the perfect position for each turbine such that the global power production setpoint is reached is a very hard problem.
+The algorithms must take a lot of parameters into account as for instance noise produced by the wings, certain speeds where the wear and tear of the turbine is high and the position of other turbines so the wake created by one turbine does not reduce the performance of other turbines unnecessarily.
+Furthermore every turbines maximum power production and current power production must also be taken into account.
+Several approaches has been tested as described in the following subsections. %TODO: Rewrite,
+
+\subsection{Hierarchical/centralised control}
+The hierarchical/centralised approach uses local control on the turbine level and global control on the wind farm level\cite{CentralisedPowerControlOfWindFarm, HeirarchicalWindFarmControl}.
+
+Setpoints for the global output of the wind farm are received by the controller on the wind farm level.
+So is the output for each turbine and the maximum available output for each turbine.
+The global controller calculates setpoints for each turbine based on the global setpoint and each turbines current and possible output.
+
+The controllers on turbine level is responsible for reaching the setpoint calculated by the global controller as well as making each turbine reach the setpoint in the most optimal manner(gearing, avoid ice over, avoid oscillation).
+
+The hierarchical/centralized approach is the current approach used in the Siemens case.
+
+\subsection{Decentralized feed-forward control}
+The decentralized feed-forward approach\cite{DecentralisedFeedforwardControlOfWindFarms} takes advantage of the fact that turbines are placed in a farm by letting upwind turbines feed wind data to downwind turbines. 
+This allows downwind turbines to make adjustments to their production in order to exploit the coming wind in the best way.
+Furthermore a restricted communication model is used allowing turbines only to communicate with their neighbors.
+
+Using this decentralized feed-forward approach to control a wind farm can help even out the output of the farm since downwind turbines has additional information regarding wind speed to come to act upon. If upwind turbines power production is also a part of the feed-forward package downwind turbines may also be able to regulate overall wind farm production by evening out spikes from upwind turbines.
+In addition by only communicating with neighboring turbines in order to achieve improvements in output the need for a centralized node is alleviated.
+
+\subsection{Game theory control}
+A new approach to control of wind farms is to utilize game theory\cite{AModelFreeApproachToWindFarmControl}.
+The turbines in a farm must cooperate to reach the desired goal of a chosen output current.
+The game theory approach use an iterative learning algorithm that converges against the optimal output after n iterations.
+According to the above referenced article improvements on up to 25\% is possible compared to other algorithms currently in use.

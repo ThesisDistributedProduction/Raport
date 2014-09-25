@@ -29,14 +29,14 @@ This has the advantage of being very simple and can achieve some fairness if the
 
 Load balancing for large systems can be split in tiers.
 The top tier being DNS base load balancing distributing in a round robin manner as well as using region knowledge of where the request was revived from \cite{Amazon:Route53}.
-At a lower tier it could be machine level based on performance parameters like \cite{zhang2000linuxVirtualServer}, and finally application level based on the content of the request \cite{Citation is missing and I need to find it}.
+At a lower tier it could be machine level based on performance parameters like \cite{zhang2000linuxVirtualServer}, and finally application level based on the content of the request[?]. %TODO: Insert citation
 There exists a lot of solution specific load balancers.
 A node balancer is a service witch distributes incoming requests, among the services registered on the network.
 The distribution is based on different policies like dividing packages or picking the one with most free CPU capacity.
 The load balancer could be a single point of failure, it should for this reason always have one or more backups as seen in \cref{fig:loadBalancingSetup}.
 The load balancer monitors the real servers and only parses on requests to running servers.
 A secondary needs to monitor the primary load balancer and step in if it stops responding.
-This can be done using a virtual private IP, which is the address for all incoming requests. Also there exists solutions witch does all this in a completely distributed manner avoiding having a central server as load balancer \cite{Some cite I ahven't found yet}, this is even in some cases extended to include the clients in the act of load balancing \cite{SOme cite to netflic eureka balancer}.
+This can be done using a virtual private IP, which is the address for all incoming requests. Also there exists solutions witch does all this in a completely distributed manner avoiding having a central server as load balancer [?], this is even in some cases extended to include the clients in the act of load balancing[?]. % \cite{SOme cite to netflic eureka balancer} %TODO: Insert citation
 
 \begin{figure}
 	\centering	
