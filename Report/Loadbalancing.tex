@@ -3,32 +3,25 @@
 %Below should
 %Having redundant systems provides a number of favourable traits like scalability and availability.
 
-Resource management is a key activity in a distributed system.
-A distributed system consists of a number of nodes with various resources available. 
-Resources like 
-\begin{itemize}
-	\item Memory
-	\item Processing time
-	\item Network bandwidth
-	\item Hard drive I/O operation
-	\item and more...
-\end{itemize}
+Resource management is a key activity in a distributed decentralised system.
+A decentralised system consists of a number of nodes with various resources available. 
+Resources like: Memory, Processing time, Network bandwidth, Hard drive I/O operations and more. 
 
-Resource management should fair meaning the nodes should have as the workload distributed as evenly as possible.
-There are different ways to handle this, some systems are able to split a single task up in equally large chunks for each node.
-In this case the system has achieved fairness by design, and dos not need a system to manage resources.
-Much af the work that the turbine controller does today, is done in parallel on every controller.
-It will in most cases be preferred to achieve fairness in this way because the system has no overhead associated with a resource management system.
+Resource management should be fair, this means the nodes should have the workload distributed as evenly as possible.
+There are different ways to handle this, some systems are able to split a single task up in equally large chunks for each node, in the Siemens case this is similar to the control algorithm that every turbine controller will need to run.
+In a system where the tasks can be split evenly among the nodes, resource management logic might not be need as the system achieves a fair distribution by design, needless to say this can result in a much simpler design because of fewer components while avoid overhead due to resource management control algorithms. %and data aggregation functionality?
+Others have many different tasks that can run independently of each other in the Siemens case this will be handling requests from users and secondary systems running outside the wind farm.
+As stated the Siemens case is a system in which both situations are present, witch means a resource management logic is needed.
 
-However there exists tasks that are not possible to split evenly or perhaps splitting them would add too much extra overhead.
-In this case some other mean of resource management is needed.
-This can be split into two categories: Passive and active resource management.
-With the passive version each nodes has specific tasks assigned to them and all these tasks are being routed to them.
-In this way the resource management system is only tasked with distributing the tasks and not monitoring the nodes current available resources.
-This has the advantage of being very simple and can achieve some fairness if the tasks are known to be of equal size.
+\section{Load Balancing}
+Software responsible for handling resource management is called a load balancer.
+Load balancers come in different complexity and with the ability to manage resource in different ways. From naively assigning clients with a round robin based algorithm to distributing connections based on resource monitoring. Some Load balancers require client and or server integration some function completely independently.
 
-Load balancing for large systems can be split in tiers.
-The top tier being DNS base load balancing distributing in a round robin manner as well as using region knowledge of where the request was revived from \cite{Amazon:Route53}.
+Different load balancing methods will are here briefly described:
+%Load balancing for large systems can be split in tiers.
+\paragraph{DNS based load balancing} %A alternative better name exists lookup next week
+is a load balancer built into the DNS service, it distributes load in a round robin manner as well as using region knowledge of where the request was revived from \cite{Amazon:Route53}. DNS based load balancing is among the most scalable solutions that does not need any special configuration of either client nor server. However is does not provide any monitoring of server performance parameters, and once the DNS lookup is over the service does not play any role in load balancing related to one that specific client until the DNS cache is refreshed. This type of loadbalancing is not applicable since 
+
 At a lower tier it could be machine level based on performance parameters like \cite{zhang2000linuxVirtualServer}, and finally application level based on the content of the request \cite{Citation is missing and I need to find it}.
 There exists a lot of solution specific load balancers.
 A node balancer is a service witch distributes incoming requests, among the services registered on the network.
