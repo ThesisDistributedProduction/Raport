@@ -5,14 +5,14 @@ An example of this is the HPPP regulation sequence illustrated on \cref{fig:data
 
 When distributing the Wind Power Supervisor onto the turbines, the turbines obviously needs to be able to handle these external requests and windmill farm regulations. For the heavy tasks, in terms of CPU power, distributed computing becomes relevant as a way of improving performance by combining the CPU power residing inside the turbines to compute a common task.
 
-In distributed computing, each node or process has its own local memory and communication happens via message passing \cite{andrews2000foundations}. This chapter describes relevant distributed computing communication paradigms and discusses which technology that is the best for the Siemens case. 
+In distributed computing, each node or process has its own local memory and communication happens via message passing~\cite{andrews2000foundations}. This chapter describes distributed computing communication paradigms, which are relevant to the Siemens case, and discusses which technology within the chosen paradigm that is the best for the Siemens case. 
 
 
 \section{Message passing}
 
 Message passing is a low-level communication paradigm, where processors communicate by sending messages via bidirectional channels. It's a highly used paradigm and other communication paradigms are usually implemented on top of an underlying message-passing system.  
 
-With message passing being a low-level communication paradigm, the communication overhead is low compared to paradigms build on top of it. It is entirely up to the application developer to handle communication. This will in many cases result in better performance, which is the most compelling argument for choosing message passing as communication paradigm. The problem with it being up to the developer, is that the developer needs to deal with configurations setup, exception handling, who and when to communicate with, etc., when developing the application. This makes it hard to develop using message passing, compared to distributed shared memory, especially when dealing with more complex applications \cite{lu1995message}. 
+With message passing being a low-level communication paradigm, the communication overhead is low compared to paradigms build on top of it. It is entirely up to the application developer to handle communication. This will in many cases result in better performance, which is the most compelling argument for choosing message passing as communication paradigm. The problem with it being up to the developer, is that the developer needs to deal with configurations setup, exception handling, who and when to communicate with, etc., when developing the application. This makes it hard to develop using message passing, compared to distributed shared memory, especially when dealing with more complex applications~\cite{lu1995message}. 
 
 
 \section{Distributed shared memory}
@@ -31,41 +31,8 @@ Shared memory is an attractive paradigm for designing parallel and distributed s
 	}
 \end{figure}
 
-The primary advantage of DSM over message passing is the shared memory abstraction provided. This gives the illusion of physically shared memory and allows developers to use the shared-memory paradigm, without having to think about communication mechanisms. However the abstraction also introduces overhead to the system, which decreases performance. The DSM abstraction has limited knowledge of the application flow of the application, compared to communication via message passing. 
- 
-Comparing DSM with message passing with regards to performance is not entirely fair since DSM is build on top of message passing. However the comparison is necessary when considering what technology to use for a given system and in this case, the comparison results in a trade off between performance and the shared memory abstraction. 
+The primary advantage of DSM over message passing is the shared memory abstraction provided. This gives the illusion of physically shared memory and allows developers to use the shared-memory paradigm, without having to think about communication mechanisms. However the abstraction also introduces overhead to the system, since DSM abstraction has limited knowledge of the application flow of the application, compared to communication via message passing. 
 
-Honghui \cite{lu1995message} has studied the trade-off between message passing performance and the shared memory abstraction. He ported 12 different parallel program scenarios to a DSM system called TreadMarks and a message passing system called PVM and compared the two technologies with regards to programmability and performance. He argues that given DSM is an abstraction built on top of message passing, DSM cannot achieve better performance than message passing, given the larger software-overhead. Therefore the goal is to achieve the same performance as message passing using DSM. For 5 of the scenarios, TreadMarks performed within 10\% of PVM. For 6 of the programs the difference were between 10\% - 30\%. For the last scenario, PVM performed twice as well as TreadMarks. 
-
-Honghui argues that the performance is dependent of the logical flow of the scenario. More messages and more data are sent in TreadMarks, explaining the performance differences. He gives the following reasons for the extra communication in TreadMarks:
-
-\begin{itemize}
-	\item Separation of synchronization and data transfer in TreadMarks. 
-	\item Extra messages to request updates for data in the invalidate protocol used in TreadMarks.
-	\item False sharing.
-	\item Diff accumulation for migratory data in TreadMarks.
-\end{itemize} 
-
-%1) Seperation of synchronization
-% Lazy release consistency: Against data races (which may result uin wrong results). Only the next processor that acquires the lock can access x --> only that processor is informormed of the change to x --> reduce message traffic. Ex: Barriers - No processor overites values before all processors have read the value computed in the previous interation.
-
-%2) Extra messages to request updates for data in the invalidate protocol used in TreadMarks
-% Memory page change communicatin. Modified pages are inviladated after an acquire. Later access causes access miss, which in turn causes installation of an up-to-date copy of the page.
-
-%3) False sharing
-% To objects er allokerede i samme memory page og de skrives til samtidig --> force update af page --> overhead
-
-%4) diff accumulation for migratory data in TreadMarks
-% Multiple-writer protocol to allow wrinting on same page at the same time. Uses a diff algorithm to reduce false sharing effects.
-
-Honghui concludes that the performance of a well optimized DSM system is comparable to that of a message passing system. Furthermore, development of systems with complex communication patterns takes a lot less effort using the DSM paradigm.
-
-In contrast to Honghui, Stumm and Zhou \cite{stumm1990algorithms} argues that applications using DSM can in fact outperform their message passing counterparts, in a few cases. They argue, that this is possible for the following reasons:
-
-\begin{itemize}
- 	\item DSM algorithms typically move data on demand as they are being accessed, which spreads communication load over a longer period of time, allowing for a greater degree of concurrency. If for example a node uses the shared memory more than others, the node does not need to communicate for every write operation made to the shared memory.
- 	\item For DSM algorithms that sends data in large blocks, communication overhead is reduced. 
-\end{itemize} 
  
 
 %DSM pass by reference
@@ -103,12 +70,119 @@ Publish/subscribe is a messaging pattern where communication is interest based i
 	}
 \end{figure}
 
-The publish/subscribe paradigm is event driven. The paradigm relies on an event notification service providing storage and management for subscriptions and efficient delivery of events, as illustrated on \cref{fig:publishSubscribe} \cite{eugster2003many}. The subscribers are notified subsequently of any event, generated by a publisher, matching the registered interest. The strength of this event-based communication is the full decoupling in time, space and synchronization between publishers and subscribers \cite{eugster2003many}.
+The publish/subscribe paradigm is event driven and corresponds to the observer design pattern, where subscribers are registered via keywords instead of registering their interest directly with the publishers. The paradigm relies on an event notification service providing storage and management for subscriptions and efficient delivery of events, as illustrated on \cref{fig:publishSubscribe}. The subscribers are notified subsequently of any event, generated by a publisher, matching the registered interest. The strength of this event-based communication is the full decoupling in time, space and synchronization between publishers and subscribers~\cite{eugster2003many}.
+
+%Quality of service??
+
+% DSM is only space and time decoupled but not sync, because consumers pull from shared space in a synchronous style
 
 
+\section{Remote procedure call}
+
+Remote procedure call (RPC) is a communications paradigm built for client/server architecture~\cite{Microsoft2003RPC}, which makes remote interactions appear the same way as local interactions. The goal is to make the process of executing code on a remote machine as simple as calling a local function~\cite{dusseau2014intro} by factoring out common tasks, such as security, synchronization, and data flow handling. This explains the paradigms popularity in distributed computing. However distribution cannot be made completely transparent to the application, because it gives rise to further types of potential failures, like communication failures, that have to be dealt with explicitly~\cite{coulouris2005distributed}. 
+
+The idea of RPC is quite simple. When a remote procedure is invoked, the calling environment is suspended, the parameters are passed across the network to the environment where the procedure is to execute and the desired procedure is executed at that location. When execution is finished, return values are sent back to the calling environment, where execution resumes \cite{birrell1984implementing}.
+
+A shortcoming of RPC is the strong coupling in time, space and synchronization. Although solutions have been presented to remove the synchronization coupling by future remote invocation. Remote method invocation is a paradigm where RPC as been applied to object-oriented contexts~\cite{eugster2003many}.
+
+%Not appropriate for broadcasting
+
+%Strong time coupled 
+%sync coupled from the consumer side (waits for the return of the call, calling environment is suspended). Can be changed so sender does not expect reply (weak reliablity, no success or failure). Or return handle for sender to later request return value when needed (future remote invocation)
+
+%Space coupling (remote reference to object)
 
 
-\section{Remote message invocation}
+%\section{Notification}
+%
+%The notification paradigm corresponds to the observer design pattern. It works by having subscribers register their interest directly with the publishers, which manages subscriptions and send events. It is usually implemented using two asynchronous invocations, in order to enforce synchronization decoupling: the first is sent by the client to the server, containing invocation arguments and a callback reference to the client, and the second is sent by the server to the client to return one or more replies. However publishers and subscribers remain coupled in time and space. Furthermore the communication management is left to the publisher. This can become a problem as the system grows in size \cite{eugster2003many}.
+
+%Publish/Subscribe where subscribers register their interest directly with publishers, which manages subscriptions and send events.
+
+%event driven
+
+%\section{Message queuing}
+%Message queuing is a message-centric approach that usually integrate some form of publish/subscribe transaction. It works by having producers append messages to a global FIFO or priority queue asynchronously and consumers dequeue them synchronously from that same queue, where messages can only be consumed by one consumer. At an interaction level message queues recall much of DSM, where producers feed messages to some global memory space. Similarly to DSM, producers and consumers are decoupled in both space and time, where synchronous decoupling is only present for the producers \cite{eugster2003many}.
+
+%Global FIFO kø. Til hvis man er ligeglad med, hvem der tager opgaven??
+
+
+%\begin{table}
+%	\begin{tabular}{l >{\centering}m{5cm} c}
+%		\hline
+%		\hline
+%		\textbf{Abstraction} & \textbf{Space} & \textbf{Time} & \textbf{Flow} \\
+%		\hline
+%		\hline
+%		Message Passing & \checkmark & \checkmark \\
+%		\hline
+%		RPC/RMI & \checkmark & \checkmark \\
+%		\hlines
+%		Async. RPC/RMI & \checkmark & \checkmark \\
+%		\hline
+%		Future RPC/RMI & \checkmark & \checkmark \\
+%		\hline
+%		Notifications & \text{x}& \text{x} & \checkmark \\
+%		\hline
+%		DSM & \checkmark & \checkmark & P(\checkmark) \\
+%		\hline
+%		Message Queuing (PULL) & \checkmark & \checkmark & \text{P(} \checkmark \text{)} \\
+%		\hline
+%		Public/Subscribe & \checkmark & \checkmark & \checkmark \\
+%		\hline
+%		\hline
+%	\end{tabular}
+%	
+%	\caption[MongoDB VoltDB]{
+%		\label{tab:mongovolt}
+%		\footnotesize{%
+%			Comparison of MongoDB and VoltDB.
+%		} 
+%	}
+%\end{table}
+
+\section{Comparison with regards to the Siemens case}
+Looking at the Siemens case (\cref{sec:SiemensCase}) the new distributed system must act as a single unit, be able to perform park regulations and scale easily with the number of turbines. Furthermore Siemens wish to remove single point of failures. With this in mind, the remote procedure call paradigm is not an option because it is tight coupled and build for a client/server architecture, which is exactly what Siemens is trying to avoid. One could imaging using a partial client/server architecture, with a communication hierarchy, however this would introduce some communication overhead~\cite{Yu1997JavaDSM} and single point of failures to the system.
+
+Comparing DSM with message passing with regards to performance is not entirely fair since DSM is an abstraction built using message passing. However the comparison is necessary when considering what technology to use for a given system and in this case, the comparison results in a trade off between performance and the shared memory abstraction. 
+
+Honghui~\cite{lu1995message} has studied the trade-off between message passing performance and the shared memory abstraction. He ported 12 different parallel program scenarios to a DSM system called TreadMarks and a message passing system called PVM and compared the two technologies with regards to programmability and performance. He argues that given DSM is an abstraction built on top of message passing, DSM cannot achieve better performance than message passing, given the larger software-overhead. Therefore the goal is to achieve the same performance as message passing using DSM. For 5 of the scenarios, TreadMarks performed within 10\% of PVM. For 6 of the programs the difference were between 10\% - 30\%. For the last scenario, PVM performed twice as well as TreadMarks. 
+
+Honghui argues that the performance is dependent of the logical flow of the scenario. More messages and more data are sent in TreadMarks, explaining the performance differences. He gives the following reasons for the extra communication in TreadMarks:
+
+\begin{itemize}
+	\item Separation of synchronization and data transfer in TreadMarks. 
+	\item Extra messages to request updates for data in the invalidate protocol used in TreadMarks.
+	\item False sharing.
+	\item Diff accumulation for migratory data in TreadMarks.
+\end{itemize} 
+
+%1) Seperation of synchronization
+% Lazy release consistency: Against data races (which may result uin wrong results). Only the next processor that acquires the lock can access x --> only that processor is informormed of the change to x --> reduce message traffic. Ex: Barriers - No processor overites values before all processors have read the value computed in the previous interation.
+
+%2) Extra messages to request updates for data in the invalidate protocol used in TreadMarks
+% Memory page change communicatin. Modified pages are inviladated after an acquire. Later access causes access miss, which in turn causes installation of an up-to-date copy of the page.
+
+%3) False sharing
+% To objects er allokerede i samme memory page og de skrives til samtidig --> force update af page --> overhead
+
+%4) diff accumulation for migratory data in TreadMarks
+% Multiple-writer protocol to allow wrinting on same page at the same time. Uses a diff algorithm to reduce false sharing effects.
+
+Honghui concludes that the performance of a well optimized DSM system is comparable to that of a message passing system. Furthermore, development of systems with complex communication patterns takes a lot less effort using the DSM paradigm.
+
+In contrast to Honghui, Stumm and Zhou~\cite{stumm1990algorithms} argues that applications using DSM can in fact outperform their message passing counterparts, in a few cases. They argue, that this is possible for the following reasons:
+
+\begin{itemize}
+ 	\item DSM algorithms typically move data on demand as they are being accessed, which spreads communication load over a longer period of time, allowing for a greater degree of concurrency. If for example a node uses the shared memory more than others, the node does not need to communicate for every write operation made to the shared memory.
+ 	\item For DSM algorithms that sends data in large blocks, communication overhead is reduced. 
+\end{itemize} 
+
+Looking at the Siemens case the two major factors for the communication paradigm choice are scalability and availability.
+ With that in mind, BLABLA is not an option because of .. 
+
+Message queuing and RMI offers feature which  
+
 
 
 \section{Conclusion}

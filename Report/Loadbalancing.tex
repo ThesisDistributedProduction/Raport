@@ -22,21 +22,22 @@ Different load balancing methods will are here briefly described:
 \paragraph{DNS based load balancing} %A alternative better name exists lookup next week
 is a load balancer built into the DNS service, it distributes load in a round robin manner as well as using region knowledge of where the request was revived from \cite{Amazon:Route53}. DNS based load balancing is among the most scalable solutions that does not need any special configuration of either client nor server. However is does not provide any monitoring of server performance parameters, and once the DNS lookup is over the service does not play any role in load balancing related to one that specific client until the DNS cache is refreshed. This type of loadbalancing is not applicable since 
 
-At a lower tier it could be machine level based on performance parameters like \cite{zhang2000linuxVirtualServer}, and finally application level based on the content of the request \cite{Citation is missing and I need to find it}.
+At a lower tier it could be machine level based on performance parameters like \cite{zhang2000linuxVirtualServer}, and finally application level based on the content of the request \textbf{[?]}. %\cite{Citation is missing and I need to find it}.
 There exists a lot of solution specific load balancers.
 A node balancer is a service witch distributes incoming requests, among the services registered on the network.
 The distribution is based on different policies like dividing packages or picking the one with most free CPU capacity.
 The load balancer could be a single point of failure, it should for this reason always have one or more backups as seen in \cref{fig:loadBalancingSetup}.
 The load balancer monitors the real servers and only parses on requests to running servers.
 A secondary needs to monitor the primary load balancer and step in if it stops responding.
-This can be done using a virtual private IP, which is the address for all incoming requests. Also there exists solutions witch does all this in a completely distributed manner avoiding having a central server as load balancer \cite{Some cite I ahven't found yet}, this is even in some cases extended to include the clients in the act of load balancing \cite{SOme cite to netflic eureka balancer}.
+This can be done using a virtual private IP, which is the address for all incoming requests. Also there exists solutions witch does all this in a completely distributed manner avoiding having a central server as load balancer  \textbf{[?]}, %\cite{Some cite I ahven't found yet}, 
+this is even in some cases extended to include the clients in the act of load balancing \textbf{[?]}. % \cite{Some cite to netflix eureka balancer}.
 
 \begin{figure}
 	\centering	
 	\scalebox{0.7}{\input{figures/tikz/LoadBalancerOverview}}
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[Distributed System with 2 load balancing nodes]{
-		\label{fig:loadBalancingSetup} 
+		\label{fig:loadBalancingSetup2Balancers} 
 		\footnotesize{%
 			A Distributed System with 2 load balancing nodes.
 		}
@@ -135,7 +136,7 @@ It compares with a version using distributed knowledge (SBA State Broadcast Algo
 	\scalebox{0.7}{\input{figures/tikz/ReguestRoutingInsteadOfBalancing}}
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[Routing requests as load balancing]{
-		\label{fig:loadBalancingSetup} 
+		\label{fig:RoutingloadBalancingSetup} 
 		\footnotesize{%
 			Routing requests as load balancing.
 		}
