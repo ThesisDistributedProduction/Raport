@@ -1,5 +1,5 @@
 \chapter{Data storage}
-Data storage is important in a system like a windmill farm.
+Data storage is important in a system like a wind farm.
 A lot of data must be persisted like weather data, health data of the different parts of every turbine and production data.
 These records are important both for immediate use to view the current state of the system but also for review in the future for instance to predict weather trends or replace worn down parts of turbine before they break completely.
 
@@ -11,7 +11,18 @@ Take out the data storage node or the communication to it and a lot of informati
 By distributing the data of the system between all the connected nodes we achieve better redundancy because the data is present on many different nodes.
 Should a node become unavailable another node can communicate the same data in effect strengthening the availability of the system.
 
-This chapter contains a description of a number of relevant storage technologies and a discussion of which technology is the best suited for a system like the Siemens case.
+This chapter contains a description of a number of relevant storage technologies and a discussion of which technology is the best suited for a system like the Siemens case presented in \cref{sec:SiemensCase}.
+
+Storage technologies will be compared on a set of parameters that are relevant to the case presented in \cref{sec:SiemensCase}. The parameters are presented in prioritized order:
+
+\begin{enumerate}
+\item \label{enum:parameters:availability} \textbf{Scalability}: The storage technology must be able to scale horizontally in order to allow a varying number of nodes.
+\item \textbf{Availability}: The data in the system must be available for processing at any time.
+\item \textbf{Replication}: The data in the system must be replicated between nodes in order to avoid data loss should one node be damaged.
+\item \textbf{Failover}: The storage technology must be able to seamlessly switch from a damaged node to a working node if a failure occurs.
+\item \textbf{sharding}: The storage technology must support automatic partitioning of datasets that are larger than the physical storage on one node.
+\item \textbf{Aggregation}: The storage technology should if possible support advanced aggregation of data.
+\end{enumerate}
 
 \section{Relational storage, SQL}
 \label{sec:sql}
@@ -20,15 +31,15 @@ These databases rely on a schema to arrange data in tables and their relations.
 Using SQL it is easy to query data and to do aggregate operations.
 RDBMSs support ACID transactions which ensures operations in the database are processed reliably.
 
-A shortcoming of the RDBMSs is the problem with object-relational mapping also known as the Impedance Mismatch Problem\cite{Fowler:IntroNoSQL, Neward:TheVietnamOfComputerScience}.
-The relational structure of the RDBMSs does not map well to the object-oriented structure the most popular programming languages encourage.
-Often an object is an aggregate of a number of attributes.
-In the context of the object-oriented program the object is seen as one entity.
-In the context of the RDBMS the attributes of the object-oriented object is often scattered between multiple tables in the database to ensure consistency and avoid duplicate data.
-This mismatch between object representation and relational representation can cause both performance problems, the JOIN operation in SQL is very costly, as well as considerable development time spent mapping one structure to the other.
-The performance problem multiplies in a distributed database if the RDBMS must do JOIN operations across the network in order to aggregate data.
+%A shortcoming of the RDBMSs is the problem with object-relational mapping also known as the Impedance Mismatch Problem\cite{Fowler:IntroNoSQL, Neward:TheVietnamOfComputerScience}.
+%The relational structure of the RDBMSs does not map well to the object-oriented structure the most popular programming languages encourage.
+%Often an object is an aggregate of a number of attributes.
+%In the context of the object-oriented program the object is seen as one entity.
+%In the context of the RDBMS the attributes of the object-oriented object is often scattered between multiple tables in the database to ensure consistency and avoid duplicate data.
+%This mismatch between object representation and relational representation can cause both performance problems, the JOIN operation in SQL is very costly, as well as considerable development time spent mapping one structure to the other.
+%The performance problem multiplies in a distributed database if the RDBMS must do JOIN operations across the network in order to aggregate data.
 
-Another problem with a traditional RDBMS is that they are designed for vertical scaling\cite{Atzeni:TheRelationalModelIsDead}. If a traditional RDBMS has problems handling data the solution is to add a bigger harddrive or invest in a faster CPU. This makes sense in a world were hardware is very expensive like it was when the traditional RDBMSs saw the light of day\cite{Stonebraker:TheEndOfAnArchitecturalEra}. Today horizontal scaling is preferred. If a system has a problem with the data load add another machine or add five others if that is what it takes.
+A problem with a traditional RDBMS is that they are designed for vertical scaling\cite{Atzeni:TheRelationalModelIsDead}. If a traditional RDBMS has problems handling data the solution is to add a bigger harddrive or invest in a faster CPU. This makes sense in a world were hardware is very expensive like it was when the traditional RDBMSs saw the light of day\cite{Stonebraker:TheEndOfAnArchitecturalEra}. Today horizontal scaling is preferred. If a system has a problem with the data load add another machine or add five others if that is what it takes. Since horizontal scalability is a very important feature of the data storage system as shown in \cref{enum:parameters:availability} the traditional RDBMS is not a viable option.
 
 \section{Schema-less storage, NoSQL}
 \label{sec:nosql}
