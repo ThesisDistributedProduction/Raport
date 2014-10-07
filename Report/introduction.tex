@@ -8,9 +8,9 @@ Heavyweight energy consumer USA has declared a goal of reaching 20\% wind energy
 Siemens Wind Power is one of the worlds leading producers of wind turbines, with a global market share of 9.5\% in 2012 \cite{worldmarketupdate2012}.
 Siemens Wind Power is increasingly focusing on the offshore wind farm market.
 The current setup of a wind farm requires additional infrastructure for management of the wind farm.
-As well as the wind turbines the wind farm consists of a Wind Power Supervisor for operations that involve the entire farm and multiple High Performance Park Pilot, from here on refered to as Park Pilots, for near realtime control of the turbines.
-The Wind Power Supervisor and Park Pilots are centralised control points of the wind farm but they are also single points of failure, which decreases the availability of the wind farm.
-Furthermore the Wind Power Supervisor and Park Pilots does not scale well with the number of turbines.
+As well as the wind turbines the wind farm consists of a Wind Power Supervisor for operations that involve the entire farm and multiple High Performance Park Pilot, from here on refereed to as Park Pilots, for near realtime control of the turbines.
+The Wind Power Supervisor and Park Pilots are centralised control points of the wind farm, having centralised control means that the system has single points of failure as well, which if it fails decreases the availability of the wind farm.
+Furthermore the Wind Power Supervisor and Park Pilots does not scale automatically with the number of turbines, but needs hardware to be upgraded if too many turbines are added.
 
 Since wind energy is recognized as one of the solutions to the renewable energy problem, wind farm size and capacity keeps increasing.
 The need for scalability is thus not only a problem for Siemens Wind Power but for the entire industry.
@@ -31,31 +31,6 @@ Likewise USA has a number of projects most of them performed by Sandia National 
 
 The area of decentralization in wind farm management and control has largely been neglected even though wind farms has reached a scale that is becoming increasingly hard to manage with a centralized approach.
 
-
-% Hvorfor starter ved med at forklare DIstributed systems burde vi ikke starte med problem stillingen og derefeter forklare at vi tager tilgangen til det med distributed system og til dels peer to Peer network.
-
-%A distributed system is a network of hardware or software components, which communicates and coordinate their actions only by message passing\cite{coulouris2005distributed}, as illustrated on \cref{fig:distributedSystem}. Each component have their own local memory every component and interact with each other in order to achieve a common goal. The nodes can be physically close, connected via a local network, or geographically distant, connected by a wide area network. An important goal of a distributed system is location transparency\cite{coulouris2005distributed} to create the illusion of the entire system acting as a single computer even though it is comprised of several nodes. Examples of distributed systems vary from aircraft control systems to the Internet to massively multiplayer online games. 
-% Er det bare mig eller er det lidt rigeligt at sige at systemet agere som en enkelt computer? Lad hellere sige noget om at opnå et fælles mål? Multiplayer spil er vel ikke distribuerede systemer, men mere server client systemer.
-
-%\begin{figure}
-%	\centering
-%	\includegraphics[width=0.7\textwidth,natwidth=510,natheight=542]{DistributedSystem.jpg} 
-%	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-%	\caption[Distributed Computing System with 2 nodes]{
-%		\label{fig:distributedSystem} 
-%		\footnotesize{%
-%			A distributed system with 4 nodes.
-%		}
-%	}
-%\end{figure}
-
-%Distributed systems offer many benefits over centralized systems including the following\cite{IBM2005TXSeries}:
-%\begin{itemize}
-%	\item Scalability: It is easy to add nodes to the system, should the size of the system increase.
-%	\item Redundancy: Several nodes can provide the same service, so if a node crashes, there are many to replace it. Additionally, from a cost perspective, each node does not have to be expensive, because many smaller nodes can be used as replacement.
-%\end{itemize}
-% Vi burde nok også snakke om ulemper? Og det er vel bare ting som er mulige at opnå?
-
 \section{Siemens Wind Power case}
 
 % Beskriv topologi
@@ -69,8 +44,7 @@ Today turbines in a wind farm at Siemens are equipped with computers for the pur
 For every transformer station there is a High Performance Park Pilot from here on refereed to as Park Pilot. The Park Pilots are responsible for park regulation. This is done by monitoring all the turbines performance parameters and issue correct set points for power production as illustrated on \cref{fig:dataComputationSequence}. Every turbine returns their current status to the Park Pilot, then the set points for each turbine is calculated in the Park Pilots and finally the new set points can be pushed to the turbines. 
 
 Every turbine has a database for raw data logging purposes, this database is replicated to the Wind Power Supervisor.
-The Wind Power Supervisor does 
-data aggregation on data from each turbine as well as store a copy of the replicated data.
+The Wind Power Supervisor does data aggregation on data from each turbine as well as store a copy of the replicated data.
 The turbines, Wind Power Supervisor and Park Pilots are connected with a gigabit network, which currently has plenty of extra capacity.
 The system handles more than 50 control points and 200 measurement points and samples these every 50 ms.
 
@@ -85,18 +59,6 @@ The system handles more than 50 control points and 200 measurement points and sa
 		}
 	}
 \end{figure}
-
-%\begin{figure}
-%	\centering
-%	\includegraphics[width=0.7\textwidth,natwidth=610,natheight=642]{SystemOverviewsFuture.png} 
-%	\captionsetup{format=plain,font=footnotesize,labelfont={bf,red},labelsep=quad,singlelinecheck=no}
-%	\caption[Illustrates the future Siemens windmill farm setup]{
-%		\label{fig:futureSiemensSetup} 
-%		\footnotesize{%
-%			This figure illustrates the future Siemens windmill farm setup.
-%		}
-%	}
-%\end{figure}
 
 \begin{figure}
 	\centering
@@ -143,8 +105,7 @@ Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by dist
 
 The purpose of this thesis is to design, implement and evaluate a system solution for a Siemens windmill farm, where the Wind Park Supervisor and the Park Pilots are decentralized by utilizing the free capacity residing in every turbine for the Siemens Wind Power case. The solution must be able to provide the same features as the current solution. 
 
-The present thesis will answer the following questions: 
-
+\paragraph{We present the following questions:}
 \begin{itemize} 
 	\item How can we best re-implement the current Siemens system (\cref{sec:SiemensCase}) as a system where the Wind Park Supervisor and the Park Pilots are decentralized?
 	\item Can we, with the new decentralized solution, reduce the current regulation cycle time of 150 ms?
@@ -170,4 +131,30 @@ The implementation of the system will be a prototype, which runs the developed s
 %	\item Network bandwidth. Siemens uses gigabit network.
 %	\item Topology. Siemens wind farms uses ring and star topology.
 %\end{itemize}
+
+
+
+% % The below snippet might come handy later on % % %
+% % % % % % % % % % % % % % % % % % % % % % % % % % %
+%A distributed system is a network of hardware or software components, which communicates and coordinate their actions only by message passing\cite{coulouris2005distributed}, as illustrated on \cref{fig:distributedSystem}. Each component have their own local memory every component and interact with each other in order to achieve a common goal. The nodes can be physically close, connected via a local network, or geographically distant, connected by a wide area network. An important goal of a distributed system is location transparency\cite{coulouris2005distributed} to create the illusion of the entire system acting as a single computer even though it is comprised of several nodes. Examples of distributed systems vary from aircraft control systems to the Internet to massively multiplayer online games. 
+% Er det bare mig eller er det lidt rigeligt at sige at systemet agere som en enkelt computer? Lad hellere sige noget om at opnå et fælles mål? Multiplayer spil er vel ikke distribuerede systemer, men mere server client systemer.
+
+%\begin{figure}
+%	\centering
+%	\includegraphics[width=0.7\textwidth,natwidth=510,natheight=542]{DistributedSystem.jpg} 
+%	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+%	\caption[Distributed Computing System with 2 nodes]{
+%		\label{fig:distributedSystem} 
+%		\footnotesize{%
+%			A distributed system with 4 nodes.
+%		}
+%	}
+%\end{figure}
+
+%Distributed systems offer many benefits over centralized systems including the following\cite{IBM2005TXSeries}:
+%\begin{itemize}
+%	\item Scalability: It is easy to add nodes to the system, should the size of the system increase.
+%	\item Redundancy: Several nodes can provide the same service, so if a node crashes, there are many to replace it. Additionally, from a cost perspective, each node does not have to be expensive, because many smaller nodes can be used as replacement.
+%\end{itemize}
+% Vi burde nok også snakke om ulemper? Og det er vel bare ting som er mulige at opnå?
 
