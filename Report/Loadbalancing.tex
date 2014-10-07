@@ -22,21 +22,24 @@ The Siemens case uses standard protocol where the client application is build by
 therefore client integration is not possible with all public interfaces, and is not investigated further.
 
 The Siemens case needs a Load balancer system with the following properties:
-\begin{itemize}
-	\item Allow the decentralised system to behave like a single server for the clients
-	\item Provides a single entry points for clients to connect to
-	\item Monitors current available resources
-	\item Support fail over
+\begin{enumerate}[label=\textbf{P.\arabic*}, ref=\textit{P.\arabic*}]
+	\item \label{List:LB:SingleEntryPoint}Allow the decentralised system to behave like a single server for the clients, providing a single entry points for clients to connect to
+	\item Monitors current available server resources
+	\item Detect and exclude faulty nodes 
+	\item Support Load balancer fail over
 	\item Have minimum resource impact on the host machine
-\end{itemize}
+\end{enumerate}
 
-% % % DNS load balancers are not relevant to the Simens case. % % % %
-%Different load balancing methods will are here briefly described:
-%%Load balancing for large systems can be split in tiers.
-%\paragraph{Dynamic DNS}
-%is a load balancer built into the DNS service, it distributes load in a round robin manner as well as using region knowledge of where the request was revived from \cite{Amazon:Route53}. DNS based load balancing is among the most scalable solutions that does not need any special configuration of either client nor server. However is does not provide any monitoring of server performance parameters, and once the DNS lookup is over the service does not play any role in load balancing related to one that specific client until the DNS cache is refreshed. This type of loadbalancing is not applicable since 
+
+To achieve property \ref{List:LB:SingleEntryPoint}.
+The systems needs to respond to a single external IP address, there exists ways to do this.
+CARP[?], VRRP[?], HSRP[?]
+
 
 A candidate for this kind of monitoring is the Linux Virtual Server project \cite{zhang2000linuxVirtualServer}.
+
+
+
 At a lower tier it could be machine level based on performance parameters like , and finally application level based on the content of the request \textbf{[?]}. %\cite{Citation is missing and I need to find it}.
 There exists a lot of solution specific load balancers.
 A node balancer is a service witch distributes incoming requests, among the services registered on the network.
@@ -171,7 +174,12 @@ It compares with a version using distributed knowledge (SBA State Broadcast Algo
 \end{figure}
 
 
-
+% % % SSK Might Be usable later until then hidden here % % %
+% % % DNS load balancers are not relevant to the Simens case. % % % %
+%Different load balancing methods will are here briefly described:
+%%Load balancing for large systems can be split in tiers.
+%\paragraph{Dynamic DNS}
+%is a load balancer built into the DNS service, it distributes load in a round robin manner as well as using region knowledge of where the request was revived from \cite{Amazon:Route53}. DNS based load balancing is among the most scalable solutions that does not need any special configuration of either client nor server. However is does not provide any monitoring of server performance parameters, and once the DNS lookup is over the service does not play any role in load balancing related to one that specific client until the DNS cache is refreshed. This type of loadbalancing is not applicable since 
 
 
 
