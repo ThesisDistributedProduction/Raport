@@ -1,15 +1,22 @@
 \chapter{State of the art}
-The following sections will describe state of the art research with respect to control and communication within the wind energy sector.
+As mentioned in \cref{chap:intro} there are a number of large scale wind park projects, but not many give a hint of their underlying software architecture.
+One way to get an idea of how the systems are structured could be by looking at the control algorithms they use.
 
-\section{Control}
-One area that is still open for optimization is the control of turbines both as a single unit but also as a farm. 
-Calculating the perfect position for each turbine such that the global power production setpoint is reached is a very hard problem.
-The algorithms must take a lot of parameters into account as for instance noise produced by the wings, certain speeds where the wear and tear of the turbine is high and the position of other turbines so the wake created by one turbine does not reduce the performance of other turbines unnecessarily.
-Furthermore every turbines maximum power production and current power production must also be taken into account.
-Several approaches has been tested as described in the following subsections. %TODO: Rewrite,
+%\section{Control}
+%One area that is still open for optimization is the control of turbines both as a single unit but also as a park. 
+%Calculating the perfect position for each turbine such that the global power production setpoint is reached is a very hard problem.
+%The algorithms must take a lot of parameters into account as for instance noise produced by the wings, certain speeds where the wear and tear of the turbine is high and the position of other turbines so the wake created by one turbine does not reduce the performance of other turbines unnecessarily.
+%Furthermore every turbines maximum power production and current power production must also be taken into account.
+%Several approaches has been tested as described in the following subsections. %TODO: Rewrite,
 
-\subsection{Hierarchical/centralised control}
-The hierarchical/centralised approach uses local control on the turbine level and global control on the wind farm level\cite{CentralisedPowerControlOfWindFarm, HeirarchicalWindFarmControl}.
+\section{Aeolus}
+The Aeolus project was a large scale EU supported project which lasted from may 2008 to april 2011. It included project partners from 
+Aalborg University, Industrial Systems and Control Ltd in Glasgow, University of Zagreb, Energy Research Centre of the Netherlands and Vestas Wind Systems A/S.
+The main objectives of the project was to research and develop predictions of flows and incorporate data from a network of sensors, as well as research and develop control paradigms that acknowledges the uncertainty in the modelling and dynamically manages the flow resource in order to optimise specific control objectives.
+The project is relevant to this thesis because several approaches to control of a wind park was evaluated.
+
+\subsection{Hierarchical control}
+The hierarchical approach uses local control on the turbine level and global control on the wind farm level\cite{HeirarchicalWindFarmControl}.
 
 Setpoints for the global output of the wind farm are received by the controller on the wind farm level.
 So is the output for each turbine and the maximum available output for each turbine.
@@ -17,7 +24,7 @@ The global controller calculates setpoints for each turbine based on the global 
 
 The controllers on turbine level is responsible for reaching the setpoint calculated by the global controller as well as making each turbine reach the setpoint in the most optimal manner(gearing, avoid ice over, avoid oscillation).
 
-The hierarchical/centralized approach is the current approach used in the Siemens case.
+The hierarchical approach is the current approach used in the Siemens case.
 
 \subsection{Decentralized feed-forward control}
 The decentralized feed-forward approach\cite{DecentralisedFeedforwardControlOfWindFarms} takes advantage of the fact that turbines are placed in a farm by letting upwind turbines feed wind data to downwind turbines. 
@@ -27,8 +34,8 @@ Furthermore a restricted communication model is used allowing turbines only to c
 Using this decentralized feed-forward approach to control a wind farm can help even out the output of the farm since downwind turbines has additional information regarding wind speed to come to act upon. If upwind turbines power production is also a part of the feed-forward package downwind turbines may also be able to regulate overall wind farm production by evening out spikes from upwind turbines.
 In addition by only communicating with neighboring turbines in order to achieve improvements in output the need for a centralized node is alleviated.
 
-\subsection{Game theory control}
-A new approach to control of wind farms is to utilize game theory\cite{AModelFreeApproachToWindFarmControl}.
-The turbines in a farm must cooperate to reach the desired goal of a chosen output current.
-The game theory approach use an iterative learning algorithm that converges against the optimal output after n iterations.
-According to the above referenced article improvements on up to 25\% is possible compared to other algorithms currently in use.
+%\subsection{Game theory control}
+%A new approach to control of wind farms is to utilize game theory\cite{AModelFreeApproachToWindFarmControl}.
+%The turbines in a farm must cooperate to reach the desired goal of a chosen output current.
+%The game theory approach use an iterative learning algorithm that converges against the optimal output after n iterations.
+%According to the above referenced article improvements on up to 25\% is possible compared to other algorithms currently in use.
