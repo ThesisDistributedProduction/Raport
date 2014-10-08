@@ -44,7 +44,7 @@ Siemens Wind Power builds wind farms of different sizes ranging from single turb
 
 Today turbines in a wind farm at Siemens are equipped with computers for the purpose of regulating power production parameters, data collection and for communication with the rest of the system. The current setup is illustrated on \cref{fig:currentSiemensSetup}. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, perform calculations, store data and handle wind farm communication with the outside world. At Siemens up to eight Park pilots are present pr. wind farm and one Wind Power Supervisor.
 
-For every transformer station there is a High Performance Park Pilot from here on refereed to as Park Pilot. The Park Pilots are responsible for park regulation. This is done by monitoring all the turbines performance parameters and issue correct set points for power production as illustrated on \cref{fig:dataComputationSequence}. Every turbine returns their current status to the Park Pilot, then the set points for each turbine is calculated in the Park Pilots and finally the new set points can be pushed to the turbines. 
+For every transformer station there is a High Performance Park Pilot from here on refereed to as Park Pilot. The Park Pilots are responsible for park regulation. This is done by monitoring all the turbines performance parameters and issue correct set points for power production. Every turbine returns their current status to the Park Pilot, then the set points for each turbine is calculated in the Park Pilots and finally the new set points can be pushed to the turbines. 
 
 Every turbine has a database for raw data logging purposes, this database is replicated to the Wind Power Supervisor.
 The Wind Power Supervisor does data aggregation on data from each turbine as well as store a copy of the replicated data.
@@ -53,7 +53,7 @@ The system handles more than 50 control points and 200 measurement points and sa
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.7\textwidth,natwidth=610,natheight=642]{SystemOverviews.png} 
+	\scalebox{0.7}{\input{figures/tikz/SystemOverview}}
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[The current Siemens wind farm system overview]{
 		\label{fig:currentSiemensSetup} 
@@ -63,34 +63,34 @@ The system handles more than 50 control points and 200 measurement points and sa
 	}
 \end{figure}
 
-\begin{figure}
-	\centering
-	\begin{sequencediagram} %Created using pgf-umlsd
-		\newthread{reg}{:Park Pilot}
-		\newinst[2]{turbine}{:Turbine}
-	
-		\begin{sdblock}{each turbine}{}
-			\mess[1]{reg}{getCurrentStatus}{turbine}
-			\mess[1]{turbine}{status}{reg}
-		\end{sdblock}
-		
-		\begin{call}{reg}{calculateAllSetpoints()}{reg}{}
-		\end{call}
-	
-		\begin{sdblock}{each turbine}{}
-			\mess[1]{reg}{setNewSetpoint}{turbine}
-		\end{sdblock}
-					
-	\end{sequencediagram}
-
-	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Regulator calculation sequence]{
-		\label{fig:dataComputationSequence} 
-		\footnotesize{%
-			Regulator calculation sequence.
-		}
-	}
-\end{figure}
+%\begin{figure}
+%	\centering
+%	\begin{sequencediagram} %Created using pgf-umlsd
+%		\newthread{reg}{:Park Pilot}
+%		\newinst[2]{turbine}{:Turbine}
+%	
+%		\begin{sdblock}{each turbine}{}
+%			\mess[1]{reg}{getCurrentStatus}{turbine}
+%			\mess[1]{turbine}{status}{reg}
+%		\end{sdblock}
+%		
+%		\begin{call}{reg}{calculateAllSetpoints()}{reg}{}
+%		\end{call}
+%	
+%		\begin{sdblock}{each turbine}{}
+%			\mess[1]{reg}{setNewSetpoint}{turbine}
+%		\end{sdblock}
+%					
+%	\end{sequencediagram}
+%
+%	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+%	\caption[Regulator calculation sequence]{
+%		\label{fig:dataComputationSequence} 
+%		\footnotesize{%
+%			Regulator calculation sequence.
+%		}
+%	}
+%\end{figure}
 
 \section{Thesis motivation}
 \label{sec:ThesisMotivation}
