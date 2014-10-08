@@ -1,12 +1,15 @@
 \chapter{Distributed computing}
 
-As mentioned, The Wind Power Supervisor (WPS) and the Park Pilot does not scale well with the number of turbines, which forces Siemens to set the regulation cycle time after worst case scenarios (see \cref{sec:SiemensCase} for details). Today this cycle time is set to 150 ms and Siemens wishes it reduced to 10 ms. This is a major performance improvement and for that reason, performing the regulation sequence using a distributed database only is not enough, since reading/writing to the disk takes valuable milliseconds.
-
+As mentioned, The Wind Power Supervisor (WPS) and the Park Pilot does not scale well with the number of turbines, which forces Siemens to set the regulation cycle time after worst case scenarios (see \cref{sec:SiemensCase} for details). Today this cycle time is set to 150 ms and Siemens wishes it reduced to 10 ms. This is a major performance improvement and for that reason, performing the regulation sequence using a distributed database only is not enough, since reading/writing to the disk takes valuable milliseconds. Therefore regulation information needs to be kept in memory in order to keep regulation cycle time as low as possible. 
 
 %Furthermore, when decentralizing the Wind Power Supervisor onto the turbines, the turbines obviously needs to be able to handle external data aggregation . For the heavy tasks, in terms of CPU power, distributed computing becomes relevant as a way of improving performance by combining the CPU power residing inside the turbines to compute a common task.
 
 
-In distributed computing, each node or process has its own local memory and communication happens via message passing~\cite{andrews2000foundations}. This means distributed computing is a way of having a global system state and keep relevant information, with regards to the global state, in memory, and thereby avoid read/write operations to the disk. This chapter contains a description of relevant distributed computing paradigms and discusses which of these paradigms that are best suited for the Siemens case. Furthermore, the chapter describes relevant technologies within the chosen paradigm and discusses which technology that is the best for the Siemens case.
+For the Park Pilot to be able to compute a park regulation, the Park Pilot needs information about every turbine in the farm. In the same way, when decentralizing the Park Pilot, for a turbine to compute park regulations, the turbine needs information about every other turbine. This means the windmill farm needs a global shared state, where information about every turbine in the farm is available to every turbine performing park regulations. 
+
+In distributed computing, each node or process has its own local memory and communication happens via message passing~\cite{andrews2000foundations}. This means distributed computing is a way of having a global system state and keep relevant information, with regards to the global state, in memory, and thereby avoid read/write operations to the disk. 
+
+This chapter contains a description of relevant distributed computing paradigms and discusses which of these paradigms that are best suited for the Siemens case. Furthermore, the chapter describes relevant technologies within the chosen paradigm and discusses which technology that is the best for the Siemens case.
 
 
 \section{Message passing}
@@ -147,45 +150,62 @@ A shortcoming of RPC is the strong coupling in time, space and synchronization. 
 \section{Comparison with regards to the Siemens case}
 Looking at the Siemens case (\cref{sec:SiemensCase}) the new distributed system must act as a single unit, be able to perform park regulations and scale easily with the number of turbines. Furthermore Siemens wish to remove single point of failures. With this in mind, the remote procedure call paradigm is not an option because it is tight coupled and build for a client/server architecture, which is exactly what Siemens is trying to avoid. One could imaging using a partial client/server architecture, with a communication hierarchy, however this would introduce some communication overhead~\cite{Yu1997JavaDSM} and single point of failures to the system.
 
-Comparing DSM with message passing with regards to performance is not entirely fair since DSM is an abstraction built using message passing. However the comparison is necessary when considering what technology to use for a given system and in this case, the comparison results in a trade off between performance and the shared memory abstraction. 
+As mentioned, to perform the park regulation sequence, the windmill farm needs a global shared state, where information about every turbine available to every turbine performing park regulations. Therefore, if the decentralized version of the Siemens case were to be implemented using raw message passing, it would result in building some kind of DSM and/or publish/subscribe abstraction, with roughly the same communication overhead. To save the trouble of developing this abstraction, we conclude that message passing is not an option as communication paradigm.
 
-Honghui~\cite{lu1995message} has studied the trade-off between message passing performance and the shared memory abstraction. He ported 12 different parallel program scenarios to a DSM system called TreadMarks and a message passing system called PVM and compared the two technologies with regards to programmability and performance. He argues that given DSM is an abstraction built on top of message passing, DSM cannot achieve better performance than message passing, given the larger software-overhead. Therefore the goal is to achieve the same performance as message passing using DSM. For 5 of the scenarios, TreadMarks performed within 10\% of PVM. For 6 of the programs the difference were between 10\% - 30\%. For the last scenario, PVM performed twice as well as TreadMarks. 
+This leaves DSM and publish/subscribe as remaining paradigms, where one could imagine the Siemens case being implemented using either of the two. The abstraction of shared memory provided by DSM is attractive when looking looking at the Siemens case. As a system developer, being able to think of the global shared state as local memory is to prefer over event handling. Therefore DSM is chosen over publish/subscribe since publish/subscribe introduces event handling to the system.
 
-Honghui argues that the performance is dependent of the logical flow of the scenario. More messages and more data are sent in TreadMarks, explaining the performance differences. He gives the following reasons for the extra communication in TreadMarks:
+% The abstraction provided by DSM is attractive when looking looking at the Siemens case. As a system developer, being able to think of the global shared state as local memory is to prefer over thinking about communication semantics. However before before choosing, it is relevant to look at the cost of the DSM abstraction.
 
-\begin{itemize}
-	\item Separation of synchronization and data transfer in TreadMarks. 
-	\item Extra messages to request updates for data in the invalidate protocol used in TreadMarks.
-	\item False sharing.
-	\item Diff accumulation for migratory data in TreadMarks.
-\end{itemize} 
+%\subsection{Message passing or DSM?}
+%
+%The abstraction provided by DSM is attractive when looking looking at the Siemens case. As a system developer, being able to think of the global shared state as local memory is to prefer over thinking about communication semantics. However before before choosing, it is relevant to look at the cost of the DSM abstraction.
 
-%1) Seperation of synchronization
-% Lazy release consistency: Against data races (which may result uin wrong results). Only the next processor that acquires the lock can access x --> only that processor is informormed of the change to x --> reduce message traffic. Ex: Barriers - No processor overites values before all processors have read the value computed in the previous interation.
+%Comparing DSM with message passing in terms of processing time and network communication time is not entirely fair since DSM is an abstraction built using message passing. Therefore, Honghui~\cite{lu1995message} argues that it is hard for DSM to outperform message passing, in terms of application execution time, given the larger software-overhead. Honghui has studied and compared a DSM system with message passing system, with the goal to assess the differences in application development time and program execution time between DSM and message passing, and determine the causes of the lower program execution time of DSM systems. He ported 12 different parallel program scenarios to a DSM system called TreadMarks and a message passing system called PVM. For 5 of the scenarios, TreadMarks performed within 10\% of PVM. For 6 of the programs the difference were between 10\% - 30\%. For the last scenario, PVM performed twice as well as TreadMarks. 
+%
+%%He ported 12 different parallel program scenarios to a DSM system called TreadMarks and a message passing system called PVM and compared the two technologies with regards to programmability and performance. He argues that given DSM is an abstraction built on top of message passing, DSM cannot achieve better performance than message passing, given the larger software-overhead. Therefore the goal is to achieve the same performance as message passing using DSM. For 5 of the scenarios, TreadMarks performed within 10\% of PVM. For 6 of the programs the difference were between 10\% - 30\%. For the last scenario, PVM performed twice as well as TreadMarks. 
+%
+%Honghui argues that the program execution time is dependent of the logical flow of the program scenario. More messages and more data are sent in TreadMarks, explaining the performance differences. He gives the following reasons for the extra communication in TreadMarks:
+%
+%\begin{itemize}
+%	\item Separation of synchronization and data transfer in TreadMarks. 
+%	\item Extra messages to request updates for data in the invalidate protocol used in TreadMarks.
+%	\item False sharing.
+%	\item Diff accumulation for migratory data in TreadMarks.
+%\end{itemize} 
+%
+%%1) Seperation of synchronization
+%% Lazy release consistency: Against data races (which may result uin wrong results). Only the next processor that acquires the lock can access x --> only that processor is informormed of the change to x --> reduce message traffic. Ex: Barriers - No processor overites values before all processors have read the value computed in the previous interation.
+%
+%%2) Extra messages to request updates for data in the invalidate protocol used in TreadMarks
+%% Memory page change communicatin. Modified pages are inviladated after an acquire. Later access causes access miss, which in turn causes installation of an up-to-date copy of the page.
+%
+%%3) False sharing
+%% To objects er allokerede i samme memory page og de skrives til samtidig --> force update af page --> overhead
+%
+%%4) diff accumulation for migratory data in TreadMarks
+%% Multiple-writer protocol to allow wrinting on same page at the same time. Uses a diff algorithm to reduce false sharing effects.
+%
+%Honghui concludes that the performance of a well optimized DSM system is comparable to that of a message passing system. Furthermore, development of systems with complex communication patterns takes a lot less effort using the DSM paradigm.
+%
+%In contrast to Honghui, Stumm and Zhou~\cite{stumm1990algorithms} argues that applications using DSM can in fact outperform their message passing counterparts, in a few cases. They argue, that this is possible for the following reasons:
+%
+%\begin{itemize}
+% 	\item DSM algorithms typically move data on demand as they are being accessed, which spreads communication load over a longer period of time, allowing for a greater degree of concurrency. If for example a node uses the shared memory more than others, the node does not need to communicate for every write operation made to the shared memory.
+% 	\item For DSM algorithms that sends data in large blocks, communication overhead is reduced. 
+%\end{itemize} 
+%
+%Looking at the Siemens case the two major factors for the communication paradigm choice are scalability and availability.
+% With that in mind, BLABLA is not an option because of .. 
+%
+%Message queuing and RMI offers feature which  
 
-%2) Extra messages to request updates for data in the invalidate protocol used in TreadMarks
-% Memory page change communicatin. Modified pages are inviladated after an acquire. Later access causes access miss, which in turn causes installation of an up-to-date copy of the page.
 
-%3) False sharing
-% To objects er allokerede i samme memory page og de skrives til samtidig --> force update af page --> overhead
 
-%4) diff accumulation for migratory data in TreadMarks
-% Multiple-writer protocol to allow wrinting on same page at the same time. Uses a diff algorithm to reduce false sharing effects.
+\section{State of the art DSM}
 
-Honghui concludes that the performance of a well optimized DSM system is comparable to that of a message passing system. Furthermore, development of systems with complex communication patterns takes a lot less effort using the DSM paradigm.
+\subsection{Memcached}
 
-In contrast to Honghui, Stumm and Zhou~\cite{stumm1990algorithms} argues that applications using DSM can in fact outperform their message passing counterparts, in a few cases. They argue, that this is possible for the following reasons:
-
-\begin{itemize}
- 	\item DSM algorithms typically move data on demand as they are being accessed, which spreads communication load over a longer period of time, allowing for a greater degree of concurrency. If for example a node uses the shared memory more than others, the node does not need to communicate for every write operation made to the shared memory.
- 	\item For DSM algorithms that sends data in large blocks, communication overhead is reduced. 
-\end{itemize} 
-
-Looking at the Siemens case the two major factors for the communication paradigm choice are scalability and availability.
- With that in mind, BLABLA is not an option because of .. 
-
-Message queuing and RMI offers feature which  
-
+\subsection{DDS}
 
 
 \section{Conclusion}
