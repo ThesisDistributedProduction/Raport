@@ -3,27 +3,27 @@
 \label{chap:intro}
 
 Wind energy is widely becoming recognized as one of the most cost efficient renewable energy sources.
-It is predicted that by the end of 2014 the worlds collected wind energy production will reach 360GW~\cite{worldwidewindcapacity}.
+It is predicted that by the end of 2014 the worlds wind energy production will reach 360GW~\cite{worldwidewindcapacity}.
 Heavyweight energy consumer USA has declared a goal of reaching 20\% wind energy of the total energy consumed in 2030~\cite{20percentenergy}, the European Union has committed to a similar goal of 20\% renewable energy by 2020~\cite{directive2009}.
 
-Siemens Wind Power is one of the worlds leading producers of wind turbines, with a global market share of 9.5\% in 2012 \cite{worldmarketupdate2012}.
+Siemens Wind Power is one of the worlds leading producers of wind turbines, with a global market share of 9.5\% in 2012~\cite{worldmarketupdate2012}.
 Siemens Wind Power is increasingly focusing on the offshore wind farm market.
 The current setup of a wind farm requires additional infrastructure for management of the wind farm.
 As well as the wind turbines the wind farm consists of a SCADA system for operations that involve the entire farm, such as external requests, and multiple park regulators, for near realtime control of the turbines.
 The SCADA system and the park pilots are centralized control points of the wind farm. Having centralized control means that the system has single points of failure, which if it fails decreases the availability of the wind farm.
 Furthermore the SCADA system and park regulators does not scale automatically with the number of turbines, but needs hardware to be upgraded if too many turbines are added.
 
-Since wind energy is recognized as one of the solutions to the renewable energy problem, wind farm size and capacity keeps increasing.
-The need for scalability is thus not only a problem for Siemens Wind Power but for the entire industry.
+Since wind energy is recognized as one of the solutions to the renewable energy problem, wind park size and capacity keeps increasing.
+The need for scalability is thus not only a challenge for Siemens Wind Power but for the entire industry.
 
-The popularity of wind energy has lead to massive research within the area. The European Union has a number of sponsored projects among others:
+The popularity of wind energy has lead to massive research within the area. The European Union has a number of sponsored projects amongst others:
 \begin{itemize}
 	\item INNWIND which focus is on accelerating the process of realizing the 20MW turbine~\cite{INNWIND}.
 	\item Aeolus which focus on the development of models that allows realtime predictions of wind flow~\cite{Aoelus}.
 	\item EERA-DTOC which focus is on creating a software tool for optimizing offshore wind farm design and clusters of wind farms~\cite{eera-dtoc}.
 \end{itemize}
 
-Likewise USA has a number of projects most of them performed by Sandia National Laboratories or National Renewable Energy Laboratory. Projects that are interesting to this thesis is:
+Likewise USA has a number of projects most of them performed by Sandia National Laboratories or National Renewable Energy Laboratory:
 \begin{itemize}
 	\item SWiFT which focus is on wake effects, turbine control and rotor development.
 	\item Offshore Wind which focus on large rotor development and simulation algorithms.
@@ -40,20 +40,20 @@ The area of the supporting software architecture and software stack is not a top
 % Regulerings algoritmen tager kun 30 ms. 150 ms er cycle time
 
 \label{sec:SiemensCase}
-Siemens Wind Power builds wind farms of different sizes ranging from single turbines to well above one hundred turbines. \cite{simensOffShoreProjects, simensOnShoreProjects}.
+Siemens Wind Power builds wind parks of different sizes ranging from single turbines to well above one hundred turbines. \cite{simensOffShoreProjects, simensOnShoreProjects}.
 
-Today turbines in a wind farm at Siemens are equipped with computers for the purpose of regulating power production parameters, data collection and for communication with the rest of the system. The current setup is illustrated on \cref{fig:currentSiemensSetup}. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, perform calculations, store data and handle wind farm communication with the outside world. At Siemens up to eight Park pilots are present pr. wind farm and one Wind Power Supervisor.
+Today turbines in a wind park at Siemens are equipped with computers for the purpose of regulating power production parameters, data collection and for communication with the rest of the system. The current wind park setup is illustrated on \cref{fig:currentSiemensSetup}. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, performs calculations, stores data and handles wind park communication with the outside world. At Siemens up to eight Park Pilots are present pr. wind park and one Wind Power Supervisor.
 
-For every transformer station there is a High Performance Park Pilot from here on refereed to as Park Pilot. The Park Pilots are responsible for park regulation. This is done by monitoring all the turbines performance parameters and issue correct set points for power production as illustrated on \cref{fig:dataComputationSequence}. Every turbine returns their current status to the Park Pilot, then the set points for each turbine is calculated in the Park Pilots and finally the new set points can be pushed to the turbines. 
+For every transformer station there is a Park Pilot. The Park Pilots are responsible for park regulation. This is done by monitoring all the turbines performance parameters and issuing correct set points for power production. Every turbine returns their current status to the Park Pilot, then the set points for each turbine is calculated in the Park Pilots and finally the new set points can be pushed to the turbines. 
 
-Every turbine has a database for raw data logging purposes, this database is replicated to the Wind Power Supervisor.
+Every turbine has a database for data logging purposes, this database is replicated to the Wind Power Supervisor.
 The Wind Power Supervisor does data aggregation on data from each turbine as well as store a copy of the replicated data.
 The turbines, Wind Power Supervisor and Park Pilots are connected with a gigabit network, which currently has plenty of extra capacity.
 The system handles more than 50 control points and 200 measurement points and samples these every 50 ms.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.7\textwidth,natwidth=610,natheight=642]{SystemOverviews.png} 
+	\scalebox{0.7}{\input{figures/tikz/SystemOverview}}
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[The current Siemens wind farm system overview]{
 		\label{fig:currentSiemensSetup} 
@@ -63,41 +63,41 @@ The system handles more than 50 control points and 200 measurement points and sa
 	}
 \end{figure}
 
-\begin{figure}
-	\centering
-	\begin{sequencediagram} %Created using pgf-umlsd
-		\newthread{reg}{:Park Pilot}
-		\newinst[2]{turbine}{:Turbine}
-	
-		\begin{sdblock}{each turbine}{}
-			\mess[1]{reg}{getCurrentStatus}{turbine}
-			\mess[1]{turbine}{status}{reg}
-		\end{sdblock}
-		
-		\begin{call}{reg}{calculateAllSetpoints()}{reg}{}
-		\end{call}
-	
-		\begin{sdblock}{each turbine}{}
-			\mess[1]{reg}{setNewSetpoint}{turbine}
-		\end{sdblock}
-					
-	\end{sequencediagram}
-
-	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Regulator calculation sequence]{
-		\label{fig:dataComputationSequence} 
-		\footnotesize{%
-			Regulator calculation sequence.
-		}
-	}
-\end{figure}
+%\begin{figure}
+%	\centering
+%	\begin{sequencediagram} %Created using pgf-umlsd
+%		\newthread{reg}{:Park Pilot}
+%		\newinst[2]{turbine}{:Turbine}
+%	
+%		\begin{sdblock}{each turbine}{}
+%			\mess[1]{reg}{getCurrentStatus}{turbine}
+%			\mess[1]{turbine}{status}{reg}
+%		\end{sdblock}
+%		
+%		\begin{call}{reg}{calculateAllSetpoints()}{reg}{}
+%		\end{call}
+%	
+%		\begin{sdblock}{each turbine}{}
+%			\mess[1]{reg}{setNewSetpoint}{turbine}
+%		\end{sdblock}
+%					
+%	\end{sequencediagram}
+%
+%	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+%	\caption[Regulator calculation sequence]{
+%		\label{fig:dataComputationSequence} 
+%		\footnotesize{%
+%			Regulator calculation sequence.
+%		}
+%	}
+%\end{figure}
 
 \section{Thesis motivation}
 \label{sec:ThesisMotivation}
-Todays setup at Siemens Wind Power (\cref{sec:SiemensCase}) is an example of a system wished to be made less centralized. The current setup poses the following problems to Siemens:  
+Todays setup at Siemens Wind Power (\cref{sec:SiemensCase}) is an example of a system wished to be made less centralized. The current setup poses the following challenges to Siemens:  
 
 \begin{itemize} 
-	\item Single point of failure. Should a Wind Power Supervisor or a Park Pilot fail, a part of the wind farm will become unavailable.
+	\item Single point of failure. Should a Wind Power Supervisor or a Park Pilot fail, a part of the wind park will become unavailable.
 	\item Low scalability. The Wind Power Supervisors and Park Pilots does not scale with the number of turbines. This is reflected in the park regulation performance. Today a park regulation cycle-time is 150 ms. This cycle-time is set after worst case set point retrieval time, worst case new setpoint calculations and worst case time it takes to broadcast new setpoints. This ultimately depends on worst case number of turbines pr. Park Pilot.
 \end{itemize}
 
@@ -106,17 +106,17 @@ Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by dist
 
 \section{Problem statement}
 
-The purpose of this thesis is to design, implement and evaluate a system solution for a Siemens windmill farm, where the Wind Park Supervisor and the Park Pilots are decentralized by utilizing the free capacity residing in every turbine for the Siemens Wind Power case. The solution must be able to provide the same features as the current solution. 
+The purpose of this thesis is to design, implement and evaluate a system solution for a Siemens wind park, where the Wind Park Supervisor and the Park Pilots are decentralized by utilizing the free capacity residing in every turbine for the Siemens Wind Power case. The solution must be able to provide the same features as the current wind park setup. 
 
 \paragraph{We present the following questions:}
 \begin{itemize} 
 	\item How can we best re-implement the current Siemens system (\cref{sec:SiemensCase}) as a system where the Wind Park Supervisor and the Park Pilots are decentralized?
 	\item Can we, with the new decentralized solution, reduce the current regulation cycle time of 150 ms?
-	\item Can we create a solution that scales so the number of turbines do not impact the regulation cycle time?
-	\item Can we create a solution where removing one or more node from the system at runtime does not cause system failure?
+	\item Can we create a solution that scales so the number of turbines does not impact the regulation cycle time?
+	\item Can we create a solution where removing one or more nodes from the system at runtime does not cause system failure?
 \end{itemize}
 
-The implementation of the system will be a prototype, which runs the developed solution, for proof of concept purposes. The prototype will be compared to the existing Siemens solution with respect to performance, availability and redundancy using an objective test metric we develop for the comparison.
+The solution system will be implemented as a prototype, which runs the developed solution, for proof of concept purposes. The prototype will be compared to the existing Siemens Wind Power solution with respect to performance, availability and redundancy using an objective test metric developed in cooperation with Siemens Wind Power.
 
 %ASK SIEMENS HOW TO COMPARE AND MORE CONSTRAINTS??? 
 
