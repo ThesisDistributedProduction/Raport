@@ -9,16 +9,16 @@ Heavyweight energy consumer USA has declared a goal of reaching 20\% wind energy
 Siemens Wind Power is one of the worlds leading producers of wind turbines, with a global market share of 9.5\% in 2012 \cite{worldmarketupdate2012}.
 Siemens Wind Power is increasingly focusing on the offshore wind farm market.
 The current setup of a wind farm requires additional infrastructure for management of the wind farm.
-As well as the wind turbines the wind farm consists of a Wind Power Supervisor for operations that involve the entire farm and multiple High Performance Park Pilot, from here on refereed to as Park Pilots, for near realtime control of the turbines.
-The Wind Power Supervisor and Park Pilots are centralised control points of the wind farm, having centralised control means that the system has single points of failure as well, which if it fails decreases the availability of the wind farm.
-Furthermore the Wind Power Supervisor and Park Pilots does not scale automatically with the number of turbines, but needs hardware to be upgraded if too many turbines are added.
+As well as the wind turbines the wind farm consists of a SCADA system for operations that involve the entire farm, such as external requests, and multiple park regulators, for near realtime control of the turbines.
+The SCADA system and the park pilots are centralized control points of the wind farm. Having centralized control means that the system has single points of failure, which if it fails decreases the availability of the wind farm.
+Furthermore the SCADA system and park regulators does not scale automatically with the number of turbines, but needs hardware to be upgraded if too many turbines are added.
 
 Since wind energy is recognized as one of the solutions to the renewable energy problem, wind farm size and capacity keeps increasing.
 The need for scalability is thus not only a problem for Siemens Wind Power but for the entire industry.
 
 The popularity of wind energy has lead to massive research within the area. The European Union has a number of sponsored projects among others:
 \begin{itemize}
-	\item INNWIND which focus is on accelerating the process of realising the 20MW turbine~\cite{INNWIND}.
+	\item INNWIND which focus is on accelerating the process of realizing the 20MW turbine~\cite{INNWIND}.
 	\item Aeolus which focus on the development of models that allows realtime predictions of wind flow~\cite{Aoelus}.
 	\item EERA-DTOC which focus is on creating a software tool for optimizing offshore wind farm design and clusters of wind farms~\cite{eera-dtoc}.
 \end{itemize}

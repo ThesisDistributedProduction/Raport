@@ -2,7 +2,9 @@
 
 As mentioned, The Wind Power Supervisor (WPS) and the Park Pilot does not scale well with the number of turbines, which forces Siemens to set the regulation cycle time after worst case scenarios (see \cref{sec:SiemensCase} for details). Today this cycle time is set to 150 ms and Siemens wants the time reduced to 10 ms. This is a major performance improvement and as such not a strict demand from the Siemens case, meaning any reduction in the 150 ms cycle time will be accepted. The goal for the decentralized solution to the Siemens case is therefore to reduce the regulation cycle time as much as possible.
 
-Looking at the park regulation sequence \cref{sec:SiemensCase}, the reason for it being slow is primarily the communication overhead involved, when requesting set points from every turbine and sending new set points to every turbine and that this communication overhead increases with the number of turbines involved with the regulation. So to reduce the regulation cycle time, this communication overhead needs to be reduced, by letting each turbine perform park regulations and calculate their own set points. 
+Looking at the park regulation algorithm \cref{sec:SiemensCase}, the reason for it being slow is primarily the communication overhead involved, when requesting set points from every turbine and sending new set points to every turbine, and that this communication overhead increases with the number of turbines involved with the regulation. So to reduce the regulation cycle time, this communication overhead needs to be reduced, by letting each turbine perform park regulations and calculate their own set points. 
+
+Removing the communication overhead from the regulation algorithm involves detaching sharing of data from the algorithm. In order to do this
 
 For the Park Pilot to be able to compute a park regulation, the Park Pilot needs information about every turbine in the farm. In the same way, when decentralizing the Park Pilot, if a turbine is to compute park regulations, the turbine needs information about every other turbine. This means the windmill farm needs a global shared state, where information about every turbine in the farm is available to every turbine performing park regulations. 
 
@@ -212,9 +214,39 @@ This leaves DSM and publish/subscribe as remaining paradigms, where one could im
 
 \section{State of the art DSM}
 
-To perform the regulation sequence as fast as possible, the best solution, in theory, is to keep all data from all turbines locally available to each turbine, so each turbine can perform the regulation sequence themselves, without accessing the hard disk. 
+The regulation algorithm is a recursive algorithm, which performs calculations of new turbine set points using the following parameters:
+
+\begin{itemize}
+	\item Current state of every turbine in the farm.
+	\item Max capacity of each turbine.
+	\item Historic data from previous calculations.
+\end{itemize} 
+
+
+
+In order to remove the communication overhead from the regulation cycle time, information sharing through the chosen paradigm, DSM, needs to to be detached from the regulation cycle. 
+
+Looking at the global shared state 
+
+ Removing communication overhead from the park regulation cycle involves the following
+
+DSM is a paradigm well implemented through by many different frameworks, with their own individual and unique implementation.
+
+
+Therefore, to determine which technology that is best suited for the Siemens case, the technologies will be compared on the following set of parameters: 
+
+%standalone: Type?
+%Distributed shared memory support
+%Distributed shared chache support
+%Distributed memeory support
+%Performance
+%Client/server?
+%Framework architecture. distributed shared memeory, client/server or not  
+%cost
 
 With DSM chosen as the communication paradigm, this chapter describes, evaluates and discusses different DSM technologies in order to find the technology best suited for Siemens.
+
+%Standalone, avoid overhead
 
 
 \section{In memory databases}
@@ -222,6 +254,7 @@ With DSM chosen as the communication paradigm, this chapter describes, evaluates
 
 \section{In-memory data grids}
 %Distributed memory. Only shared for replica reasons
+
 \subsection{Oracle Coherence}
 %dist. memory --> distributed chache
 %java, .net, c++
@@ -255,6 +288,7 @@ With DSM chosen as the communication paradigm, this chapter describes, evaluates
 
 \subsection{jBoss Cache}
 %Java 5.0 and 6
+%forældet
 
 
 \subsection{DSM in .NET}
