@@ -1,15 +1,24 @@
 \chapter{Distributed computing}
 
-As mentioned, The Wind Power Supervisor (WPS) and the Park Pilot does not scale well with the number of turbines, which forces Siemens to set the regulation cycle time after worst case scenarios (see \cref{sec:SiemensCase} for details). Today this cycle time is set to 150 ms and Siemens wishes it reduced to 10 ms. This is a major performance improvement and for that reason, performing the regulation sequence using a distributed database only is not enough, since reading/writing to the disk takes valuable milliseconds. Therefore regulation information needs to be kept in memory in order to keep regulation cycle time as low as possible. 
+As mentioned, The Wind Power Supervisor (WPS) and the Park Pilot does not scale well with the number of turbines, which forces Siemens to set the regulation cycle time after worst case scenarios (see \cref{sec:SiemensCase} for details). Today this cycle time is set to 150 ms and Siemens wants the time reduced to 10 ms. This is a major performance improvement and as such not a strict demand from the Siemens case, meaning any reduction in the 150 ms cycle time will be accepted. The goal for the decentralized solution to the Siemens case is therefore to reduce the regulation cycle time as much as possible.
+
+Looking at the park regulation sequence \cref{sec:SiemensCase}, the reason for it being slow is primarily the communication overhead involved, when requesting set points from every turbine and sending new set points to every turbine and that this communication overhead increases with the number of turbines involved with the regulation. So to reduce the regulation cycle time, this communication overhead needs to be reduced, by letting each turbine perform park regulations and calculate their own set points. 
+
+For the Park Pilot to be able to compute a park regulation, the Park Pilot needs information about every turbine in the farm. In the same way, when decentralizing the Park Pilot, if a turbine is to compute park regulations, the turbine needs information about every other turbine. This means the windmill farm needs a global shared state, where information about every turbine in the farm is available to every turbine performing park regulations. 
+
+%This is a major performance improvement and for that reason, performing the regulation sequence using a distributed database only is not enough, since reading/writing to the disk takes valuable milliseconds. Therefore regulation information needs to be kept in memory in order to keep regulation cycle time as low as possible. 
+
+This chapter describes and discusses different distributed computing paradigms as a way of making a global state for the turbines to compute park regulations themselves. The goal is to find the paradigm best suited for the Siemens case. Furthermore, the chapter describes relevant technologies within the chosen paradigm and discusses which technology that is the best for the Siemens case.
+
+The chapter uses the following definition by Andrews~\cite{andrews2000foundations} for distributed computing: \textit{In distributed computing, each node or process has its own local memory and communication happens via message passing.}
+
+
 
 %Furthermore, when decentralizing the Wind Power Supervisor onto the turbines, the turbines obviously needs to be able to handle external data aggregation . For the heavy tasks, in terms of CPU power, distributed computing becomes relevant as a way of improving performance by combining the CPU power residing inside the turbines to compute a common task.
 
+%
+%In distributed computing, each node or process has its own local memory and communication happens via message passing~\cite{andrews2000foundations}. This means distributed computing is a way of having a global system state and keep relevant information, with regards to the global state, in memory, and thereby avoid read/write operations to the disk. 
 
-For the Park Pilot to be able to compute a park regulation, the Park Pilot needs information about every turbine in the farm. In the same way, when decentralizing the Park Pilot, for a turbine to compute park regulations, the turbine needs information about every other turbine. This means the windmill farm needs a global shared state, where information about every turbine in the farm is available to every turbine performing park regulations. 
-
-In distributed computing, each node or process has its own local memory and communication happens via message passing~\cite{andrews2000foundations}. This means distributed computing is a way of having a global system state and keep relevant information, with regards to the global state, in memory, and thereby avoid read/write operations to the disk. 
-
-This chapter contains a description of relevant distributed computing paradigms and discusses which of these paradigms that are best suited for the Siemens case. Furthermore, the chapter describes relevant technologies within the chosen paradigm and discusses which technology that is the best for the Siemens case.
 
 
 \section{Message passing}
@@ -203,7 +212,59 @@ This leaves DSM and publish/subscribe as remaining paradigms, where one could im
 
 \section{State of the art DSM}
 
-\subsection{Memcached}
+To perform the regulation sequence as fast as possible, the best solution, in theory, is to keep all data from all turbines locally available to each turbine, so each turbine can perform the regulation sequence themselves, without accessing the hard disk. 
+
+With DSM chosen as the communication paradigm, this chapter describes, evaluates and discusses different DSM technologies in order to find the technology best suited for Siemens.
+
+
+\section{In memory databases}
+%Client/server architecture
+
+\section{In-memory data grids}
+%Distributed memory. Only shared for replica reasons
+\subsection{Oracle Coherence}
+%dist. memory --> distributed chache
+%java, .net, c++
+%http://www.oracle.com/technetwork/middleware/coherence/distributed-caching-100021.html
+
+
+\subsection{VMware Gemfire}
+%Contact sales
+%Not open source
+
+\subsection{Gigaspaces XAP}
+%Share nothing architecture
+
+\subsection{ScaleOut Software}
+%Java, .NET, C/C++ 
+%cash
+%Share nothing architecture
+%http://www.scaleoutsoftware.com/downloads-resources/downloads/
+
+\subsection{NCache}
+%expensive
+%http://www.alachisoft.com/ncache/index.html
+
+\subsection{Hazelcast}
+%java
+%opensource
+%http://hazelcast.com/products/hazelcast/
+
+\section{Distributed shared cache}
+
+
+\subsection{jBoss Cache}
+%Java 5.0 and 6
+
+
+\subsection{DSM in .NET}
+%IP multicast
+
+%casusally consistent: Writes that are potentially causally related must be seen by all processes in the same order. Concurrent writes may be seen in a different order on different machines.
+
+\subsection{AppFabric}
+%Runs on IIS
+
 
 \subsection{DDS}
 

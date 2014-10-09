@@ -1,0 +1,104 @@
+\tikzstyle{line} = [draw, -latex']
+
+\begin{tikzpicture}
+[
+	start chain=going right,
+	diagram item/.style={
+		minimum width=40pt,
+		on chain,
+	},
+	mill item/.style={
+			minimum width=10pt,
+			on chain
+	},
+	comment item/.style={
+			inner sep=5pt,
+			draw,
+			dashed,
+	}
+]
+
+\newcommand\millFigure{\includegraphics[width=0.7cm]{MillSiluet}}
+\newcommand\multiMillFigure{\includegraphics[width=4cm]{MultiMillSiluet}}
+
+\begin{scope}[node distance=20mm and 10mm]
+
+\node [
+	diagram item,
+	label=center:Internet
+] (Internet) {\includegraphics[width=4cm]{Cisco_BW/cloud}};
+
+\node [
+	continue chain=going below,
+	diagram item,
+	label={[label distance=0cm]80:Wind Power Supervisor}
+] (wps){\includegraphics[width=1.5cm]{Cisco_BW/fileserver}};
+
+\node [
+	start branch=1 going left,
+	diagram item,
+	label=above:High Performance Park Pilot
+] (hppp){\includegraphics[width=1.5cm]{Cisco_BW/fileserver}};
+
+\node[
+	comment item,
+	align=left
+](comment)[right=4cm of wps]{
+	\begin{tabular}{l}
+		\textbf{Wind Power Supervisor}  \\
+		Plan control tasks\\
+		- Noise control \\
+		- Flicker control \\
+		- Aviation light control \\
+		- Ice control \\
+		Data \\
+		- Aggregated historical \\
+		- Reporting \\
+		External communication \\
+		- Network services \\
+	\end{tabular}
+};
+
+\node [	
+continue chain=going below,
+mill item
+] (millright){\multiMillFigure};
+
+\node[
+	comment item,
+	align=left
+](comment1)[right=3.0cm of millright]{
+Each turbine contains logged \\
+data with high resolution and \\
+turbine control logic.};
+
+\node [	
+continue branch=1 going below,
+mill item
+] (millleft){\multiMillFigure};
+
+\draw [->] (hppp.251) -- (millleft.101) node [near start, left] {1} node [midway] (hiddenNode){};
+
+\node[
+	comment item,
+	align=left
+](comment2)[left=1.7cm of hiddenNode]{
+HPPP \\
+getCurrentStatus() \\
+calculateSetpoints() \\
+setNewSetpoints() };
+
+\path [line,dashed] (wps) -- (comment);
+\path [line,dashed] (millright) -- (comment1);
+\path [line,dashed] (hiddenNode) -- (comment2);
+
+\draw [->] (hppp.280) -- (millleft.84) node [near end, right] {*};
+\draw [<-] (hppp.265) -- (millleft.93);
+
+\draw (Internet) -- (wps);
+\draw (wps) -- (hppp) node [near start, above] {1} node [near end, below] {*};
+\draw (wps) -- (millright) node [near start, left] {1} node [near end, right] {*};
+
+\end{scope}
+
+\end{tikzpicture}
