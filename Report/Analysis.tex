@@ -1,19 +1,42 @@
 \chapter{Analysis}
-Problem -> Alternativer -> Sammenligning -> Endeligt valg
 
+The problem statement (\cref{sec:problemStatement}) presents four questions for this project. Question~\ref{PS:Q:1} being the primary question, from which the other three spawns. 
 
-Opdeling vs. samme emne
-\begin{itemize}
-\item Vidensudveksling er vigtig
-\item  Opsplitning med undervisning
-\end{itemize}
+To answer question \ref{PS:Q:1} we have the following fundamental needs of the Siemens case, currently provided by the Wind Park Supervisor and the Park Pilots:
+\begin{enumerate}[label=\textbf{\alph*.}, ref=\textit{\alph*}]
+\item \label{Analysis:need:a} Data aggregation.
+\item \label{Analysis:need:b} Data storage for the entire park.
+\item \label{Analysis:need:c} External communication.
+\item \label{Analysis:need:d} Park regulation.
+\end{enumerate}
 
+For the turbines to be able to handle the needs above and act as a single unit, we are forced to look at decentralized software components. 
 
-noter:
-pup/sub pattern vs DSM (Distributed shared memory)
-ved multicast operationer fejler mange pup/sub systemer da de bruger almindelige unicast protokoller og derfor sender samme pakke flere gang til forskellige modtagere istedet for at multicast pakken en gang til all. (speciale rapport kilde: Unders\o gelse af Distributed Shared Memory performance og anvendelse ...)
+The following chapters describes, analyses and discusses solutions to the needs above. The chapters are divided based on the components we see as solutions to \ref{Analysis:need:a}-\ref{Analysis:need:d}. As such this analysis contains the following chapters:
 
+\begin{description}
+\item{\textbf{Data storage.}} The obvious solution for need \ref{Analysis:need:a} and \ref{Analysis:need:b}.
+\item{\textbf{Resource management.}} In the decentralized system, the turbines needs to be able to handle need~\ref{Analysis:need:c}. Currently Siemens windmill farms can have up to 100 communication channels open at a time. In order to avoid a single mill having to handle 100 communication channels, resource management has to be introduced to the system.
+\item{\textbf{Distributed computing.}} For the turbines to be able to perform park regulations, communication between the turbines is essential, since park regulation demands knowledge about every turbine in the farm. Distributed computing is introduced to the system as a way to keep a global state as a solution to need~\ref{Analysis:need:d}. This chapter also addresses question~\ref{PS:Q:2} of the problem statement.
+\end{description}
 
+Question \ref{PS:Q:3} and \ref{PS:Q:4} of the problem statement are addressed by all of the chapters above.
+
+%Problem -> Alternativer -> Sammenligning -> Endeligt valg
+%
+%
+%Opdeling vs. samme emne
+%\begin{itemize}
+%\item Vidensudveksling er vigtig
+%\item  Opsplitning med undervisning
+%\end{itemize}
+%
+%
+%noter:
+%pup/sub pattern vs DSM (Distributed shared memory)
+%ved multicast operationer fejler mange pup/sub systemer da de bruger almindelige unicast protokoller og derfor sender samme pakke flere gang til forskellige modtagere istedet for at multicast pakken en gang til all. (speciale rapport kilde: Unders\o gelse af Distributed Shared Memory performance og anvendelse ...)
+%
+%
 
 
 \input{DataStorage}

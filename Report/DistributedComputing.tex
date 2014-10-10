@@ -4,7 +4,7 @@ As mentioned, The Wind Power Supervisor (WPS) and the Park Pilot does not scale 
 
 Looking at the park regulation algorithm \cref{sec:SiemensCase}, the reason for it being slow is primarily the communication overhead involved, when requesting set points from every turbine and sending new set points to every turbine, and that this communication overhead increases with the number of turbines involved with the regulation. So to reduce the regulation cycle time, this communication overhead needs to be reduced, by letting each turbine perform park regulations and calculate their own set points. 
 
-Removing the communication overhead from the regulation algorithm involves detaching sharing of data from the algorithm. In order to do this
+%Removing the communication overhead from the regulation algorithm involves detaching sharing of data from the algorithm. In order to do this
 
 For the Park Pilot to be able to compute a park regulation, the Park Pilot needs information about every turbine in the farm. In the same way, when decentralizing the Park Pilot, if a turbine is to compute park regulations, the turbine needs information about every other turbine. This means the windmill farm needs a global shared state, where information about every turbine in the farm is available to every turbine performing park regulations. 
 
@@ -286,10 +286,8 @@ With DSM chosen as the communication paradigm, this chapter describes, evaluates
 \subsubsection{Distributed shared cache}
 
 
-\subsubsection{jBoss Cache}
-%Java 5.0 and 6
-%forældet
-
+\subsubsection{Infinispan}
+%promising
 
 \subsubsection{DSM in .NET}
 %IP multicast
