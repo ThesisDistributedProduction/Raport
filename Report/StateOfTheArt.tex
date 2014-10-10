@@ -11,7 +11,9 @@ Other related work includes research into decentralized systems.
 %Several approaches has been tested as described in the following subsections. %TODO: Rewrite,
 
 \section{Decentralized systems}
-
+With the coming era of Internet of Things (IoT) the focus on decentralized systems and autonomic agents is greater than ever.
+IoT devices must be able to communicate with each other directly without the need for an intermediate central server.
+Furthermore the IoT devices must be largely autonomous since they cannot rely on a lasting connection to a server for control.
 
 A new approach to control of wind farms is to utilize game theory\cite{AModelFreeApproachToWindFarmControl}.
 The turbines in a farm must cooperate to reach the desired goal of a chosen output.
@@ -37,7 +39,7 @@ The hierarchical approach is the current approach used in the Siemens case.
 \subsection{Decentralized feed-forward control}
 The decentralized feed-forward approach\cite{DecentralisedFeedforwardControlOfWindFarms} takes advantage of the fact that turbines are placed in a farm by letting upwind turbines feed wind data to downwind turbines. 
 This allows downwind turbines to make adjustments to their production in order to exploit the coming wind in the best way.
-Furthermore a restricted communication model is used allowing turbines only to communicate with their neighb
+Furthermore a restricted communication model is used allowing turbines only to communicate with their neighbors.
 Using this decentralized feed-forward approach to control a wind farm can help even out the output of the farm since downwind turbines has additional information regarding wind speed to come to act upon. If upwind turbines power production is also a part of the feed-forward package downwind turbines may also be able to regulate overall wind farm production by evening out spikes from upwind turbines.
 In addition by only communicating with neighboring turbines in order to achieve improvements in output the need for a centralized node is alleviated.
 
