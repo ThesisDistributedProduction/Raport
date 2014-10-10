@@ -1,4 +1,4 @@
-\chapter{Distributed computing}
+\section{Distributed computing}
 
 As mentioned, The Wind Power Supervisor (WPS) and the Park Pilot does not scale well with the number of turbines, which forces Siemens to set the regulation cycle time after worst case scenarios (see \cref{sec:SiemensCase} for details). Today this cycle time is set to 150 ms and Siemens wants the time reduced to 10 ms. This is a major performance improvement and as such not a strict demand from the Siemens case, meaning any reduction in the 150 ms cycle time will be accepted. The goal for the decentralized solution to the Siemens case is therefore to reduce the regulation cycle time as much as possible.
 
@@ -23,14 +23,14 @@ The chapter uses the following definition by Andrews~\cite{andrews2000foundation
 
 
 
-\section{Message passing}
+\subsection{Message passing}
 
 Message passing is a low-level communication paradigm, where processors communicate by sending messages via bidirectional channels. It is a highly used paradigm and other communication paradigms are usually implemented on top of an underlying message-passing system.  
 
 With message passing being a low-level communication paradigm, the communication overhead is low compared to paradigms build on top of it. It is entirely up to the application developer to handle communication. This will in many cases result in better execution time, which is the most compelling argument for choosing message passing as communication paradigm. The problem with it being up to the developer, is that the developer needs to deal with configurations setup, such as sockets and marshaling, exception handling and who and when to communicate with when developing the application. This makes it hard to develop using message passing, especially when dealing with more complex applications~\cite{lu1995message}. 
 
 
-\section{Distributed shared memory}
+\subsection{Distributed shared memory}
 
 Shared memory is an attractive paradigm for designing parallel and distributed systems. Applications can use shared memory as a tool for the entire system to share a common state. However for loose coupled distributed systems, no physically shared memory is available to support such a model. Distributed shared memory (DSM) is a way of providing physically distributed memory machines a shared memory abstraction, illustrated on \cref{fig:distributedSharedMemory}.
 
@@ -71,7 +71,7 @@ A downside to the DSM abstraction is that it introduces overhead to the system, 
 %Scalability and makespan (Y). Page 298, conclusion.
 
 
-\section{Publish/subscribe}
+\subsection{Publish/subscribe}
 
 Publish/subscribe is a messaging pattern where communication is interest based instead of address based. Messages are characterized into classes and sent by publishers, without knowledge of how many subscribers there may be. Nodes can then subscribe to one or more classes of interest, without knowledge of how many publishers there are, providing a more decoupled, scalable and flexible interaction model.
 
@@ -94,7 +94,7 @@ The publish/subscribe paradigm is event driven and corresponds to the observer d
 % DSM is only space and time decoupled but not sync, because consumers pull from shared space in a synchronous style
 
 
-\section{Remote procedure call}
+\subsection{Remote procedure call}
 
 Remote procedure call (RPC) is a communications paradigm built for client/server architecture~\cite{Microsoft2003RPC}, which makes remote interactions appear the same way as local interactions. The goal is to make the process of executing code on a remote machine as simple as calling a local function~\cite{dusseau2014intro} by factoring out common tasks, such as security, synchronization, and data flow handling. This explains the paradigms popularity in distributed computing. However distribution cannot be made completely transparent to the application, because it gives rise to further types of potential failures, like communication failures, that have to be dealt with explicitly~\cite{coulouris2005distributed}. 
 
@@ -158,7 +158,7 @@ A shortcoming of RPC is the strong coupling in time, space and synchronization. 
 %	}
 %\end{table}
 
-\section{Comparison with regards to the Siemens case}
+\subsection{Comparison with regards to the Siemens case}
 Looking at the Siemens case (\cref{sec:SiemensCase}) the new distributed system must act as a single unit, be able to perform park regulations and scale easily with the number of turbines. Furthermore Siemens wish to remove single point of failures. With this in mind, the remote procedure call paradigm is not an option because it is tight coupled and build for a client/server architecture, which is exactly what Siemens is trying to avoid. One could imaging using a partial client/server architecture, with a communication hierarchy, however this would introduce some communication overhead~\cite{Yu1997JavaDSM} and single point of failures to the system.
 
 As mentioned, to perform the park regulation sequence, the windmill farm needs a global shared state, where information about every turbine available to every turbine performing park regulations. Therefore, if the decentralized version of the Siemens case were to be implemented using raw message passing, it would result in building some kind of DSM and/or publish/subscribe abstraction, with roughly the same communication overhead. To save the trouble of developing this abstraction, we conclude that message passing is not an option as communication paradigm.
@@ -212,7 +212,7 @@ This leaves DSM and publish/subscribe as remaining paradigms, where one could im
 
 
 
-\section{State of the art DSM}
+\subsection{State of the art DSM}
 
 The regulation algorithm is a recursive algorithm, which performs calculations of new turbine set points using the following parameters:
 
@@ -249,61 +249,61 @@ With DSM chosen as the communication paradigm, this chapter describes, evaluates
 %Standalone, avoid overhead
 
 
-\section{In memory databases}
+\subsection{In memory databases}
 %Client/server architecture
 
-\section{In-memory data grids}
+\subsection{In-memory data grids}
 %Distributed memory. Only shared for replica reasons
 
-\subsection{Oracle Coherence}
+\subsubsection{Oracle Coherence}
 %dist. memory --> distributed chache
 %java, .net, c++
 %http://www.oracle.com/technetwork/middleware/coherence/distributed-caching-100021.html
 
 
-\subsection{VMware Gemfire}
+\subsubsection{VMware Gemfire}
 %Contact sales
 %Not open source
 
-\subsection{Gigaspaces XAP}
+\subsubsection{Gigaspaces XAP}
 %Share nothing architecture
 
-\subsection{ScaleOut Software}
+\subsubsection{ScaleOut Software}
 %Java, .NET, C/C++ 
 %cash
 %Share nothing architecture
 %http://www.scaleoutsoftware.com/downloads-resources/downloads/
 
-\subsection{NCache}
+\subsubsection{NCache}
 %expensive
 %http://www.alachisoft.com/ncache/index.html
 
-\subsection{Hazelcast}
+\subsubsection{Hazelcast}
 %java
 %opensource
 %http://hazelcast.com/products/hazelcast/
 
-\section{Distributed shared cache}
+\subsubsection{Distributed shared cache}
 
 
-\subsection{jBoss Cache}
+\subsubsection{jBoss Cache}
 %Java 5.0 and 6
 %forældet
 
 
-\subsection{DSM in .NET}
+\subsubsection{DSM in .NET}
 %IP multicast
 
 %casusally consistent: Writes that are potentially causally related must be seen by all processes in the same order. Concurrent writes may be seen in a different order on different machines.
 
-\subsection{AppFabric}
+\subsubsection{AppFabric}
 %Runs on IIS
 
 
-\subsection{DDS}
+\subsubsection{DDS}
 
 
-\section{Conclusion}
+\subsection{Conclusion}
 
 %Ens
 %Valg med vægt på arkitektur og development tid. 

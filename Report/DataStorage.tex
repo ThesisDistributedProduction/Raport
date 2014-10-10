@@ -1,4 +1,4 @@
-\chapter{Data storage}
+\section{Data storage}
 Data storage is important in a system like a wind farm.
 A lot of data must be persisted like weather data, health data of the different parts of every turbine and production data.
 These records are important both for immediate use to view the current state of the system but also for review in the future for instance to predict weather trends or replace worn down parts of turbine before they break completely.
@@ -24,7 +24,7 @@ Storage technologies will be compared on a set of parameters that are relevant t
 \item \textbf{Aggregation}: The storage technology should if possible support advanced aggregation of data.
 \end{enumerate}
 
-\section{Relational storage, SQL}
+\subsection{Relational storage, SQL}
 \label{sec:sql}
 The traditional way of storing data is in a Relational Database Management System(RDBMS).
 These databases rely on a schema to arrange data in tables and their relations.
@@ -41,7 +41,7 @@ RDBMSs support ACID transactions which ensures operations in the database are pr
 
 A problem with a traditional RDBMS is that they are designed for vertical scaling\cite{Atzeni:TheRelationalModelIsDead}. If a traditional RDBMS has problems handling data the solution is to add a bigger harddrive or invest in a faster CPU. This makes sense in a world were hardware is very expensive like it was when the traditional RDBMSs saw the light of day\cite{Stonebraker:TheEndOfAnArchitecturalEra}. Today horizontal scaling is preferred. If a system has a problem with the data load add another machine or add five others if that is what it takes. Since horizontal scalability is a very important feature of the data storage system as shown in \cref{enum:parameters:availability} the traditional RDBMS is not a viable option.
 
-\section{Schema-less storage, NoSQL}
+\subsection{Schema-less storage, NoSQL}
 \label{sec:nosql}
 Since 2009 the schema-less storage methods have become increasingly popular.
 Relational databases could no longer keep up with the task of storing and querying big data.
@@ -52,7 +52,7 @@ The downside however is the lack of the ACID properties which results in a lower
 
 The schema-less databases can be divided roughly into four categories\cite{Fowler:IntroNoSQL, Moniruzzaman:NoSQLDatabaseNewEraOfDatabasesForBigDataAnalysis}, which will be described separately in the following sections.
 
-\subsection{Document databases}
+\subsubsection{Document databases}
 The document databases are designed to contain documents.
 The documents contains attribute name/value pairs.
 Attributes may vary between rows.
@@ -98,7 +98,7 @@ Primary use include storing actual documents like emails and blog posts, or stor
 % 	}
 % \end{figure}
 
-\subsection{Key-value stores}
+\subsubsection{Key-value stores}
 The key-value stores can be compared to a hashmap since every entry has a key and an associated value. 
 To retrieve data you search for the key. 
 The values can contain any kind of data from simple text to lists or documents.
@@ -147,7 +147,7 @@ Primary use includes fast lookup for instance for user sessions or product lists
 % 	}
 % \end{figure}
 
-\subsection{Column-family stores}
+\subsubsection{Column-family stores}
 Column-family stores keep related data stored together.
 A column-family object consists of a key-value pair where the value contains columns of related data.
 
@@ -219,7 +219,7 @@ Primary use includes distributed data storage, batch processing of data and anal
 % 	}
 % \end{figure}
 
-\subsection{Graph databases}
+\subsubsection{Graph databases}
 Graph databases divides data according to nodes and relations between nodes.
 Each node in the graph contains key-value pairs of data, and each edge describes a relationship to another node.
 Graph databases are optimized for traversal of relationships between nodes, not for data aggregation or analysis.
@@ -284,7 +284,7 @@ Primary use includes pattern detection and mapping of networks.
 % 	}
 % \end{figure}
 
-\section{Relational storage that scale, NewSQL}
+\subsection{Relational storage that scale, NewSQL}
 \label{sec:newsql}
 NewSQL data stores aim to bring the relational data model into the world of horizontal scalability and flexible data models while maintaining the ACID properties and transactions of the traditional RDBMS\cite{Cattell:ScalableSQLAndNoSQLDataStores}.
 This is obtained by implementing a completely new architecture\cite{CORBETT:SpannerGooglesGloballyDistributedDatabase}.
@@ -308,7 +308,7 @@ NewSQL data stores are divided into three categories\cite{Prasanns:NewSQLTheNewW
 \item Transparent clustering/sharding: Provide extra features for transparent clustering/sharding on top of existing database systems. 
 \end{itemize}
 
-\section{SQL, NoSQL or NewSQL?}
+\subsection{SQL, NoSQL or NewSQL?}
 This thesis aims to create a distributed system with scalability and redundancy as the most important parameters.
 This means that traditional SQL is not an option because of the poor scalability.
 
@@ -318,7 +318,7 @@ NewSQL promises to keep the virtues of the traditional databases systems while s
 
 Since both NoSQL and NewSQL seems like fitting technologies for data management in the Siemens case a further comparison between two state of the art implementations must be done in order to decide which technology will be the best suited.
 
-\section{State of the art NoSQL}
+\subsection{State of the art NoSQL}
 To identify state of the NoSQL and NewSQL databases a website called db-engines.com\cite{db-engines} is used.
 This website maintain a list of more than 200 different databases ranked by popularity. The list is updated monthly based on search engine popularity, discussion threads, job-offers, mentions on LinkedIn and tweets. This does not give the complete and objective ranking but it gives a pointer to the most popular database in their respective category.
 
@@ -357,7 +357,7 @@ There is support for automatic failover if an instance is unavailable.
 MongoDB supports data aggregation and mapreduce allowing aggregate operations before data is returned from the database.
 In terms of availability, data distribution and aggregate operations MongoDB is the best of the NoSQL data stores.
 
-\section{State of the art NewSQL}
+\subsection{State of the art NewSQL}
 Looking at the db-engines.com database list once more we find that the four highest ranking NewSQL databases are within the top 100 databases:
 
 \begin{itemize}
@@ -387,7 +387,7 @@ Since all NewSQL databases are built for scalability, availability and use SQL a
 In terms of ease of use NuoDB is the best choice but in terms of performance VoltDB has some impressive benchmarks.
 Since this system is a production system with a lot of feedback loops running performance is important and that is why VoltDB is the best NewSQL alternative.
 
-\section{Comparison of MongoDB and VoltDB}
+\subsection{Comparison of MongoDB and VoltDB}
 Since MongoDB and VoltDB are the best fit to the Siemens Case in their respective categories a comparison of the two will determine which to use.
 There are several parameters relevant for the Siemens case as shown in table \ref{tab:mongovolt}.
 \begin{table}
@@ -432,7 +432,7 @@ There are several parameters relevant for the Siemens case as shown in table \re
 	}
 \end{table}
 
-\section{Conclusion}
+\subsection{Conclusion}
 Choosing a data store these days is not easy. The data store business has been the disrupted by the amount of data generated by web 2.0. 
 A number of new databases has spawned trying to solve the problems of traditional RDBMSs. 
 The industry has not yet come to terms with the correct solution to the big data problem and therefore the best fitting solution as of now must be found.

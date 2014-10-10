@@ -1,5 +1,5 @@
 % !TeX spellcheck = en_GB
-\chapter{Resource Management} % Load balancing
+\section{Resource Management} % Load balancing
 %Below should
 %Having redundant systems provides a number of favourable traits like scalability and availability.
 
@@ -13,7 +13,7 @@ In a system where the tasks can be split evenly among the nodes, resource manage
 Others have many different tasks that can run independently of each other in the Siemens case this will be handling requests from users and secondary systems running outside the wind farm.
 In the Siemens case the system currently is designed to at peak to handle a hundred simultaneously connected clients from outside the wind farm. This workload needs to distributed fairly when building a decentralised system therefore dedicated resource management logic is needed.
 
-\section{Load Balancing}
+\subsection{Load Balancing}
 Software responsible for handling resource management is often refereed to as a load balancer.
 Load balancers come in different complexity and with the ability to manage resource in various ways.
 From naively assigning clients with a round robin based algorithm to distributing connections based on resource monitoring.
@@ -111,7 +111,7 @@ Load balances can provide various features, related to offloading the real serve
 	\item support TCP Handoffs (for non restful applications)
 \end{itemize}
 
-\section{Levels of balancing}
+\subsection{Levels of balancing}
 \begin{description}
 	\item[??] DDNS / Round robin DNS
 	\item[OSI 3] Network/IP %google says network layer LVS says transport layer
@@ -137,7 +137,7 @@ hearbeat 	\url{http://people.adams.edu/~cdmiller/posts/nginx-heartbeat-ha/}
 
 \url{http://kaivanov.blogspot.dk/2013/01/building-load-balancer-with-lvs-linux.html}
 \url{http://sorrawut.com/lvs-dr/}
-\section{Existing solutions}
+\subsection{Existing solutions}
 \begin{description}
 	\item [Linux Virtual Server: IPVS] Is implemented in the linux kernal version 2.4 and 2.6. Works at the IP level. Used by big sites sourceforge.net, layer 3.
 	\item [Google Compute Engine: Load Balancer]: Proprietary. layer 3 and 7.
