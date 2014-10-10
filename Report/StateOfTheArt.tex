@@ -1,6 +1,7 @@
 \chapter{Related work}
 As mentioned in \cref{chap:intro} there are a number of large scale wind park projects, but not many give a hint of their underlying software architecture.
 One way to get an idea of how the systems are structured could be by looking at the control algorithms they use.
+Other related work includes research into decentralized systems.
 
 %\section{Control}
 %One area that is still open for optimization is the control of turbines both as a single unit but also as a park. 
@@ -8,6 +9,13 @@ One way to get an idea of how the systems are structured could be by looking at 
 %The algorithms must take a lot of parameters into account as for instance noise produced by the wings, certain speeds where the wear and tear of the turbine is high and the position of other turbines so the wake created by one turbine does not reduce the performance of other turbines unnecessarily.
 %Furthermore every turbines maximum power production and current power production must also be taken into account.
 %Several approaches has been tested as described in the following subsections. %TODO: Rewrite,
+
+\section{Decentralized systems}
+
+
+A new approach to control of wind farms is to utilize game theory\cite{AModelFreeApproachToWindFarmControl}.
+The turbines in a farm must cooperate to reach the desired goal of a chosen output.
+The game theory approach use an iterative learning algorithm that converges against the optimal output after n iterations.
 
 \section{Aeolus}
 The Aeolus project was a large scale EU supported project which lasted from may 2008 to april 2011. It included project partners from 
