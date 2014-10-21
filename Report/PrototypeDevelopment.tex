@@ -46,5 +46,37 @@ Pro
 %https://forums.virtualbox.org/viewtopic.php?f=6&t=63556&start=165
  
 
+The prototype is split int the following 3 parts:
+\begin{itemize}
+	\item DataSimulator
+	\item HPPP component
+	\item Monitor (UI component)
+	\end{itemize}
 
+
+\begin{tikzpicture} 
+\begin{umlseqdiag} 
+	\umldatabase{DB} 
+	\umlmulti{DataSimulator}
+	\umlmulti{Regulation Controller}
+	\umlmulti{Monitor}
+	\begin{umlcall}[op=getAlldata(), type=asynchron, return=0]{DB}{DataSimulator}
+		\begin{umlfragment}[type=ForAll, label=Samples, inner xsep=8, fill=white!10]
+			\begin{umlcall}[op=Simumlation data, type=synchron, return=setpoint]{DataSimulator}{Regulation Controller}
+			
+			\end{umlcall}
+			\begin{umlfragment}[type=opt, fill=white!10]
+				\begin{umlcall}[op=UpdateUI(), type=asynchron, return=0]{DataSimulator}{Monitor}
+				\end{umlcall}
+			\end{umlfragment}
+		\end{umlfragment}
+
+
+	\begin{umlcall}[op=saveData(), type=asynchron, return=0]{DataSimulator}{DB}
+	\end{umlcall}	
+	\end{umlcall}
+	
+	
+\end{umlseqdiag} 
+\end{tikzpicture}
 
