@@ -4,8 +4,17 @@
 \setlrmarginsandblock{3.5cm}{2.5cm}{*}
 \setulmarginsandblock{3cm}{*}{1.2}
 
+% The following is needed in order to make the code .ps compatible
+% with both latex/dvips and pdflatex.
+\ifx\pdftexversion\undefined
+	\usepackage[dvips]{graphicx}
+\else
+	\usepackage[pdftex]{graphicx}
+	\DeclareGraphicsRule{*}{mps}{*}{}
+\fi
+
 \usepackage[retainorgcmds]{IEEEtrantools}
-\usepackage{graphicx}
+%\usepackage{graphicx}
 \usepackage{pstricks,pst-node,pst-text,pst-3d}
 \usepackage{marginnote}
 \usepackage{array,booktabs,longtable}
