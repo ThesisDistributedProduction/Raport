@@ -21,6 +21,7 @@
 \usepackage{url}
 \usepackage{color}
 \usepackage{array}
+\usepackage[oldenum]{paralist}
 \usepackage{enumitem}
 %\definecolor{webblue}{rgb}{0.0,0.05,0.45}
 \definecolor{MyDarkBlue}{rgb}{0,0.08,0.45}
@@ -205,21 +206,20 @@
 
 \mainmatter
 \include{introduction}
-%\include{dedication}
+% include{dedication}
 \include{StateOfTheArt}
 \include{Analysis}
-\include{PrototypeDevelopment}
+\include{Technologies}
+\include{EvaluationSystem}
+\include{Experiments}
+\include{Results}
 \include{Comparison}
 \include{Conclusion}
-%\include{chapter1}
-%\include{chapter2}
-%\include{Conclusion}
+
 \appendix
 \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 \appendixpage
-%\include{appendix1}
-%\include{appendix2}
-%\include{appendix3}
+% include{appendix1}
 
 \backmatter
 \renewcommand{\bibsection}{%

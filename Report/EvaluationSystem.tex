@@ -1,8 +1,14 @@
 % !TeX spellcheck = en_US
-\chapter{Prototype development}
+\chapter{Evaluation System Implementation}
 The prototype in this project will consist of X virtual machines.
 
 \section{Platform}
+
+\section{DDS configuration}
+
+\section{Algorithm Decentralized}
+
+\section{Algorithm Centralized}
 
 Windows
 Pro
@@ -15,8 +21,6 @@ Bad
 \begin{itemize}
 	\item expensive
 \end{itemize}
-
-
 
 Linux
 Pro
@@ -79,4 +83,52 @@ The prototype is split int the following 3 parts:
 \end{tikzpicture}
 
 \includegraphics{figures/metapost/ClassDiagramHPPP.1}
+
+
+
+
+\tikzstyle{fact}=[rectangle, draw=none, rounded corners=1mm, fill=blue, drop shadow,
+text centered, anchor=north, text=white]
+\tikzstyle{state}=[circle, draw=none, fill=orange, circular drop shadow,
+text centered, anchor=north, text=white]
+\tikzstyle{leaf}=[circle, draw=none, fill=red, circular drop shadow,
+text centered, anchor=north, text=white]
+\tikzstyle{comment}=[rectangle, draw=black, fill=black!60, rounded corners, drop shadow,
+anchor=west, text=white, text width=6.5cm]
+
+
+
+
+
+\begin{tikzpicture}[node distance=0.5cm]
+
+\node (State00) [state] {$S_{00}$};
+\node (Fact01) [fact,below=of State00] {$T_{01}$} edge [<-] (State00);
+\node (State01) [state,below=of Fact01] {$S_{01}$} edge [<-] (Fact01);
+\node (Rule01) [comment,right=of Fact01, rectangle split, rectangle split parts=4] {
+	\textbf{RULE-01}
+	\nodepart{second}IF ($S_{00}$) Engine overheats
+	\nodepart{third}AND ($T_{01}$) Engine itself is not the cause
+	\nodepart{fourth}THEN ($S_{01}$) Cooling system is responsible for overheat
+};
+
+\begin{pgfonlayer}{background}
+\path (State00.west |- State00.north)+(-0.4,0.4) node (a) {};
+\path (Rule01.east |- State01.south)+(0.4,-0.4) node (b) {};
+\path [fill=yellow!40,rounded corners, draw=black!50, dashed] (a) rectangle (b); 
+\end{pgfonlayer}
+\end{tikzpicture}
+
+
+
+
+
+
+
+
+
+
+
+
+
 

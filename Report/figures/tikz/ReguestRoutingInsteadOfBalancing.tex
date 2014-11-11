@@ -13,19 +13,19 @@ diagram item seperated/.style={
 \node [
 diagram item,
 label=above:Client 1
-] (client1) {\includegraphics{Cisco_BW/PC}};
+] (client1) {\includegraphics{Cisco_BW/pc}};
 
 \node [
 start branch=1 going right,
 diagram item seperated,
 label=above:Client 2
-] (client2){\includegraphics{Cisco_BW/PC}};
+] (client2){\includegraphics{Cisco_BW/pc}};
 
 \node [
 continue branch=1 going right,
 diagram item seperated,
 label=above:Client 3
-] (client3) {\includegraphics{Cisco_BW/PC}};
+] (client3) {\includegraphics{Cisco_BW/pc}};
 
 \node [
 continue chain=going below right,
@@ -54,19 +54,19 @@ diagram item
 start branch=1 going below right,
 diagram item,
 label=below:Client 3 Handler
-] {\includegraphics{Cisco_BW/PC}};
+] {\includegraphics{Cisco_BW/pc}};
 
 \node [
 start branch=1 going below left,
 diagram item,
 label=below:Client 1 Handler
-] {\includegraphics{Cisco_BW/PC}};
+] {\includegraphics{Cisco_BW/pc}};
 
 \node [
 continue chain = going below,
 diagram item,
 label=below:Client 2 Handler
-] {\includegraphics{Cisco_BW/PC}};
+] {\includegraphics{Cisco_BW/pc}};
 
 %Lines to/from LB2
 \draw[loosely dotted] (LB1) -> (LB2) node[fill=white,midway]{heatbeat};

@@ -319,11 +319,10 @@ NewSQL promises to keep the virtues of the traditional databases systems while s
 Since both NoSQL and NewSQL seems like fitting technologies for data management in the Siemens case a further comparison between two state of the art implementations must be done in order to decide which technology will be the best suited.
 
 \subsection{State of the art NoSQL}
-To identify state of the NoSQL and NewSQL databases a website called db-engines.com\cite{db-engines} is used.
+To identify state of the NoSQL and NewSQL databases a website called\urlstyle{same} \url{db-engines.com}\cite{db-engines}\urlstyle{tt} is used.
 This website maintain a list of more than 200 different databases ranked by popularity. The list is updated monthly based on search engine popularity, discussion threads, job-offers, mentions on LinkedIn and tweets. This does not give the complete and objective ranking but it gives a pointer to the most popular database in their respective category.
 
 Since we expect a stream of measured values from a wide range of parameters on every turbine a key-value store seems to be the obvious choice of NoSQL storage method. On top of the continuous stream of measured values aggregated measures must be obtained for the entire farm. This implies that custom software must be built to aggregate data from all the data stores and calculate aggregated values or that the data store has built in features for aggregation and calculation of aggregate values. Furthermore it is important that the database management system is able to do replication of data and automatic failover in order to achieve high availability.
-
 Within the top 20 databases on the list we find 5 NoSQL databases:
 
 \begin{itemize}
