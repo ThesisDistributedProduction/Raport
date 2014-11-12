@@ -1,0 +1,65 @@
+	\tikzstyle{fact}=[rectangle, draw=none, rounded corners=1mm, fill=blue, drop shadow,
+	text centered, anchor=north, text=white]
+	\tikzstyle{source}=[circle, draw=none, fill=orange, circular drop shadow,
+	text centered, anchor=north, text=white]
+	\tikzstyle{target}=[circle, draw=none, fill=blue, circular drop shadow,
+	text centered, anchor=north, text=white]
+	\tikzstyle{other}=[circle, draw=black!50, fill=white, circular drop shadow,
+	text centered, anchor=north, text=white]
+	%\tikzstyle{comment}=[rectangle, draw=black, fill=black!60, rounded corners, drop shadow,
+	%anchor=west, text=white, text width=6.5cm]
+	\vspace{-20pt}
+	\begin{tikzpicture}[node distance=0.8cm]
+		\node (Source) [source] {};
+		\node (Target1) [target,right=of Source] {} edge [<-] (Source);
+		\node (Target2) [other,above=of Target1] {};
+		\node (Target3) [other,below=of Target1] {};
+		\node (Target3) [other,above=of Source] {};
+		\node (Target3) [other,below=of Source] {};
+		
+		\begin{pgfonlayer}{background}
+			\path (Source.west |- Target2.north)+(-0.4,0.4) node (a) {};
+			\path (Target1.east |- Target3.south)+(0.4,-0.4) node (b) {};
+			\path [fill=yellow!40,rounded corners, draw=black!50, dashed] (a) rectangle (b); 
+		\end{pgfonlayer}
+	\end{tikzpicture}
+	\caption{Unitcast}
+	\label{fig:networkUnicast}
+	
+	\vspace{10pt}
+		\begin{tikzpicture}[node distance=0.8cm]	
+		\node (Source) [source] {};
+		\node (Target1) [target,right=of Source] {} edge [<-] (Source);
+		\node (Target2) [target,above=of Target1] {} edge [<-] (Source);
+		\node (Target3) [target,below=of Target1] {} edge [<-] (Source);
+		\node (Target3) [target,above=of Source] {} edge [<-] (Source);
+		\node (Target3) [target,below=of Source] {} edge [<-] (Source);
+		
+		\begin{pgfonlayer}{background}
+			\path (Source.west |- Target2.north)+(-0.4,0.4) node (a) {};
+			\path (Target1.east |- Target3.south)+(0.4,-0.4) node (b) {};
+			\path [fill=yellow!40,rounded corners, draw=black!50, dashed] (a) rectangle (b); 
+		\end{pgfonlayer}
+	\end{tikzpicture}
+	\caption{Broadcast}
+	\label{fig:networkBroadcast}
+			
+	\vspace{10pt}
+	\begin{tikzpicture}[node distance=0.8cm]	
+		\node (Source) [source] {};
+		\node (Target1) [target,right=of Source] {} edge [<-] (Source);
+		\node (Target2) [target,above=of Target1] {} edge [<-] (Source);
+		\node (Target3) [other,below=of Target1] {};
+		\node (Target3) [other,above=of Source] {};
+		\node (Target3) [target,below=of Source] {} edge [<-] (Source);
+		
+		\begin{pgfonlayer}{background}
+			\path (Source.west |- Target2.north)+(-0.4,0.4) node (a) {};
+			\path (Target1.east |- Target3.south)+(0.4,-0.4) node (b) {};
+			\path [fill=yellow!40,rounded corners, draw=black!50, dashed] (a) rectangle (b); 
+		\end{pgfonlayer}
+	\end{tikzpicture}
+	\caption{Multicast}
+	\label{fig:networkMulticast}
+	\vspace{-60pt}
+		

@@ -1,21 +1,34 @@
 % !TeX spellcheck = en_US
 \chapter{Technologies}
 
-\section{IP protocol Addressing methodologies}
+\section{IP Protocol Addressing Methodologies}
 
-The IP protocol defines 5 different communication methodologies\cite{MISSING REF}:
-\begin{inparaenum}[{}]
-	\renewcommand{\labelsep}{,,,dsf}	
-	\item Broadcast
-	\item Multicast
-	\item Unicast
-	\item Anycast
+\begin{wrapfigure}{r}{0.225\textwidth}
+	\input{figures/tikz/networkMetologies.tex}
+\end{wrapfigure}
+The IP protocol defines different communication methodologies among these are: Unicast \cite{MISSING REF}, Broadcast \cite{MISSING REF} and Multicast \cite{MISSING REF}.
+These methodologies each allow for different kinds of communication.
 				
-\end{inparaenum}
+\paragraph{Unicast}
+is the simplest and most used methodology, it is provides point to point communication and is the basis for most TCP/IP communication. % most TCP/IP since it is also used in Anycast
+As seen in \cref{fig:networkUnicast} the source node only send packet to one node, this kind of communication works well as long as the data being transfered only needs to be sent to one node.
+%\paragraph{Anycast} exsists but is irelevant to our project
 
-\subsection{Broadcast}
-\subsection{Multicast}
-\subsection{Unicast}
+\paragraph{Broadcast}
+is the direct opposite of unicast, it provides one to all communication, illustrated in \cref{fig:networkBroadcast}. All in this context mens all machines on the same subnet or locally behind the nearest router.
+The source node only needs to send one packet to reach every other node, copying of the packet is done in the network by switches and routers.
+The broadcast address for a given subnet can be found by doing a bitwise or operation on the local ip address with the binary complement of the subnet mask ($broadcast~address~=~local~ip~|~!subnet~mask$). To broadcast to all subnets behind the nearest router the address $255.255.255$ can be used, other protocols have similar capabilities.
+Broadcast dos not support TCP/IP and delivers packages in a best effort way, this means that there is no guarantee or feedback of if the packet1
+On large networks there can be a lot of broadcast traffic that every node needs to decide if it needs to respond to or discard.
+In the new IPv6 Broadcast is no longer supported and is replace by multicast \cite{MISSING_REF}, this makes it optional to listen to broadcast traffic and possibly increase performance.
+
+\paragraph{Multicast}
+is a combination of unicast and broadcast and can be configured to be used as either one, however this is not what it is designed for. Multicast is designed to provide one to many communication as illustrated in \cref{fig:networkMulticast}.
+Multicasting works using multicast groups, these groups are maintained by routers and layer 2 switches. The way a node is added to a multicast group is by sending a packet requesting a group membership using the IGMP protocol. Each multicast group is associated with a multicast ip address, this ip address is used by a sending node when a packet is to be multicasted.
+Communicating via multicating is efficient and ensures that each node needs to handle a minimum of packets, routers and switches however has a added responsibility of maintaining information of witch multicast address each port is associated with and transmitting packets to all of them.
+
+
+\textbf{Source Specific multicast?}
 
 \section{Data Distribution Service}
 

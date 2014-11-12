@@ -23,6 +23,8 @@
 \usepackage{array}
 \usepackage[oldenum]{paralist}
 \usepackage{enumitem}
+\usepackage{wrapfig}
+
 %\definecolor{webblue}{rgb}{0.0,0.05,0.45}
 \definecolor{MyDarkBlue}{rgb}{0,0.08,0.45}
 %\definecolor{webred}{rgb}{0.75,0,0}
@@ -196,6 +198,8 @@
 \renewcommand{\contentsname}{Table of Contents}
 \renewcommand*\abstractname{Summary}
 
+\newcommand{\inlineURL}[1]{\urlstyle{same}\url{#1}\urlstyle{tt}}
+
 %\includeonly{Loadbalancing} %Hvis man ikke vil kompilere det hele hver gang
 \begin{document}
 \frontmatter
@@ -207,7 +211,7 @@
 \mainmatter
 \include{introduction}
 % include{dedication}
-\include{StateOfTheArt}
+\include{RelatedWork}
 \include{Analysis}
 \include{Technologies}
 \include{EvaluationSystem}
