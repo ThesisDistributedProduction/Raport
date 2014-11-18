@@ -119,16 +119,26 @@ anchor=west, text=white, text width=6.5cm]
 \end{pgfonlayer}
 \end{tikzpicture}
 
+\section{Graphical Interface}
+In order to visualize the system a graphical user interface has been constructed using Matlab, Simulink and DDS Blockset for Simulink.
+These tools combined allows the creation of a Simulink model which taps into the communication of the DDS framework.
+The data collected from via the Simulink model can then be transferred to Matlab for further processing or visualization.
 
+The main objective of the graphical interface is to visualize what messages is currently flowing in the system but almost as important is the ability to collect data for further analysis.
+Matlab is a powerful tool for anlysis and having the data transferred live from the DDS framework to matlab allows for both live as well as in depth analysis on a dataset collected during an experiment.
 
+\subsection{DDS Blockset for Simulink}
+RTI has created a Blockset for Simulink allowing a Simulink model to interact with the DDS Participant and other entities in a DDS enabled network.
+The blockset consists of a toolbox containing 6 blocks. Common for all blocks except the DDS Time block is that they can be configured with a default or custom Quality of Service profile as well as a sample time. The Quality of Service profile must match the profile used in the network you want to participate in. The sample time is related to the Simulink model and specifies the timeinterval between samples.
 
+\paragraph{The DomainParticipant block} is the equivalent to the DomainParticipant entity in DDS. This block allows for configuration of the DomainID which links the DomainParticipant to a specific DDS domain.
 
+\paragraph{The Publisher/Subscriber block} can be configured as either a Publisher or a Subscriber and will act as either based on the chosen configuration.
 
+\paragraph{The DataWriter block} is the equivalent to the DataWriter entity in DDS. This block can write data to a topic in DDS. The DataWriter block must be configured with the name of the Topic as well as the name of the Topic Type created by the Simulink Bus that is input to the DataWriter.
 
+\paragraph{The DataReader block} is the equivalent to the DataReader entity in DDS. This block can read data from a topic in DDS. The DataReader block must be configured with the name of the Topic as well as the name of the Topic Type created by the Simulink Bus that is input to the DataReader. The DataReader block can also be configured to either use Read() or Take() for obtaining the DDS data. The Read() command will leave the data in DDS memory, the Take() command will remove the data from DDS memory. The DataReader block is able to either poll DDS for data or wait for data until data is ready or a timeout occurs.
 
+\paragraph{The DDSTarget block} is controls code generated for the DDS blocks in the Simulink model. It is possible to configure which version of DDS code will be generated for, either RTI Connext DDS(default), or RTI Connext Micro DDS. The type system can be configured to either static or dynamic as well as the discovery mode.
 
-
-
-
-
-
+\paragraph{The Time block} can return the current time from DDS output in seconds and nanoseconds.
