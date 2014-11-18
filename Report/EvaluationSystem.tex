@@ -1,123 +1,43 @@
 % !TeX spellcheck = en_US
 \chapter{Evaluation System Implementation}
-The prototype in this project will consist of X virtual machines.
 
 \section{Platform}
 
-\section{DDS configuration}
-
-\section{Algorithm Decentralized}\label{sec:algoDecen}
-
-\section{Algorithm Centralized}\label{sec:algoCen}
-
-Windows
-Pro
-\begin{itemize}
-	\item Well known to most people (easy to get going) 
-	\item 
-\end{itemize}
-
-Bad
-\begin{itemize}
-	\item expensive
-\end{itemize}
-
-Linux
-Pro
-\begin{itemize}
-	\item Market leader [?] Need Source
-	\item Linux Virtual server
-	\item Linux Containers
-	\item Open source / free
-	\item More configurable with respect to scheduler (non preemptive (default), preemptive voluntary, RT ) 
-	\begin{itemize}
-		\item \url{http://www.linuxtopia.org/online_books/linux_kernel/kernel_configuration/re152.html}
-		\item \url{http://stackoverflow.com/questions/5174955/what-is-voluntary-preemption}
-		\item \url{http://lwn.net/Articles/146861/}
-		\item \url{https://www.osadl.org/uploads/media/ECE-2011-09.pdf}
-		\item \url{http://www.linux.com/news/featured-blogs/200-libby-clark/710319-intro-to-real-time-linux-for-embedded-developers}
-								
-	\end{itemize}
-\end{itemize}
-
-
-
-%user: shared
-%password: windfarm
-
-%https://forums.virtualbox.org/viewtopic.php?f=6&t=63556&start=165
- 
-
-The prototype is split int the following 3 parts:
-\begin{itemize}
-	\item DataSimulator
-	\item HPPP component
-	\item Monitor (UI component)
-	\end{itemize}
-
-
 \begin{tikzpicture} 
 \begin{umlseqdiag} 
-	\umldatabase{DB} 
-	\umlmulti{DataSimulator}
-	\umlmulti{Regulation Controller}
-	\umlmulti{Monitor}
-	\begin{umlcall}[op=getAlldata(), type=asynchron, return=0]{DB}{DataSimulator}
-		\begin{umlfragment}[type=ForAll, label=Samples, inner xsep=8, fill=white!10]
-			\begin{umlcall}[op=Simumlation data, type=synchron, return=setpoint]{DataSimulator}{Regulation Controller}
-			
-			\end{umlcall}
-			\begin{umlfragment}[type=opt, fill=white!10]
-				\begin{umlcall}[op=UpdateUI(), type=asynchron, return=0]{DataSimulator}{Monitor}
-				\end{umlcall}
-			\end{umlfragment}
-		\end{umlfragment}
+\umldatabase{DB} 
+\umlmulti{DataSimulator}
+\umlmulti{Regulation Controller}
+\umlmulti{Monitor}
+\begin{umlcall}[op=getAlldata(), type=asynchron, return=0]{DB}{DataSimulator}
+\begin{umlfragment}[type=ForAll, label=Samples, inner xsep=8, fill=white!10]
+\begin{umlcall}[op=Simumlation data, type=synchron, return=setpoint]{DataSimulator}{Regulation Controller}
+
+\end{umlcall}
+\begin{umlfragment}[type=opt, fill=white!10]
+\begin{umlcall}[op=UpdateUI(), type=asynchron, return=0]{DataSimulator}{Monitor}
+\end{umlcall}
+\end{umlfragment}
+\end{umlfragment}
 
 
-	\begin{umlcall}[op=saveData(), type=asynchron, return=0]{DataSimulator}{DB}
-	\end{umlcall}	
-	\end{umlcall}
-	
-	
+\begin{umlcall}[op=saveData(), type=asynchron, return=0]{DataSimulator}{DB}
+\end{umlcall}	
+\end{umlcall}
+
+
 \end{umlseqdiag} 
 \end{tikzpicture}
 
 \includegraphics{figures/metapost/ClassDiagramHPPP.1}
 
 
+\section{DDS configuration}
 
+\section{Algorithm Decentralized}\label{sec:algoDecen}
 
-\tikzstyle{fact}=[rectangle, draw=none, rounded corners=1mm, fill=blue, drop shadow,
-text centered, anchor=north, text=white]
-\tikzstyle{state}=[circle, draw=none, fill=orange, circular drop shadow,
-text centered, anchor=north, text=white]
-\tikzstyle{leaf}=[circle, draw=none, fill=red, circular drop shadow,
-text centered, anchor=north, text=white]
-\tikzstyle{comment}=[rectangle, draw=black, fill=black!60, rounded corners, drop shadow,
-anchor=west, text=white, text width=6.5cm]
+\section{Algorithm Centralized}\label{sec:algoCen} 
 
-
-
-
-
-\begin{tikzpicture}[node distance=0.5cm]
-
-\node (State00) [state] {$S_{00}$};
-\node (Fact01) [fact,below=of State00] {$T_{01}$} edge [<-] (State00);
-\node (State01) [state,below=of Fact01] {$S_{01}$} edge [<-] (Fact01);
-\node (Rule01) [comment,right=of Fact01, rectangle split, rectangle split parts=4] {
-	\textbf{RULE-01}
-	\nodepart{second}IF ($S_{00}$) Engine overheats
-	\nodepart{third}AND ($T_{01}$) Engine itself is not the cause
-	\nodepart{fourth}THEN ($S_{01}$) Cooling system is responsible for overheat
-};
-
-\begin{pgfonlayer}{background}
-\path (State00.west |- State00.north)+(-0.4,0.4) node (a) {};
-\path (Rule01.east |- State01.south)+(0.4,-0.4) node (b) {};
-\path [fill=yellow!40,rounded corners, draw=black!50, dashed] (a) rectangle (b); 
-\end{pgfonlayer}
-\end{tikzpicture}
 
 \section{Graphical Interface}
 In order to visualize the system a graphical user interface has been constructed using Matlab, Simulink and DDS Blockset for Simulink.
