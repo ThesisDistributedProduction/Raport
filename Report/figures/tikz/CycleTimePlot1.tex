@@ -1,0 +1,33 @@
+\begin{tikzpicture}
+\begin{axis}[
+width=\textwidth,
+%ymax=0.5,
+xlabel=n Turbine Controllers,
+ylabel=ms]
+\addplot[blue!20!blue] coordinates {
+	(2 ,6)
+	(20 ,5)
+	(40 ,4)
+	(60 ,3)
+	(80 ,2)
+	(100 ,1)
+		};
+\addplot[red!20!red] coordinates {
+	(2 , 3)
+	(20 ,4)
+	(40 ,5)
+	(60 ,6)
+	(80 ,7)
+	(100,8)	
+	};
+\addplot[green!20!green] coordinates {
+		(2 , 2)
+		(20 ,3)
+		(40 ,4)
+		(60 ,5)
+		(80 ,6)
+		(100,7)	
+	};
+\legend{5ms delay,10ms delay,20ms delay}
+\end{axis}
+\end{tikzpicture}
