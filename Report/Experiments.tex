@@ -2,6 +2,8 @@
 
 \chapter{Experiments}
 
+\newcommand{\turbineNumbers}{(1, 5, 10 and 30)}
+
 %	\item \label{PS:Q:1} How can we best re-implement the current Siemens system (\cref{sec:SiemensCase}) as a system where the Wind Park Supervisor and the Park Pilots are decentralized?
 %	\item \label{PS:Q:2} Can we, with the new decentralized solution, reduce the current regulation cycle time of 150 ms?
 %	\item \label{PS:Q:3} Can we create a solution that scales so the number of turbines does not impact the regulation cycle time?
@@ -10,29 +12,57 @@
 The goal of this project was not only to build a control system that provides both scalability and availability, but also to compare it to the current solution by Siemens Windpower. 
 In order to evaluate the system, we have created the experiments in the following sections.
 
-Every experiment is done using 3 computers connected using a 1Gbit ethernet router with IGMP support.
+The experiments are done using up to 3 machines connected using a 1Gbit ethernet router with IGMP support.
 The experiments are run on 3 laptops, with one being used to capture test data and the other 2 optionally running a number of turbines controllers to generate traffic.
 All test are run with CPU utilization on average below 90\%, this is done to keep performance consistent.
 The specification of the hardware used for testing can be found in \cref{appendix:HardwareSpecification}
 
-\section{PS \ref{PS:Q:1}: Does our prototype work?}
-We start the prototype does it communicate with out a central system?
+\section{PS \ref{PS:Q:CanWeDoIt}: Does our prototype work?}
+We start the prototype:
+\begin{itemize}
+	\item Does it communicate without a central system?
+	\item Does the sum of the turbines setpoints match the global setpoint? 
+\end{itemize}
 
 
-\section{PS \ref{PS:Q:4}: Remove node without system failure?}
-Randomly kill client, plot a few seconds of data around the event.
 
-\section{PS \ref{PS:Q:3}: Can we make a solution that scales?}
+\section{PS \ref{PS:Q:Availlability}: Remove node without system failure?}
+
+The below experiment is done with a variating N number of failing turbines \turbineNumbers.
+The experiment has the following procedure:
+\begin{enumerate}
+	\item Start the system with 100 turbines.
+	\item Make sure the system is stable.
+	\item Kill N nodes.
+	\begin{itemize}
+		\item did the system discover the failed node within a 150ms timeframe?
+		\item did the system adjust the setpoints for all turbines to keep the global setpoint correct?
+	\end{itemize}
+\end{enumerate}
+
+
+\section{PS \ref{PS:Q:CanWeScale}: Can we make a solution that scales?}
 Scalability is by Bondi\cite{Bondi:2000:CSI:350391.350432} defined as \textit{the systems ability to accommodate an increasing number of elements or objects, to process growing volumes of work gracefully, and/or to be susceptible to enlargement}. 
 
 The experiments below are made to show how the number of turbines and regulation speed affect Memory and Network traffic, the tests are done with 2, 21, 41, 61, 81 and 101 simulated turbine controllers. Besides turbines we are also going to modify ''Data Wait Time Frame'' witch is a constant that defines the time a turbine controller will wait for new updates before considering the other turbine controller offline and unavailable, i.e. regulation speed.
 
-The test system is expected to be running only one instance, therefore system memory and network throughput are only measured locally on the test device.
+The test system is expected to be running only one instance in a real life implementation, therefore system memory and network throughput are only measured locally on the test device.
 
-\paragraph{Memory consumption} 
-\paragraph{Network utilization}
 
-\section{PS \ref{PS:Q:2}: Can we reduce regulation cycle time?}
+The experiment is done with a variating N number online turbines.
+Doing the experiment the following procedure is followed:
+\begin{enumerate}
+	\item Start the system with N turbines.
+	\item Make sure the system is stable.
+	\item Take measurement of network traffic and memory with a sample rate of 5ms for 2 mins.
+	\begin{itemize}
+		\item did the system memory consumption increase and how much?
+		\item did the system network traffic increase and how much?
+	\end{itemize}
+\end{enumerate}
+
+
+\section{PS \ref{PS:Q:HowWellDoWeScale}: Can we reduce regulation cycle time?}
 In order to compare regulation time performance between a centralized and a decentralized solution see \cref{cha:decentralizedSystem}. ???X??? experiments a centralized system was implemented see \cref{cha:existingSystem}.
 Comparing 
 

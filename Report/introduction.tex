@@ -111,13 +111,23 @@ The purpose of this thesis is to design, implement and evaluate a system solutio
 
 \paragraph{We present the following questions:}
 \begin{enumerate} [label={\arabic*.}, ref=\textit{\arabic*}]
-	\item \label{PS:Q:1} How can we best re-implement the current Siemens system (\cref{sec:SiemensCase}) as a system where the Wind Park Supervisor and the Park Pilots are decentralized?
-	\item \label{PS:Q:2} Can we, with the new decentralized solution, reduce the current regulation cycle time of 150 ms?
-	\item \label{PS:Q:3} Can we create a solution that scales so the number of turbines does not impact the regulation cycle time?
-	\item \label{PS:Q:4} Can we create a solution where removing one or more nodes from the system at runtime does not cause system failure?
+%	\label{PS:Q:1}
+	\item \label{PS:Q:CanWeDoIt} How can we best re-implement the current system at Siemens Wind Power (\cref{sec:SiemensCase}) as a system where the Wind Park Supervisor and the Park Pilots are decentralized?
+%	\label{PS:Q:4}
+	\item \label{PS:Q:Availlability} Can we create a solution where removing one or more nodes from the system at runtime does not cause system failure?
+%	\label{PS:Q:3}
+	\item \label{PS:Q:CanWeScale} Can we create a solution that scales so the number of turbines does not impact the regulation cycle time?
+%	\item Can we, with the new decentralized solution, reduce the current regulation cycle time of 150 ms?
+%	\label{PS:Q:2}
+	\item \label{PS:Q:HowWellDoWeScale} How will the new decentralized system impact the following parameters compared to the current centralized system at Siemens Wind Power:
+	\begin{enumerate}
+		\item Time of a single regulation cycle.
+		\item Network traffic measured in bits per second.
+		\item Memory impact measured in bytes.
+	\end{enumerate}
 \end{enumerate}
 
-The solution system will be implemented as a prototype, which runs the developed solution, for proof of concept purposes. The prototype will be compared to the existing Siemens Wind Power solution with respect to performance, availability and redundancy using an objective test metric developed in cooperation with Siemens Wind Power.
+The decentralized solution will be implemented as a prototype, for proof of concept and test purposes. The prototype will be compared to the existing Siemens Wind Power solution with respect to performance, availability and scalability using an objective test metric developed in cooperation with Siemens Wind Power.
 
 %ASK SIEMENS HOW TO COMPARE AND MORE CONSTRAINTS??? 
 
