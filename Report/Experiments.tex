@@ -46,21 +46,19 @@ The tests are done with \testTurbineNumbers ~turbine controllers. Besides turbin
 
 The test system is expected to be running only one instance in a real life implementation, therefore the test machine will only run one instance and the support machines will run the rest generating system load.
 The experiment is done with a variating N number of online turbines.
-The following procedure is followed each time the experiment is done:
+The following procedure is used each time the experiment is done:
 \begin{enumerate}
 	\item Start the system with N turbines.
 	\item Make sure the system is stable.
 	\item Start logging the reported regulation run time and cache read count.
-	\begin{itemize}
-		\item Stop logging after \experiemntRunTime.
-	\end{itemize}
+	\item Stop logging after \experiemntRunTime.
 \end{enumerate}
 
 \section{PS \ref{PS:Q:HowWellDoWeScale}: Comparing decentralized with centralized}
 Theses experiments seek to compare the new decentralized (see \cref{cha:decentralizedSystem}) system with the current centralized Siemens system(see \cref{cha:existingSystem}).
 
 The experiments below are made to show how the number of turbines and regulation speed affect the regulation algorithm, memory consumption and Network traffic.
-Each of these parameters behave differently when centralized compared to decentralized.
+Each of these parameters behave differently when centralized compared to decentralized as seen in \cref{fig:timingCentralVSDecentral} the decentralized system does not wait for new data before doing calculations. Because of this the decentralized version has a extra parameter witch says how much data was updated before calculation was run.
 
 \begin{figure}[b]
 	%The figure show how regulation time differs central vs decantral
@@ -72,11 +70,22 @@ Each of these parameters behave differently when centralized compared to decentr
 	{\sffamily{Decentralized approach}}
 	\input{figures/tikz/timingDiagramDecntral}
 	\caption{Centralized vs decentralized regulation time}
+	\label{fig:timingCentralVSDecentral}
 \end{figure}
 
+	The centralized version is split into two applications a client and a server.
+	What we aim to primarily compare here is the regulation therefore the client side of the application is not measured. This means that the decentralized version is at slight disadvantage.
+	The following procedure is used each time the experiment is done, the procedure is done with N simulated turbines for both :
 
-This is meant to give a real life clue to how increased network traffic results in data not being received before its deadline. The deadline is the ''Data Wait Time Frame'' value.
-
-This parameter is measured by every node and transmitted to every node, this is bundled together with the data packets as described in \cref{sec:algoDecen,sec:algoCen}.
-
-
+\begin{minipage}{\textwidth}
+	\begin{enumerate}
+		\item Start the system with N turbines.
+		\item Make sure the system is stable.
+		\item Start logging:
+		\begin{itemize}
+			\item Reported regulation run time (Central only, Decentralized is reused)
+			\item Memory and Bandwidth
+		\end{itemize}
+		\item Stop logging after \experiemntRunTime.
+		\end{enumerate}
+\end{minipage}
