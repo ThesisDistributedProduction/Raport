@@ -10,17 +10,19 @@ However in order to completely answer question~\ref{PS:Q:HowWellDoWeScale}, and 
 
 The thesis motivation (\cref{sec:ThesisMotivation}) describes a brief overview of the current system at Siemens. Since the focus of this thesis is around the regulation sequence, the Park Pilot and the turbines are the only components built for the centralized solution. The following chapter describes the centralized solution followed by a theoretical comparison between the centralized solution and the current Siemens system. 
 
-%Only built for testing purposes
+%Only built for comparison/testing purposes
 
 \section{Regulation algorithm}\label{sec:regAlgorithm}
 
 \section{Communication}\label{sec:currentSystemCen} 
 
-The first area studied when building the centralized solution, was the communication around the regulation algorithm and what data is needed for the algorithm to calculate setpoints for every turbine. This section explains how the communication around the centralized solution is built.
+The first area studied when building the centralized solution, was the regulation cycle. This includes what data the regulation algorithm needs for calculating setpoints for every turbine and the communication around the regulation algorithm for getting the data.
+
+The regulation cycle of the Park Pilot loops infinitely. This section explains a single regulation cycle of the centralized solution.
 
 \subsection{Get turbine states}
 
-In order for the Park Pilot to calculate turbine setpoints, the Park Pilot must have the state of all turbines:
+In order for the Park Pilot to calculate turbine setpoints, the Park Pilot must have the state of all turbines.
 
 \begin{figure}
 	\centering
@@ -34,15 +36,7 @@ In order for the Park Pilot to calculate turbine setpoints, the Park Pilot must 
 			\begin {call}{turbineDataReplier}{readData()}{turbine}{return data}
 			\end {call}
 			\mess[1]{turbineDataReplier}{sendReply}{parkPilot}
-		\end{sdblock}
-	
-%		\begin{call}{parkPilot}{calculateAllSetpoints()}{parkPilot}{}
-%		\end{call}
-%	
-%		\begin{sdblock}{each turbine}{}
-%			\mess[1]{parkPilot}{setNewSetpoint}{turbine}
-%		\end{sdblock}
-				
+		\end{sdblock}				
 	\end{sequencediagram}
 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
@@ -54,7 +48,7 @@ In order for the Park Pilot to calculate turbine setpoints, the Park Pilot must 
 	}
 \end{figure}
 
-A simple overview of the first part of the regulation sequence is presented on \cref{fig:getStatesOfTurbines}. This part of the algorithm is implemented using the RTI DDS Request-Reply implementation~\cite{rtiConnextUsersManual}. The three objects presented are:
+A simple overview of the first part of the regulation sequence is presented on \cref{fig:getStatesOfTurbines}. This part of the algorithm is implemented using the RTI DDS Request-Reply implementation~\cite{rtiConnextUsersManual}. The three primary objects of this part of the algorithm are:
 
 \begin{description}
 	\item [Park Pilot] The Park Pilot running the regulation algorithm. This object requests the data from all turbines and calculates setpoints when states has been received.
@@ -64,7 +58,7 @@ A simple overview of the first part of the regulation sequence is presented on \
 
 The Park Pilot sends a request to a specific topic and then waits until it has received a reply from all the turbines subscribing to this topic, which in our case is all turbines. In a real-life implementation of the system, a timer should be implemented to determine how long to wait for the replies, and maybe even mark a turbine as offline, if a given turbine does not reply within that time period. However, since this is only a prototype for data comparison purposes, this functionality has not been implemented. The request message, sent from the Park Pilot, contains the cycle time, which is only used for data logging purposes (i.e. not used by the turbines).
 
-The Turbine Data Replier is instantiated with the Turbine object and runs on every turbine. After instantiation, the Turbine Data Replier goes into an infinite loop which first waits infinitely for a request, reads turbine data from the Turbine object and finally sends a reply containing the data to the Park Pilot. Ideally, the Turbine Data Replier object should have been implemented as a listener on the request topic using RTI DDS SimpleReplier~\cite{rtiConnextUsersManual}. However, we could not get it to work using the SimpleReplier and fortunately waiting infinitely for a request works just as well for our purpose.
+The Turbine Data Replier is instantiated with the Turbine object and runs on every turbine. After instantiation, the Turbine Data Replier goes into an infinite loop which first waits infinitely for a request, reads turbine data from the Turbine object and finally sends a reply containing the data to the Park Pilot. Ideally, the Turbine Data Replier object should have been implemented as a listener on the request topic using RTI DDS SimpleReplier~\cite{rtiConnextUsersManual}. However, we could not get it to work using the SimpleReplier but waiting infinitely for a request works just as well for our purpose.
 
 The Turbine object is the interface to the actual Turbine. The primary functionality of this object is to change state when a new setpoint is assigned to the object. Furthermore it reads data from the underlying MongoDB database. 
 
@@ -74,11 +68,9 @@ When the Park Pilot has received the states of all turbines the setpoints for al
 
 Our regulation algorithm works by first determining how many turbines that are available for production. This is done going through every turbine, checking if they currently hit their maximum production capacity. If a given turbine is producing at maximum capacity, a greater load cannot be assigned to it and the available turbine count is reduced. 
 
-Next the setpoint for every turbine is calculated.
+Next the setpoint for every turbine is calculated. This is simply done by dividing the global setpoint for the entire park with the number of available turbines. If this new setpoint is higher than the maximum capacity of a given turbine, the turbine is set to produce at maximum capacity. If this happens, a gab between the maximum capacity and the calculated setpoint is left unhandled, and the wind farm is under-producing until the next cycle, where a new set of setpoints are calculated, with one less available turbine. Hence this gap will eventually be closed unless the maximum capacity of the entire park is reached.
 
 \subsection{Send setpoints}
 
 
 \section{DDS configuration}\label{sec:ddsConfigCen} 
-
-\section{Algorithm}\label{sec:algoCen} 
