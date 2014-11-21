@@ -1,5 +1,8 @@
 *.sublime-workspace
 
+## Primary ignores
+*.bib.bak
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
