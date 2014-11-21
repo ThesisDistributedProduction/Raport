@@ -1,4 +1,84 @@
 \chapter{Existing system}\label{cha:existingSystem}
 
+Question~\ref{PS:Q:HowWellDoWeScale} in the problem statement asks for a comparison between the decentralized solution and the current system at Siemens on different levels. In order to make these comparisons, basic assumptions about the current system at Siemens must be in place. 
+
+Ideally, for us to compare the two systems on equal terms, both systems should be implemented in the same environment. However, since we do not have access to the environment where the current system at Siemens is implemented, we have chosen to build our own version of the current Siemens system, in the same environment as the decentralized system.
+
+This version of their system, from now on referred to as the centralized solution, built from basic assumptions and what we know about the Siemens System. The goal of this version of their system is to create a foundation for a comparison between the decentralized solution and the current Siemens system, by ruling out the environment as a parameter. Since we don't have access to the Siemens environment, we aim to close some of the theoretical gap between the current Siemens system and the decentralized solution, using the centralized solution. As a result, we aim to compare the centralized solution with the decentralized solution.
+
+However in order to completely answer question~\ref{PS:Q:HowWellDoWeScale}, and compare the decentralized solution with the current Siemens system, another comparison must be introduced: A comparison between our centralized solution and the current Siemens system. This comparison is theoretical and based solely on assumptions and what we know about the current Siemens system. 
+
+The thesis motivation (\cref{sec:ThesisMotivation}) describes a brief overview of the current system at Siemens. Since the focus of this thesis is around the regulation sequence, the Park Pilot and the turbines are the only components built for the centralized solution. The following chapter describes the centralized solution followed by a theoretical comparison between the centralized solution and the current Siemens system. 
+
+%Only built for testing purposes
+
+\section{Regulation algorithm}\label{sec:regAlgorithm}
+
+\section{Communication}\label{sec:currentSystemCen} 
+
+The first area studied when building the centralized solution, was the communication around the regulation algorithm and what data is needed for the algorithm to calculate setpoints for every turbine. This section explains how the communication around the centralized solution is built.
+
+\subsection{Get turbine states}
+
+In order for the Park Pilot to calculate turbine setpoints, the Park Pilot must have the state of all turbines:
+
+\begin{figure}
+	\centering
+	\begin{sequencediagram} %Created using pgf-umlsd
+		\newthread{parkPilot}{:Park Pilot}
+		\newthread{turbineDataReplier}{:Turbine Data Replier}
+		\newinst{turbine}{:Turbine}
+	
+		\begin{sdblock}{each turbine}{}
+			\mess[1]{parkPilot}{sendRequest}{turbineDataReplier}
+			\begin {call}{turbineDataReplier}{readData()}{turbine}{return data}
+			\end {call}
+			\mess[1]{turbineDataReplier}{sendReply}{parkPilot}
+		\end{sdblock}
+	
+%		\begin{call}{parkPilot}{calculateAllSetpoints()}{parkPilot}{}
+%		\end{call}
+%	
+%		\begin{sdblock}{each turbine}{}
+%			\mess[1]{parkPilot}{setNewSetpoint}{turbine}
+%		\end{sdblock}
+				
+	\end{sequencediagram}
+
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Regulator calculation sequence]{
+		\label{fig:getStatesOfTurbines} 
+		\footnotesize{%
+			First part of the regulation sequence: Getting the state of all turbines.
+		}
+	}
+\end{figure}
+
+A simple overview of the first part of the regulation sequence is presented on \cref{fig:getStatesOfTurbines}. This part of the algorithm is implemented using the RTI DDS Request-Reply implementation~\cite{rtiConnextUsersManual}. The three objects presented are:
+
+\begin{description}
+	\item [Park Pilot] The Park Pilot running the regulation algorithm. This object requests the data from all turbines and calculates setpoints when states has been received.
+	\item [Turbine Data Replier] The replier object, instantiated on every turbine. Handles the request and sends a reply.
+	\item [Turbine] The underlying turbine object, instantiated on every turbine. Interface to the Turbine, which handles communication with the underlying database with simulation data.
+\end{description}
+
+The Park Pilot sends a request to a specific topic and then waits until it has received a reply from all the turbines subscribing to this topic, which in our case is all turbines. In a real-life implementation of the system, a timer should be implemented to determine how long to wait for the replies, and maybe even mark a turbine as offline, if a given turbine does not reply within that time period. However, since this is only a prototype for data comparison purposes, this functionality has not been implemented. The request message, sent from the Park Pilot, contains the cycle time, which is only used for data logging purposes (i.e. not used by the turbines).
+
+The Turbine Data Replier is instantiated with the Turbine object and runs on every turbine. After instantiation, the Turbine Data Replier goes into an infinite loop which first waits infinitely for a request, reads turbine data from the Turbine object and finally sends a reply containing the data to the Park Pilot. Ideally, the Turbine Data Replier object should have been implemented as a listener on the request topic using RTI DDS SimpleReplier~\cite{rtiConnextUsersManual}. However, we could not get it to work using the SimpleReplier and fortunately waiting infinitely for a request works just as well for our purpose.
+
+The Turbine object is the interface to the actual Turbine. The primary functionality of this object is to change state when a new setpoint is assigned to the object. Furthermore it reads data from the underlying MongoDB database. 
+
+\subsection{Calculate setpoints}
+
+When the Park Pilot has received the states of all turbines the setpoints for all turbines are calculated. Since we don't have access to Siemens' regulation algorithm (see \cref{sec:regAlgorithm}), we have developed our own simple regulation algorithm.
+
+Our regulation algorithm works by first determining how many turbines that are available for production. This is done going through every turbine, checking if they currently hit their maximum production capacity. If a given turbine is producing at maximum capacity, a greater load cannot be assigned to it and the available turbine count is reduced. 
+
+Next the setpoint for every turbine is calculated.
+
+\subsection{Send setpoints}
+
+
+\section{DDS configuration}\label{sec:ddsConfigCen} 
 
 \section{Algorithm}\label{sec:algoCen} 
