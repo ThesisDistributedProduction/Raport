@@ -20,7 +20,20 @@ The thesis motivation (\cref{sec:ThesisMotivation}) describes a brief overview o
 
 \section{Regulation algorithm}\label{sec:regAlgorithm}
 
-\input{figures/tikz/dataFlowDecentral}
+BLA
+
+\begin{figure}
+	\centering
+	\input{figures/tikz/dataFlowDecentral}
+
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Regulation algorithm input/output parameters]{
+		\label{fig:ioRegAlg} 
+		\footnotesize{%
+			Input/output parameters of the regulation algorithm.
+		}
+	}
+\end{figure}
 
 \section{Regulation cycle}\label{sec:currentSystemCen} 
 
@@ -48,7 +61,7 @@ In order for the Park Pilot to calculate turbine setpoints, the Park Pilot must 
 	\end{sequencediagram}
 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Regulator calculation sequence]{
+	\caption[First part of the regulation cycle]{
 		\label{fig:getStatesOfTurbines} 
 		\footnotesize{%
 			First part of the regulation sequence: Getting the state of all turbines.
@@ -111,7 +124,7 @@ After calculating the setpoints (\cref{sec:calculateSetpoints}), the Park Pilot 
 	\end{sequencediagram}
 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Regulator calculation sequence]{
+	\caption[Last part of the regulation cycle]{
 		\label{fig:sendSetpoints} 
 		\footnotesize{%
 			Last part of the regulation sequence: Sending setpoints to all turbines.
