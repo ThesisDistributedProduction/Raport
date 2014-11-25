@@ -12,15 +12,36 @@ The thesis motivation (\cref{sec:ThesisMotivation}) describes a brief overview o
 
 %Only built for comparison/testing purposes
 
+%Logic view. What classes are where?
+
+%Use of keys
+
+%Data Objects
+
 \section{Regulation algorithm}\label{sec:regAlgorithm}
 
-\section{Communication}\label{sec:currentSystemCen} 
+BLA
+
+\begin{figure}
+	\centering
+	\input{figures/tikz/dataFlowDecentral}
+
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Regulation algorithm input/output parameters]{
+		\label{fig:ioRegAlg} 
+		\footnotesize{%
+			Input/output parameters of the regulation algorithm.
+		}
+	}
+\end{figure}
+
+\section{Regulation cycle}\label{sec:currentSystemCen} 
 
 The first area studied when building the centralized solution, was the regulation cycle. This includes what data the regulation algorithm needs for calculating setpoints for every turbine and the communication around the regulation algorithm for getting the data.
 
 The regulation cycle of the Park Pilot loops infinitely. This section explains a single regulation cycle of the centralized solution.
 
-\subsection{Get turbine states}
+\subsection{Get turbine states}\label{sec:getTurbineStates}
 
 In order for the Park Pilot to calculate turbine setpoints, the Park Pilot must have the state of all turbines.
 
@@ -40,7 +61,7 @@ In order for the Park Pilot to calculate turbine setpoints, the Park Pilot must 
 	\end{sequencediagram}
 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Regulator calculation sequence]{
+	\caption[First part of the regulation cycle]{
 		\label{fig:getStatesOfTurbines} 
 		\footnotesize{%
 			First part of the regulation sequence: Getting the state of all turbines.
@@ -62,7 +83,7 @@ The Turbine Data Replier is instantiated with the Turbine object and runs on eve
 
 The Turbine object is the interface to the actual Turbine. The primary functionality of this object is to change state when a new setpoint is assigned to the object. Furthermore it reads data from the underlying MongoDB database. 
 
-\subsection{Calculate setpoints}
+\subsection{Calculate setpoints}\label{sec:calculateSetpoints}
 
 When the Park Pilot has received the states of all turbines the setpoints for all turbines are calculated. Since we don't have access to Siemens' regulation algorithm (see \cref{sec:regAlgorithm}), we have developed our own simple regulation algorithm.
 
@@ -72,5 +93,54 @@ Next the setpoint for every turbine is calculated. This is simply done by dividi
 
 \subsection{Send setpoints}
 
+\Cref{fig:sendSetpoints} presents a simple overview of the last part of the algorithm. This part of the algorithm is implemented using RTI DDS Publish-Subscribe implementation~\cite{rtiConnextUsersManual}. The primary objects are:
+
+\begin{description}
+	\item [Park Pilot] Explained in \cref{sec:getTurbineStates}.
+	\item [Turbine Outlet] The Park Pilots implementation of a given turbine. Onene of these objects instantiated on the Park Pilot for each turbine in the park. Writing data to each turbine is handled from this object.
+	\item [Setpoint Listener] The listener object called when when a new setpoint is published. One of these objects are instantiated on each turbine.
+	\item [Turbine] Explained in \cref{sec:getTurbineStates}.
+\end{description}
+
+After calculating the setpoints (\cref{sec:calculateSetpoints}), the Park Pilot sends a new setpoint to each turbine. The Park Pilot sets the setpoint of the Turbine Outlet before publishing the Data.
+
+\begin{figure}
+	\centering
+	\begin{sequencediagram} %Created using pgf-umlsd
+		\newthread{parkPilot}{:Park Pilot}
+		\newinst{turbineOutlet}{:Turbine Outlet}
+		\newinst{setPointListener}{:Setpoint Listener}
+		\newinst{turbine}{:Turbine}
+	
+		\begin{sdblock}{each turbineOutlet}{}
+			\begin {call}{parkPilot}{setSetpoint()}{turbineOutlet}{}
+			\end {call}
+			\begin {call}{parkPilot}{publishData()}{turbineOutlet}{}
+				\mess[1]{turbineOutlet}{write}{setPointListener}
+				\begin {call}{setPointListener}{setSetpoint()}{turbine}{}
+				\end {call}
+			\end {call}
+		\end{sdblock}				
+	\end{sequencediagram}
+
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Last part of the regulation cycle]{
+		\label{fig:sendSetpoints} 
+		\footnotesize{%
+			Last part of the regulation sequence: Sending setpoints to all turbines.
+		}
+	}
+\end{figure}
+
+The main purpose of Turbine Outlet object is to register and publish setpoints to each turbine. Upon instantiation, the Turbine Outlet registers the turbine id as a RTI DDS key~\cite{rtiConnextUsersManual} to the setpoint topic and saves the handle object. Saving the handle upon registration and using the handle when writing improves performance~\cite{DDSInstanceHandlet}, which is why the handle is saved with the object. Lastly the object writes the data to the topic.
+
+The Setpoint Listener object is a listener on the setpoint topic. The setpoint topic is configured with as a Content Filtered Topic~\cite{rtiConnextUsersManual}, so the listener only reacts to messages with a key that equals the turbines id (see \cref{sec:ddsConfigCen} for DDS configuration). When Setpoint Listener object is invoked, the new setpoint is saved to the Turbine object, which updates the state of the turbine.
 
 \section{DDS configuration}\label{sec:ddsConfigCen} 
+
+\subsection{Data objects(IDL)}
+
+\subsection{QoS}
+
+
+\section{Theoretical comparison to the existing system at Siemens Wind Power}
