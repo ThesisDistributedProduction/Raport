@@ -47,6 +47,18 @@ Currently only the decentralized system can be visualized and controlled using t
 RTI has created a Blockset for Simulink allowing a Simulink model to interact with the DDS Participant and other entities in a DDS enabled network.
 The blockset consists of a toolbox containing 6 blocks. Common for all blocks except the DDS Time block is that they can be configured with a default or custom Quality of Service profile as well as a sample time. The Quality of Service profile must match the profile used in the network you want to participate in. The sample time is related to the Simulink model and specifies the timeinterval between samples.
 
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{figures/DDSBlockset}
+\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[DDSBlockset blocks for Simulink]{
+		\label{fig:DDSBlocksetBlocks} 
+		\footnotesize{%
+			DDSBlockset blocks for Simulink.
+		}
+	}
+\end{figure}
+
+
 \paragraph{The DomainParticipant block} is the equivalent to the DomainParticipant entity in DDS. This block allows for configuration of the DomainID which links the DomainParticipant to a specific DDS domain.
 
 \paragraph{The Publisher/Subscriber block} can be configured as either a Publisher or a Subscriber and will act as either based on the chosen configuration.
@@ -71,9 +83,32 @@ DDS Blockset for Simulink has an import feature available for import of Interfac
 Since Matlab does not provide a compiler fro C++ on x64 systems one must be downloaded. Microsoft provides a compiler in the Microsoft Windows SDK 7.1. Matlab must be told to use the compiler by using the mex -setup command. Finally the location of the binaries and the libraries that is downloaded with the new compiler must be added to path.
 
 \subsection{Simulink model of the decentralized system}\label{subsec:decentralizedmodel}
+
+\begin{figure}[b]
+\includegraphics[width=\textwidth]{figures/DecentralizedModel}
+\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Decentralized Simulink model]{
+		\label{fig:decentralizedSimulinkModel} 
+		\footnotesize{%
+			Decentralized Simulink model.
+		}
+	}
+\end{figure}
+
 The Simulink model of the decentralized system is simple. The decentralized Simulink model has a DomainParticipant block in order to be able to receive data from the same domain as the turbines. It also has a Time block to enable logging and graphing of the current DDS time. Since the decentralized system only uses one DDS message type, TurbineMessage \{INSERT REFERENCE\}, to communicate between all the turbines in the system, the decentralized Simulink model has only one Subscriber block and one DataReader block. The Subscriber block specifies the topic to subscribe to and the DataReader block receives events every time a new TurbineMessage is available. The TurbineMessage that is received is logged to a .mat file together with the current DDS time for later use.
 
 In order to transfer data from the Simulink model to Matlab eventlisteners must be implemented in a Matlab .m file. In the decentralized system the eventhandler listens for incoming events on the bus object that receives new data from the DataReader block. When new data is received the event fires and data can be collected from the Simulink model. Furthermore model execution can be controlled from Matlab, as well as parameters like model runtime.
 
 \subsection{Simulink model of the centralized system}\label{subsec:centralizedmodel}
 The Simulink model of the centralized system is a bit more complex. The centralized system contains three different messagetypes, TurbineDataMessage, RequestMessage, SetpointMessage, \{INSERT REFRENCE\} that all run on different topics. Because of this the centralized Simulink model contains one DomainParticipant, three Subscribers, one for each topic, and three DataReaders, one for each message type, in order to capture the communication in the centralized system. Every message received is logged to a .mat file together with the current DDS time.
+
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{figures/CentralizedModel}
+\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Centralized Simulink model]{
+		\label{fig:centralizedSimulinkModel} 
+		\footnotesize{%
+			Centralized Simulink model.
+		}
+	}
+\end{figure}
