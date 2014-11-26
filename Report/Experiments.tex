@@ -4,14 +4,15 @@
 
 \newcommand{\failingTurbineNumbers}{1, 5, 10 and 30}
 \newcommand{\testTurbineNumbers}{2, 21, 41, 61, 81 and 101}
+\newcommand{\testCycletimeNumbers}{5ms, 10ms, 15ms, 20ms, 25ms and 30ms}
 \newcommand{\experiemntRunTime}{2mins}
 
 
 The goal of this project was not only to build a control system that provides both scalability and availability, but also to compare it to the current solution by Siemens Windpower. 
 In order to evaluate the system, we have created the experiments in the following sections.
 
-The experiments are done using up to 3 machines connected using a 1Gbit ethernet router with IGMP support.
-The experiments are run on 3 laptops, with one being used to capture test data and the other 2 optionally running a number of turbines controllers to generate traffic.
+The experiments are performed using up to 3 machines connected using a 1Gbit ethernet router with IGMP support.
+The experiments are run on 3 laptops, with one being used to capture test data and the other 2 optionally running a number of turbines to generate network traffic.
 All test are run with CPU utilization on average below 90\%, this is done to keep performance consistent.
 The specification of the hardware used for testing can be found in \cref{appendix:HardwareSpecification}.
 Every experiment is run at least X times 
@@ -38,15 +39,30 @@ The experiment has the following procedure:
 \end{enumerate}
 
 
-\section{PS \ref{PS:Q:CanWeScale}: Scalability of regulation algorithm}
+\section{PS \ref{PS:Q:CanWeScale}: Scalability of decentralized system}
 Scalability is by Bondi\cite{Bondi:2000:CSI:350391.350432} defined as \textit{the systems ability to accommodate an increasing number of elements or objects, to process growing volumes of work gracefully, and/or to be susceptible to enlargement}.
 
-The experiments below are made to show how the number of turbines effect the regulation cycle in the decentralized system described in \cref{cha:decentralizedSystem}.
-The tests are done with \testTurbineNumbers ~turbine controllers. Besides turbines we are also going to modify ''Data Wait Time Frame'' witch is a constant that defines the time a turbine controller will wait for new updates before considering the other turbine controller offline and unavailable, i.e. regulation speed.
+\subsection{Cycle time and the impact on cache read count}
+The experiment below are made to show how the regulation time affect the cache read count in the decentralized system described in \cref{cha:decentralizedSystem}. 
+The experiments are performed with \testCycletimeNumbers ~cycle times.  
+
+The following procedure is used each time the experiment is performed:
+\begin{enumerate}
+	\item Start the system with a cycle time of N ms and 21 turbines.
+	\item Make sure the system is stable.
+	\item Start logging the reported regulation run time and cache read count.
+	\item Stop logging after \experiemntRunTime.
+\end{enumerate}
+
+\subsection{Number of turbines and their impact on regulation time and cache count}
+The experiment below are made to show how the number of turbines affect the regulation cycle in the decentralized system described in \cref{cha:decentralizedSystem}.
+
+The experiments are performed with \testTurbineNumbers ~turbines. Besides turbines we are also going to modify ''Data Wait Time Frame'' witch is a constant that defines the time a turbine controller will wait for new updates before considering the other turbines offline and unavailable, i.e. regulation speed.
 
 The test system is expected to be running only one instance in a real life implementation, therefore the test machine will only run one instance and the support machines will run the rest generating system load.
 The experiment is done with a variating N number of online turbines.
-The following procedure is used each time the experiment is done:
+
+The following procedure is used each time the experiment is performed:
 \begin{enumerate}
 	\item Start the system with N turbines.
 	\item Make sure the system is stable.
@@ -74,7 +90,7 @@ Each of these parameters behave differently when centralized compared to decentr
 \end{figure}
 
 	The centralized version is split into two applications a client and a server.
-	What we aim to primarily compare here is the regulation therefore the client side of the application is not measured. This means that the decentralized version is at slight disadvantage.
+	The aim is to compare the regulation time, therefore the client side of the application is not measured. This means that the decentralized version is at a slight disadvantage.
 	The following procedure is used each time the experiment is done, the procedure is done with N simulated turbines for both :
 
 \begin{minipage}{\textwidth}
