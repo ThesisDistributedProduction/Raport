@@ -4,26 +4,33 @@
 
 \newcommand{\failingTurbineNumbers}{1, 5, 10 and 30}
 \newcommand{\testTurbineNumbers}{2, 21, 41, 61, 81 and 101}
+\newcommand{\testCycletimeNumbers}{5ms, 10ms, 15ms, 20ms, 25ms and 30ms}
 \newcommand{\experiemntRunTime}{2mins}
 
+The goal of this project is not only to build a control system that provides both scalability and availability, but also to compare it to the current solution by Siemens Windpower. 
+In order to evaluate the system, we have created the experiments in the following sections. 
+The experiments are named PS 1 to PS 4 as they relate to the questions proposed in \cref{sec:problemStatement}.
+PS 1 thus relates to question \ref{PS:Q:CanWeDoIt} of \cref{sec:problemStatement} and so forth.
 
-The goal of this project was not only to build a control system that provides both scalability and availability, but also to compare it to the current solution by Siemens Windpower. 
-In order to evaluate the system, we have created the experiments in the following sections.
-
-The experiments are done using up to 3 machines connected using a 1Gbit ethernet router with IGMP support.
-The experiments are run on 3 laptops, with one being used to capture test data and the other 2 optionally running a number of turbines controllers to generate traffic.
+The experiments are performed using up to 3 standard issue consumer laptops connected using a 1Gbit ethernet router with IGMP support.
+One laptop is being used to capture test data and the other 2 optionally running a number of turbines to generate network traffic.
 All test are run with CPU utilization on average below 90\%, this is done to keep performance consistent.
 The specification of the hardware used for testing can be found in \cref{appendix:HardwareSpecification}.
 Every experiment is run at least X times 
 
-\section{PS \ref{PS:Q:CanWeDoIt}: Does our prototype work?}
-We start the prototype:
-\begin{itemize}
-	\item Does it communicate without a central system?
-	\item Does the sum of the turbines setpoints match the global setpoint? 
-\end{itemize}
+\section{PS \ref{PS:Q:CanWeDoIt}: Decentralized system implementation}
+
+Question \ref{PS:Q:CanWeDoIt} of \cref{sec:problemStatement} asks if it is possible to re-implement the current system at Simens Wind Power as a decentralized system. The following experiment aims to investigate if the proposed decentralized system can perform the operations that the current centralized system at Simens Wind Power is able to perform. More specifically the experiments aims to investigate if the proposed decentralized system is able to regulate the power production of each turbine in order to reach the global power production goal.
+
+The experiment has the following procedure:
+\begin{enumerate}
+	\item Start the system with 100 turbines.
+	\item Start the graphical interface described in \cref{sec:graphicalInterface}.
+	\item Observe the global setpoint line and the global production line on the graphical interface.
+\end{enumerate}
 
 \section{PS \ref{PS:Q:Availlability}: Fault tolerance of the system}
+Question \ref{PS:Q:Availlability} of \cref{sec:problemStatement} asks if the proposed decentralized system is able to continue its functions even though nodes are removed from the system at runtime. The following experiment aims to investigate if the proposed decentralized system continue to regulate the power production of each available turbine such that the global power production goal is reached when turbines are removed from the system at runtime. 
 
 The below experiment is done with a variating N number of failing turbines \failingTurbineNumbers.
 The experiment has the following procedure:
@@ -38,15 +45,36 @@ The experiment has the following procedure:
 \end{enumerate}
 
 
-\section{PS \ref{PS:Q:CanWeScale}: Scalability of regulation algorithm}
+\section{PS \ref{PS:Q:CanWeScale}: Scalability of decentralized system}
 Scalability is by Bondi\cite{Bondi:2000:CSI:350391.350432} defined as \textit{the systems ability to accommodate an increasing number of elements or objects, to process growing volumes of work gracefully, and/or to be susceptible to enlargement}.
 
-The experiments below are made to show how the number of turbines effect the regulation cycle in the decentralized system described in \cref{cha:decentralizedSystem}.
-The tests are done with \testTurbineNumbers ~turbine controllers. Besides turbines we are also going to modify ''Data Wait Time Frame'' witch is a constant that defines the time a turbine controller will wait for new updates before considering the other turbine controller offline and unavailable, i.e. regulation speed.
+Question \ref{PS:Q:CanWeScale} of \cref{sec:problemStatement} asks if the proposed decentralized system is able to scale with the number of turbines in the system. The experiments that investigate this question has been split into two part.  \newline
+
+Part 1 aims to investigate the anticorrelation between regulation time and cache read count in the proposed decentralized system. This is relevant because changing the regulation time may have an impact on the number of cache reads. Choosing a regulation time that has a low number of cache read count for part 2 of the experiments will make it easier to identify how scaling up the number of turbines will affect cache read count. \newline
+
+Part 2 aims to investigate the impact on regulation time and cache read count when the number of turbines are scaled up in the proposed decentralized system. \newline
+
+\subsection{Part 1: Regulation time and the impact on cache read count}
+The experiment below are made to show how the regulation time affect the cache read count in the decentralized system described in \cref{cha:decentralizedSystem}. 
+The experiments are performed with \testCycletimeNumbers ~cycle times.  
+
+The following procedure is used each time the experiment is performed:
+\begin{enumerate}
+	\item Start the system with a cycle time of N ms and 21 turbines.
+	\item Make sure the system is stable.
+	\item Start logging the reported regulation run time and cache read count.
+	\item Stop logging after \experiemntRunTime.
+\end{enumerate}
+
+\subsection{Part 2: Number of turbines and their impact on regulation time and cache read count}
+The experiment below are made to show how the number of turbines affect the regulation cycle in the decentralized system described in \cref{cha:decentralizedSystem}.
+
+The experiments are performed with \testTurbineNumbers ~turbines. Besides turbines we are also going to modify ''Data Wait Time Frame'' witch is a constant that defines the time a turbine controller will wait for new updates before considering the other turbines offline and unavailable, i.e. regulation speed.
 
 The test system is expected to be running only one instance in a real life implementation, therefore the test machine will only run one instance and the support machines will run the rest generating system load.
 The experiment is done with a variating N number of online turbines.
-The following procedure is used each time the experiment is done:
+
+The following procedure is used each time the experiment is performed:
 \begin{enumerate}
 	\item Start the system with N turbines.
 	\item Make sure the system is stable.
@@ -55,10 +83,9 @@ The following procedure is used each time the experiment is done:
 \end{enumerate}
 
 \section{PS \ref{PS:Q:HowWellDoWeScale}: Comparing decentralized with centralized}
-Theses experiments seek to compare the new decentralized (see \cref{cha:decentralizedSystem}) system with the current centralized Siemens system(see \cref{cha:existingSystem}).
-
-The experiments below are made to show how the number of turbines and regulation speed affect the regulation algorithm, memory consumption and Network traffic.
-Each of these parameters behave differently when centralized compared to decentralized as seen in \cref{fig:timingCentralVSDecentral} the decentralized system does not wait for new data before doing calculations. Because of this the decentralized version has a extra parameter witch says how much data was updated before calculation was run.
+Question \ref{PS:Q:HowWellDoWeScale} of \cref{sec:problemStatement} asks how the proposed decentralized system compares to the existing centralized system\cref{cha:existingSystem}) at Siemens Wind Power with regards to a number of parameters.
+The experiments below aims to show how the number of turbines and regulation speed affect the regulation algorithm, memory consumption and Network traffic.
+Each of these parameters behave differently when centralized compared to decentralized as seen in \cref{fig:timingCentralVSDecentral} the decentralized system does not wait for new data before doing calculations. Because of this the proposed decentralized version has a extra parameter which indicate how much data was updated before the calculation started.
 
 \begin{figure}[b]
 	%The figure show how regulation time differs central vs decantral
@@ -74,7 +101,7 @@ Each of these parameters behave differently when centralized compared to decentr
 \end{figure}
 
 	The centralized version is split into two applications a client and a server.
-	What we aim to primarily compare here is the regulation therefore the client side of the application is not measured. This means that the decentralized version is at slight disadvantage.
+	The aim is to compare the regulation time, therefore the client side of the application is not measured. This means that the decentralized version is at a slight disadvantage.
 	The following procedure is used each time the experiment is done, the procedure is done with N simulated turbines for both :
 
 \begin{minipage}{\textwidth}
