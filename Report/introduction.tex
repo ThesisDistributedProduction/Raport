@@ -16,7 +16,7 @@ Furthermore the SCADA system and park regulators does not scale automatically wi
 Since wind energy is recognized as one of the solutions to the renewable energy problem, wind park size and capacity keeps increasing.
 The need for scalability is thus not only a challenge for Siemens Wind Power but for the entire industry.
 
-%The area of decentralization in wind farm management and control has largely been neglected even though wind farms has reached a scale that is becoming increasingly hard to manage with a centralized approach.
+Despite the fact that the wind farms has grown to a size that is becoming increasingly hard to manage with a centralized control system the area of decentralization in wind farm management and control has largely been neglected as a research area. The main problem being that with a centralized control system individual turbines must wait for the centralized control system to calculate and communicate values like the amount of power a single turbine must produce in order to meet the power production requirements of the entire wind farm. Since the wind farm is expected to operate as a single unit the power production of a single turbine is affected by the power production of all other turbines. This interdependence between all turbines forces the central control system to collect data from all turbines before a single new power production value can be calculated, which is time consuming. Adding turbines will additionally increase the time the centralized control system needs to calculate new power production values. To uphold a constant power production level for the entire wind farm near real-time control and regulation is necessary thus the time consumption of the centralized control system must be minimized in effect limiting the number of turbines the centralized control system is able to handle.
 
 \section{Siemens Wind Power case}
 
@@ -85,8 +85,7 @@ Todays setup at Siemens Wind Power (\cref{sec:SiemensCase}) is an example of a s
 	\item Low scalability. The Wind Power Supervisors and Park Pilots does not scale with the number of turbines. This is reflected in the park regulation performance. Today a park regulation cycle-time is 150 ms. This cycle-time is set after worst case set point retrieval time, worst case new setpoint calculations and worst case time it takes to broadcast new setpoints. This ultimately depends on worst case number of turbines pr. Park Pilot.
 \end{itemize}
 
-Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by distributing their functionality to the turbines, utilizing the free capacity of the computers already residing in every turbine. This would increase availability by lowering the possibility of single point of failure. Furthermore this would increase scalability of the system, opening for performance optimizations of the park regulation cycle-time by detaching regulation performance from number of turbines pr. Park Pilot. 
-
+Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by distributing their functionality to the turbines, utilizing the free computing capacity of the computers already residing in every turbine. This would increase availability by lowering the possibility of single point of failure. Furthermore this would increase scalability of the system, opening for performance optimizations of the park regulation cycle-time by detaching regulation performance from number of turbines pr. Park Pilot. 
 
 \section{Problem statement}
 \label{sec:problemStatement}
