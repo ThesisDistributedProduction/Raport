@@ -29,8 +29,35 @@ In the new IPv6 broadcast is no longer supported \cite{RFC4291_AddressingIPv6Dra
 Multicasting works using multicast groups, these groups are maintained by routers and layer 2 switches. The way a node is added to a multicast group is by transmitting a packet requesting a group membership using the IGMP protocol. Each multicast group is associated with a multicast ip address, this ip address is used by the transmitting node when a packet is to be transmitted to a multicast group.
 Communicating via multicating is efficient and ensures that each node can be configured to handle a minimum number of packets, routers and switches however has a added responsibility of maintaining information of witch multicast address each port is associated with and transmitting packets to all of them.
 
-\section{Data Distribution Service}
+\section{Data Distribution Service for Real-Time Systems}
+The Data Distribution Service for Real-Time Systems hereafter called DDS is an Object Management Group standard defining a middleware for communication between information provideres and information consumers.
+The standard is an API specification and an interoperability wire-protocol that defines a data-centric publish-subscribe architecture \cite{pardo2003omg}.
+The standard has been implemented by a number of software vendors, the most popular being the RTI Connext DDS implementation.
+
+The DDS standard provides a number of services that a decentralized system like the one this thesis aims to create could profit from.
+Services include amongst others:
+
+\begin{itemize}
+	\item Automatic node discovery.
+	\item A data-centric publish-subscribe approach that allows for distribution of data by topic decoupling the nodes.
+	\item Cross-platform support.
+	\item Fine grained control of Quality of Service parameters.
+\end{itemize}
 
 \subsection{Node discovery}
+Node discovery in DDS is obtained using the Simple Discovery Protocol(SDP).
+This protocol describes a sequence of messages that are sent between DDS entities in order for them to automatically discover each other.
+The protocol is split into two phases:
+
+\begin{itemize}
+	\item Simple Participant Discovery Protocol(SPDP)
+	\item Simple Endpoint Discovery Protocol(SEDP)
+\end{itemize}
+
+\subsection{Simple Participant Discovery}
+This phase facilitates the discovery of DomainParticipants in the system.
+After the Simple Participant Discovery phase has been completed all DomainParticipants in the system has registered the necessary information to enable future communication with each other.
 
 \subsection{Real Time Streaming protocol}
+
+\subsection{Quality of Service}
