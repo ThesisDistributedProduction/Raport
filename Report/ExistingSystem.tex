@@ -1,4 +1,4 @@
-\chapter{Existing system}\label{cha:existingSystem}
+\chapter{The Proposed Centralized Solution}\label{cha:existingSystem}
 
 Question~\ref{PS:Q:HowWellDoWeScale} in the problem statement asks for a comparison between the decentralized solution and the current system at Siemens on different levels. In order to make these comparisons, basic assumptions about the current system at Siemens must be in place. 
 
@@ -48,6 +48,8 @@ is given a global setpoint and the state of all turbines, from which setpoints f
 
 This input/output parameters of the regulation algorithm is of cause simplified. The current system at Siemens has many more but for purpose of this thesis, this is enough. 
 
+
+
 \section{Regulation cycle}\label{sec:currentSystemCen} 
 
 The first area studied when building the centralized solution, was building the frames for the regulation algorithm (see \cref{sec:regAlgorithm}), meaning how to communicate the input/output around the system. 
@@ -82,7 +84,7 @@ In order for the Park Pilot to calculate turbine setpoints, the Park Pilot must 
 	}
 \end{figure}
 
-A simple overview of the first part of the regulation sequence is presented on \cref{fig:getStatesOfTurbines}. This part of the algorithm is implemented using the RTI DDS Request-Reply implementation~\cite{rtiConnextUsersManual}. The three primary objects of this part of the algorithm are:
+A simple overview of the first part of the regulation sequence is presented on \cref{fig:getStatesOfTurbines}. This part of the algorithm is implemented using the RTI Connext Request-Reply implementation~\cite{rtiConnextUsersManual}. The three primary objects of this part of the algorithm are:
 
 \begin{description}
 	\item [Park Pilot] The Park Pilot running the regulation algorithm. This object requests the data from all turbines and calculates setpoints when states has been received.
@@ -92,7 +94,7 @@ A simple overview of the first part of the regulation sequence is presented on \
 
 The Park Pilot sends a request to a specific topic and then waits until it has received a reply from all the turbines subscribing to this topic, which in our case is all turbines. In a real-life implementation of the system, a timer should be implemented to determine how long to wait for the replies, and maybe even mark a turbine as offline, if a given turbine does not reply within that time period. However, since this is only a prototype for data comparison purposes, this functionality has not been implemented. The request message, sent from the Park Pilot, contains the cycle time, which is only used for data logging purposes (i.e. not used by the turbines).
 
-The Turbine Data Replier is instantiated with the Turbine object and runs on every turbine. After instantiation, the Turbine Data Replier goes into an infinite loop which first waits infinitely for a request, reads turbine data from the Turbine object and finally sends a reply containing the data to the Park Pilot. Ideally, the Turbine Data Replier object should have been implemented as a listener on the request topic using RTI DDS SimpleReplier~\cite{rtiConnextUsersManual}. However, we could not get it to work using the SimpleReplier but waiting infinitely for a request works just as well for our purpose.
+The Turbine Data Replier is instantiated with the Turbine object and runs on every turbine. After instantiation, the Turbine Data Replier goes into an infinite loop which first waits infinitely for a request, reads turbine data from the Turbine object and finally sends a reply containing the data to the Park Pilot. Ideally, the Turbine Data Replier object should have been implemented as a listener on the request topic using RTI Connext SimpleReplier~\cite{rtiConnextUsersManual}. However, we could not get it to work using the SimpleReplier but waiting infinitely for a request works just as well for our purpose.
 
 The Turbine object is the interface to the actual Turbine. The primary functionality of this object is to change state when a new setpoint is assigned to the object. Furthermore it reads data from the underlying MongoDB database. 
 
@@ -106,7 +108,7 @@ Next the setpoint for every turbine is calculated. This is simply done by dividi
 
 \subsection{Send setpoints}
 
-\Cref{fig:sendSetpoints} presents a simple overview of the last part of the algorithm. This part of the algorithm is implemented using RTI DDS Publish-Subscribe implementation~\cite{rtiConnextUsersManual}. The primary objects are:
+\Cref{fig:sendSetpoints} presents a simple overview of the last part of the algorithm. This part of the algorithm is implemented using RTI Connext Publish-Subscribe implementation~\cite{rtiConnextUsersManual}. The primary objects are:
 
 \begin{description}
 	\item [Park Pilot] Explained in \cref{sec:getTurbineStates}.
@@ -145,18 +147,133 @@ After calculating the setpoints (\cref{sec:calculateSetpoints}), the Park Pilot 
 	}
 \end{figure}
 
-The main purpose of Turbine Outlet object is to register and publish setpoints to each turbine. Upon instantiation, the Turbine Outlet registers the turbine id as a RTI DDS key~\cite{rtiConnextUsersManual} to the setpoint topic and saves the handle object. Saving the handle upon registration and using the handle when writing improves performance~\cite{DDSInstanceHandlet}, which is why the handle is saved with the object. Lastly the object writes the data to the topic.
+The main purpose of Turbine Outlet object is to register and publish setpoints to each turbine. Upon instantiation, the Turbine Outlet registers the turbine id as a RTI Connext key~\cite{rtiConnextUsersManual} to the setpoint topic and saves the handle object. Saving the handle upon registration and using the handle when writing improves performance~\cite{DDSInstanceHandlet}, which is why the handle is saved with the object. Lastly the object writes the data to the topic.
 
 The Setpoint Listener object is a listener on the setpoint topic. The setpoint topic is configured with as a Content Filtered Topic~\cite{rtiConnextUsersManual}, so the listener only reacts to messages with a key that equals the turbines id (see \cref{sec:ddsConfigCen} for DDS configuration). When Setpoint Listener object is invoked, the new setpoint is saved to the Turbine object, which updates the state of the turbine.
 
 \section{DDS configuration}\label{sec:ddsConfigCen} 
 
-A key component for building the centralized solution is DDS. DDS is the framework we use for 
+The key component used for communication is DDS (see \cref{DDS}). This section describes how we have configured DDS for the centralized solution.
+
+\subsection{Interface Description Language}
+
+The data transfer objects (DTO) used when sending messages from the turbines to the Park Pilot, and the other way around, are created using the RTI Connext Interface Description Language~\cite{rtiConnextUsersManual}. DTOs are defined in an IDL file (see \cref{fig:cenTurbineDataMessage} for IDL example). From there the actual implementations of the IDL definitions are auto generated from the command prompt using the \textit{rtiddsgen}~\cite{rtiConnextUsersManual} command.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.3\textwidth,natwidth=250,natheight=200]{turbineDataMessage.PNG} 
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Centralized turbine reply message]{
+		\label{fig:cenTurbineDataMessage} 
+		\footnotesize{%
+			The the reply message .idl file sent from the turbines to the Park Pilot in the centralized solution.
+		}
+	}
+\end{figure}
+
+The IDL definitions are are defined from looking at what data to transfer between the turbines and the Park Pilot. \Cref{fig:cenTurbineDataMessage} for example is IDL definition of the data transfer object used as reply from the turbines to the Park Pilot. 
+
+\subsection{Topics}
+
+Including the topics generated from the RTI Connext Request-Reply implementation~\cite{rtiConnextUsersManual} we are using the following topics:
 
 
-\subsection{Data objects(IDL)}
+%\begin{figure}
+%	\centering
+%	\input{figures/tikz/topicsCentral.tex}
+%
+%	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+%	\caption[Regulation algorithm input/output parameters]{
+%		\label{fig:ioRegAlg} 
+%		\footnotesize{%
+%			Input/output parameters of the regulation algorithm.
+%		}
+%	}
+%\end{figure}
 
-\subsection{QoS}
+\subsection{Choosing QoS parameters}
+
+Quality of service parameters are parameters used to determine system behavior. As such, setting the right ones for our system is important in order to get the centralized solution to behave as much as the current system at Siemens as possible. 
+
+In order to decide the QoS parameters for the centralized, the QoS XML file from the current system at Siemens was provided by Siemens (see \cref{appendix:siemensQosFile} for the QoS XML file). Thus QoS parameters for the centralized solution has been set using this file, which presents many different QoS profiles.
+
+The Siemens QoS XML file (\cref{appendix:siemensQosFile}) only specifies one participant factory profile and one participant profile. Both profiles has applied to the solution and only parameters irrelevant to the purpose of this thesis has been removed from the profiles. 
+
+However, the file specifies many different profiles for DataReaders, DataWriters and Topics and where each profile has been applied to the current system at Siemens has not been informed by Siemens. Thus we don't know which ones has been used for the part of the system that is implemented with the centralized solution. 
+
+Each parameter in every QoS profile has been evaluated and the parameters relevant to the purpose of this theses has been applied to the centralized solution, based on assumptions about the current Siemens system. The QoS XML file roughly presents profiles that combines the following parameters in different ways:
+
+\paragraph{Reliability} is the parameter, which determines whether or not data published by a DataWriter will be reliably delivered by the DDS framework to matching DataReaders~\cite{rtiConnextUsersManual}. The three levels of reliability presented by the different profiles are:
+
+\begin{itemize}
+	\item \textbf{Best effort reliability} profiles are configured so data samples are sent once and missed samples are acceptable.
+	\item \textbf{Reliable} profiles are configured to make sure that data sent is received and missed samples are resent. DataWriters will send samples reliably to DataReaders, buffering sent data until they have been acknowledged as being received by DataReaders and resending any samples that may have been lost during transport. The DataWriter buffer of this configuration is set to the size of one message, which means only the newest message are resent. This implies that an unacknowledged sample may be overwritten and thus lost. 
+	\item \textbf{Strictly reliable} profiles are configured exactly like reliable profiles, but with a larger DataWriter buffer. Increasing the DataWriter buffer size will decrease the chance of unacknowledged samples being overwritten. Thus DataReaders are ensured all messages sent by the DataWriters.
+\end{itemize}
+
+\paragraph{Durability} controls whether or not, and how, published samples are stored by the DataWriter application for DataReaders that are found after the samples were initially written, thus allowing new DataReaders to receive data sent before they were created. The levels of durability presented by the different profiles are:
+
+\begin{itemize}
+	\item \textbf{No durability} profiles are configured not to store any samples for newly discovered DataReaders.
+	\item \textbf{Local durability} profiles are configured so that DataWriters will store and send previously published samples for delivery to newly discovered DataReaders as long as the DataWriter still exists.
+\end{itemize}
+
+\paragraph{Throughput} is configured using the batch~\cite{rtiConnextUsersManual} parameter, which can be used to decrease the amount of communication overhead associated with the transmission and (in case of reliable communication) acknowledgment of small samples at the expense of latency. This is done by batching many smaller samples to be sent in a single large packet, which increases network utilization and thus throughput in terms of samples per second. The two levels of throughput presented by the different profiles are:
+
+\begin{itemize}
+	\item \textbf{Regular throughout} profiles are configured not batch any samples, thus data samples and (in case of reliable communication) acknowledgment message are sent individually.
+	\item \textbf{High throughput} profiles are configured so DataWriters will batch data in order to increase throughput.
+\end{itemize}
+
+The many profiles in the Siemens QoS XML file (\cref{appendix:siemensQosFile}) are presumably made for many different purposes. For building the centralized solution, the profile using \textbf{Strictly reliable}, \textbf{No durability} and \textbf{Regular throughput} configurations was chosen based on the following assumptions about the current Siemens system:
+
+\begin{itemize}
+	\item \textbf{Strictly reliable} messaging is important for the Park Pilot to compute setpoints for each turbine, since states of all turbines are needed in order to calculate setpoints. Thus resending a sample data if the sample data is dropped is needed in order to calculate setpoints. 
+	\item \textbf{No durability} is needed for the regulation algorithm. If a new turbine is discovered, the turbine have no need of receiving old requests or setpoints. The turbine only needs to make itself available to requests from the Park Pilot and thereby be taken into account, which is done automatically by \textit{Connext} when a new DataReader is discovered.  
+	\item \textbf{Regular throughput} provides the best performance for the regulation cycle. Batching data samples and potentially end in a situation where two turbine states are returned to the regulation algorithm bundled is not acceptable. 
+\end{itemize}
+
+All parameters of the quality of service configuration for the centralized solution is presented and described in section \cref{sec:detailedQoSDesc}.
+
+
+\subsection{Detailed QoS evaluation} \label{sec:detailedQoSDesc}
+\lstset{tabsize=2, language=XML, basicstyle=\small}
+
+The section provides a detailed evaluation of every parameter of the centralized solution QoS XML file, including the QoS parameters deemed irrelevant and thereby removed from the QoS file provided by Siemens (\cref{appendix:siemensQosFile}). Removed parameters are marked with '(Removed)'.
+
+\paragraph{Logging} every time an error occurs (\cref{fig:parFacLogQos})
+
+
+\begin{figure}
+\begin{lstlisting}
+<participant_factory_qos>
+    <logging>
+        <verbosity>WARNING</verbosity>
+        <category>PLATFORM</category>
+        <print_format>VERBOSE_TIMESTAMPED</print_format>
+        <output_file>ddsadaptor.log</output_file>
+    </logging>
+</participant_factory_qos>
+\end{lstlisting}
+\caption[Participant factory logging QoS]{
+		\label{fig:parFacLogQos} 
+		\footnotesize{Participant factory logging QoS.}
+	}
+\end{figure}
+
+
+%DTLS --> underlying UDP, multicast disabled
+
+%<autoenable_created_entities>false</autoenable_created_entities> we default should be true. We don't need any disabled entities
+
+%logging: removed from both systems
+%discovery
+%buffer size
+%participant, UDP, dtls
+%datareader, liveliness, best effort reliability, history 1
+%datawriter, liveliness, same as reader, heartbeat watermarks for reliability
+
+%Siemens er ved at skifte til, UDP Det giver mere mening, sparer netværks trafik
 
 
 \section{Theoretical comparison to the existing system at Siemens Wind Power}
