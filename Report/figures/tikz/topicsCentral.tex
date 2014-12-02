@@ -1,0 +1,65 @@
+\begin{tikzpicture}[
+	point/.style={inner sep=0pt}, %circle,minimum size=2pt,fill=red},
+	textNode/.style={inner sep=2pt},
+	hv path/.style={to path={-| (\tikztotarget)}},
+	vh path/.style={to path={|- (\tikztotarget)}},
+	skip loop h/.style={to path={-- ++(0,#1) -| (\tikztotarget)}},
+	skip loop v/.style={to path={-- ++(#1,0) |- (\tikztotarget)}},
+	graphs/every graph/.style={edges=rounded corners}
+	]
+	
+% Place nodes
+\matrix[row sep=1.4cm,column sep=.4cm] {
+	\node [point]  		(p1x1)	{}; &&
+	\node [rectangle]	(Turbine)		[draw, label=above:\textbf{$\cdot$}N Turbines, text width=50pt]	{Cur.Prod. Max.Prod}; &&
+	\node [point]  		(p1x3)	{}; \\
+	
+	\node [point]  		(p2x1)			{}; &&
+	\node [textNode]	(HPPP)		 	{Reg. algorithm}; &&
+	\node [textNode]	(Setpoint)	{N Setpoints}; \\
+
+	&& \node [textNode]  (gSetpoint)							{Global SetPoint}; \\
+};
+	
+\graph[use existing nodes]{
+	Turbine ->[skip loop v=-3.1cm] HPPP -> Setpoint ->[vh path] Turbine;
+	gSetpoint -> HPPP;
+};
+
+\end{tikzpicture}
+
+
+
+%\begin{tikzpicture}[
+%	point/.style={inner sep=0pt}, %circle,minimum size=2pt,fill=red},
+%	textNode/.style={inner sep=2pt},
+%	hv path/.style={to path={-| (\tikztotarget)}},
+%	vh path/.style={to path={|- (\tikztotarget)}},
+%	skip loop h/.style={to path={-- ++(0,#1) -| (\tikztotarget)}},
+%	skip loop v/.style={to path={-- ++(#1,0) |- (\tikztotarget)}},
+%	graphs/every graph/.style={edges=rounded corners}
+%	]
+%	
+%% Place nodes
+%\matrix[row sep=1.5cm,column sep=.5cm] {
+%	\node [point]  		(p1x1)	{}; &&
+%	\node [rectangle]	(Turbine)		[draw, label=above:\textbf{$\cdot$}N Turbines, text width=50pt]	{Cur.Prod. Max.Prod}; &&
+%	\node [point]  		(p1x3)	{}; \\
+%	
+%	\node [point]  		(p2x1)			{}; &&
+%	\node [textNode]	(HPPP)		 	{HPPP}; &&
+%	\node [textNode]	(Setpoint)	{\textbf{$\cdot$}N Setpoints}; \\
+%
+%	\node [textNode]  (gSetpoint)										{Global SetPoint}; &&
+%	\node [rectangle]	(Data)			[draw, text width=50pt] {Cur.prod  Max.Prod};\\
+%};
+%
+%\node [textNode,right of=Data] {~~~~~~~~~~~~~~~~~\textbf{$\cdot$}N Turbines};
+%	
+%\graph[use existing nodes]{
+%	Turbine ->[skip loop v=-2.7cm] HPPP -> Setpoint ->[vh path] Turbine;
+%	gSetpoint.east -> HPPP;
+%	Data -> HPPP;
+%};
+%
+%\end{tikzpicture}
