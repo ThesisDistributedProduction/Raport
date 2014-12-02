@@ -315,7 +315,7 @@ Services include amongst others:
 
 DDS relies heavily on the multicast features of the IP protocol described below.
 
-\subsection{IP Protocol Addressing Methodologies}
+\subsubsection{IP Protocol Addressing Methodologies}
 
 \begin{wrapfigure}{r}{0.225\textwidth}
 	\vspace{-20pt}
@@ -344,7 +344,7 @@ Multicasting works using multicast groups, these groups are maintained by router
 Communicating via multicating is efficient and ensures that each node can be configured to handle a minimum number of packets, routers and switches however has a added responsibility of maintaining information of witch multicast address each port is associated with and transmitting packets to all of them.
 
 \subsubsection{Node discovery}
-Node discovery in DDS is obtained using the Simple Discovery Protocol(SDP).
+Node discovery in DDS is performed using the Simple Discovery Protocol(SDP).
 This protocol describes a sequence of messages that are sent between DDS entities in order for them to automatically discover each other.
 The protocol is split into two phases:
 
@@ -359,9 +359,19 @@ After this phase has been completed all DomainParticipants in the system has reg
 The Simple Endpoint Discovery Protocol(SEDP) phase facilitates the discovery of DataWriters and DataReaders across the network.
 After this phase has been completed all DomainParticipants in the system has registered the necessesary information to enable DataWriters and DataReaders to communicate.
 
-Since the SEDP registers all the DataWriters and DataReaders in the system the protocol scales poorly \cite{(CFDP)}. The discovery time grows as the number of endpoints increase. This affects the scalability of a system directly. To avoid the increase in discovery time a different protocol called Content-based Filtering Discovery Protocol(CFDP) has been proposed. CFDP is similar to SDP during the SPDP phase but it differs in the SEDP phase where changes has been made in order to facilitate content-based discovery of endpoints. The filtering allows the DomainParticipant to reduce the number of discovery messages to the number of endpoints that needs to communicate with the DomainParticipant and its local endpoints. Currently CFDP has only been tested using unicast and here the protocol outperforms SDP in terms of network usage, packages sent and discovery time. However if multicast is used as the underlying transport protocol SDP outperforms CFDP. This happens because SDP only needs one multicast for all DomainParticipants. CFDP in contrast will need one multicast address for each content filter used. This limitation in CFDP is subject for further research. Since CFDP does not outperform SDP when using multicast the proposed solutions of this thesis will use SDP as their discovery protocols.
+Since the SEDP registers all the DataWriters and DataReaders in the system the protocol scales poorly \cite{(CFDP)}. The discovery time and number of packets sent grows as the number of endpoints increase. This affects the scalability of the system directly. To avoid the increase in discovery time different protocols has been proposed. 
 
-\subsubsection{Real Time Streaming protocol}
+\paragraph{Content-based Filtering Discovery Protocol(CFDP)} is similar to SDP during the SPDP phase but it differs in the SEDP phase where changes has been made in order to facilitate content-based discovery of endpoints. The filtering allows the DomainParticipant to reduce the number of discovery messages to the number of endpoints that needs to communicate with the DomainParticipant and its local endpoints. Currently CFDP has only been tested using unicast and here the protocol outperforms SDP in terms of network usage, packages sent and discovery time. However if multicast is used as the underlying transport protocol SDP outperforms CFDP. This happens because SDP only needs one multicast for all DomainParticipants. CFDP in contrast will need one multicast address for each content filter used. This limitation in CFDP is proposed as a subject for further research.
+
+Since CFDP does not outperform SDP when using multicast the proposed solutions of this thesis will not use CFDP as their discovery protocols.
+
+\paragraph{A discovery protocol based on Bloom filters} has been proposed as well. Similar to CFDP the Bloom filter approach aims to reduce the number of packets that needs to be exchanged in order to discover all endpoints in the system. The Bloom filter approach introduces a Bloom filter for each DomainParticipant that contains information describing the local endpoints. During the SPDP phase the Bloom filters are sent to all other DomainParticipants. In this way information of all endpoints in the system has been distributed when the SEDP phase begins allowing the DomainParticipants to decrease the number of discovery messages to the number of endpoints that it needs to facilitate communication for its local DataReaders and DataWriters. 
+
+Again the main advantage of using Bloom filters is found in the unicast scenario. In a multicast scenario there still are advantages of using the Bloom filter approach because the DomainParticipants are able to limit the number of discovery messages compared to SDP. The advantage of using the Bloom filter approach increases as the ratio between endpoints and DomainParticipants increase.
+
+Using the Bloom filter approach to enhance the discovery process in DDS is relevant to a system like the one described in the Siemens Case in \cref{sec:SiemensCase}. Despite the advantages of the Bloom filter approach the proposed solutions of this master thesis will not further enhance the discovery protocol of DDS, because the benefits of the enhancement would be present in both the proposed decentralized solution and the proposed centralized solution thus the impact of the enhancement would be unnoticeable when comparing the systems.
+
+\subsubsection{Real Time Publish-Subscribe Protocol}
 
 
 \subsubsection{Quality of Service}
