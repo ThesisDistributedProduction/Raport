@@ -298,10 +298,77 @@ With DSM chosen as the communication paradigm, this chapter describes, evaluates
 %Runs on IIS
 
 
-\subsubsection{DDS}
+\subsection{Data Distribution Service for Real-Time Systems}
+The Data Distribution Service for Real-Time Systems hereafter called DDS is an Object Management Group standard defining a middleware for communication between information provideres and information consumers.
+The standard is an API specification and an interoperability wire-protocol that defines a data-centric publish-subscribe architecture \cite{pardo2003omg}.
+The standard has been implemented by a number of software vendors, the most popular being the RTI Connext DDS implementation.
+
+The DDS standard provides a number of services that a decentralized system like the one this thesis aims to create could profit from.
+Services include amongst others:
+
+\begin{itemize}
+	\item Automatic node discovery.
+	\item A data-centric publish-subscribe approach that allows for distribution of data by topic decoupling the nodes.
+	\item Cross-platform support.
+	\item Fine grained control of Quality of Service parameters.
+\end{itemize}
+
+DDS relies heavily on the multicast features of the IP protocol described below.
+
+\subsection{IP Protocol Addressing Methodologies}
+
+\begin{wrapfigure}{r}{0.225\textwidth}
+	\vspace{-20pt}
+	\input{figures/tikz/networkMetologies.tex}
+	\vspace{-10pt}
+\end{wrapfigure}
+
+The IP protocol defines different communication methodologies among these are: Unicast, Broadcast \cite{RFC0919_Broadcast} and Multicast \cite{RFC1112_Multicast_IGMPv1}.
+These methodologies each allow for different kinds of communication.
+
+\paragraph{Unicast} is the simplest and most used methodology, it is provides point to point communication and is the basis for most TCP/IP communication.
+% most TCP/IP since it is also used in Anycast
+As seen in \cref{fig:networkUnicast} the source node only send packet to one node, this kind of communication works well as long as the data being transfered only needs to be sent to one node.
+%\paragraph{Anycast} exsists but is irelevant to our project
+
+\paragraph{Broadcast} is the direct opposite of unicast, it provides one to all communication, illustrated in \cref{fig:networkBroadcast}. All in this context mens all machines on the same subnet or locally behind the nearest router.
+The source node only needs to send one packet to reach every other node, copying of the packet is done in the network by switches and routers.
+There exist a broadcast address for every subnet and a special address witch broadcast to all machines within the local network separated from the outside with a router.
+%The broadcast address for a given subnet can be found by doing a bitwise or operation on the local ip address with the binary complement of the subnet mask ($broadcast~address~=~local~ip~|~!subnet~mask$). To broadcast to all subnets behind the nearest router the address $255.255.255$ can be used, other protocols have similar capabilities.
+Broadcast does not support TCP/IP and delivers packet in a best effort way, this means that there is no guarantee or feedback of if the packet arrived, all this has to be built on top if needed.
+On large networks there can be a lot of broadcast traffic that every node needs to decide if it needs to respond to or discard.
+In the new IPv6 broadcast is no longer supported \cite{RFC4291_AddressingIPv6Draft} and is replaced by multicast protocols, this makes it optional to listen to broadcast traffic and possibly increase performance.
+
+\paragraph{Multicast} is a combination of unicast and broadcast and can be configured to be used as either one, however this is not what it is designed for. Multicast is designed to provide one to many communication as illustrated in \cref{fig:networkMulticast}.
+Multicasting works using multicast groups, these groups are maintained by routers and layer 2 switches. The way a node is added to a multicast group is by transmitting a packet requesting a group membership using the IGMP protocol. Each multicast group is associated with a multicast ip address, this ip address is used by the transmitting node when a packet is to be transmitted to a multicast group.
+Communicating via multicating is efficient and ensures that each node can be configured to handle a minimum number of packets, routers and switches however has a added responsibility of maintaining information of witch multicast address each port is associated with and transmitting packets to all of them.
+
+\subsubsection{Node discovery}
+Node discovery in DDS is obtained using the Simple Discovery Protocol(SDP).
+This protocol describes a sequence of messages that are sent between DDS entities in order for them to automatically discover each other.
+The protocol is split into two phases:
+
+\begin{itemize}
+	\item Simple Participant Discovery Protocol(SPDP)
+	\item Simple Endpoint Discovery Protocol(SEDP)
+\end{itemize}
+
+The Simple Participant Discovery Protocol(SPDP) phase facilitates the discovery of DomainParticipants across the network.
+After this phase has been completed all DomainParticipants in the system has registered the necessary information to enable future communication with each other.
+
+The Simple Endpoint Discovery Protocol(SEDP) phase facilitates the discovery of DataWriters and DataReaders across the network.
+After this phase has been completed all DomainParticipants in the system has registered the necessesary information to enable DataWriters and DataReaders to communicate.
+
+Since the SEDP registers all the DataWriters and DataReaders in the system the protocol scales poorly \cite{(CFDP)}. The discovery time grows as the number of endpoints increase. This affects the scalability of a system directly. To avoid the increase in discovery time a different protocol called Content-based Filtering Discovery Protocol(CFDP) has been proposed. CFDP is similar to SDP during the SPDP phase but it differs in the SEDP phase where changes has been made in order to facilitate content-based discovery of endpoints. The filtering allows the DomainParticipant to reduce the number of discovery messages to the number of endpoints that needs to communicate with the DomainParticipant and its local endpoints. Currently CFDP has only been tested using unicast and here the protocol outperforms SDP in terms of network usage, packages sent and discovery time. However if multicast is used as the underlying transport protocol SDP outperforms CFDP. This happens because SDP only needs one multicast for all DomainParticipants. CFDP in contrast will need one multicast address for each content filter used. This limitation in CFDP is subject for further research. Since CFDP does not outperform SDP when using multicast the proposed solutions of this thesis will use SDP as their discovery protocols.
+
+\subsubsection{Real Time Streaming protocol}
 
 
-\subsection{Conclusion}
+\subsubsection{Quality of Service}
+
+
+\subsubsection{Conclusion}
+
 
 %Ens
 %Valg med vægt på arkitektur og development tid. 
