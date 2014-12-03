@@ -1,8 +1,8 @@
 \chapter{Analysis}
 
-The problem statement (\cref{sec:problemStatement}) presents four questions for this project. The \ref{PS:Q:CanWeDoIt} question being the primary question, from which the other three spawns. 
+The problem statement (\cref{sec:problemStatement}) presents four questions for this project. The \ref{PS:Q:Feasibility} question being the primary question, from which the other three spawns. 
 
-To answer the \ref{PS:Q:CanWeDoIt} question we have the following fundamental needs of the Siemens case, currently provided by the Wind Park Supervisor and the Park Pilots:
+To answer the \ref{PS:Q:Feasibility} question we have the following fundamental needs of the Siemens case, currently provided by the Wind Park Supervisor and the Park Pilots:
 \begin{enumerate}[label=\textbf{\alph*.}, ref=\textit{\alph*}]
 \item \label{Analysis:need:a} Data aggregation.
 \item \label{Analysis:need:b} Data storage for the entire park.
@@ -17,10 +17,10 @@ The following chapters describes, analyses and discusses solutions to the needs 
 \begin{description}
 \item{\textbf{Data storage.}} The obvious solution for need \ref{Analysis:need:a} and \ref{Analysis:need:b}.
 \item{\textbf{Resource management.}} In the decentralized system, the turbines needs to be able to handle need~\ref{Analysis:need:c}. Currently Siemens windmill farms can have up to 100 communication channels open at a time. In order to avoid a single mill having to handle 100 communication channels, resource management has to be introduced to the system.
-\item{\textbf{Distributed computing.}} For the turbines to be able to perform park regulations, communication between the turbines is essential, since park regulation demands knowledge about every turbine in the farm. Distributed computing is introduced to the system as a way to keep a global state as a solution to need~\ref{Analysis:need:d}. This chapter also addresses question~\ref{PS:Q:HowWellDoWeScale} of the problem statement.
+\item{\textbf{Distributed computing.}} For the turbines to be able to perform park regulations, communication between the turbines is essential, since park regulation demands knowledge about every turbine in the farm. Distributed computing is introduced to the system as a way to keep a global state as a solution to need~\ref{Analysis:need:d}. This chapter also addresses question~\ref{PS:Q:Scalability} of the problem statement.
 \end{description}
 
-Question \ref{PS:Q:Availlability} and \ref{PS:Q:CanWeScale} of the problem statement are addressed by all of the chapters above.
+Question \ref{PS:Q:Availability} and \ref{PS:Q:Performance} of the problem statement are addressed by all of the chapters above.
 
 %Problem -> Alternativer -> Sammenligning -> Endeligt valg
 %
