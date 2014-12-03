@@ -12,7 +12,7 @@
 \newcommand*{\bitvector}[3]{
   \draw[fill=#3] (t_cur) -- ++( .1, .3) -- ++(#2-.2,0) -- ++(.1, -.3)
                          -- ++(-.1,-.3) -- ++(.2-#2,0) -- cycle;
-  \path (t_cur) -- node[anchor=mid] {#1} ++(#2,0) node[time] (t_cur) {};
+  \path (t_cur) -- node[anchor=mid](textNode) {#1} ++(#2,0) node[time] (t_cur) {};
 }
 
 % \known{val}{length}
@@ -27,23 +27,50 @@
 
 % \nextwave{name}
 \newcommand{\nextwave}[1]{
-  \path (0,\value{wavenum}) node[left] {#1} node[time] (t_cur) {};
+  %\path (0,\value{wavenum}) node[left] {#1} node[time] (t_cur) {};
+  \path (0,\value{wavenum}) node[time] (t_cur) {};
   \addtocounter{wavenum}{-1}
 }
 
-% \begin{wave}[clkname]{num_waves}{clock_cycles}
-\newenvironment{wave}{
-  \begin{tikzpicture}[draw=black, yscale=.8,xscale=1]
-    \tikzstyle{time}=[coordinate]
-    \setlength{\unitlength}{1cm}
-    \setcounter{wavenum}{0}
-    
-}{\end{tikzpicture}}
+\newcommand{\timeSpanLabel}{
+	\node (CycleTimeLabel) [rectangle, above = 0.25cm of textNode, inner sep=10pt] {CycleTime};	  
+}
+
+\newcommand{\timeSpanA}{
+	\node (t_timeSpanA) [point, above = 0 of t_cur] {};	  
+}
+
+\newcommand{\timeSpanB}{
+	\node (t_timeSpanB) [point, above =0 of t_cur] {};
+	
+	\graph[use existing nodes]{
+		t_timeSpanA --[time span=1cm] t_timeSpanB;
+	}; 
+}
 
 %%% End of timing.sty
 
-\begin{wave}
- 	\nextwave{DataPooling} \known{ReciveData}{11}
-  \nextwave{Regulation Time} \unknown{SendData}{2} \known{DataWaitTime}{7} \unknown{Calculate}{2}
-\end{wave}
+\begin{tikzpicture}[
+	point/.style={inner sep=0pt}, %circle,minimum size=2pt,fill=red},
+	draw=black, 
+	yscale=.8,
+	xscale=1,
+	hv path/.style={to path={-| (\tikztotarget)}},
+	vh path/.style={to path={|- (\tikztotarget)}},
+	skip loop v/.style={to path={-- ++(#1,0) |- (\tikztotarget)}},		
+	skip loop h/.style={to path={-- ++(0,#1) -| (\tikztotarget)}},
+	time span/.style={to path={-- ++(0,#1) -| (\tikztotarget)}},
+	graphs/every graph/.style={edges=rounded corners}	
+	]
+	
+\tikzstyle{time}=[coordinate]
+\setlength{\unitlength}{1cm}
+\setcounter{wavenum}{0}
+
+% 	\nextwave{DataPooling} \known{ReciveData}{11}
+% 	\nextwave{Regulation Time} \unknown{SendData}{2} \known{DataWaitTime}{7} \unknown{Calculate}{2} \known{Buffer}{2}
+
+ 	\nextwave{} \timeSpanA \unknown{Send SP}{3} \unknown{ReadData}{3} \timeSpanLabel  \unknown{Calculate}{3} \timeSpanB \known{Buffer}{5}
+ 	\nextwave{} \known{ReciveData}{14}
+ 	\end{tikzpicture}
 }
