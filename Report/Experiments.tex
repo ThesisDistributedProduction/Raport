@@ -10,7 +10,7 @@
 The goal of this project is not only to build a control system that provides both scalability and availability, but also to compare it to the current solution by Siemens Windpower. 
 In order to evaluate the system, we have created the experiments in the following sections. 
 The experiments are named PS 1 to PS 4 as they relate to the questions proposed in \cref{sec:problemStatement}.
-PS 1 thus relates to question \ref{PS:Q:CanWeDoIt} of \cref{sec:problemStatement} and so forth.
+PS 1 thus relates to question \ref{PS:Q:Feasibility} of \cref{sec:problemStatement} and so forth.
 
 The experiments are performed using up to 3 standard issue consumer laptops connected using a 1Gbit ethernet router with IGMP support.
 One laptop is being used to capture test data and the other 2 optionally running a number of turbines to generate network traffic.
@@ -18,9 +18,9 @@ All test are run with CPU utilization on average below 90\%, this is done to kee
 The specification of the hardware used for testing can be found in \cref{appendix:HardwareSpecification}.
 Every experiment is run at least X times 
 
-\section{PS \ref{PS:Q:CanWeDoIt}: Decentralized system implementation}
+\section{PS \ref{PS:Q:Feasibility}: Decentralized system implementation}
 
-Question \ref{PS:Q:CanWeDoIt} of \cref{sec:problemStatement} asks if it is possible to re-implement the current system at Simens Wind Power as a decentralized system. The following experiment aims to investigate if the proposed decentralized system can perform the operations that the current centralized system at Simens Wind Power is able to perform. More specifically the experiments aims to investigate if the proposed decentralized system is able to regulate the power production of each turbine in order to reach the global power production goal.
+Question \ref{PS:Q:Feasibility} of \cref{sec:problemStatement} asks if it is possible to re-implement the current system at Simens Wind Power as a decentralized system. The following experiment aims to investigate if the proposed decentralized system can perform the operations that the current centralized system at Simens Wind Power is able to perform. More specifically the experiments aims to investigate if the proposed decentralized system is able to regulate the power production of each turbine in order to reach the global power production goal.
 
 The experiment has the following procedure:
 \begin{enumerate}
@@ -29,8 +29,8 @@ The experiment has the following procedure:
 	\item Observe the global setpoint line and the global production line on the graphical interface.
 \end{enumerate}
 
-\section{PS \ref{PS:Q:Availlability}: Fault tolerance of the system}
-Question \ref{PS:Q:Availlability} of \cref{sec:problemStatement} asks if the proposed decentralized system is able to continue its functions even though nodes are removed from the system at runtime. The following experiment aims to investigate if the proposed decentralized system continue to regulate the power production of each available turbine such that the global power production goal is reached when turbines are removed from the system at runtime. 
+\section{PS \ref{PS:Q:Availability}: Fault tolerance of the system}
+Question \ref{PS:Q:Availability} of \cref{sec:problemStatement} asks if the proposed decentralized system is able to continue its functions even though nodes are removed from the system at runtime. The following experiment aims to investigate if the proposed decentralized system continue to regulate the power production of each available turbine such that the global power production goal is reached when turbines are removed from the system at runtime. 
 
 The below experiment is done with a variating N number of failing turbines \failingTurbineNumbers.
 The experiment has the following procedure:
@@ -45,10 +45,10 @@ The experiment has the following procedure:
 \end{enumerate}
 
 
-\section{PS \ref{PS:Q:CanWeScale}: Scalability of decentralized system}
+\section{PS \ref{PS:Q:Performance}: Scalability of decentralized system}
 Scalability is by Bondi\cite{Bondi:2000:CSI:350391.350432} defined as \textit{the systems ability to accommodate an increasing number of elements or objects, to process growing volumes of work gracefully, and/or to be susceptible to enlargement}.
 
-Question \ref{PS:Q:CanWeScale} of \cref{sec:problemStatement} asks if the proposed decentralized system is able to scale with the number of turbines in the system. The experiments that investigate this question has been split into two part.  \newline
+Question \ref{PS:Q:Performance} of \cref{sec:problemStatement} asks if the proposed decentralized system is able to scale with the number of turbines in the system. The experiments that investigate this question has been split into two part.  \newline
 
 Part 1 aims to investigate the anticorrelation between regulation time and cache read count in the proposed decentralized system. This is relevant because changing the regulation time may have an impact on the number of cache reads. Choosing a regulation time that has a low number of cache read count for part 2 of the experiments will make it easier to identify how scaling up the number of turbines will affect cache read count. \newline
 
@@ -82,8 +82,8 @@ The following procedure is used each time the experiment is performed:
 	\item Stop logging after \experiemntRunTime.
 \end{enumerate}
 
-\section{PS \ref{PS:Q:HowWellDoWeScale}: Comparing decentralized with centralized}
-Question \ref{PS:Q:HowWellDoWeScale} of \cref{sec:problemStatement} asks how the proposed decentralized system compares to the existing centralized system\cref{cha:existingSystem}) at Siemens Wind Power with regards to a number of parameters.
+\section{PS \ref{PS:Q:Scalability}: Comparing decentralized with centralized}
+Question \ref{PS:Q:Scalability} of \cref{sec:problemStatement} asks how the proposed decentralized system compares to the existing centralized system\cref{cha:existingSystem}) at Siemens Wind Power with regards to a number of parameters.
 The experiments below aims to show how the number of turbines and regulation speed affect the regulation algorithm, memory consumption and Network traffic.
 Each of these parameters behave differently when centralized compared to decentralized as seen in \cref{fig:timingCentralVSDecentral} the decentralized system does not wait for new data before doing calculations. Because of this the proposed decentralized version has a extra parameter which indicate how much data was updated before the calculation started.
 
