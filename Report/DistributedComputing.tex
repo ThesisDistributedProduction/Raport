@@ -308,7 +308,7 @@ Services include amongst others:
 
 \begin{itemize}
 	\item Automatic node discovery.
-	\item A data-centric publish-subscribe approach that allows for distribution of data by topic decoupling the nodes.
+	\item A data-centric publish-subscribe approach that allows for distribution of data by topic, decoupling the nodes of the system.
 	\item Cross-platform support.
 	\item Fine grained control of Quality of Service parameters.
 \end{itemize}
@@ -349,8 +349,8 @@ This protocol describes a sequence of messages that are sent between DDS entitie
 The protocol is split into two phases:
 
 \begin{itemize}
-	\item Simple Participant Discovery Protocol(SPDP)
-	\item Simple Endpoint Discovery Protocol(SEDP)
+	\item Simple Participant Discovery Protocol
+	\item Simple Endpoint Discovery Protocol
 \end{itemize}
 
 The Simple Participant Discovery Protocol(SPDP) phase facilitates the discovery of DomainParticipants across the network.
@@ -363,23 +363,36 @@ Since the SEDP registers all the DataWriters and DataReaders in the system the p
 
 \paragraph{Content-based Filtering Discovery Protocol(CFDP)} is similar to SDP during the SPDP phase but it differs in the SEDP phase where changes has been made in order to facilitate content-based discovery of endpoints. The filtering allows the DomainParticipant to reduce the number of discovery messages to the number of endpoints that needs to communicate with the DomainParticipant and its local endpoints. Currently CFDP has only been tested using unicast and here the protocol outperforms SDP in terms of network usage, packages sent and discovery time. However if multicast is used as the underlying transport protocol SDP outperforms CFDP. This happens because SDP only needs one multicast for all DomainParticipants. CFDP in contrast will need one multicast address for each content filter used. This limitation in CFDP is proposed as a subject for further research.
 
-Since CFDP does not outperform SDP when using multicast the proposed solutions of this thesis will not use CFDP as their discovery protocols.
+Since CFDP does not outperform SDP when using multicast, CFDP is not suited as the discovery protocol for the system described in this thesis.
 
-\paragraph{A discovery protocol based on Bloom filters} has been proposed as well. Similar to CFDP the Bloom filter approach aims to reduce the number of packets that needs to be exchanged in order to discover all endpoints in the system. The Bloom filter approach introduces a Bloom filter for each DomainParticipant that contains information describing the local endpoints. During the SPDP phase the Bloom filters are sent to all other DomainParticipants. In this way information of all endpoints in the system has been distributed when the SEDP phase begins allowing the DomainParticipants to decrease the number of discovery messages to the number of endpoints that it needs to facilitate communication for its local DataReaders and DataWriters. 
+\paragraph{A discovery protocol based on Bloom filters} has been proposed as well \cite{monedero2009dds}. Similar to CFDP the Bloom filter approach aims to reduce the number of packets that needs to be exchanged in order to discover all endpoints in the system. The Bloom filter approach introduces a Bloom filter for each DomainParticipant that contains information describing the local endpoints. During the SPDP phase the Bloom filters are sent to all other DomainParticipants. In this way information of all endpoints in the system has been distributed when the SEDP phase begins allowing the DomainParticipants to decrease the number of discovery messages sent to the number of endpoints that it must know in order to facilitate communication for its local DataReaders and DataWriters. 
 
 Again the main advantage of using Bloom filters is found in the unicast scenario. In a multicast scenario there still are advantages of using the Bloom filter approach because the DomainParticipants are able to limit the number of discovery messages compared to SDP. The advantage of using the Bloom filter approach increases as the ratio between endpoints and DomainParticipants increase.
 
-Using the Bloom filter approach to enhance the discovery process in DDS is relevant to a system like the one described in the Siemens Case in \cref{sec:SiemensCase}. Despite the advantages of the Bloom filter approach the proposed solutions of this master thesis will not further enhance the discovery protocol of DDS, because the benefits of the enhancement would be present in both the proposed decentralized solution and the proposed centralized solution thus the impact of the enhancement would be unnoticeable when comparing the systems.
+Since a wind farm has a limited number of endpoints, less than 300 turbines, the decrease in discovery time by using the Bloom filter approach would be minor. Therefore the Bloom filter approach is not further investigated in this thesis. \newline
 
-\subsubsection{Real Time Publish-Subscribe Protocol}
-
+The Simple Discovery Protocol does not scale well with the number of endpoints. This problem is currently under research and solutions have been proposed. As of the time of writing none of the proposed solutions to the problem are well suited for use in this thesis. Further research in the area may present new solutions to the problem that are well suited for use in a multicast enabled system with less than 300 nodes.
 
 \subsubsection{Quality of Service}
+DDS provides Quality of Service(QoS) parameters to enable very fine grained control over the behavior of the deployed DDS entities in a system. To create a decentralized system several of the QoS parameters are interesting.
 
+\begin{itemize}
+	\item \textbf{Multicast} \\
+		Enabling multicast in the system will decrease the network traffic in the system, which in turn increases scalability.
+		
+	\item \textbf{History} \\
+		The History parameter will enable the system to keep a log of messages received during operation thus eliminating the need for another storage option. This saves the system from using additional resources for storing and retrieving values from a file or a local database.
+		
+	\item \textbf{Lifespan} \\
+		The History parameter enables the system to keep a log of messages but the history may only be relevant for a specified amount of time. In order not to keep irrelevant messages it can be specified how long they are relevant.
+	
+	\item \textbf{Durability} \\
+		To make sure a new turbine can start operation the Durability parameter can be used in order to update the new turbine with the history of messages in the system. In this way the turbine does not need to wait to receive new data from individual turbines to start regulation, instead it can start regulation as soon as the history is received.
+		
+	\item \textbf{Reliability} \\
+		This parameter regulates the reliable delivery of messages in the system, which affect the operation of the turbines and their regulation. 
+\end{itemize}
 
-\subsubsection{Conclusion}
+Using the QoS of DDS a system can be configured to fit its environment and its requirements very tightly allowing efficient and reliable operation.
 
-
-%Ens
-%Valg med vægt på arkitektur og development tid. 
-%RMI fravalg
+\subsection{Conclusion}
