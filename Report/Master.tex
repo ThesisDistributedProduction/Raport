@@ -25,6 +25,8 @@
 \usepackage{enumitem}
 \usepackage{wrapfig}
 \usepackage{listings}
+\usepackage{todonotes}
+
 
 %\definecolor{webblue}{rgb}{0.0,0.05,0.45}
 \definecolor{MyDarkBlue}{rgb}{0,0.08,0.45}
@@ -190,6 +192,17 @@
   \boldmath
 }
 \makeatother
+
+
+% Added possibility for description refferences by using the \itemlabel{}{} command %
+\makeatletter
+\newcommand{\labitem}[2]{%
+	\def\@itemlabel{''\textbf{#1}''}
+	\item
+	\def\@currentlabel{\textit{#1}}\label{#2}}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 % andre pakker og konfigurationer
 \usepackage{makeidx}

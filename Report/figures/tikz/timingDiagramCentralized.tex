@@ -35,7 +35,7 @@
 }
 
 \newcommand{\timeSpanLabel}{
-	\node (CycleTimeLabel) [rectangle, above = 0.25cm of textNode, inner sep=10pt] {CycleTime~~~~~~~};	  
+	\node (CycleTimeLabel) [rectangle, above = 0.7cm of textNode, inner sep=0pt] {~~~~~~~CycleTime~~~~~~~};	  
 }
 
 \newcommand{\timeSpanA}{
@@ -46,13 +46,14 @@
 	\node (t_timeSpanB) [point, above =0 of t_cur] {};
 
   \graph[use existing nodes]{
-  	t_timeSpanA --[time span=1cm] t_timeSpanB;
+  	t_timeSpanA --[time span=1cm] CycleTimeLabel;
+   	CycleTimeLabel.south --[time span=-0.24cm] t_timeSpanB;
   }; 
+    	
 }
 
 
 %%% End of timing.sty
-
 \begin{tikzpicture}[
 	point/.style={inner sep=0pt}, %circle,minimum size=2pt,fill=red},
 	draw=black, 
@@ -63,7 +64,7 @@
 	skip loop v/.style={to path={-- ++(#1,0) |- (\tikztotarget)}},		
 	skip loop h/.style={to path={-- ++(0,#1) -| (\tikztotarget)}},
 	time span/.style={to path={-- ++(0,#1) -| (\tikztotarget)}},
-		graphs/every graph/.style={edges=rounded corners}	
+	graphs/every graph/.style={edges=rounded corners}	
 	]
 	
   \tikzstyle{time}=[coordinate]

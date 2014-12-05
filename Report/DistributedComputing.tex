@@ -346,7 +346,7 @@ Multicasting works using multicast groups, these groups are maintained by router
 Communicating via multicating is efficient and ensures that each node can be configured to handle a minimum number of packets, routers and switches however has a added responsibility of maintaining information of witch multicast address each port is associated with and transmitting packets to all of them.
 
 \subsubsection{Main DDS entities}
-RTI Connext DDS provides a number of entities that must be present in a system in order to enable commmunication.
+RTI Connext provides a number of entities that must be present in a system in order to enable commmunication.
 
 \begin{itemize}
 	\item \textbf{DomainParticipant} \\
@@ -446,7 +446,7 @@ DDS provides Quality of Service(QoS) parameters to enable very fine grained cont
 		The Liveness parameter specifies how liveness of a datawriter is determined. This allows the system to detect when a turbine is no longer available and to respond in an appropriate way.
 \end{itemize}
 
-Using the QoS of DDS a system can be configured to fit its environment and its requirements very tightly allowing efficient and reliable operation.
+Using the QoS of DDS a system can be configured to fit its environment and its requirements very tightly allowing efficient and reliable operation. QoS will be elaborated further in chapters \cref{cha:existingSystem} and \cref{cha:decentralizedSystem}.
 
 \subsection{Conclusion}
 The RTI Connext Data Distribution Service for Real Time Systems enables both communication using publish/subscribe as well as the ability to maintain a global shared state by preserving message history. Coupled with the fact that the middleware provides automatic node discovery, cross-platform support and fine grained control using Quality of Service parameters the RTI Connext Data Distribution Service for Real Time Systems is the best choice of middleware for the Siemens Case (\cref{sec:SiemensCase}).

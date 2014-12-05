@@ -32,8 +32,12 @@
   \addtocounter{wavenum}{-1}
 }
 
+%\newcommand{\timeSpanLabel}{
+%	\node (CycleTimeLabel) [rectangle, above = 0.25cm of textNode, inner sep=10pt] {CycleTime};	  
+%}
+
 \newcommand{\timeSpanLabel}{
-	\node (CycleTimeLabel) [rectangle, above = 0.25cm of textNode, inner sep=10pt] {CycleTime};	  
+	\node (CycleTimeLabel) [rectangle, above = 0.7cm of textNode, inner sep=0pt] {CycleTime};	  
 }
 
 \newcommand{\timeSpanA}{
@@ -44,8 +48,10 @@
 	\node (t_timeSpanB) [point, above =0 of t_cur] {};
 	
 	\graph[use existing nodes]{
-		t_timeSpanA --[time span=1cm] t_timeSpanB;
+		t_timeSpanA --[time span=1cm] CycleTimeLabel;
+		CycleTimeLabel.south --[time span=-0.24cm] t_timeSpanB;
 	}; 
+	
 }
 
 %%% End of timing.sty
