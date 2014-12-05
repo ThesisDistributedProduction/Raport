@@ -2,53 +2,54 @@
 
 \chapter{Experiments}
 
-\newcommand{\failingTurbineNumbers}{1, 5, 10 and 30}
+\newcommand{\failingTurbineNumbers}{1, 5, 10, 30}
 \newcommand{\testTurbineNumbers}{2, 21, 41, 61, 81 and 101}
 \newcommand{\testCycletimeNumbers}{5ms, 10ms, 15ms, 20ms, 25ms and 30ms}
 \newcommand{\experiemntRunTime}{2mins}
 
 The goal of this project is not only to build a control system that provides both scalability and availability, but also to compare it to the current solution by Siemens Windpower. 
-In order to evaluate the system, we have created the experiments in the following sections. 
-The experiments are named PS 1 to PS 4 as they relate to the questions proposed in \cref{sec:problemStatement}.
-PS 1 thus relates to question \ref{PS:Q:Feasibility} of \cref{sec:problemStatement} and so forth.
+To evaluate the new decentralized system, the experiments in the following sections where created. 
+The experiments are grouped by in relation to the problem statements proposed in \cref{sec:problemStatement}.
 
-The experiments are performed using up to 3 standard issue consumer laptops connected using a 1Gbit ethernet router with IGMP support.
-One laptop is being used to capture test data and the other 2 optionally running a number of turbines to generate network traffic.
-All test are run with CPU utilization on average below 90\%, this is done to keep performance consistent.
-The specification of the hardware used for testing can be found in \cref{appendix:HardwareSpecification}.
-Every experiment is run at least X times 
+The experiments are performed using 3 laptops connected using a Gbit(IEEE 802.3ab) Ethernet router with IGMP support(see \cref{appendix:HardwareSpecification}), The laptops are howerver only using 100Mb(IEEE 802.3u) network adapters.
+One laptop is being used to capture test data and the others are running a number of turbines to generate network traffic.
+All test are run with CPU utilization on average below 90\% and network adapters are likewise monitored to ensure they are neither overloaded doing experiment runs
+Monitoring these to parameters are essential to getting usable test results, if the processor or network adapter is overloaded packages will not be sent sufficiently fast and will impact cycletime in a way that would never happen when running just one instance.
 
-\section{PS \ref{PS:Q:Feasibility}: Decentralized system implementation}
+Every experiment is run at least X \todo{Set correct value for X} times 
 
-Question \ref{PS:Q:Feasibility} of \cref{sec:problemStatement} asks if it is possible to re-implement the current system at Simens Wind Power as a decentralized system. The following experiment aims to investigate if the proposed decentralized system can perform the operations that the current centralized system at Simens Wind Power is able to perform. More specifically the experiments aims to investigate if the proposed decentralized system is able to regulate the power production of each turbine in order to reach the global power production goal.
+\section{Experiments: \ref{PS:Q:Feasibility}}
 
+The \ref{PS:Q:Feasibility} question asks if it is possible to re-implement the current system at Siemens Wind Power as a decentralized system. The following experiment aims to investigate if the proposed decentralized system can perform the operations that the current centralized system at Siemens Wind Power is able to perform. More specifically the experiments aims to investigate if the proposed decentralized system is able to regulate the power production of each turbine in order to maintain the global power production goal.
 The experiment has the following procedure:
 \begin{enumerate}
 	\item Start the system with 100 turbines.
 	\item Start the graphical interface described in \cref{sec:graphicalInterface}.
-	\item Observe the global setpoint line and the global production line on the graphical interface.
+	\item Observe that the global setpoint and the global production line on the graphical interface match.
 \end{enumerate}
 
-\section{PS \ref{PS:Q:Availability}: Fault tolerance of the system}
-Question \ref{PS:Q:Availability} of \cref{sec:problemStatement} asks if the proposed decentralized system is able to continue its functions even though nodes are removed from the system at runtime. The following experiment aims to investigate if the proposed decentralized system continue to regulate the power production of each available turbine such that the global power production goal is reached when turbines are removed from the system at runtime. 
+\section{Experiments: \ref{PS:Q:Availability}}
+The \ref{PS:Q:Availability} question asks if the proposed decentralized system is able to continue its functions even though nodes are removed from the system at runtime.
+The proposed decentralized system should be able to continue maintaining the global setpoint of the park even if some turbines become unavailable, this of course assumes that available capacity is present in the park.
 
-The below experiment is done with a variating N number of failing turbines \failingTurbineNumbers.
+The below experiment is repeated with a N failing turbines
 The experiment has the following procedure:
+$N = \failingTurbineNumbers$
 \begin{enumerate}
 	\item Start the system with 100 turbines.
 	\item Make sure the system is stable.
 	\item Kill N nodes.
 	\begin{itemize}
 		\item did the system discover the failed node within a 150ms timeframe?
-		\item did the system adjust the setpoints for all turbines to keep the global setpoint correct?
+		\item did the system adjust the setpoints for all turbines to maintain the global setpoint?
 	\end{itemize}
 \end{enumerate}
 
 
-\section{PS \ref{PS:Q:Performance}: Scalability of decentralized system}
+\section{Experiments: \ref{PS:Q:Performance}}
 Scalability is by Bondi\cite{Bondi:2000:CSI:350391.350432} defined as \textit{the systems ability to accommodate an increasing number of elements or objects, to process growing volumes of work gracefully, and/or to be susceptible to enlargement}.
 
-Question \ref{PS:Q:Performance} of \cref{sec:problemStatement} asks if the proposed decentralized system is able to scale with the number of turbines in the system. The experiments that investigate this question has been split into two part.  \newline
+The \ref{PS:Q:Performance} question asks if the proposed decentralized system is able to scale with the number of turbines in the system. The experiments that investigate this question has been split into two part. \newline
 
 Part 1 aims to investigate the anticorrelation between regulation time and cache read count in the proposed decentralized system. This is relevant because changing the regulation time may have an impact on the number of cache reads. Choosing a regulation time that has a low number of cache read count for part 2 of the experiments will make it easier to identify how scaling up the number of turbines will affect cache read count. \newline
 
@@ -82,7 +83,7 @@ The following procedure is used each time the experiment is performed:
 	\item Stop logging after \experiemntRunTime.
 \end{enumerate}
 
-\section{PS \ref{PS:Q:Scalability}: Comparing decentralized with centralized}
+\section{Experiments: \ref{PS:Q:Scalability}}
 Question \ref{PS:Q:Scalability} of \cref{sec:problemStatement} asks how the proposed decentralized system compares to the existing centralized system\cref{cha:existingSystem}) at Siemens Wind Power with regards to a number of parameters.
 The experiments below aims to show how the number of turbines and regulation speed affect the regulation algorithm, memory consumption and Network traffic.
 Each of these parameters behave differently when centralized compared to decentralized as seen in \cref{fig:timingCentralVSDecentral} the decentralized system does not wait for new data before doing calculations. Because of this the proposed decentralized version has a extra parameter which indicate how much data was updated before the calculation started.
@@ -91,10 +92,11 @@ Each of these parameters behave differently when centralized compared to decentr
 	%The figure show how regulation time differs central vs decantral
 	\centering
 	{\sffamily{Centralized approach}}
+	\newline
 	\input{figures/tikz/timingDiagramCentralized}
 	\newline
 	
-	{\sffamily{Decentralized approach}}
+	{\sffamily{Decentralized approach with seperate data reception}}
 	\input{figures/tikz/timingDiagramDecntral}
 	\caption{Centralized vs decentralized regulation time}
 	\label{fig:timingCentralVSDecentral}
