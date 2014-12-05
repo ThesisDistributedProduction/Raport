@@ -24,16 +24,9 @@ Despite the fact that the wind farms has grown to a size that is becoming increa
 % Regulerings algoritmen tager kun 30 ms. 150 ms er cycle time
 
 \label{sec:SiemensCase}
-Siemens Wind Power builds wind parks of different sizes ranging from single turbines to well above one hundred turbines. \cite{simensOffShoreProjects, simensOnShoreProjects}.
+Siemens Wind Power builds wind farms of different sizes ranging from single turbines to well above one hundred turbines. \cite{simensOffShoreProjects, simensOnShoreProjects}.
 
-Today turbines in a wind park at Siemens are equipped with computers for the purpose of regulating power production parameters, data collection and for communication with the rest of the system. The current wind park setup is illustrated on \cref{fig:currentSiemensSetup}. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, stores data and handles wind park communication with the outside world. At Siemens up to eight Park Pilots are present pr. wind park and one Wind Power Supervisor.
-
-For every transformer station there is a Park Pilot. The Park Pilots are responsible for park regulation. This is done by monitoring all the turbines performance parameters and issuing correct set points for power production. Every turbine returns their current status to the Park Pilot, then the set points for each turbine is calculated in the Park Pilots and finally the new set points can be pushed to the turbines. 
-
-Every turbine has a database for data logging purposes, this database is replicated to the Wind Power Supervisor.
-The Wind Power Supervisor does data aggregation on data from each turbine as well as store a copy of the replicated data.
-The turbines, Wind Power Supervisor and Park Pilots are connected with a gigabit network, which currently has plenty of extra capacity.
-The system handles more than 50 control points and 200 measurement points and samples these every 50 ms.
+Today turbines in a wind farm at Siemens are equipped with computers for the purpose of regulating power production parameters, data collection and for communication with the rest of the system. The current wind farm setup is illustrated on \cref{fig:currentSiemensSetup}. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, stores data and handles wind park communication with the outside world. At Siemens up to eight Park Pilots are present pr. wind farm and one Wind Power Supervisor.
 
 \begin{figure}
 	\centering
@@ -42,10 +35,29 @@ The system handles more than 50 control points and 200 measurement points and sa
 	\caption[The current Siemens wind farm system overview]{
 		\label{fig:currentSiemensSetup} 
 		\footnotesize{%
-			The current Siemens wind farm system overview.
+			The current Siemens system overview.
 		}
 	}
 \end{figure}
+
+For every transformer station there is a Park Pilot. The Park Pilots are responsible for wind farm regulation. This is done by monitoring all the turbines performance parameters and issuing setpoints for power production. The calculation of setpoints for each turbine consist of a number of steps as illustrated on figure \cref{fig:currentSiemensCycleTime}. First the Park Pilot must request data from each turbine in order to calculate setpoints based on updated values. The Park Pilot must wait for each turbine to answer the request. After receiving data from each turbine new setpoints are calculated and distributed to the turbines. The buffer is added to make sure setpoints has been properly distributed and that individual turbines have time to adjust their power production according to the new setpoint before a new request for turbine data is sent. Also the WaitForData block may vary in time depending on the current traffic of the network as well as the response time of the individual turbines.\todo{Remove the cycletime part of the figure. We are only interested in explaining the regulation cycle steps not the cycletime. Cycletime will be explained later.}
+
+\begin{figure}[!h]
+	\centering
+	\input{figures/tikz/timingDiagramCentralized}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[The current Siemens wind farm system overview]{
+		\label{fig:currentSiemensCycleTime} 
+		\footnotesize{%
+			The regulation cycle.
+		}
+	}
+\end{figure}
+
+Every turbine has a database for data logging purposes, this database is replicated to the Wind Power Supervisor.
+The Wind Power Supervisor does data aggregation on data from each turbine as well as store a copy of the replicated data.
+The turbines, Wind Power Supervisor and Park Pilots are connected with a gigabit network, which currently has plenty of extra capacity in terms of available bandwidth.
+The system handles more than 50 control points and 200 measurement points and samples these every 50 ms.
 
 %\begin{figure}
 %	\centering
@@ -81,45 +93,55 @@ The system handles more than 50 control points and 200 measurement points and sa
 Todays setup at Siemens Wind Power (\cref{sec:SiemensCase}) is an example of a system wished to be made less centralized. The current setup poses the following challenges to Siemens:  
 
 \begin{itemize} 
-	\item Single point of failure. Should a Wind Power Supervisor or a Park Pilot fail, a part of the wind park will become unavailable.
-	\item Low scalability. The Wind Power Supervisors and Park Pilots does not scale with the number of turbines. This is reflected in the park regulation performance. Today a park regulation cycle-time is 150 ms. This cycle-time is set after worst case set point retrieval time, worst case new setpoint calculations and worst case time it takes to broadcast new setpoints. This ultimately depends on worst case number of turbines pr. Park Pilot.
+	\item Single point of failure. Should a Wind Power Supervisor or a Park Pilot fail, a part of the wind farm will become unavailable.
+	\item Low scalability. The Wind Power Supervisors and Park Pilots does not scale with the number of turbines. This is reflected in the wind farm regulation performance. Today a wind farm regulation cycle time is 150 ms. This regulation cycle time is set after worst case setpoint retrieval time, worst case new setpoint calculations and worst case time it takes to broadcast new setpoints. This ultimately depends on worst case number of turbines pr. Park Pilot.
 \end{itemize}
 
-Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by distributing their functionality to the turbines, utilizing the free computing capacity of the computers already residing in every turbine. This would increase availability by lowering the possibility of single point of failure. Furthermore this would increase scalability of the system, opening for performance optimizations of the park regulation cycle-time by detaching regulation performance from number of turbines pr. Park Pilot. 
+Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by distributing their functionality to the turbines, utilizing the free computing capacity of the computers already residing in every turbine. This would increase availability by lowering the possibility of single point of failure. Furthermore this would increase scalability of the system, opening for performance optimizations of the wind farm regulation cycle time by detaching regulation time from the number of turbines pr. Park Pilot. 
 
 \section{Problem statement}
 \label{sec:problemStatement}
 
-The purpose of this thesis is to design, implement and evaluate a system solution for a Siemens wind park, where the Wind Park Supervisor and the Park Pilots are decentralized by utilizing the free capacity residing in every turbine for the Siemens Wind Power case. The solution must be able to provide the same features as the current wind park setup. 
+The purpose of this thesis is to design, implement and evaluate a solution for a Siemens wind farm, where the Wind Park Supervisor and the Park Pilots are decentralized by utilizing the free capacity residing in every turbine for the Siemens Wind Power case. The solution must be able to provide the same features as the current wind farm setup. 
 
-\paragraph{We present the following questions:}
+\paragraph{The following problems are addressed:}
 \begin{description} % [label={\arabic*.}, ref=\textit{\arabic*}]
 	%	\label{PS:Q:1}
-	\labitem{Feasibility}{PS:Q:Feasibility} How can we best re-implement the current system at Siemens Wind Power (\cref{sec:SiemensCase}) as a system where the Wind Park Supervisor and the Park Pilots are decentralized?
+	\labitem{Feasibility}{PS:Q:Feasibility} How can we best re-implement the current Siemens system (\cref{sec:SiemensCase}) as a system where the Wind Park Supervisor and the Park Pilots are decentralized?
 	%	\label{PS:Q:4}
 	\labitem{Availability}{PS:Q:Availability} Can we create a solution where removing one or more nodes from the system at runtime does not cause system failure?
 	%	\label{PS:Q:3}
 	\labitem{Performance}{PS:Q:Performance} Can we create a solution that scales so the number of turbines does not impact the regulation cycle time?
 	%	\item Can we, with the new decentralized solution, reduce the current regulation cycle time of 150 ms?
 	%	\label{PS:Q:2}
-	\labitem{Scalability}{PS:Q:Scalability} How will the new decentralized system impact the following parameters compared to the current centralized system at Siemens Wind Power:
+	\labitem{Scalability}{PS:Q:Scalability} How will the new decentralized solution influence the following parameters compared to the current Siemens system:
 	\begin{enumerate}
-		\item Time of a single regulation cycle.
+		\item Time in milliseconds of a single regulation cycle.
 		\item Network traffic measured in bits per second.
 		\item Memory impact measured in bytes.
 	\end{enumerate}
 \end{description}
 
-The decentralized solution will be implemented as a prototype, for proof of concept and test purposes. The prototype will be compared to the existing Siemens Wind Power solution with respect to performance, availability and scalability using an objective test metric developed in cooperation with Siemens Wind Power.
+The decentralized solution will be implemented as a prototype, for proof of concept and test purposes.
 
+\section{Enabling comparison of current Siemens system with decentralized solution\todo{Bad title}}
+In order to address the problems presented in \cref{sec:problemStatement} a common ground must be established for comparison purposes. The decentralized solution proposed in this thesis will not be directly comparable to the current Siemens system because we are unable to duplicate the environment of the current Siemens system. As a consequence of this a centralized solution resembling the current Siemens system must be developed to enable a comparison. As presented in \cref{fig:projectDiffOverview} there exist a difference between the current Siemens system and the centralized solution as well as a difference between the centralized solution and the decentralized solution, illustrated by deltas.\todo{Rename figure parts. Siemens -> Current Siemens system, Central -> Centralized solution, Decentralized -> Decentralized solution}
 
-\begin{figure}[b]
+\begin{figure}[!h]
+	\centering
 	\input{figures/tikz/ProjectDiffOverview}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Comparison overview]{
+		\label{fig:projectDiffOverview} 
+		\footnotesize{%
+			Comparison overview.
+		}
+	}
 \end{figure}
 
+The delta between the current Siemens system and the centralized solution is minimized as much as possible based on information about the current Siemens system delivered by Siemens Wind Power. Since the operation and regulation of the current Siemens system is proprietary the full system information is not available. To make up for the missing information a number of assumptions has been done about the current Siemens system which is also a part of the delta. These assumptions will be detailed further in \cref{cha:existingSystem}. 
 
-%afgrænsning til HPPPen og regulerings sekvensen.
-
+The delta between the centralized solution and decentralized solution describes the difference in operation of a centralized system and a decentralized system.
 
 %ASK SIEMENS HOW TO COMPARE AND MORE CONSTRAINTS??? 
 
