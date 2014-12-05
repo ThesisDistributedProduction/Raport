@@ -1,26 +1,35 @@
-\chapter{Analysis}
+\chapter{Technologies for decentralizing the Siemens Case}
 
-The problem statement (\cref{sec:problemStatement}) presents four questions for this project. Question~\ref{PS:Q:CanWeDoIt} being the primary question, from which the other three spawns. 
+The problem statement (\cref{sec:problemStatement}) presents four questions for this project. The \ref{PS:Q:Feasibility} question being the primary question, from which the other three spawns. 
 
-To answer question \ref{PS:Q:CanWeDoIt} we have the following fundamental needs of the Siemens case, currently provided by the Wind Park Supervisor and the Park Pilots:
+To answer the \ref{PS:Q:Feasibility} question we have to identify the key services performed by the Wind Park Supervisor and the Park Pilots. These services must be provided by the new decentralized system such that removing the central control points, the Wind Park Supervisor and the Park Pilots, will not diminish the new decentralized systems function compared to the current system as described by the Siemens Case in \cref{sec:SiemensCase}. The following key services has been identified:
+
 \begin{enumerate}[label=\textbf{\alph*.}, ref=\textit{\alph*}]
-\item \label{Analysis:need:a} Data aggregation.
-\item \label{Analysis:need:b} Data storage for the entire park.
-\item \label{Analysis:need:c} External communication.
-\item \label{Analysis:need:d} Park regulation.
+\item \label{Analysis:need:a} \textbf{Data aggregation} \\
+	It must be possible to aggregate data across the entire wind farm in order to enable calculation of global parameters such as global power production, global max power production etc. 
+
+\item \label{Analysis:need:b} \textbf{Data storage} \\
+	The individual turbines must be able to store data about wind speeds, individual power production as well as the state of wear on different parts of the turbine. Several data points are measured every second. As well as individual data, global data must be stored as well. Without a central storage point the global data must be distributed across the entire wind farm such that it is accessible by any turbine handling an external connection which may request such global data.
+
+\item \label{Analysis:need:c} \textbf{External communication} \\
+	The wind farm must be able to handle communication with the external world. Currently this is handled by both the Wind Park Supervisor and the Park Pilots depending on which data is relevant to the initiator of the external connection. The external communication must be handled by the turbines of the wind farm such that it is transparent to the initiator which node is actually performing the services requested.
+
+\item \label{Analysis:need:d} \textbf{Park regulation} \\
+	The wind farm must regulate the power production towards a global power production setpoint. Without a central controller to calculate the individual setpoints for all turbines these calculations must be done by each individual turbine.
+	
 \end{enumerate}
 
-For the turbines to be able to handle the needs above and act as a single unit, we are forced to look at decentralized software components. 
+For the wind farm to be able to handle the needs above and act as a single unit, we are forced to look at decentralized software components. 
 
 The following chapters describes, analyses and discusses solutions to the needs above. The chapters are divided based on the components we see as solutions to \ref{Analysis:need:a}-\ref{Analysis:need:d}. As such this analysis contains the following chapters:
 
-\begin{description}
+\begin{enumerate}[label=3.\arabic*]
 \item{\textbf{Data storage.}} The obvious solution for need \ref{Analysis:need:a} and \ref{Analysis:need:b}.
 \item{\textbf{Resource management.}} In the decentralized system, the turbines needs to be able to handle need~\ref{Analysis:need:c}. Currently Siemens windmill farms can have up to 100 communication channels open at a time. In order to avoid a single mill having to handle 100 communication channels, resource management has to be introduced to the system.
-\item{\textbf{Distributed computing.}} For the turbines to be able to perform park regulations, communication between the turbines is essential, since park regulation demands knowledge about every turbine in the farm. Distributed computing is introduced to the system as a way to keep a global state as a solution to need~\ref{Analysis:need:d}. This chapter also addresses question~\ref{PS:Q:HowWellDoWeScale} of the problem statement.
-\end{description}
+\item{\textbf{Distributed computing.}} For the turbines to be able to perform park regulations, communication between the turbines is essential, since park regulation demands knowledge about every turbine in the farm. Distributed computing is introduced to the system as a way to keep a global state as a solution to need~\ref{Analysis:need:d}. This chapter also addresses question~\ref{PS:Q:Scalability} of the problem statement.
+\end{enumerate}
 
-Question \ref{PS:Q:Availlability} and \ref{PS:Q:CanWeScale} of the problem statement are addressed by all of the chapters above.
+Question \ref{PS:Q:Availability} and \ref{PS:Q:Performance} of the problem statement are addressed by all of the chapters mentioned above.
 
 %Problem -> Alternativer -> Sammenligning -> Endeligt valg
 %

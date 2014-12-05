@@ -163,7 +163,9 @@ Looking at the Siemens case (\cref{sec:SiemensCase}) the new distributed system 
 
 As mentioned, to perform the park regulation sequence, the windmill farm needs a global shared state, where information about every turbine available to every turbine performing park regulations. Therefore, if the decentralized version of the Siemens case were to be implemented using raw message passing, it would result in building some kind of DSM and/or publish/subscribe abstraction, with roughly the same communication overhead. To save the trouble of developing this abstraction, we conclude that message passing is not an option as communication paradigm.
 
-This leaves DSM and publish/subscribe as remaining paradigms, where one could imagine the Siemens case being implemented using either of the two. The abstraction of shared memory provided by DSM is attractive when looking looking at the Siemens case. As a system developer, being able to think of the global shared state as local memory is to prefer over event handling. Therefore DSM is chosen over publish/subscribe since publish/subscribe introduces event handling to the system.
+This leaves DSM and publish/subscribe as remaining paradigms, where one could imagine the Siemens case being implemented using either of the two. The abstraction of shared memory provided by DSM is attractive when looking looking at the Siemens case. As a system developer, being able to think of the global shared state as local memory is to prefer over event handling. The Data Distribution Service defined by the Object Management Group provides a middleware based on Real Time Publish-Subscribe with the ability to maintain a history of messages. This enables the use of publish/subscribe as well as the ability to maintain a global shared state through the message history.
+
+%This leaves DSM and publish/subscribe as remaining paradigms, where one could imagine the Siemens case being implemented using either of the two. The abstraction of shared memory provided by DSM is attractive when looking looking at the Siemens case. As a system developer, being able to think of the global shared state as local memory is to prefer over event handling. Therefore DSM is chosen over publish/subscribe since publish/subscribe introduces event handling to the system.
 
 % The abstraction provided by DSM is attractive when looking looking at the Siemens case. As a system developer, being able to think of the global shared state as local memory is to prefer over thinking about communication semantics. However before before choosing, it is relevant to look at the cost of the DSM abstraction.
 
@@ -212,28 +214,28 @@ This leaves DSM and publish/subscribe as remaining paradigms, where one could im
 
 
 
-\subsection{State of the art DSM}
+%\subsection{State of the art DSM}
 
-The regulation algorithm is a recursive algorithm, which performs calculations of new turbine set points using the following parameters:
+%The regulation algorithm is a recursive algorithm, which performs calculations of new turbine set points using the following parameters:
 
-\begin{itemize}
-	\item Current state of every turbine in the farm.
-	\item Max capacity of each turbine.
-	\item Historic data from previous calculations.
-\end{itemize} 
-
-
-
-In order to remove the communication overhead from the regulation cycle time, information sharing through the chosen paradigm, DSM, needs to to be detached from the regulation cycle. 
-
-Looking at the global shared state 
-
- Removing communication overhead from the park regulation cycle involves the following
-
-DSM is a paradigm well implemented through by many different frameworks, with their own individual and unique implementation.
+%\begin{itemize}
+%	\item Current state of every turbine in the farm.
+%	\item Max capacity of each turbine.
+%	\item Historic data from previous calculations.
+%\end{itemize} 
 
 
-Therefore, to determine which technology that is best suited for the Siemens case, the technologies will be compared on the following set of parameters: 
+
+%In order to remove the communication overhead from the regulation cycle time, information sharing through the chosen paradigm, DSM, needs to to be detached from the regulation cycle. 
+
+%Looking at the global shared state 
+
+% Removing communication overhead from the park regulation cycle involves the following
+
+%DSM is a paradigm well implemented through by many different frameworks, with their own individual and unique implementation.
+
+
+%Therefore, to determine which technology that is best suited for the Siemens case, the technologies will be compared on the following set of parameters: 
 
 %standalone: Type?
 %Distributed shared memory support
@@ -244,57 +246,57 @@ Therefore, to determine which technology that is best suited for the Siemens cas
 %Framework architecture. distributed shared memeory, client/server or not  
 %cost
 
-With DSM chosen as the communication paradigm, this chapter describes, evaluates and discusses different DSM technologies in order to find the technology best suited for Siemens.
+%With DSM chosen as the communication paradigm, this chapter describes, evaluates and discusses different DSM technologies in order to find the technology best suited for Siemens.
 
 %Standalone, avoid overhead
 
 
-\subsection{In memory databases}
+%\subsection{In memory databases}
 %Client/server architecture
 
-\subsection{In-memory data grids}
+%\subsection{In-memory data grids}
 %Distributed memory. Only shared for replica reasons
 
-\subsubsection{Oracle Coherence}
+%\subsubsection{Oracle Coherence}
 %dist. memory --> distributed chache
 %java, .net, c++
 %http://www.oracle.com/technetwork/middleware/coherence/distributed-caching-100021.html
 
 
-\subsubsection{VMware Gemfire}
+%\subsubsection{VMware Gemfire}
 %Contact sales
 %Not open source
 
-\subsubsection{Gigaspaces XAP}
+%\subsubsection{Gigaspaces XAP}
 %Share nothing architecture
 
-\subsubsection{ScaleOut Software}
+%\subsubsection{ScaleOut Software}
 %Java, .NET, C/C++ 
 %cash
 %Share nothing architecture
 %http://www.scaleoutsoftware.com/downloads-resources/downloads/
 
-\subsubsection{NCache}
+%\subsubsection{NCache}
 %expensive
 %http://www.alachisoft.com/ncache/index.html
 
-\subsubsection{Hazelcast}
+%\subsubsection{Hazelcast}
 %java
 %opensource
 %http://hazelcast.com/products/hazelcast/
 
-\subsubsection{Distributed shared cache}
+%\subsubsection{Distributed shared cache}
 
 
-\subsubsection{Infinispan}
+%\subsubsection{Infinispan}
 %promising
 
-\subsubsection{DSM in .NET}
+%\subsubsection{DSM in .NET}
 %IP multicast
 
 %casusally consistent: Writes that are potentially causally related must be seen by all processes in the same order. Concurrent writes may be seen in a different order on different machines.
 
-\subsubsection{AppFabric}
+%\subsubsection{AppFabric}
 %Runs on IIS
 
 
@@ -308,12 +310,12 @@ Services include amongst others:
 
 \begin{itemize}
 	\item Automatic node discovery.
-	\item A data-centric publish-subscribe approach that allows for distribution of data by topic decoupling the nodes.
+	\item A data-centric publish-subscribe approach that allows for distribution of data by topics, decoupling the nodes of the system.
 	\item Cross-platform support.
 	\item Fine grained control of Quality of Service parameters.
 \end{itemize}
 
-DDS relies heavily on the multicast features of the IP protocol described below.
+DDS relies on the multicast features of the IP protocol which is described below.
 
 \subsubsection{IP Protocol Addressing Methodologies}
 
@@ -343,14 +345,50 @@ In the new IPv6 broadcast is no longer supported \cite{RFC4291_AddressingIPv6Dra
 Multicasting works using multicast groups, these groups are maintained by routers and layer 2 switches. The way a node is added to a multicast group is by transmitting a packet requesting a group membership using the IGMP protocol. Each multicast group is associated with a multicast ip address, this ip address is used by the transmitting node when a packet is to be transmitted to a multicast group.
 Communicating via multicating is efficient and ensures that each node can be configured to handle a minimum number of packets, routers and switches however has a added responsibility of maintaining information of witch multicast address each port is associated with and transmitting packets to all of them.
 
+\subsubsection{Main DDS entities}
+RTI Connext DDS provides a number of entities that must be present in a system in order to enable commmunication.
+
+\begin{itemize}
+	\item \textbf{DomainParticipant} \\
+		Domains represent logical, isolated, communication networks. Entities existing in different domains are unable to communicate with each other. The DomainParticipant is created with an integer value specifying the domain it belongs to. The DomainParticipants owns the Topics, Publishers and Subscribers in effect making them belong to a specific domain.
+	
+	\item \textbf{Publisher} \\
+		A Publisher owns and manages a number of DataWriters. The Publisher is responsible for the publishing of data provided by the DataWriters. One Publisher can publish data from several DataWriters on several different Topics.
+	
+	\item \textbf{Subscriber} \\
+		A Subscriber owns and manages a number of DataReaders. The Subscriber is responsible for the receipt of published data on behalf of the DataReaders. One Subscriber can receive data for several DataReaders on several different Topics. 
+	
+	\item \textbf{Topic} \\
+		Topics interconnect DataReaders and DataWriters. DataWriters can subscribe to a Topic and receive data each time a DataReader publishes data to the same Topic.
+	
+	\item \textbf{DataWriter} \\
+		A Datawriter is owned by a single Publisher. It is associated with a single Topic and is able to send data to this Topic using the owning Publisher.
+	
+	\item \textbf{DataReader} \\
+		A DataReader is owned by a single Subscriber. It is associated with a single Topic and is able to receive data published to this Topic using the owning DataReader.
+\end{itemize}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\textwidth,natwidth=610,natheight=642]{DDSentities.png} 
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[DDS entities]{
+		\label{fig:publishSubscribe} 
+		\footnotesize{%
+			DDS entites as presented in RTI Connext Core Libraries and Utilities User's Manual \cite{rtiConnextUsersManual}.
+		}
+	}
+\end{figure}
+
 \subsubsection{Node discovery}
 Node discovery in DDS is performed using the Simple Discovery Protocol(SDP).
 This protocol describes a sequence of messages that are sent between DDS entities in order for them to automatically discover each other.
+Node discovery is important in a system like the Siemens Case described in \cref{sec:SiemensCase} because the regulation of a wind farm requires data from all turbines in order to regulate the overall wind farm production correctly.
 The protocol is split into two phases:
 
 \begin{itemize}
-	\item Simple Participant Discovery Protocol(SPDP)
-	\item Simple Endpoint Discovery Protocol(SEDP)
+	\item Simple Participant Discovery Protocol
+	\item Simple Endpoint Discovery Protocol
 \end{itemize}
 
 The Simple Participant Discovery Protocol(SPDP) phase facilitates the discovery of DomainParticipants across the network.
@@ -359,27 +397,56 @@ After this phase has been completed all DomainParticipants in the system has reg
 The Simple Endpoint Discovery Protocol(SEDP) phase facilitates the discovery of DataWriters and DataReaders across the network.
 After this phase has been completed all DomainParticipants in the system has registered the necessesary information to enable DataWriters and DataReaders to communicate.
 
-Since the SEDP registers all the DataWriters and DataReaders in the system the protocol scales poorly \cite{(CFDP)}. The discovery time and number of packets sent grows as the number of endpoints increase. This affects the scalability of the system directly. To avoid the increase in discovery time different protocols has been proposed. 
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\textwidth,natwidth=610,natheight=642]{DDSdiscovery.png} 
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[DDS discovery phases]{
+		\label{fig:publishSubscribe} 
+		\footnotesize{%
+			DDS discovery phases as presented in RTI Connext Core Libraries and Utilities User's Manual \cite{rtiConnextUsersManual}.
+		}
+	}
+\end{figure}
+
+Since the SEDP registers all the DataWriters and DataReaders in the system the protocol scales poorly \cite{(CFDP)}. The discovery time and number of packets sent grows as the number of endpoints increase. This affects the scalability of the system directly. To avoid the increase in discovery time different protocols has been proposed to solve the scalability problem. 
 
 \paragraph{Content-based Filtering Discovery Protocol(CFDP)} is similar to SDP during the SPDP phase but it differs in the SEDP phase where changes has been made in order to facilitate content-based discovery of endpoints. The filtering allows the DomainParticipant to reduce the number of discovery messages to the number of endpoints that needs to communicate with the DomainParticipant and its local endpoints. Currently CFDP has only been tested using unicast and here the protocol outperforms SDP in terms of network usage, packages sent and discovery time. However if multicast is used as the underlying transport protocol SDP outperforms CFDP. This happens because SDP only needs one multicast for all DomainParticipants. CFDP in contrast will need one multicast address for each content filter used. This limitation in CFDP is proposed as a subject for further research.
 
-Since CFDP does not outperform SDP when using multicast the proposed solutions of this thesis will not use CFDP as their discovery protocols.
+Since CFDP does not outperform SDP when using multicast, CFDP is not suited as the discovery protocol for the system described in this thesis.
 
-\paragraph{A discovery protocol based on Bloom filters} has been proposed as well. Similar to CFDP the Bloom filter approach aims to reduce the number of packets that needs to be exchanged in order to discover all endpoints in the system. The Bloom filter approach introduces a Bloom filter for each DomainParticipant that contains information describing the local endpoints. During the SPDP phase the Bloom filters are sent to all other DomainParticipants. In this way information of all endpoints in the system has been distributed when the SEDP phase begins allowing the DomainParticipants to decrease the number of discovery messages to the number of endpoints that it needs to facilitate communication for its local DataReaders and DataWriters. 
+\paragraph{A discovery protocol based on Bloom filters} has been proposed as well \cite{monedero2009dds}. Similar to CFDP the Bloom filter approach aims to reduce the number of packets that needs to be exchanged in order to discover endpoints in the system. The Bloom filter approach introduces a Bloom filter for each DomainParticipant that contains information describing the local endpoints. During the SPDP phase the Bloom filters are distributed to all DomainParticipants. In this way information of all endpoints in the system has been distributed when the SEDP phase begins allowing the DomainParticipants to decrease the number of discovery messages sent to the number of endpoints that it must know in order to facilitate communication for its local DataReaders and DataWriters. 
 
 Again the main advantage of using Bloom filters is found in the unicast scenario. In a multicast scenario there still are advantages of using the Bloom filter approach because the DomainParticipants are able to limit the number of discovery messages compared to SDP. The advantage of using the Bloom filter approach increases as the ratio between endpoints and DomainParticipants increase.
 
-Using the Bloom filter approach to enhance the discovery process in DDS is relevant to a system like the one described in the Siemens Case in \cref{sec:SiemensCase}. Despite the advantages of the Bloom filter approach the proposed solutions of this master thesis will not further enhance the discovery protocol of DDS, because the benefits of the enhancement would be present in both the proposed decentralized solution and the proposed centralized solution thus the impact of the enhancement would be unnoticeable when comparing the systems.
+Since a wind farm has a limited number of endpoints, less than 300 turbines, the decrease in discovery time by using the Bloom filter approach would be minor. Therefore the Bloom filter approach is not further investigated in this thesis. \newline
 
-\subsubsection{Real Time Publish-Subscribe Protocol}
-
+The Simple Discovery Protocol does not scale well with the number of endpoints. This problem is currently under research and solutions have been proposed. As of the time of writing none of the proposed solutions to the problem are well suited for use in this thesis. Further research in the area may present new solutions to the problem that are well suited for use in a multicast enabled system with less than 300 nodes.
 
 \subsubsection{Quality of Service}
+DDS provides Quality of Service(QoS) parameters to enable very fine grained control over the behavior of the deployed DDS entities in a system. To create a decentralized system several of the QoS parameters are interesting.
 
+\begin{itemize}
+	\item \textbf{Multicast} \\
+		Enabling multicast in the system will decrease the network traffic in the system, which in turn increases scalability.
+		
+	\item \textbf{History} \\
+		The History parameter will enable the system to keep a log of messages received during operation thus eliminating the need for another storage option. This saves the system from using additional resources for storing and retrieving values from a file or a local database.
+		
+	\item \textbf{Lifespan} \\
+		The History parameter enables the system to keep a log of messages but the history may only be relevant for a specified amount of time. In order not to keep irrelevant messages it can be specified how long they are relevant.
+	
+	\item \textbf{Durability} \\
+		To make sure a new turbine can start operation the Durability parameter can be used in order to update the new turbine with the history of messages in the system. In this way the turbine does not need to wait to receive new data from individual turbines to start regulation, instead it can start regulation as soon as the history is received.
+		
+	\item \textbf{Reliability} \\
+		This parameter regulates the reliable delivery of messages in the system, which affect the operation of the turbines and their regulation.
+		
+	\item \textbf{Liveness} \\
+		The Liveness parameter specifies how liveness of a datawriter is determined. This allows the system to detect when a turbine is no longer available and to respond in an appropriate way.
+\end{itemize}
 
-\subsubsection{Conclusion}
+Using the QoS of DDS a system can be configured to fit its environment and its requirements very tightly allowing efficient and reliable operation.
 
-
-%Ens
-%Valg med vægt på arkitektur og development tid. 
-%RMI fravalg
+\subsection{Conclusion}
+The RTI Connext Data Distribution Service for Real Time Systems enables both communication using publish/subscribe as well as the ability to maintain a global shared state by preserving message history. Coupled with the fact that the middleware provides automatic node discovery, cross-platform support and fine grained control using Quality of Service parameters the RTI Connext Data Distribution Service for Real Time Systems is the best choice of middleware for the Siemens Case (\cref{sec:SiemensCase}).
