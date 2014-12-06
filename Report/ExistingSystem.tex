@@ -440,7 +440,7 @@ The section provides a detailed evaluation of every parameter of the chosen prof
 	
 	The parameters within the \textit{protocol} parameter is used to tune the reliability protocol. Setting them is not required in order to achieve strict reliability but is beneficial from a performance standpoint. 
 	
-	When a \textit{DataReader} receives a heartbeat from a \textit{DataWriter} (indicating (a) that the DataWriter still exists on the network and (b) what sequence numbers it has published), the \textit{DataReader} will instantly reply with a positive or negative acknowledgment. Setting the \textit{response\_delay} to 0 nanoseconds makes the system more reactive at the cost of an increased chance of (N)ACK spikes. The regulation cycle blocks until messages from all turbines has been received, thus it is crucial to inform any data samples losses as soon as possible.
+	When a \textit{DataReader} receives a heartbeat from a \textit{DataWriter} (indicating (a) that the DataWriter still exists on the network and (b) what sequence numbers it has published), the \textit{DataReader} will instantly reply with a positive or negative acknowledgment. Setting the \textit{response\_delay} to 0 nanoseconds makes the system more reactive at the cost of an increased chance of (N)ACK spikes. The regulation cycle blocks until messages from all turbines has been received, thus it is crucial to inform any data sample losses as soon as possible.
 \end{itemize}
 
 
