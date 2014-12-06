@@ -240,7 +240,7 @@ The profile from the current Siemens system QoS XML file chosen for the centrali
 \subsection{Detailed quality of service evaluation} \label{sec:detailedQoSDesc}
 
 
-The section provides a detailed evaluation of every parameter of the chosen profiles of the centralized solution QoS XML file, including the QoS parameters deemed irrelevant and thereby removed from the QoS file provided by Siemens (\cref{appendix:siemensQosFile}). Removed parameters are marked with '(removed)'.
+The section provides a detailed evaluation of every parameter of the chosen profiles of the centralized solution QoS XML file, including the QoS parameters deemed irrelevant and thereby removed from the QoS file provided by Siemens (\cref{appendix:siemensQosFile}). See \cref{appendix:centralizedQosFile} for centralized solution QoS XML file. Removed parameters are marked with '(removed)' and commented out in the figures.
 
 \paragraph{Participant factory} (\cref{fig:parFacQos}) QoS parameters has been evaluated as follows:
 
@@ -248,14 +248,13 @@ The section provides a detailed evaluation of every parameter of the chosen prof
 	\item \textbf{autoenable\_created\_entities (removed)} determines whether or not participants should be enabled upon initialization. For the centralized solution the default value (enabled) for this parameter is sufficient.
 	\item \textbf{logging} is set for all participants and occurs on both errors and warning messages concerning the underlying platform (hardware or OS) on which \textit{RTI Connext} is running, where a warning indicates that \textit{RTI Connext} is taking an action that may of may not be what was intended. This parameter is set since the current system uses this setting but also for debugging purposes.
 \end{itemize}
-\lstset{tabsize=2, language=XML, basicstyle=\small}
 
 \begin{figure}
-\begin{lstlisting}
+\begin{lstlisting}[language=XML]
 <participant_factory_qos>
-	<entity_factory>
+	<!--entity_factory>
 		<autoenable_created_entities>false</autoenable_created_entities>
-	</entity_factory>
+	</entity_factory-->
 	<logging>
 		<verbosity>WARNING</verbosity>
 		<category>PLATFORM</category>
@@ -286,7 +285,7 @@ The section provides a detailed evaluation of every parameter of the chosen prof
 \end{itemize}
 
 \begin{figure}
-\begin{lstlisting}
+\begin{lstlisting}[language=XML]
 <participant_qos>
 	<database>
 		<shutdown_cleanup_period>
@@ -300,25 +299,25 @@ The section provides a detailed evaluation of every parameter of the chosen prof
 	<transport_builtin>
 		<mask>UDPv4</mask>
 	</transport_builtin>
-	<receiver_pool>
+	<!--receiver_pool>
 		<buffer_size>65535</buffer_size>
-	</receiver_pool>
+	</receiver_pool-->
 	<property>
 		<value>
-			<element>
+			<!--element>
 				<name>dds.transport.UDPv4.builtin.ignore_nonup_interfaces</name>
 				<value>0</value>
 			</element>
 			<element>
 				<name>dds.transport.UDPv4.builtin.multicast_enabled</name>
 				<value>0</value>
-			</element>
+			</element-->
 			<element>
 				<name>dds.transport.UDPv4.builtin.parent.message_size_max</name>
 				<value>65535</value>
 			</element>
 			<element>
-				<name>dds.transport.UDPv4.builtin.send_socket_buffer_size </name>
+				<name>dds.transport.UDPv4.builtin.send_socket_buffer_size</name>
 				<value>65535</value>
 			</element>
 			<element>
@@ -335,7 +334,7 @@ The section provides a detailed evaluation of every parameter of the chosen prof
 	}
 \end{figure}
 
-\paragraph{Topic} (\cref{fig:parQos}) QoS parameters are not presented by the Current Siemens System QoS XML file and thus no \textit{Topic} QoS profile has been applied to the centralized solution. 
+\paragraph{Topic} QoS parameters are not presented by the Current Siemens System QoS XML file and thus no \textit{Topic} QoS profile has been applied to the centralized solution. 
 
 \paragraph{DataWriter} QoS parameters has been set after the profile \textit{SwpStrictReliableNoDurability} from the current Siemens system QoS XML file (\cref{appendix:siemensQosFile}), as discussed in \cref{sec:choosingQosParams}. Combining the \textit{SwpStrictReliableNoDurability} profile with the two underlying base profiles (\textit{SwpReliableNoDurability} and \textit{SwpBestEffort}) we get the QoS parameters presented on \cref{fig:writerQoS}. The DataWriter parameters presented on \cref{fig:writerQoS} has been evaluated as follows:
 
@@ -345,23 +344,29 @@ The section provides a detailed evaluation of every parameter of the chosen prof
 	
 	Note that strict reliability is only achieved when combining this parameter configuration with a \textit{KEEP\_ALL\_HISTORY\_QOS} history configuration.
 	\item \textbf{history} configures the number of data samples that \textit{Connext} will store locally for \textit{DataWriters} and \textit{DataReaders}, applies on a per \textit{Topic} keyed instance basis. This parameter has been set to \textit{KEEP\_ALL\_HISTORY\_QOS} for strictly reliable messaging, which means \textit{Connext} will only store up to the value of the \textit{max\_samples\_per\-\_instance} of the \textit{resource\_limits} QoS parameter.
-	\item \textbf{resource\_limits} determines how \textit{DomainParticipants} allocate and use physical memory for internal resources. In this case it's used to configure the maximum number of data samples of any one instance that \textit{Connext} will store for a \textit{DataWriter}. The centralized solution stores 20 unacknowledged data samples in the send queue, so data samples can be resent if a timeout occurs or a NACK message from a \textit{DataReader}. So the centralized solution is strictly reliable up to 20 unacknowledged messages pr. keyed instance, as the current Siemens System. Any more result in data samples being overridden by the \textit{DataWriter}.
+	\item \textbf{resource\_limits} determines how \textit{DomainParticipants} allocate and use physical memory for internal resources. In this case it's used to configure the maximum number of data samples of any one instance that \textit{Connext} will store for a \textit{DataWriter}. The centralized solution stores 20 unacknowledged data samples in the send queue, so data samples can be resent if a timeout occurs or a NACK message from a \textit{DataReader} is received. So the centralized solution is strictly reliable up to 20 unacknowledged messages pr. keyed instance, as the current Siemens System. Any more result in data samples being overridden by the \textit{DataWriter}.
 	
-	The value of 20 is taken from the current Siemens system and is more than enough. Theoretically, for the purpose of the centralized solution, this value could be set to 1, since the centralized solution waits for responds and thus every \textit{DomainParticipant} is at most 1 message behind at any given time. However since the centralized solution is built to mimic the current Siemens system and since a larger value has no impact on our test results, the value of 20 has been kept for the centralized solution.
+	The value of 20 is kept for the centralized solution. Theoretically, for the purpose of the centralized solution, this value could be set to 1, since the centralized solution waits for responds and thus every \textit{DomainParticipant} is at most 1 message behind at any given time. However, since the centralized solution is set to run with strictly reliable messaging, this queue has to be set larger to prevent the turbines from blocking the regulation cycle, when waiting for ACK/NACK messages from the Park Pilot after sending a reply. Thus this value is set to be large enough to not impact the regulation cycle time, in which case 20 is fine. 
 	\item \textbf{protocol} parameter provides the system developer control over the configurable portions of the standard protocol for packet exchange between applications, in this case the configuration of the reliable data delivery mechanism (\textit{rtps\_reliable\_writer}) of the protocol on a per \textit{DataWriter} basis. 
 	
 	The parameters within the \textit{protocol} parameter is used to tune the behavior of the reliability protocol. Setting them is not required in order to achieve strict reliability but is beneficial from a performance standpoint. Thus since this performance optimization is applied to the current Siemens system, we apply it to the centralized solution.
+	
+	The optimization consists of increasing and decreasing the rate at which heartbeats are sent to \textit{DataReaders} according to the samples within the \textit{DataWriter} send cache (set by the \textit{resource\_limit} parameter). If the cache is below 5 data samples, the rate at which heartbeats are sent is slowed down, indicating \textit{DataReaders} are getting data samples correctly, to reduce network traffic. Similarly, if the cache gets higher than 15 data samples, the heartbeat rate is increased to spur faster acknowledgment (positive or negative) of its samples to allow it to empty its cache and avoid blocking. The number of times the \textit{DataWriter} will a heartbeat to a reader without receiving a response is set to 500. After 500 sent heartbeats, the \textit{DataReader} will be considers inactive and the \textit{DataWriter} will no longer await acknowledgements before discarding sent data. This parameter is set to prevent a poorly behaving process from monopolizing the CPU for several seconds.
+	
+	Furthermore the \textit{DataWriters} of the centralized solution is set to be reactive, by setting the NACK response delay to 0 seconds. Leaving the centralized solution less reactive, one could increase the changes that the writer will learn of additional reader that missed the same data, in which case \textit{DataWriters} would be able to send a single multicast repair, instead of many unicast repairs, thereby using the available network bandwidth more efficiently. However since multicast is disabled, we set data to be resent immediately after receiving a NACK from a \textit{DataReader}. 
+	
+	Finally the \textit{min\_send\_window\_size} and \textit{max\_send\_window\_size} configures how many data samples are kept by in their send queue until acknowledgments from all of their subscribing \textit{DataReaders} has been received. These parameters has been removed since their values are overwritten by the \textit{resource\_limits} parameter having a lower value.
 \end{itemize}
 
 \begin{figure}
-\begin{lstlisting}
+\begin{lstlisting}[language=XML]
 <datawriter_qos>
-	<liveliness>
+	<!--liveliness>
 		<lease_duration>
 			<sec>1</sec>
 			<nanosec>0</nanosec>
 			</lease_duration>
-	</liveliness>
+	</liveliness-->
 	<reliability>
 		<kind>DDS_RELIABLE_RELIABILITY_QOS</kind>
 		<max_blocking_time>
@@ -400,8 +405,8 @@ The section provides a detailed evaluation of every parameter of the chosen prof
 				<sec>0</sec>
 				<nanosec>0</nanosec>
 			</max_nack_response_delay>
-			<min_send_window_size>32</min_send_window_size>
-			<max_send_window_size>32</max_send_window_size>
+			<!--min_send_window_size>32</min_send_window_size>
+			<max_send_window_size>32</max_send_window_size-->
 		</rtps_reliable_writer>
 	</protocol>
 </datawriter_qos>
@@ -412,20 +417,70 @@ The section provides a detailed evaluation of every parameter of the chosen prof
 	}
 \end{figure}
 
+\paragraph{DataReader} QoS parameters has been set after the profile \textit{SwpStrictReliableNoDurability} from the current Siemens system QoS XML file (\cref{appendix:siemensQosFile}), as discussed in \cref{sec:choosingQosParams}. This is the same profile used to configure \textit{DataWriter} QoS. Combining the \textit{SwpStrictReliableNoDurability} profile with the two underlying base profiles (\textit{SwpReliableNoDurability} and \textit{SwpBestEffort}) we get the QoS parameters presented on \cref{fig:readerQoS}. The \textit{DataReaders} parameters presented on \cref{fig:readerQoS} has been evaluated as follows:
+
+\begin{itemize}
+	\item \textbf{liveliness (removed)} see \textit{DataWriter liveliness} QoS evaluation above for parameter description. 
+	
+	The centralized solution is not built to be fault tolerant or to detect any changes is number of turbines. Thus this parameter has been removed.
+	
+	\item \textbf{reliability} see \textit{DataWriter reliability} QoS evaluation above for parameter description.
+	
+	The centralized solution is configured for strictly reliable messaging.
+	
+	Note that strict reliability is only achieved when combining this parameter configuration with a \textit{KEEP\_ALL\_HISTORY\_QOS} history configuration.
+	\item \textbf{history} see \textit{DataWriter history} QoS evaluation above for parameter description.
+	
+	Strict reliability is maintained through the \textit{KEEP\_ALL\_HISTORY\_QOS}, where \textit{resource\_limits} defines how many data samples the receive queue can hold.
+	
+	\item \textbf{resource\_limits} see \textit{DataWriter resource\_limits} QoS evaluation above for parameter description.
+	
+	The receive queue size of the \textit{DataReaders} are configured to 20 data samples per keyed instance. 
+	\item \textbf{protocol} parameter provides the system developer control over the configurable portions of the standard protocol for packet exchange between applications, in this case the configuration of the reliable data reader mechanism (rtps\_reliable\_reader) of the protocol on a per \textit{DataReader} basis.
+	
+	The parameters within the \textit{protocol} parameter is used to tune the reliability protocol. Setting them is not required in order to achieve strict reliability but is beneficial from a performance standpoint. 
+	
+	When a \textit{DataReader} receives a heartbeat from a \textit{DataWriter} (indicating (a) that the DataWriter still exists on the network and (b) what sequence numbers it has published), the \textit{DataReader} will instantly reply with a positive or negative acknowledgment. Setting the \textit{response\_delay} to 0 nanoseconds makes the system more reactive at the cost of an increased chance of (N)ACK spikes. The regulation cycle blocks until messages from all turbines has been received, thus it is crucial to inform any data sample losses as soon as possible.
+\end{itemize}
 
 
-%DTLS --> underlying UDP, multicast disabled
-
-%<autoenable_created_entities>false</autoenable_created_entities> we default should be true. We don't need any disabled entities
-
-%logging: removed from both systems
-%discovery
-%buffer size
-%participant, UDP, dtls
-%datareader, liveliness, best effort reliability, history 1
-%datawriter, liveliness, same as reader, heartbeat watermarks for reliability
-
-%Siemens er ved at skifte til, UDP Det giver mere mening, sparer netværks trafik
+\begin{figure}
+\begin{lstlisting}[language=XML]
+<datareader_qos>
+	<!-- <liveliness>
+		<lease_duration>
+			<sec>1</sec>
+			<nanosec>0</nanosec>
+		</lease_duration>
+	</liveliness> -->
+	<history>
+		<kind>KEEP_ALL_HISTORY_QOS</kind>
+	</history>
+	<reliability>
+		<kind>RELIABLE_RELIABILITY_QOS</kind>
+	</reliability>
+	<resource_limits>
+		<max_samples_per_instance>20</max_samples_per_instance>
+	</resource_limits>
+	<protocol>
+		<rtps_reliable_reader>
+			<min_heartbeat_response_delay>
+				<sec>0</sec>
+				<nanosec>0</nanosec>
+			</min_heartbeat_response_delay>
+			<max_heartbeat_response_delay>
+				<sec>0</sec>
+				<nanosec>0</nanosec>
+			</max_heartbeat_response_delay>
+		</rtps_reliable_reader>
+	</protocol>
+</datareader_qos>
+\end{lstlisting}
+\caption[DataReader QoS parameters]{
+		\label{fig:readerQoS} 
+		\footnotesize{DataReader QoS parameters.}
+	}
+\end{figure}
 
 
 \section{Comparison to the existing system at Siemens Wind Power}
