@@ -2,15 +2,15 @@
 
 \chapter{Results}
 
-\section{PS \ref{PS:Q:Feasibility}: Does our prototype work?}
-We start the prototype does it communicate with out a central system?
+\section{\ref{PS:Q:Feasibility}: Does our prototype work?}
+Presented below in \cref{fig:graphicalInterface} is shown a screenshot of the graphical interface while the decentralized solution is running 5 turbines. The global setpoint for power production is at 2000, illustrated by the red line and global power production is illustrated by the black line. The blue line illustrates the maximum available power production for the wind farm while the lines in the bottom around 400 is the power production of each individual turbine.
 
-\begin{figure}
+\begin{figure} [!h]
 	\centering
 	\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{gui.png} 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[Graphical interface running 5 turbines]{
-		\label{fig:publishSubscribe} 
+		\label{fig:graphicalInterface} 
 		\footnotesize{%
 			Graphical interface running 5 turbines.
 		}
@@ -18,15 +18,15 @@ We start the prototype does it communicate with out a central system?
 \end{figure}
 
 
-\section{PS \ref{PS:Q:Availability}: Remove node without system failure?}
+\section{\ref{PS:Q:Availability}: Remove node without system failure?}
 Randomly kill client, plot a few seconds of data around the event.
 
-\section{PS \ref{PS:Q:Performance}: Can we make a solution that scales?}
+\section{\ref{PS:Q:Performance}: Can we make a solution that scales?}
 
 \input{figures/tikz/Resources1}
 
 
-\section{PS \ref{PS:Q:Scalability}: Does it scale well compared to the centralized version?}
+\section{\ref{PS:Q:Scalability}: Does it scale well compared to the centralized version?}
 \input{figures/tikz/CycleTimePlot1}
 
 \input{figures/tikz/CacheMisses1}

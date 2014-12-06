@@ -1,16 +1,16 @@
 \section{Distributed computing}
 
-As mentioned, The Wind Power Supervisor (WPS) and the Park Pilot does not scale well with the number of turbines, which forces Siemens to set the regulation cycle time after worst case scenarios (see \cref{sec:SiemensCase} for details). Today this cycle time is set to 150 ms and Siemens wants the time reduced to 10 ms. This is a major performance improvement and as such not a strict demand from the Siemens case, meaning any reduction in the 150 ms cycle time will be accepted. The goal for the decentralized solution to the Siemens case is therefore to reduce the regulation cycle time as much as possible.
+As mentioned, The Wind Power Supervisor (WPS) and the Park Pilot does not scale well with the number of turbines, which forces Siemens to set the regulation cycle time after worst case scenarios (see \cref{sec:SiemensCase} for details). Today the regulation cycle time is set to 150 ms and Siemens wants the regulation cycle time reduced to 10 ms. This is a major performance improvement and as such not a strict demand from the Siemens case, meaning any reduction in the 150 ms cycle time will be accepted. The goal for the decentralized solution to the Siemens case is therefore to reduce the regulation cycle time as much as possible.
 
-Looking at the park regulation algorithm \cref{sec:SiemensCase}, the reason for it being slow is primarily the communication overhead involved, when requesting set points from every turbine and sending new set points to every turbine, and that this communication overhead increases with the number of turbines involved with the regulation. So to reduce the regulation cycle time, this communication overhead needs to be reduced, by letting each turbine perform park regulations and calculate their own set points. 
+Looking at the park regulation cycle \cref{sec:SiemensCase}, the reason for it being slow is primarily the communication overhead involved, when requesting setpoints from every turbine and sending new setpoints to every turbine, and that this communication overhead increases with the number of turbines involved with the regulation. So to reduce the regulation cycle time, this communication overhead needs to be reduced, by letting each turbine perform the regulation cycle and calculate their own setpoints. 
 
 %Removing the communication overhead from the regulation algorithm involves detaching sharing of data from the algorithm. In order to do this
 
-For the Park Pilot to be able to compute a park regulation, the Park Pilot needs information about every turbine in the farm. In the same way, when decentralizing the Park Pilot, if a turbine is to compute park regulations, the turbine needs information about every other turbine. This means the windmill farm needs a global shared state, where information about every turbine in the farm is available to every turbine performing park regulations. 
+For the Park Pilot to be able to compute the regulation algorithm, the Park Pilot needs information about every turbine in the farm. In the same way, when decentralizing the Park Pilot, if a turbine is to compute the regulation algorithm, the turbine needs information about every other turbine. This means the wind farm needs a global shared state, where information about every turbine in the wind farm is available to every turbine performing the regulation algorithm. 
 
 %This is a major performance improvement and for that reason, performing the regulation sequence using a distributed database only is not enough, since reading/writing to the disk takes valuable milliseconds. Therefore regulation information needs to be kept in memory in order to keep regulation cycle time as low as possible. 
 
-This chapter describes and discusses different distributed computing paradigms as a way of making a global state for the turbines to compute park regulations themselves. The goal is to find the paradigm best suited for the Siemens case. Furthermore, the chapter describes relevant technologies within the chosen paradigm and discusses which technology that is the best for the Siemens case.
+This chapter describes and discusses different distributed computing paradigms as a way of making a global state for the turbines to compute the regulation algorithm themselves. The goal is to find the paradigm best suited for the Siemens case. Furthermore, the chapter describes relevant technologies within the chosen paradigm and discusses which technology is the best fit for the Siemens case.
 
 The chapter uses the following definition by Andrews~\cite{andrews2000foundations} for distributed computing: \textit{In distributed computing, each node or process has its own local memory and communication happens via message passing.}
 
@@ -32,7 +32,7 @@ With message passing being a low-level communication paradigm, the communication
 
 \subsection{Distributed shared memory}
 
-Shared memory is an attractive paradigm for designing parallel and distributed systems. Applications can use shared memory as a tool for the entire system to share a common state. However for loose coupled distributed systems, no physically shared memory is available to support such a model. Distributed shared memory (DSM) is a way of providing physically distributed memory machines a shared memory abstraction, illustrated on \cref{fig:distributedSharedMemory}.
+Shared memory is an attractive paradigm for designing parallel and distributed systems. Applications can use shared memory as a tool for the entire system to share a common state. However for loosely coupled distributed systems, no physically shared memory is available to support such a model. Distributed shared memory (DSM) is a way of providing physically distributed memory machines a shared memory abstraction, illustrated on \cref{fig:distributedSharedMemory}.
 
 \begin{figure}
 	\centering
@@ -350,22 +350,22 @@ RTI Connext provides a number of entities that must be present in a system in or
 
 \begin{itemize}
 	\item \textbf{DomainParticipant} \\
-		Domains represent logical, isolated, communication networks. Entities existing in different domains are unable to communicate with each other. The DomainParticipant is created with an integer value specifying the domain it belongs to. The DomainParticipants owns the Topics, Publishers and Subscribers in effect making them belong to a specific domain.
+		\textit{Domains} represent logical, isolated, communication networks. Entities existing in different \textit{Domains} are unable to communicate with each other. The \textit{DomainParticipant} is created with an integer value specifying the \textit{Domain} it belongs to. The \textit{DomainParticipants} owns the \textit{Topics}, \textit{Publishers} and \textit{Subscribers} in effect making them belong to a specific \textit{Domain}.
 	
 	\item \textbf{Publisher} \\
-		A Publisher owns and manages a number of DataWriters. The Publisher is responsible for the publishing of data provided by the DataWriters. One Publisher can publish data from several DataWriters on several different Topics.
+		A \textit{Publisher} owns and manages a number of \textit{DataWriters}. The \textit{Publisher} is responsible for the publishing of data provided by the \textit{DataWriters}. One \textit{Publisher} can publish data from several \textit{DataWriters} on several different \textit{Topics}.
 	
 	\item \textbf{Subscriber} \\
-		A Subscriber owns and manages a number of DataReaders. The Subscriber is responsible for the receipt of published data on behalf of the DataReaders. One Subscriber can receive data for several DataReaders on several different Topics. 
+		A \textit{Subscriber} owns and manages a number of \textit{DataReaders}. The \textit{Subscriber} is responsible for the receipt of published data on behalf of the \textit{DataReaders}. One \textit{Subscriber} can receive data for several \textit{DataReaders} on several different \textit{Topics}. 
 	
 	\item \textbf{Topic} \\
-		Topics interconnect DataReaders and DataWriters. DataWriters can subscribe to a Topic and receive data each time a DataReader publishes data to the same Topic.
+		\textit{Topics} interconnect \textit{DataReaders} and \textit{DataWriters}. \textit{DataWriters} can subscribe to a \textit{Topic} and receive data each time a \textit{DataReader} publishes data to the same \textit{Topic}.
 	
 	\item \textbf{DataWriter} \\
-		A Datawriter is owned by a single Publisher. It is associated with a single Topic and is able to send data to this Topic using the owning Publisher.
+		A \textit{Datawriter} is owned by a single \textit{Publisher}. It is associated with a single \textit{Topic} and is able to send data to this \textit{Topic} using the owning \textit{Publisher}.
 	
 	\item \textbf{DataReader} \\
-		A DataReader is owned by a single Subscriber. It is associated with a single Topic and is able to receive data published to this Topic using the owning DataReader.
+		A \textit{DataReader} is owned by a single \textit{Subscriber}. It is associated with a single \textit{Topic} and is able to receive data published to this \textit{Topic} using the owning \textit{DataReader}.
 \end{itemize}
 
 \begin{figure}
@@ -391,11 +391,11 @@ The protocol is split into two phases:
 	\item Simple Endpoint Discovery Protocol
 \end{itemize}
 
-The Simple Participant Discovery Protocol(SPDP) phase facilitates the discovery of DomainParticipants across the network.
-After this phase has been completed all DomainParticipants in the system has registered the necessary information to enable future communication with each other.
+The Simple Participant Discovery Protocol(SPDP) phase facilitates the discovery of \textit{DomainParticipants} across the network.
+After this phase has been completed all \textit{DomainParticipants} in the system has registered the necessary information to enable future communication with each other.
 
-The Simple Endpoint Discovery Protocol(SEDP) phase facilitates the discovery of DataWriters and DataReaders across the network.
-After this phase has been completed all DomainParticipants in the system has registered the necessesary information to enable DataWriters and DataReaders to communicate.
+The Simple Endpoint Discovery Protocol(SEDP) phase facilitates the discovery of \textit{DataWriters} and \textit{DataReaders} across the network.
+After this phase has been completed all \textit{DomainParticipants} in the system has registered the necessesary information to enable \textit{DataWriters} and \textit{DataReaders} to communicate.
 
 \begin{figure}
 	\centering
@@ -409,15 +409,15 @@ After this phase has been completed all DomainParticipants in the system has reg
 	}
 \end{figure}
 
-Since the SEDP registers all the DataWriters and DataReaders in the system the protocol scales poorly \cite{(CFDP)}. The discovery time and number of packets sent grows as the number of endpoints increase. This affects the scalability of the system directly. To avoid the increase in discovery time different protocols has been proposed to solve the scalability problem. 
+Since the SEDP registers all the \textit{DataWriters} and \textit{DataReaders} in the system the protocol scales poorly \cite{(CFDP)}. The discovery time and number of packets sent grows as the number of endpoints increase. This affects the scalability of the system directly. To avoid the increase in discovery time different protocols has been proposed to solve the scalability problem. 
 
-\paragraph{Content-based Filtering Discovery Protocol(CFDP)} is similar to SDP during the SPDP phase but it differs in the SEDP phase where changes has been made in order to facilitate content-based discovery of endpoints. The filtering allows the DomainParticipant to reduce the number of discovery messages to the number of endpoints that needs to communicate with the DomainParticipant and its local endpoints. Currently CFDP has only been tested using unicast and here the protocol outperforms SDP in terms of network usage, packages sent and discovery time. However if multicast is used as the underlying transport protocol SDP outperforms CFDP. This happens because SDP only needs one multicast for all DomainParticipants. CFDP in contrast will need one multicast address for each content filter used. This limitation in CFDP is proposed as a subject for further research.
+\paragraph{Content-based Filtering Discovery Protocol(CFDP)} is similar to SDP during the SPDP phase but it differs in the SEDP phase where changes has been made in order to facilitate content-based discovery of endpoints. The filtering allows the \textit{DomainParticipant} to reduce the number of discovery messages to the number of endpoints that needs to communicate with the \textit{DomainParticipant} and its local endpoints. Currently CFDP has only been tested using unicast and here the protocol outperforms SDP in terms of network usage, packages sent and discovery time. However if multicast is used as the underlying transport protocol SDP outperforms CFDP. This happens because SDP only needs one multicast for all \textit{DomainParticipants}. CFDP in contrast will need one multicast address for each content filter used. This limitation in CFDP is proposed as a subject for further research.
 
 Since CFDP does not outperform SDP when using multicast, CFDP is not suited as the discovery protocol for the system described in this thesis.
 
-\paragraph{A discovery protocol based on Bloom filters} has been proposed as well \cite{monedero2009dds}. Similar to CFDP the Bloom filter approach aims to reduce the number of packets that needs to be exchanged in order to discover endpoints in the system. The Bloom filter approach introduces a Bloom filter for each DomainParticipant that contains information describing the local endpoints. During the SPDP phase the Bloom filters are distributed to all DomainParticipants. In this way information of all endpoints in the system has been distributed when the SEDP phase begins allowing the DomainParticipants to decrease the number of discovery messages sent to the number of endpoints that it must know in order to facilitate communication for its local DataReaders and DataWriters. 
+\paragraph{A discovery protocol based on Bloom filters} has been proposed as well \cite{monedero2009dds}. Similar to CFDP the Bloom filter approach aims to reduce the number of packets that needs to be exchanged in order to discover endpoints in the system. The Bloom filter approach introduces a Bloom filter for each \textit{DomainParticipant} that contains information describing the local endpoints. During the SPDP phase the Bloom filters are distributed to all \textit{DomainParticipants}. In this way information of all endpoints in the system has been distributed when the SEDP phase begins allowing the \textit{DomainParticipants} to decrease the number of discovery messages sent to the number of endpoints that it must know in order to facilitate communication for its local \textit{DataReaders} and \textit{DataWriters}. 
 
-Again the main advantage of using Bloom filters is found in the unicast scenario. In a multicast scenario there still are advantages of using the Bloom filter approach because the DomainParticipants are able to limit the number of discovery messages compared to SDP. The advantage of using the Bloom filter approach increases as the ratio between endpoints and DomainParticipants increase.
+Again the main advantage of using Bloom filters is found in the unicast scenario. In a multicast scenario there still are advantages of using the Bloom filter approach because the \textit{DomainParticipants} are able to limit the number of discovery messages compared to SDP. The advantage of using the Bloom filter approach increases as the ratio between endpoints and \textit{DomainParticipants} increase.
 
 Since a wind farm has a limited number of endpoints, less than 300 turbines, the decrease in discovery time by using the Bloom filter approach would be minor. Therefore the Bloom filter approach is not further investigated in this thesis. \newline
 
@@ -443,7 +443,7 @@ DDS provides Quality of Service(QoS) parameters to enable very fine grained cont
 		This parameter regulates the reliable delivery of messages in the system, which affect the operation of the turbines and their regulation.
 		
 	\item \textbf{Liveness} \\
-		The Liveness parameter specifies how liveness of a datawriter is determined. This allows the system to detect when a turbine is no longer available and to respond in an appropriate way.
+		The Liveness parameter specifies how liveness of a \textit{DataWriter} is determined. This allows the system to detect when a turbine is no longer available and to respond in an appropriate way.
 \end{itemize}
 
 Using the QoS of DDS a system can be configured to fit its environment and its requirements very tightly allowing efficient and reliable operation. QoS will be elaborated further in chapters \cref{cha:existingSystem} and \cref{cha:decentralizedSystem}.

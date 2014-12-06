@@ -40,11 +40,11 @@ Today turbines in a wind farm at Siemens are equipped with computers for the pur
 	}
 \end{figure}
 
-For every transformer station there is a Park Pilot. The Park Pilots are responsible for wind farm regulation. This is done by monitoring all the turbines performance parameters and issuing setpoints for power production. The calculation of setpoints for each turbine consist of a number of steps as illustrated on figure \cref{fig:currentSiemensCycleTime}. First the Park Pilot must request data from each turbine in order to calculate setpoints based on updated values. The Park Pilot must wait for each turbine to answer the request. After receiving data from each turbine new setpoints are calculated and distributed to the turbines. The buffer is added to make sure setpoints has been properly distributed and that individual turbines have time to adjust their power production according to the new setpoint before a new request for turbine data is sent. Also the WaitForData block may vary in time depending on the current traffic of the network as well as the response time of the individual turbines.\todo{Remove the cycletime part of the figure. We are only interested in explaining the regulation cycle steps not the cycletime. Cycletime will be explained later.}
+For every transformer station there is a Park Pilot. The Park Pilots are responsible for wind farm regulation. This is done by monitoring all the turbines performance parameters and issuing setpoints for power production. The calculation of setpoints for each turbine consist of a number of steps as illustrated on figure \cref{fig:currentSiemensCycleTime}. First the Park Pilot must request data from each turbine in order to calculate setpoints based on updated values. The Park Pilot must wait for each turbine to answer the request. After receiving data from each turbine new setpoints are calculated and distributed to the turbines. The buffer is added to make sure setpoints has been properly distributed and that individual turbines have time to adjust their power production according to the new setpoint before a new request for turbine data is sent. Also the WaitForData block may vary in time depending on the current traffic of the network as well as the response time of the individual turbines.
 
 \begin{figure}[!h]
 	\centering
-	\input{figures/tikz/timingDiagramCentralized}
+	\input{figures/tikz/timingDiagramSiemensSystem}
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[The current Siemens wind farm system overview]{
 		\label{fig:currentSiemensCycleTime} 
@@ -124,7 +124,8 @@ The purpose of this thesis is to design, implement and evaluate a solution for a
 
 The decentralized solution will be implemented as a prototype, for proof of concept and test purposes.
 
-\section{Enabling comparison of current Siemens system with decentralized solution\todo{Bad title}}
+\section{Enabling comparison of current Siemens system with decentralized solution} %
+\todo{Bad Section title}
 In order to address the problems presented in \cref{sec:problemStatement} a common ground must be established for comparison purposes. The decentralized solution proposed in this thesis will not be directly comparable to the current Siemens system because we are unable to duplicate the environment of the current Siemens system. As a consequence of this a centralized solution resembling the current Siemens system must be developed to enable a comparison. As presented in \cref{fig:projectDiffOverview} there exist a difference between the current Siemens system and the centralized solution as well as a difference between the centralized solution and the decentralized solution, illustrated by deltas.\todo{Rename figure parts. Siemens -> Current Siemens system, Central -> Centralized solution, Decentralized -> Decentralized solution}
 
 \begin{figure}[!h]
