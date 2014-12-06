@@ -8,10 +8,4 @@
 \node []					(SimCen)		[right = of Siemens] 	{$\Delta$};
 \node [block]			(OurCent)		[right = of SimCen] 	[label=above:Centralized solution]	{};
 
-\begin{scope}[on background layer]
-\node [block] 		(Central) 	[fit=(Siemens) (OurCent), inner sep=20pt] {};
-\node []					(CenDece)		[right = of Central] 	{$\Delta$};
-\node [block]			(DeCent)		[right = of CenDece] 	[label=above:Decentralized solution] {};
-\end{scope}
-
 \end{tikzpicture}

@@ -26,6 +26,24 @@
 \usepackage{wrapfig}
 \usepackage{listings}
 \usepackage{todonotes}
+\usepackage{ulem}
+
+
+\definecolor{maroon}{rgb}{0.5,0,0}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\lstdefinelanguage{XML}
+{
+  basicstyle=\small\ttfamily,
+  morestring=[s]{"}{"},
+  morecomment=[s]{?}{?},
+  morecomment=[s]{!--}{--},
+  commentstyle=\color{gray},
+  moredelim=[s][\color{black}]{>}{<},
+  moredelim=[s][\color{black}]{\ }{=},
+  stringstyle=\color{black},
+  identifierstyle=\color{black},
+  tabsize=2
+}
 
 
 %\definecolor{webblue}{rgb}{0.0,0.05,0.45}
