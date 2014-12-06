@@ -217,6 +217,23 @@
 
 \newcommand{\inlineURL}[1]{\urlstyle{same}\url{#1}\urlstyle{tt}}
 
+
+\newcommand{\buildBoxPlot}[6][blue!60]{
+	\addplot+[
+	#1,
+	solid,
+	boxplot prepared={
+		median= #2,
+		upper quartile=#3,
+		lower quartile=#4,
+		upper whisker=#5,
+		lower whisker=#6
+	},
+	] coordinates {};
+	
+}
+
+
 %\includeonly{Loadbalancing} %Hvis man ikke vil kompilere det hele hver gang
 \begin{document}
 \frontmatter
