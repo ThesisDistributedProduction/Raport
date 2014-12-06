@@ -1,20 +1,12 @@
 \chapter{The Proposed Centralized Solution}\label{cha:existingSystem}
 
-Question~\ref{PS:Q:Scalability} in the problem statement asks for a comparison between the decentralized solution and the current system at Siemens on different levels. In order to make these comparisons, basic assumptions about the current system at Siemens must be in place. 
+The \ref{PS:Q:Scalability} question in the problem statement(\cref{sec:problemStatement}) asks for a comparison between the decentralized solution and the current system at Siemens on different parameters. Ideally, for us to compare the two systems on equal terms, both systems should be implemented in the same environment. However, since we do not have access to the environment where the current system at Siemens is implemented, we have chosen to build our own version of the current Siemens system, in the same environment as the decentralized solution.
 
-Ideally, for us to compare the two systems on equal terms, both systems should be implemented in the same environment. However, since we do not have access to the environment where the current system at Siemens is implemented, we have chosen to build our own version of the current Siemens system, in the same environment as the decentralized system.
+This version of the current Siemens system, from now on referred to as the centralized solution, is built from what Siemens has informed about the current Siemens system. The goal of the centralized solution is to create a foundation for a comparison between the decentralized solution and the current Siemens system, by making the system architecture around the regulation algorithm the only parameter changed from the centralized solution to the decentralized solution, thus ruling out the environment difference of the two systems as a parameter. This means the centralized solution is only built to enable us to collect data that can be used to compare the two systems. As a result, we aim to compare the decentralized solutions test results with the centralized solutions test results, collected within the same environment, to more accurately answer the \cref{PS:Q:Scalability} question.
 
-This version of their system, from now on referred to as the centralized solution, is built from what Siemens has told us about the current Siemens system. The goal of this version of their system is to create a foundation for a comparison between the decentralized solution and the current Siemens system, by ruling out the environment as a parameter. Since we don't have access to the Siemens environment, we aim to close some of the theoretical gap between the current Siemens system and the decentralized solution, using the centralized solution. As a result, we aim to compare the centralized solution with the decentralized solution.
-
-However in order to completely answer question~\ref{PS:Q:Scalability}, and compare the decentralized solution with the current Siemens system, another comparison must be introduced: A comparison between our centralized solution and the current Siemens system. This comparison is theoretical and based solely on assumptions and what we know about the current Siemens system. 
+However in order to completely answer the \ref{PS:Q:Scalability} question, and compare the decentralized solution with the current Siemens system, another comparison must be introduced: A comparison between our centralized solution and the current Siemens system. This comparison is relevant in order to close the remaining 'comparison-gap' between the decentralized solution and the current Siemens system. This comparison will be a theoretical comparison between the centralized solution and the current Siemens system, and based on assumptions made when building the centralized solution.
 
 The thesis motivation (\cref{sec:ThesisMotivation}) describes a brief overview of the current system at Siemens. This chapter gives a detailed description of the key component of the current Siemens system: The regulation algorithm. Furthermore the chapter describes the centralized solution followed by a theoretical comparison between the centralized solution and the current Siemens system. 
-
-%Only built for comparison/testing purposes
-
-%Logic view. What classes are where?
-
-%Data Objects
 
 \section{Regulation algorithm}\label{sec:regAlgorithm}
 
@@ -37,8 +29,6 @@ To get as realistic a picture of the system as possible of the regulation algori
 
 With the algorithm being a black box, the input/output parameters of the algorithm was studied to provide the correct communication circumstances for the algorithm. \Cref{fig:ioRegAlg} presents a simple input/output overview of the algorithm. Input/output parameters of the algorithm are as follows:
 
-is given a global setpoint and the state of all turbines, from which setpoints for all turbines are calculated (see \cref{sec:calculateSetpoints} for specific explanation of the centralized regulation algorithm). Each turbine are then given a setpoint, which is used to change state of the turbine. The state of the turbine is represented using the following two parameters:
-
 \begin{description}
 	\item The \textbf{global setpoint} of the wind farm. This is the production goal of the wind farm. Which means all turbines combined should produce.
 	\item The \textbf{setpoint} of each turbine, calculated from the regulation algorithm. 
@@ -46,7 +36,9 @@ is given a global setpoint and the state of all turbines, from which setpoints f
 	\item The \textbf{maximum production} of the turbine. In real-life, this parameter is amongst others determined from the wind conditions around the turbine.
 \end{description}
 
-This input/output parameters of the regulation algorithm is of cause simplified. The current system at Siemens has many more but for purpose of this thesis, this is enough. 
+These input/output parameters of the regulation algorithm is simplified compared to the current Siemens system. NOGET MED HVORFOR DET ER OKAY KUN AT  HAVE DET HER DATA.
+
+ The regulation algorithm of the current system at Siemens uses many more parameters, however  many more but for purpose of this thesis, this is enough. 
 
 
 
