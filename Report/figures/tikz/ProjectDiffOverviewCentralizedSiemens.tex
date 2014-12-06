@@ -1,0 +1,11 @@
+\begin{tikzpicture}[
+	node distance = 0.3cm,
+	auto,
+	block/.style={draw, rectangle, text width=5em, text centered, minimum height=5cm}		
+	]
+% Place nodes
+\node [block]			(Siemens)												[label=above:Siemens system]	{};
+\node []					(SimCen)		[right = of Siemens] 	{$\Delta$};
+\node [block]			(OurCent)		[right = of SimCen] 	[label=above:Centralized solution]	{};
+
+\end{tikzpicture}
