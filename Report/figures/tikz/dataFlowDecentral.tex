@@ -9,21 +9,25 @@
 	]
 	
 % Place nodes
-\matrix[row sep=1.4cm,column sep=.4cm] {
+\matrix[row sep=1.5cm,column sep=.5cm] {
 	\node [point]  		(p1x1)	{}; &&
-	\node [rectangle]	(Turbine)		[draw, label=above:\textbf{$\cdot$}nTurbines, text width=50pt]	{Cur.prod. Max.prod}; &&
+	\node [rectangle]	(Turbine)		[draw, label=above:Turbine, text width=50pt]	{Cur.prod. Max.prod}; &&
 	\node [point]  		(p1x3)	{}; \\
 	
 	\node [point]  		(p2x1)			{}; &&
 	\node [textNode]	(HPPP)		 	{Reg.algorithm}; &&
-	\node [textNode]	(Setpoint)	{nTurbines\textbf{$\cdot$}setpoints}; \\
+	\node [textNode]	(Setpoint)	{Setpoint}; \\
 
-	&& \node [textNode]  (gSetpoint)							{Global setpoint}; \\
+	\node [textNode]  (gSetpoint)										{Global setpoint}; &&
+	\node [rectangle]	(Data)			[draw, text width=50pt] {Cur.prod  Max.prod};\\
 };
+
+\node [textNode,right of=Data] {~~~~~~~~~~~~~~~~~\textbf{$\cdot$}nTurbines-1};
 	
 \graph[use existing nodes]{
-	Turbine ->[skip loop v=-3.6cm] HPPP -> Setpoint ->[vh path] Turbine;
-	gSetpoint -> HPPP;
+	Turbine ->[skip loop v=-3.1cm] HPPP -> Setpoint ->[vh path] Turbine;
+	gSetpoint.east -> HPPP;
+	Data -> HPPP;
 };
 
 \end{tikzpicture}
