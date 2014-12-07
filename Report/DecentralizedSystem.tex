@@ -78,8 +78,8 @@ The problems described in the section all relates to installation of DDS Blockse
 Other environments may be more or less optimal but have not been tested during this thesis.
 
 There are a few caveats to be avoided when installing DDS Blockset for Simulink on Windows.
-After installation of DDSBlockset for Simulink completes make sure the NDDSHOME path variable is set to C:\textbackslash Program Files(x86)\textbackslash RTI.
-Notice that this path is different from the default path recommended by RTI which is C:\textbackslash Program Files(x86)\textbackslash RTI\textbackslash ndds.5.0.0 (version numbers may change).
+After installation of DDSBlockset for Simulink completes make sure the NDDSHOME path variable is set to \path{C:\ Program Files(x86)\ RTI}.
+Notice that this path is different from the default path recommended by RTI which is \path{C:\ Program Files(x86)\ RTI\ ndds.5.0.0} (version numbers may change).
 
 DDS Blockset for Simulink has an import feature available for import of Interface Definition Language files. The import process creates a Simulink bus that the Simulink model can hook into and pull data from. In order to enable import of Interface Definition Language files additional setup must be performed.
 Since Matlab does not provide a compiler fro C++ on x64 systems one must be downloaded. Microsoft provides a compiler in the Microsoft Windows SDK 7.1. Matlab must be told to use the compiler by using the mex -setup command. Finally the location of the binaries and the libraries that is downloaded with the new compiler must be added to path.
