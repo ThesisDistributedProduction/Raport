@@ -1,0 +1,81 @@
+
+
+{ %The brackets issolate the enviroment
+
+\tikzstyle{line}		 	= [draw]
+
+\makeatletter
+\ifcsname c@wavenum\endcsname %Only create one counter
+\else
+	\newcounter{wavenum}
+\fi
+\makeatother
+
+\newcommand*{\bitvector}[3]{
+  \draw[fill=#3] (t_cur) -- ++( .1, .3) -- ++(#2-.2,0) -- ++(.1, -.3)
+                         -- ++(-.1,-.3) -- ++(.2-#2,0) -- cycle;
+  \path (t_cur) -- node[anchor=mid](textNode) {#1} ++(#2,0) node[time] (t_cur) {};
+  }
+
+% \known{val}{length}
+\newcommand*{\known}[2]{
+    \bitvector{#1}{#2}{white}
+}
+
+% \unknown{length}
+\newcommand*{\unknown}[2]{
+    \bitvector{#1}{#2}{black!20}
+}
+
+% \nextwave{name}
+\newcommand{\nextwave}[1]{
+  %\path (0,\value{wavenum}) node[time] (t_cur) {};
+   \path (0,\value{wavenum}) node[left] {#1} node[time] (t_cur) {};
+  \addtocounter{wavenum}{-1}
+}
+
+\newcommand{\timeSpanLabel}{
+	\node (CycleTimeLabel) [rectangle, above = 0.7cm of textNode, inner sep=0pt] {Regulation cycle time};	  
+}
+
+\newcommand{\timeSpanA}{
+	\node (t_timeSpanA) [point, above = 0 of t_cur] {};	  
+}
+
+\newcommand{\timeSpanB}{
+	\node (t_timeSpanB) [point, above =0 of t_cur] {};
+
+  \graph[use existing nodes]{
+  	t_timeSpanA --[time span=1cm] CycleTimeLabel;
+   	CycleTimeLabel.south --[time span=-0.24cm] t_timeSpanB;
+  }; 
+    	
+}
+
+
+%%% End of timing.sty
+\begin{tikzpicture}[
+	point/.style={inner sep=0pt}, %circle,minimum size=2pt,fill=red},
+	draw=black, 
+	yscale=.8,
+	xscale=1,
+	hv path/.style={to path={-| (\tikztotarget)}},
+	vh path/.style={to path={|- (\tikztotarget)}},
+	skip loop v/.style={to path={-- ++(#1,0) |- (\tikztotarget)}},		
+	skip loop h/.style={to path={-- ++(0,#1) -| (\tikztotarget)}},
+	time span/.style={to path={-- ++(0,#1) -| (\tikztotarget)}},
+	graphs/every graph/.style={edges=rounded corners}	
+	]
+	
+  \tikzstyle{time}=[coordinate]
+  \setlength{\unitlength}{1cm}
+  \setcounter{wavenum}{0}
+    
+  %\nextwave{Regulation Time} \unknown{SendData}{2} \known{WaitForData}{5} \unknown{ReciveData}{2} \unknown{Calculate}{2}\unknown{SendSP}{2}
+  \nextwave{Park Pilot} \unknown{reqStates}{1.8} \known{wait}{2} \unknown{readStates}{2} \unknown{calculate}{1.7} \unknown{sendSetpoints}{2.6}
+  
+  \nextwave{Turbine} \known{wait}{1.8} \unknown{replyState}{2} \known{wait}{6.3} \unknown{receiveSetpoint}{2.9}
+    
+  
+\end{tikzpicture}
+}
