@@ -1,68 +1,96 @@
 \begin{tikzpicture}
-	\begin{axis}
-	[
-		width=\textwidth,
-		xlabel=Number of turbines,
-		ylabel=Regulation cycle time (ms),
-		xtick={1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18},
-		xticklabels={5, 10, 15, 20, 25, 30, 35, 40, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95},
-		boxplot/draw direction=y
-	]
-	\buildBoxPlot{0.871522}{0.955}{0.809034}{12.535623}{0.541744}
+\begin{axis}
+[
+width=\textwidth,
+axis y line*=left,
+xlabel=Number of turbines,
+ylabel=Regulation cycle time (ms),
+ymin = 0,
+xtick={1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},
+xticklabels={5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95},
+boxplot/draw direction=y
+]
 
-	\buildBoxPlot{1.168815}{1.310873}{1.081427}{24.566027}{0.591135}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog2.csv
+\buildBoxPlot{0.871522}{0.955}{0.809034}{12.535623}{0.541744}
 
-	\buildBoxPlot{1.398871}{1.613768}{1.303639}{19.188073}{0.747894}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog3.csv
+\buildBoxPlot{1.168815}{1.310873}{1.081427}{24.566027}{0.591135}
 
-	\buildBoxPlot{1.722236}{1.981776}{1.596331}{13.257023}{1.077214}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog4.csv
+\buildBoxPlot{1.398871}{1.613768}{1.303639}{19.188073}{0.747894}
 
-	\buildBoxPlot{1.978881}{2.337657}{1.823133}{20.243534}{1.278172}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog5.csv
+\buildBoxPlot{1.722236}{1.981776}{1.596331}{13.257023}{1.077214}
 
-	\buildBoxPlot{2.985681}{3.527133}{2.724617}{102.89112}{1.917354}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog6.csv
+\buildBoxPlot{1.978881}{2.337657}{1.823133}{20.243534}{1.278172}
 
-	\buildBoxPlot{5.662608}{6.776183}{5.315074}{55.800126}{3.845115}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog7.csv
+\buildBoxPlot{2.985681}{3.527133}{2.724617}{102.89112}{1.917354}
 
-	\buildBoxPlot{14.607313}{22.842589}{10.21933}{40.119104}{7.578863}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog8.csv
+\buildBoxPlot{5.662268}{6.776311}{5.315074}{55.800126}{3.845115}
 
-	\buildBoxPlot{20.220936}{27.962488}{19.190067}{63.348974}{17.058657}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog9.csv
+\buildBoxPlot{14.607313}{22.842589}{10.21933}{40.119104}{7.578863}
 
-	\buildBoxPlot{31.587407}{33.177592}{24.950794}{46.841843}{22.941051}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog10.csv
+\buildBoxPlot{16.673738}{25.382756}{14.810635}{46.844742}{12.042462}
 
-	\buildBoxPlot{36.93711}{38.790125}{32.230331}{51.398495}{29.702809}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog11.csv
+\buildBoxPlot{20.220936}{27.962488}{19.190067}{63.348974}{17.058657}
 
-	\buildBoxPlot{40.231022}{42.885333}{36.673407}{77.051599}{33.854906}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog12.csv
+\buildBoxPlot{31.587407}{33.177592}{24.950794}{46.841843}{22.941051}
 
-	\buildBoxPlot{45.380062}{48.694656}{42.841453}{225.894089}{39.402015}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog13.csv
+\buildBoxPlot{36.93711}{38.790125}{32.230331}{51.398495}{29.702809}
 
-	\buildBoxPlot{51.425649}{54.462315}{48.438981}{250.200229}{45.062697}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog14.csv
+\buildBoxPlot{40.231022}{42.885333}{36.673407}{77.051599}{33.854906}
 
-	\buildBoxPlot{58.196177}{62.557505}{55.582236}{271.626595}{51.598593}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog15.csv
+\buildBoxPlot{45.380062}{48.694656}{42.841453}{225.894089}{39.402015}
 
-	\buildBoxPlot{64.70376}{70.553035}{62.053219}{278.866888}{57.401402}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog16.csv
+\buildBoxPlot{51.425649}{54.462315}{48.438981}{250.200229}{45.062697}
 
-	\buildBoxPlot{73.715686}{80.566923}{69.809765}{287.542878}{65.698499}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog17.csv
+\buildBoxPlot{58.196177}{62.557505}{55.582236}{271.626595}{51.598593}
 
-	\buildBoxPlot{82.961949}{151.608592}{77.825807}{290.243704}{72.589561}
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog18.csv
+\buildBoxPlot{64.70376}{70.553035}{62.053219}{278.866888}{57.401402}
 
-\addplot[thick, red] coordinates {
-(1 ,0.871522)
-(2 ,1.168815)
-(3 ,1.398871)
-(4 ,1.722236)
-(5 ,1.978881)
-(6 ,2.985681)
-(7 ,5.662608)
-(8 ,14.607313)
-(9 ,20.220936)
-(10 ,31.587407)
-(11 ,36.93711)
-(12 ,40.231022)
-(13 ,45.380062)
-(14 ,51.425649)
-(15 ,58.196177)
-(16 ,64.70376)
-(17 ,73.715686)
-(18 ,82.961949)
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog19.csv
+\buildBoxPlot{73.715686}{80.566923}{69.809765}{287.542878}{65.698499}
+
+%% /home/stefan/work/TestResults/Test4_Centralized_success_12-4-2014_2024/CentralizedLog20.csv
+\buildBoxPlot{82.961949}{151.608592}{77.825807}{290.243704}{72.589561}
+
+
+\addplot[thick, red!70] coordinates {
+	(1 ,0.871522)
+	(2 ,1.168815)
+	(3 ,1.398871)
+	(4 ,1.722236)
+	(5 ,1.978881)
+	(6 ,2.985681)
+	(7 ,5.662268)
+	(8 ,14.607313)
+	(9 ,16.673738)
+	(10 ,20.220936)
+	(11 ,31.587407)
+	(12 ,36.93711)
+	(13 ,40.231022)
+	(14 ,45.380062)
+	(15 ,51.425649)
+	(16 ,58.196177)
+	(17 ,64.70376)
+	(18 ,73.715686)
+	(19 ,82.961949)
+	
 };
+
 \end{axis}
 \end{tikzpicture}
