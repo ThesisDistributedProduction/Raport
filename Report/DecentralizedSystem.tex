@@ -1,5 +1,16 @@
 % !TeX spellcheck = en_US
-\chapter{Decentralized system}\label{cha:decentralizedSystem}
+\chapter{The Proposed Decentralized Solution}\label{cha:decentralizedSystem}
+
+This chapter describes the proposed centralized solution used to answer the four questions presented in the problem statement (\cref{sec:problemStatement}). The expectation supporting this thesis is that the decentralized solution will perform better than the centralized solution (presented in \cref{cha:existingSystem}) on the following parameters:
+
+\begin{description}
+	\item[Availability] in terms of fault tolerance. Decentralizing the Park Pilot out on the turbines removes the Park Pilot as a single point of failure. Thus the decentralized solution should be able to handle the situation where a the situation where a turbine fails.
+	\item[Performance] in terms of regulation cycle time. Having all data needed, in order to perform the regulation, available locally on every turbine, thus enabling every turbine to regulate themselves, removes the time spent requesting data and waiting for replies from the regulation cycle.
+	\item[Scalability] in terms of turbines per Park Pilot, which ultimately controls the regulation cycle time. The cycle time is controlled by the worst case number of turbines per Park Pilot (i.e. worst case state retrieval time, worst case new setpoint calculations, worst case time it takes to broadcast new setpoints). Thus the theory is that decentralizing the Park Pilot would enable a more dynamic system, where increasing the number of turbines also increases the resources (in terms of CPU power and RAM) available to the Park Pilot, but also increases the number of packages on the network to the point where the network bandwidth becomes inadequate. Siemens has informed that the current Siemens solution operates on a gigabit network, making network bandwidth a small issue, but an issue that has to be solved at some point nevertheless. Even when this issue presents itself, one could imagine a decentralized system where the turbines are automatically clustered, where one cluster represents a Park Pilot, in order to decrease number of receivers per turbine, thus decreasing the number of packages on the network.
+\end{description}
+
+
+\noindent The chapter is divided
 
 \section{Regulation algorithm}
 
