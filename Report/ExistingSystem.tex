@@ -8,7 +8,7 @@ However in order to completely answer the \ref{PS:Q:Scalability} question, and c
 
 The thesis motivation (\cref{sec:ThesisMotivation}) describes a brief overview of the current system at Siemens. This chapter gives a detailed description of the key component of the current Siemens system: The regulation algorithm. Furthermore the chapter describes the centralized solution followed by a theoretical comparison between the centralized solution and the current Siemens system. 
 
-\section{Regulation algorithm}\label{sec:regAlgorithm}
+\section{Regulation algorithm}\label{sec:cenRegAlgorithm}
 
 The regulation algorithm is a key component of the system and it is where new setpoints are calculated. Since the purpose of this thesis is not to improve any regulation algorithms, the regulation algorithm has been considered a black box in development of both the centralized and the decentralized solution. What is important to this thesis is that the algorithm used is the same in both the centralized and the decentralized solution, to make sure the two systems are compared on the same terms. 
 
@@ -19,15 +19,15 @@ To get as realistic a picture of the system as possible of the regulation algori
 	\input{figures/tikz/dataFlowCentral}
 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Regulation algorithm input/output parameters]{
-		\label{fig:ioRegAlg} 
+	\caption[Centralized input/output parameters of the regulation algorithm]{
+		\label{fig:ioCenRegAlg} 
 		\footnotesize{%
-			Input/output parameters of the regulation algorithm.
+			Centralized input/output parameters of the regulation algorithm.
 		}
 	}
 \end{figure}
 
-With the algorithm being a black box, the input/output parameters of the algorithm was studied to provide the correct communication circumstances for the algorithm. \Cref{fig:ioRegAlg} presents a simple input/output overview of the algorithm. Input/output parameters of the algorithm are as follows:
+With the algorithm being a black box, the input/output parameters of the algorithm was studied to provide the correct communication circumstances for the algorithm. \Cref{fig:ioCenRegAlg} presents a simple input/output overview of the algorithm. Input/output parameters of the algorithm are as follows:
 
 \begin{description}
 	\item The \textbf{global setpoint} of the wind farm. This is the production goal of the wind farm. Which means all turbines combined should produce.
@@ -36,15 +36,11 @@ With the algorithm being a black box, the input/output parameters of the algorit
 	\item The \textbf{maximum production} of the turbine. In real-life, this parameter is amongst others determined from the wind conditions around the turbine.
 \end{description}
 
-These input/output parameters of the regulation algorithm is simplified compared to the current Siemens system. NOGET MED HVORFOR DET ER OKAY KUN AT  HAVE DET HER DATA.
-
- The regulation algorithm of the current system at Siemens uses many more parameters, however  many more but for purpose of this thesis, this is enough. 
-
-
+These input/output parameters of the regulation algorithm is simplified compared to the current Siemens system. What data that is used is more og less irrelevant for the purpose of this thesis as long as both the decentralized solution and the centralized solution are using the same data and as long as both systems are able to perform the same simple regulation.
 
 \section{Regulation cycle}\label{sec:currentSystemCen} 
 
-The first area studied when building the centralized solution, was building the frames for the regulation algorithm (see \cref{sec:regAlgorithm}), meaning how to communicate the input/output around the system. 
+The first area studied when building the centralized solution, was building the frames for the regulation algorithm (see \cref{sec:cenRegAlgorithm}), meaning how to communicate the input/output around the system. 
 
 The regulation cycle of the Park Pilot loops infinitely. This section describes the centralized solution through explaining how a single regulation cycle works.
 
@@ -92,7 +88,7 @@ The Turbine object is the interface to the actual Turbine. The primary functiona
 
 \subsection{Calculate setpoints}\label{sec:calculateSetpoints}
 
-When the Park Pilot has received the states of all turbines the setpoints for all turbines are calculated. Since we don't have access to Siemens' regulation algorithm (see \cref{sec:regAlgorithm}), we have developed our own simple regulation algorithm.
+When the Park Pilot has received the states of all turbines the setpoints for all turbines are calculated. Since we don't have access to Siemens' regulation algorithm (see \cref{sec:cenRegAlgorithm}), we have developed our own simple regulation algorithm.
 
 Our regulation algorithm works by first determining how many turbines that are available for production. This is done going through every turbine, checking if they currently hit their maximum production capacity. If a given turbine is producing at maximum capacity, a greater load cannot be assigned to it and the available turbine count is reduced. 
 
