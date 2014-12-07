@@ -40,14 +40,14 @@ These input/output parameters of the regulation algorithm is simplified compared
 
 \section{Regulation cycle}\label{sec:currentSystemCen} 
 
-The first area studied when building the centralized solution, was building the frames for the regulation algorithm (see \cref{sec:cenRegAlgorithm}), meaning how to communicate the input/output around the system. 
+The first area studied when building the centralized solution, was building the frames for the regulation algorithm (see \cref{sec:cenRegAlgorithm}), meaning how to communicate the input/output around the centralized solution. 
 
-The regulation cycle of the Park Pilot loops infinitely. This section describes the centralized solution through explaining how a single regulation cycle works.
+The regulation cycle of the Park Pilot loops infinitely. This section describes the centralized solution by explaining how a single regulation cycle works. The regulation cycle consist of a number of steps presented in \cref{fig:timingCentral}.
 
-\begin{figure}
+\begin{figure}[!h]
 	%The figure show how regulation time differs central vs decantral
-	\input{figures/tikz/timingDiagramCentralized}
-	\caption{The centralized regulation cycle}
+	\input{figures/tikz/cycleDiagramCentralized}
+	\caption{The regulation cycle of the centralized solution}
 	\label{fig:timingCentral}
 \end{figure}
 
@@ -63,10 +63,10 @@ In order for the Park Pilot to calculate turbine setpoints, the Park Pilot must 
 		\newinst{turbine}{:Turbine}
 	
 		\begin{sdblock}{each turbine}{}
-			\mess[1]{parkPilot}{sendRequest}{turbineDataReplier}
-			\begin {call}{turbineDataReplier}{readData()}{turbine}{return data}
+			\mess[1]{parkPilot}{reqState}{turbineDataReplier}
+			\begin {call}{turbineDataReplier}{readState()}{turbine}{return state}
 			\end {call}
-			\mess[1]{turbineDataReplier}{sendReply}{parkPilot}
+			\mess[1]{turbineDataReplier}{replyState}{parkPilot}
 		\end{sdblock}				
 	\end{sequencediagram}
 
@@ -87,9 +87,9 @@ A simple overview of the first part of the regulation sequence is presented on \
 	\item [Turbine] The underlying turbine object, instantiated on every turbine. Interface to the Turbine, which handles communication with the underlying database with simulation data.
 \end{description}
 
-The Park Pilot sends a request to a specific topic and then waits until it has received a reply from all the turbines subscribing to this topic, which in our case is all turbines. In a real-life implementation of the system, a timer should be implemented to determine how long to wait for the replies, and maybe even mark a turbine as offline, if a given turbine does not reply within that time period. However, since this is only a prototype for data comparison purposes, this functionality has not been implemented. The request message, sent from the Park Pilot, contains the cycle time, which is only used for data logging purposes (i.e. not used by the turbines).
+The Park Pilot sends a request to a specific topic and then waits until it has received a reply from all the turbines subscribing to this topic, which in our case is all turbines. In a real-life implementation of the system, a timer should be implemented to determine how long to wait for the replies, and maybe even mark a turbine as offline, if a given turbine does not reply within that time period. However, since this is a prototype for comparison purposes, this functionality has not been implemented. The request message, sent from the Park Pilot, contains the regulation cycle time, which is only used for data logging purposes (i.e. not used by the turbines).
 
-The Turbine Data Replier is instantiated with the Turbine object and runs on every turbine. After instantiation, the Turbine Data Replier goes into an infinite loop which first waits infinitely for a request, reads turbine data from the Turbine object and finally sends a reply containing the data to the Park Pilot. Ideally, the Turbine Data Replier object should have been implemented as a listener on the request topic using RTI Connext SimpleReplier~\cite{rtiConnextUsersManual}. However, we could not get it to work using the SimpleReplier but waiting infinitely for a request works just as well for our purpose.
+The Turbine Data Replier is instantiated with the Turbine object and runs on every turbine. After instantiation, the Turbine Data Replier goes into an infinite loop which first waits infinitely until a request is received, reads turbine data from the Turbine object and finally sends a reply containing the data to the Park Pilot. Ideally, the Turbine Data Replier object should have been implemented as a listener on the request topic using RTI Connext SimpleReplier~\cite{rtiConnextUsersManual}. However, we could not get it to work using the SimpleReplier but waiting infinitely for a request works just as well for our purpose.
 
 The Turbine object is the interface to the actual Turbine. The primary functionality of this object is to change state when a new setpoint is assigned to the object. Furthermore it reads data from the underlying MongoDB database. 
 
