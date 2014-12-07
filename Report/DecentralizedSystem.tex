@@ -16,7 +16,7 @@ This chapter describes the decentralized solution by first describing what decen
 
 \section{Regulation algorithm}
 
-With the regulation algorithm being a black box (see \cref{sec:cenRegAlgorithm})
+Decentralizing the regulation algorithm from the centralized solution (\cref{sec:cenRegAlgorithm}), we get the input/outputs presented on \cref{fig:ioDecenRegAlg}.
 
 \begin{figure}
 	\centering
@@ -24,14 +24,30 @@ With the regulation algorithm being a black box (see \cref{sec:cenRegAlgorithm})
 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[Decentralized input/output parameters of the regulation algorithm]{
-		\label{fig:ioRegAlg} 
+		\label{fig:ioDecenRegAlg} 
 		\footnotesize{%
 			Decentralized input/output parameters of the regulation algorithm.
 		}
 	}
 \end{figure}
 
+The regulation algorithm is now computed on every turbine instead of computing the algorithm on an external Park Pilot. Thus, instead of getting all states (current production and max production) externally, the regulation algorithm now gets one state from the local turbine. Furthermore the regulation algorithm now only calculates a single setpoint - the setpoint used by the local turbine to set a new state - instead of calculating a setpoint for every turbine in the wind farm.
+
+As the \cref{fig:ioDecenRegAlg} implies, this change also means that every turbine now needs the state of every other turbine in the wind farm.
+
 \section{Regulation cycle}
+
+\begin{figure}[b]
+	%The figure show how regulation time differs central vs decantral
+	\input{figures/tikz/timingDiagramDecntral}
+	\caption{The decentralized regulation cycle}
+	\label{fig:timingDecentral}
+\end{figure}
+
+
+%	\newline
+%	
+%	
 
 \section{DDS configuration}
 
