@@ -2,8 +2,10 @@
 
 \chapter{Results}
 
-\section{\ref{PS:Q:Feasibility}: Does our prototype work?}
-Presented below in \cref{fig:graphicalInterface} is shown a screenshot of the graphical interface while the decentralized solution is running 5 turbines. The global setpoint for power production is at 2000, illustrated by the red line and global power production is illustrated by the black line. The blue line illustrates the maximum available power production for the wind farm while the lines in the bottom around 400 is the power production of each individual turbine.
+\section{\ref{PS:Q:Feasibility}}
+Presented in \cref{fig:graphicalInterface} is shown a screenshot of the graphical interface while the decentralized solution is running 5 turbines.
+The global setpoint for power production is at 2000, illustrated by the red line and global power production is illustrated by the black line.
+The blue line illustrates the maximum available power production for the wind farm while the lines in the bottom around 400 is the power production of each individual turbine.
 
 \begin{figure} [!h]
 	\centering
@@ -18,35 +20,57 @@ Presented below in \cref{fig:graphicalInterface} is shown a screenshot of the gr
 \end{figure}
 
 
-\section{\ref{PS:Q:Availability}: Remove node without system failure?}
+\section{\ref{PS:Q:Availability}}
 Randomly kill client, plot a few seconds of data around the event.
 
-\section{\ref{PS:Q:Performance}: Can we make a solution that scales?}
+\section{\ref{PS:Q:Performance}}
 
-\begin{figure}
+
+
+\subsection{Part 1}
+
+\begin{figure}[h]
 	\input{figures/tikz/results/Test5_decentral_cycle_msleep}
-	\caption{Decentralized solution variable sleep time experiment}
+	\caption{Decentralized solution variable sleep time experiment 1}
 	\label{fig:exp:decen:sleep}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
+	\input{figures/tikz/results/Test5_decentral_cycle_msleep_cache}
+	\caption{Decentralized solution variable sleep time experiment 1}
+	\label{fig:exp:decen:sleep_cache}
+\end{figure}
+
+\begin{figure}[h]
 	\input{figures/tikz/results/Test6_decentral_cycle_msleep}
-	\caption{Decentralized solution variable sleep time experiment}
+	\caption{Decentralized solution variable sleep time experiment 2}
 	\label{fig:exp:decen:sleep2}
 \end{figure}
 
+\begin{figure}[h]
+	\input{figures/tikz/results/Test6_decentral_cycle_msleep_cache}
+	\caption{Decentralized solution variable sleep time experiment 2}
+	\label{fig:exp:decen:sleep2_cache}
+\end{figure}
 
-\begin{figure}
+\subsection{Part 2}
+
+\begin{figure}[h]
 	\input{figures/tikz/results/Test5_decentral_cycle}
-	\caption{Decentralized solution variable number of turbines experiment}
+	\caption{Decentralized solution variable number of turbines experiment 1}
 	\label{fig:exp:decen:turbines}
 \end{figure}
 
-
-\begin{figure}
-	\input{figures/tikz/results/Test4_Central_cycle}
-	\caption{Centralized solution variable number of turbines experiment}
-	\label{fig:exp:cen:turbines}
+\begin{figure}[h]
+	\input{figures/tikz/results/Test5_decentral_cycle_cache}
+	\caption{Decentralized solution variable number of turbines experiment 1}
+	\label{fig:exp:decen:turbines_cache}
 \end{figure}
 
-\section{\ref{PS:Q:Scalability}: Does it scale well compared to the centralized version?}
+\section{\ref{PS:Q:Scalability}}
+
+\begin{figure}[h]
+	\input{figures/tikz/results/Test4_Central_cycle}
+	\caption{Centralized solution variable number of turbines experiment 1}
+	\label{fig:exp:cen:turbines}
+\end{figure}

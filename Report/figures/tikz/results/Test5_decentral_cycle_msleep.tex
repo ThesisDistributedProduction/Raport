@@ -54,37 +54,3 @@ boxplot/draw direction=y
 
 \end{axis}
 \end{tikzpicture}
-\begin{tikzpicture}
-\begin{axis}
-[
-width=\textwidth,
-axis y line*=left,
-xlabel=Sleeptime (ms),
-ymin = 0,
-ylabel=Average Cache hits,
-xtick={1, 2, 3, 4, 5, 6, 7, 8, 9},
-xticklabels={10, 15, 20, 25, 30, 35, 40, 45, 50},
-boxplot/draw direction=y
-]
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\addplot[thick, orange!70] coordinates {
-	(1 ,6.085743962607115)
-	(2 ,1.30948985528138)
-	(3 ,1.938311112324131)
-	(4 ,1.6288878136953286)
-	(5 ,0.7463376395972676)
-	(6 ,1.1345702327480605)
-	(7 ,0.459182154121039)
-	(8 ,0.6532183226081268)
-	(9 ,1.2264147755115835)
-};
-\end{axis}
-\end{tikzpicture}

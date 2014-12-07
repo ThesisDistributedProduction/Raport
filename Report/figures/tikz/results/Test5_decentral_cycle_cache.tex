@@ -1,0 +1,56 @@
+\begin{tikzpicture}
+\begin{axis}
+[
+width=\textwidth,
+axis y line*=left,
+xlabel=Number of turbines,
+ymin = 0,
+ylabel=Average Cache hits,
+xtick={1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20},
+xticklabels={5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100},
+boxplot/draw direction=y
+]
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\addplot[thick, orange!70] coordinates {
+	(1 ,0.2591015249347438)
+	(2 ,0.3423283799799435)
+	(3 ,0.4286200856364344)
+	(4 ,0.7913519050319182)
+	(5 ,1.171919068056407)
+	(6 ,0.4440826120490188)
+	(7 ,1.8595523144717856)
+	(8 ,0.506366007056297)
+	(9 ,1.8951768000539848)
+	(10 ,2.037951753081981)
+	(11 ,2.0728170589196186)
+	(12 ,2.0275369832294468)
+	(13 ,1.2416290071090674)
+	(14 ,3.5220372523313626)
+	(15 ,2.115832267020478)
+	(16 ,3.7417427229878832)
+	(17 ,5.311682134712245)
+	(18 ,8.473847137142263)
+	(19 ,14.663734246038112)
+	(20 ,22.06932793366117)
+};
+\end{axis}
+\end{tikzpicture}

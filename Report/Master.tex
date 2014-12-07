@@ -215,7 +215,7 @@
 % Added possibility for description refferences by using the \itemlabel{}{} command %
 \makeatletter
 \newcommand{\labitem}[2]{%
-	\def\@itemlabel{''\textbf{#1}''}
+	\def\@itemlabel{\textbf{#1}}
 	\item
 	\def\@currentlabel{\textit{#1}}\label{#2}}
 \makeatother
