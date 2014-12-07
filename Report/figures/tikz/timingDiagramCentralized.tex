@@ -29,13 +29,13 @@
 
 % \nextwave{name}
 \newcommand{\nextwave}[1]{
-  \path (0,\value{wavenum}) node[time] (t_cur) {};
-  % \path (0,\value{wavenum}) node[left] {#1} node[time] (t_cur) {};
+  %\path (0,\value{wavenum}) node[time] (t_cur) {};
+   \path (0,\value{wavenum}) node[left] {#1} node[time] (t_cur) {};
   \addtocounter{wavenum}{-1}
 }
 
 \newcommand{\timeSpanLabel}{
-	\node (CycleTimeLabel) [rectangle, above = 1.01cm of t_cur, inner sep=0pt] {CycleTime};	  
+	\node (CycleTimeLabel) [rectangle, above = 0.7cm of textNode, inner sep=0pt] {Regulation cycle time};	  
 }
 
 \newcommand{\timeSpanA}{
@@ -72,9 +72,9 @@
   \setcounter{wavenum}{0}
     
   %\nextwave{Regulation Time} \unknown{SendData}{2} \known{WaitForData}{5} \unknown{ReciveData}{2} \unknown{Calculate}{2}\unknown{SendSP}{2}
-  \nextwave{} \timeSpanA \unknown{ReqData}{3} \known{Wait}{3} \timeSpanLabel \unknown{ReadData}{2}  \unknown{Calculate}{2} \unknown{Send SP}{2} \timeSpanB
+  \nextwave{Park Pilot} \timeSpanA \unknown{ReqState}{2} \known{Wait}{2} \unknown{ReadState}{2} \timeSpanLabel \unknown{Calculate}{2} \unknown{Send SP}{2} \timeSpanB
   
-  \nextwave{} \known{Wait}{3} \unknown{SendData}{3} \known{Wait}{6} \unknown{Recive SP}{2}
+  \nextwave{Turbines} \known{Wait}{2} \unknown{ReplyState}{2} \known{Wait}{6} \unknown{Receive SP}{2}
     
   
 \end{tikzpicture}
