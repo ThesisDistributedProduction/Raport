@@ -1,0 +1,76 @@
+\begin{tikzpicture}
+\begin{axis}
+[
+width=\textwidth,
+axis y line*=left,
+xlabel=Sleeptime (ms),
+ylabel=Regulation cycle time (ms),
+ymin = 0,
+xtick={1, 2, 3, 4, 5, 6, 7, 8},
+xticklabels={15, 20, 25, 30, 35, 40, 45, 50},
+boxplot/draw direction=y
+]
+
+\buildBoxPlot{15.092001}{15.350001}{14.615002}{35.264002}{1.741002}
+
+\buildBoxPlot{19.940002}{20.344001}{19.065}{31.065001}{4.285}
+
+\buildBoxPlot{25.049}{25.340002}{24.285001}{34.350001}{3.004001}
+
+\buildBoxPlot{30.127001}{30.325}{29.743}{40.916}{18.242002}
+
+\buildBoxPlot{35.128}{35.358001}{34.704}{47.280002}{1.504}
+
+\buildBoxPlot{40.130002}{40.312001}{39.81}{51.402001}{25.482001}
+
+\buildBoxPlot{45.186}{45.348001}{44.919}{59.214001}{15.009}
+
+\buildBoxPlot{49.999001}{50.319002}{49.183002}{59.652}{4.503}
+
+
+\addplot[thick, red!70] coordinates {
+	(1 ,15.092001)
+	(2 ,19.940002)
+	(3 ,25.049)
+	(4 ,30.127001)
+	(5 ,35.128)
+	(6 ,40.130002)
+	(7 ,45.186)
+	(8 ,49.999001)
+	
+};
+
+\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis}
+[
+width=\textwidth,
+axis y line*=left,
+xlabel=Sleeptime (ms),
+ymin = 0,
+ylabel=Average Cache hits,
+xtick={1, 2, 3, 4, 5, 6, 7, 8},
+xticklabels={15, 20, 25, 30, 35, 40, 45, 50},
+boxplot/draw direction=y
+]
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\buildBoxPlot[black]{0}{0}{0}{0}{0}
+\addplot[thick, orange!70] coordinates {
+	(1 ,1.30948985528138)
+	(2 ,1.938311112324131)
+	(3 ,1.6288878136953286)
+	(4 ,0.7463376395972676)
+	(5 ,1.1345702327480605)
+	(6 ,0.459182154121039)
+	(7 ,0.6532183226081268)
+	(8 ,1.2264147755115835)
+};
+\end{axis}
+\end{tikzpicture}
