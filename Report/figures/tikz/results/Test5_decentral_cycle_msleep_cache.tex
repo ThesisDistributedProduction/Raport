@@ -1,11 +1,11 @@
 \begin{tikzpicture}
 \begin{axis}
 [
-width=\textwidth,
+width=\resultsFigureWidthScale\textwidth,
 axis y line*=left,
 xlabel=Sleeptime (ms),
 ymin = 0,
-ylabel=Average Cache hits,
+ylabel=Average cache hits,
 xtick={1, 2, 3, 4, 5, 6, 7, 8, 9},
 xticklabels={10, 15, 20, 25, 30, 35, 40, 45, 50},
 boxplot/draw direction=y
@@ -30,5 +30,14 @@ boxplot/draw direction=y
 	(8 ,0.6532183226081268)
 	(9 ,1.2264147755115835)
 };
+
+%    \addplot [no markers, red] gnuplot [raw gnuplot] { % "raw gnuplot" allows us to use arbitrary gnuplot commands
+%    	f(x) = a*exp(b*x); % Define the function to fit
+%    	a=1; b=-0.001; % Set reasonable starting values here
+%    	fit f(x) 'data.csv' u 1:4 via a,b; % Select the file, the columns (indexing starts at 1) and the variables
+%    	plot [x=3000:4000] f(x); % Specify the range to plot
+%    };
+
+
 \end{axis}
 \end{tikzpicture}
