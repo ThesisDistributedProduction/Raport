@@ -37,7 +37,7 @@
 %}
 
 \newcommand{\timeSpanLabel}{
-	\node (CycleTimeLabel) [rectangle, above = 0.7cm of textNode, inner sep=0pt] {CycleTime};	  
+	\node (CycleTimeLabel) [rectangle, above = 1.02cm of t_cur, inner sep=0pt] {Regulation cycle time};
 }
 
 \newcommand{\timeSpanA}{
@@ -73,7 +73,7 @@
 \setlength{\unitlength}{1cm}
 \setcounter{wavenum}{0}
 
-	\nextwave{} \timeSpanA \unknown{Send SP}{4.7} \unknown{ReadData}{4.7} \timeSpanLabel  \unknown{Calculate}{4.6} \timeSpanB
-	\nextwave{} \known{ReciveData}{14}
+	\nextwave{} \timeSpanA \unknown{readStates}{3} \unknown{calculate}{3} \timeSpanLabel \unknown{setSetpoint}{3} \unknown{sendState}{3} \timeSpanB \known{wait}{2}
+	\nextwave{} \known{reciveStates}{14}
 \end{tikzpicture}
 }
