@@ -8,15 +8,17 @@ Heavyweight energy consumer USA has declared a goal of reaching 20\% wind energy
 
 Siemens Wind Power is one of the worlds leading producers of wind turbines, with a global market share of 9.5\% in 2012~\cite{worldmarketupdate2012}.
 Siemens Wind Power is increasingly focusing on the offshore wind farm market.
-The current setup of a wind farm requires additional infrastructure for management of the wind farm.
-As well as the wind turbines the wind farm consists of a SCADA system for operations that involve the entire farm, such as external requests, and multiple park regulators, for near realtime control of the turbines.
-The SCADA system and the park pilots are centralized control points of the wind farm. Having centralized control means that the system has single points of failure, which if it fails decreases the availability of the wind farm.
-Furthermore the SCADA system and park regulators does not scale automatically with the number of turbines, but needs hardware to be upgraded if too many turbines are added.
+The current setup of a wind farm requires additional infrastructure for management and control of the wind farm.
+In addition to the wind turbines, a wind farm at Siemens Wind Power consists of a SCADA system, which handles data aggregation, logging and external data requests, and multiple park regulators, for near real-time control of the turbines.
+
+Both components are essential for a Siemens Wind Power wind farm to function. All communication within the wind farm goes through these two components, and system failure in either the SCADA system or one of the park regulators renders large parts of the wind farm unavailable, thus resulting in decreased control of the wind farm. This makes these components centralized control points and thus potential single point of failures to the wind farm. 
+
+Furthermore the SCADA system and park regulators does not scale automatically with the number of turbines. A park regulator can only handle regulation for a certain amount of turbines, meaning the larger the wind farm, the more park regulators needs to be present to handle regulation.
 
 Since wind energy is recognized as one of the solutions to the renewable energy problem, wind park size and capacity keeps increasing.
-The need for scalability is thus not only a challenge for Siemens Wind Power but for the entire industry.
+The need for wind farm scalability and availability is thus not only a challenge for Siemens Wind Power but for the entire industry.
 
-Despite the fact that the wind farms has grown to a size that is becoming increasingly hard to manage with a centralized control system the area of decentralization in wind farm management and control has largely been neglected as a research area. The main problem being that with a centralized control system individual turbines must wait for the centralized control system to calculate and communicate values like the amount of power a single turbine must produce in order to meet the power production requirements of the entire wind farm. Since the wind farm is expected to operate as a single unit the power production of a single turbine is affected by the power production of all other turbines. This interdependence between all turbines forces the central control system to collect data from all turbines before a single new power production value can be calculated, which is time consuming. Adding turbines will additionally increase the time the centralized control system needs to calculate new power production values. To uphold a constant power production level for the entire wind farm near real-time control and regulation is necessary thus the time consumption of the centralized control system must be minimized in effect limiting the number of turbines the centralized control system is able to handle.
+Despite the fact that the wind farms has grown to a size that is becoming increasingly hard to manage with a centralized control system, the area of decentralization key components in wind farm management and control has largely been neglected as a research area. The main problem being that with a centralized control system individual turbines must wait for the centralized control system to calculate and communicate values like the amount of power a single turbine must produce in order to meet the power production requirements of the entire wind farm. Since the wind farm is expected to operate as a single unit the power production of a single turbine is affected by the power production of all other turbines. This interdependence between all turbines forces the central control system to collect data from all turbines before a single new power production value can be calculated, which is time consuming. Adding turbines will additionally increase the time the centralized control system needs to calculate new power production values. To uphold a constant power production level for the entire wind farm near real-time control and regulation is necessary thus the time consumption of the centralized control system must be minimized in effect limiting the number of turbines the centralized control system is able to handle.
 
 \section{Siemens Wind Power case}
 
@@ -24,9 +26,9 @@ Despite the fact that the wind farms has grown to a size that is becoming increa
 % Regulerings algoritmen tager kun 30 ms. 150 ms er cycle time
 
 \label{sec:SiemensCase}
-Siemens Wind Power builds wind farms of different sizes ranging from single turbines to well above one hundred turbines. \cite{simensOffShoreProjects, simensOnShoreProjects}.
+Siemens Wind Power builds wind farms of different sizes ranging from single turbines to well above one hundred turbines \cite{simensOffShoreProjects, simensOnShoreProjects}. 
 
-Today turbines in a wind farm at Siemens are equipped with computers for the purpose of regulating power production parameters, data collection and for communication with the rest of the system. The current wind farm setup is illustrated on \cref{fig:currentSiemensSetup}. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, stores data and handles wind park communication with the outside world. At Siemens up to eight Park Pilots are present pr. wind farm and one Wind Power Supervisor.
+The current wind farm setup is illustrated on \cref{fig:currentSiemensSetup}. Today every turbine in a wind farm at Siemens Wind Power are equipped with computers for the purpose of data collection and for communication with the rest of the system. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, stores data and handles wind park communication with the outside world. At Siemens up to eight Park Pilots are present pr. wind farm and one Wind Power Supervisor.
 
 \begin{figure}
 	\centering
