@@ -27,7 +27,7 @@ The blue line illustrates the maximum available power production for the wind fa
 
 \section{\ref{PS:Q:Performance}}
 The cycle times are calculated as the difference between the receive timestamp of the oldest turbine state package and a timestamp right after the new turbine state has been sent and the turbines setpoint has been set.
-The red cycle time plots are done with box plots and a line. The box plots whiskers show the extreme values max and min, the top and bottom of the box show the upper and lower quartile of the data, and the center line shows the median. The median is further highlighted by a red line.
+The regulation cycle time with variating number of turbines are done with box plots and a line. The box plots whiskers show the extreme values max and min, the top and bottom of the box show the upper and lower quartile of the data, and the center line shows the median. The median is further highlighted by a line.
 
 \subsection{\nameref{subsec:Exper:perfom:1}}
 
@@ -41,7 +41,7 @@ The experiment where performed with a variating number of internal wait times.
 	\label{fig:exp:decen:sleep}
 \end{figure}
 
-\Cref{fig:exp:decen:sleep} show the that the regulation cycle times and Wait times are linearly Dependant on each other, the maximum value with wait time 10 is outside the boundaries of the plot but is calculated to $148.91~ms.$ The upper and lower quartile are close together the exception is the $10~ms.$ wait time sample, the maximum being the $20~ms.$ wait time having a difference of $1.401~ms.$ between upper and lower quantile and the minimum being $45~ms.$ wait time with a difference of $0.402~ms.$. The maximum values again with the exception of the $10~ms.$ wait time sample follow the median values, the minimum values are able to reach low regulation cycle times much lower than the wait time used in the experiment.
+\Cref{fig:exp:decen:sleep} show the that the regulation cycle times and wait times are linearly Dependant on each other, the maximum value with wait time 10 is outside the boundaries of the plot but is calculated to $148.91~ms.$ The upper and lower quartile are close together the exception is the $10~ms.$ wait time sample, the maximum being the $20~ms.$ wait time having a difference of $1.401~ms.$ between upper and lower quantile and the minimum being $45~ms.$ wait time with a difference of $0.402~ms.$ The maximum values again with the exception of the $10~ms.$ wait time sample follow the median values, the minimum values are able to reach low regulation cycle times much lower than the wait time used in the experiment.
 
 \begin{figure}[h]
 	\centering
@@ -53,11 +53,10 @@ The experiment where performed with a variating number of internal wait times.
 \Cref{fig:exp:decen:sleep-cache} show the average cache reads of the experiment.
 A cache read only happens in the decentralized solution and is a consequence of the separation of receiving data in a separate thread.
 The cache read happens if the wait time elapses before all turbine instances have responded with state information. The Number dos not include information of if the same turbine instance state has been read from cache multiple times.
-The number of cache reads is declining, a fitted function of the plot has been put on top (red), the plot is fitted against the function $\dfrac{a}{x+b} + c$.
+The number of cache reads is declining, a fitted function of the plot has been put on top (red), the plot is in Matlab fitted against the function $\dfrac{a}{x + b} + c$.
 
 \subsection{\nameref{subsec:Exper:perfom:2}}
-
-
+The plots in this section relates to the second part of the \nameref{sec:Exper:perfom} experiment. In this graph the regulation cycle time is plotted against a variating number of turbines.
 
 \begin{figure}[h]
 	\centering
@@ -65,6 +64,9 @@ The number of cache reads is declining, a fitted function of the plot has been p
 	\caption{Decentralized solution variable number of turbines experiment 1}
 	\label{fig:exp:decen:turbines}
 \end{figure}
+
+\cref{fig:exp:decen:turbines} show regulation cycle time of the decentralized system compared with a variating number of turbines. The internal sleep parameter is fixed as $20~ms.$
+It is seen the system performs with a constant regulation cycle time with 5 to 90 turbines, if only observing the median. The maximum values of the regulation begin to increase at 65 turbines. The maximum values are caped at $151~ms.$
 
 \begin{figure}[h]
 	\centering
