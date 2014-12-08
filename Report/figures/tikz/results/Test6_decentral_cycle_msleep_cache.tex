@@ -35,5 +35,21 @@ minor tick num=1
 	(45 ,0.46317152740208856)
 	(50 ,1.858914282814271)
 };
+
+%matlab info
+%     General model:
+%     f(x) = (a/(x+b))+ c
+%     Coefficients (with 95% confidence bounds):
+%     a =       7.017  (-8.781, 22.82)
+%     b =      -8.622  (-11.55, -5.697)
+%     c =      0.9821  (0.01249, 1.952)
+     
+\addplot[
+red,
+domain=10:50,
+samples=201,
+]
+{(7.017/(x-8.622))+ 0.9821};
+
 \end{axis}
 \end{tikzpicture}
