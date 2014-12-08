@@ -48,7 +48,9 @@ The current wind farm setup is illustrated on \cref{fig:currentSiemensSetup}. To
 	}
 \end{figure}
 
-For every transformer station there is a Park Pilot. The Park Pilots are responsible for wind farm regulation. This is done by monitoring all the turbines performance parameters and issuing how much power a given turbine is to produce, from hereon called a setpoint. The calculation of setpoints for each turbine consist of a number of steps as illustrated on figure \cref{fig:currentSiemensCycleTime}. First the Park Pilot must request data from each turbine in order to calculate setpoints based on updated values. The Park Pilot must wait for each turbine to answer the request. After receiving data from each turbine new setpoints are calculated and distributed to the turbines. The buffer is added to make sure setpoints has been properly distributed and that individual turbines have time to adjust their power production according to the new setpoint before a new request for turbine data is sent. Also the WaitForData block may vary in time depending on the current traffic of the network as well as the response time of the individual turbines.
+For every transformer station there is a Park Pilot. The Park Pilots are responsible for wind farm regulation, meaning issuing production goals for each turbine, based on the how much power the entire wind farm should produce and the state of each turbine within the wind farm. A production goal is how much power a given turbine should produce and are from hereon called a \textit{setpoint}. The state of a turbine is information regarding how much power the turbine can produce, based on wind- and weather conditions amongst others, and how much power the turbine currently is producing. 
+
+The Park Pilots at Siemens Wind Power spends 150 ms performing a single regulation. Regulation is performed infinitely many times throughout the lifespan of the wind farm, making regulation a cyclic process. The calculation of setpoints for each turbine consist of a number of steps as illustrated on figure \cref{fig:currentSiemensCycleTime}. First the Park Pilot must request the state of each turbine in order to calculate new setpoints. The Park Pilot must wait for each turbine to answer the request. After receiving data from each turbine new setpoints are calculated and distributed to the turbines. The buffer is added to make sure setpoints has been properly distributed and that individual turbines have time to adjust their power production according to the new setpoint before a new request for turbine data is sent. Also the time spent waiting for states may vary depending on the current traffic of the network as well as the response time of the individual turbines.
 
 \begin{figure}[!h]
 	\centering
@@ -65,7 +67,7 @@ For every transformer station there is a Park Pilot. The Park Pilots are respons
 Every turbine has a database for data logging purposes, this database is replicated to the Wind Power Supervisor.
 The Wind Power Supervisor does data aggregation on data from each turbine as well as store a copy of the replicated data.
 The turbines, Wind Power Supervisor and Park Pilots are connected with a gigabit network, which currently has plenty of extra capacity in terms of available bandwidth.
-The system handles more than 50 control points and 200 measurement points and samples these every 50 ms.
+Internally the turbine handles more than 50 control points and 200 measurement points and samples these every 50 ms.
 
 %\begin{figure}
 %	\centering
