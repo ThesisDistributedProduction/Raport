@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_US
 
-\newcommand{\resultsFigureWidthScale}{0.8}
+\newcommand{\resultsFigureWidthScale}{1}
 
 \chapter{Results}
 
@@ -66,7 +66,11 @@ The plots in this section relates to the second part of the \nameref{sec:Exper:p
 \end{figure}
 
 \cref{fig:exp:decen:turbines} show regulation cycle time of the decentralized system compared with a variating number of turbines. The internal sleep parameter is fixed as $20~ms.$
-It is seen the system performs with a constant regulation cycle time with 5 to 90 turbines, if only observing the median. The maximum values of the regulation begin to increase at 65 turbines. The maximum values are caped at $151~ms.$
+It is seen the system performs with a constant regulation cycle time with 5 to 90 turbines, if only observing the median.
+The quartiles are with the exception of the 5 turbines experiment of almost constant until 65, the same applies to the maximum values.
+Regulation cycle time values are capped close to $150~ms.$ by the software which then considers the turbine offline.
+At 70 turbines the maximum value sticks out notably it does look like a outlier however checking the raw data, it is not there are logged regulation cycle times for every ms value between it and the median.
+It should be noted that all the data with a cycle time above $132~ms$ are collected from the same test machine.
 
 \begin{figure}[h]
 	\centering
