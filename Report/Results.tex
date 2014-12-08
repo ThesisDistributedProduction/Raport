@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_US
 
-\newcommand{\resultsFigureWidthScale}{0.7}
+\newcommand{\resultsFigureWidthScale}{0.8}
 
 \chapter{Results}
 
@@ -31,7 +31,7 @@ The red cycle time plots are done with box plots and a line. The box plots whisk
 
 \subsection{\nameref{subsec:Exper:perfom:1}}
 
-The results of one of the \nameref{sec:Exper:perfom} experiments plotted are plotted in \cref{fig:exp:decen:sleep2,fig:exp:decen:sleep2-cache}.
+The results of one of the \nameref{sec:Exper:perfom} experiments plotted are plotted in \cref{fig:exp:decen:sleep,fig:exp:decen:sleep-cache}.
 The experiment where performed with a variating number of internal wait times.
 
 \begin{figure}[h]
@@ -41,21 +41,23 @@ The experiment where performed with a variating number of internal wait times.
 	\label{fig:exp:decen:sleep}
 \end{figure}
 
-\Cref{fig:exp:decen:sleep2} show the that the regulation cycle times and Wait times are linearly Dependant on each other, the maximum value with wait time 10 is outside the boundaries of the plot but is calculated to $148.91~ms.$ The upper and lower quartile are close together the exception is the $10~ms.$ wait time sample, the maximum being the $20~ms.$ wait time having a difference of $1.401~ms.$ between upper and lower quantile and the minimum being $45~ms.$ wait time with a difference of $0.402~ms.$. The maximum values again with the exception of the $10~ms.$ wait time sample follow the median values, the minimum values are able to reach low regulation cycle times much lower than the wait time used in the experiment.
+\Cref{fig:exp:decen:sleep} show the that the regulation cycle times and Wait times are linearly Dependant on each other, the maximum value with wait time 10 is outside the boundaries of the plot but is calculated to $148.91~ms.$ The upper and lower quartile are close together the exception is the $10~ms.$ wait time sample, the maximum being the $20~ms.$ wait time having a difference of $1.401~ms.$ between upper and lower quantile and the minimum being $45~ms.$ wait time with a difference of $0.402~ms.$. The maximum values again with the exception of the $10~ms.$ wait time sample follow the median values, the minimum values are able to reach low regulation cycle times much lower than the wait time used in the experiment.
 
 \begin{figure}[h]
 	\centering
 	\input{figures/tikz/results/Test6_decentral_cycle_msleep_cache}
 	\caption{Decentralized solution with variable wait time cache reads experiment}
-	\label{fig:exp:decen:sleep2-cache}
+	\label{fig:exp:decen:sleep-cache}
 \end{figure}
 
-Below are the cache reads figures, the orange line is the average cache reads.
+\Cref{fig:exp:decen:sleep-cache} show the average cache reads of the experiment.
 A cache read only happens in the decentralized solution and is a consequence of the separation of receiving data in a separate thread.
-The cache read happens if the wait time elapses before all turbine instances have responded with state information. The Number dos not include information of if the same turbine instance state has been read from cache twice in a row.
+The cache read happens if the wait time elapses before all turbine instances have responded with state information. The Number dos not include information of if the same turbine instance state has been read from cache multiple times.
+The number of cache reads is declining, a fitted function of the plot has been put on top (red), the plot is fitted against the function $\dfrac{a}{x+b} + c$.
+
+\subsection{\nameref{subsec:Exper:perfom:2}}
 
 
-\subsection{Part 2}
 
 \begin{figure}[h]
 	\centering
