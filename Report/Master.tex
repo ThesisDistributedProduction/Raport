@@ -53,7 +53,7 @@
 
 \usepackage[T1]{fontenc}
 \checkandfixthelayout
-% opsÃ¦tning af pagestyles
+% opsætning af pagestyles
 \makepagestyle{book} % laver en ny tom pagestyle
 \makeevenhead{book}{}{\small\sffamily\leftmark}{}
 \makeoddhead{book}{}{\small\sffamily\rightmark}{}
@@ -82,7 +82,7 @@
 \makeatother
 
 \pagestyle{book}
-% laver om pÃ¥ plain stilen
+% laver om på plain stilen
 \copypagestyle{plain}{book}
 \makeevenhead{plain}{}{}{}
 \makeoddhead{plain}{}{}{}
@@ -125,8 +125,8 @@
 \makeatother
 
 
-% sÃ¸g for at hvis en \section el.lign. flyttes til en ny side
-% da skal siden fÃ¸r ikke strÃ¦kkes
+% søg for at hvis en \section el.lign. flyttes til en ny side
+% da skal siden før ikke strækkes
 \raggedbottomsectiontrue
 % justering af afsnitsnummerering og ToC dybde
 \setsecnumdepth{subsubsection} % til og med
@@ -226,7 +226,7 @@
 % andre pakker og konfigurationer
 \usepackage{makeidx}
 \usepackage{mflogo} 
-\makeindex % hvis man anvender sÃ¥dan en
+\makeindex % hvis man anvender sådan en
 
 %\renewcommand*{\cftchaptername}{Chapter\space}
 \renewcommand*{\cftchaptername}{}
@@ -237,7 +237,7 @@
 \newcommand{\inlineURL}[1]{\urlstyle{same}\url{#1}\urlstyle{tt}}
 
 
-\newcommand{\buildBoxPlot}[6][blue!60]{
+\newcommand{\buildBoxPlot}[6][blue]{
 	\addplot+[
 	#1,
 	solid,
@@ -267,7 +267,7 @@
 % include{dedication}
 \include{RelatedWork}
 \include{Analysis}
-%\include{Technologies}
+% include{Technologies}
 \include{ExistingSystem}
 \include{DecentralizedSystem}
 \include{Experiments}
@@ -279,6 +279,7 @@
 \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 \appendixpage
 \include{Appendix_HardwareSpec}
+\include{Appendix_TestResults}
 % include{appendix1}
 
 

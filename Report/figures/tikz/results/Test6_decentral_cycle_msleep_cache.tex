@@ -1,34 +1,39 @@
 \begin{tikzpicture}
 \begin{axis}
 [
-width=\textwidth,
+width=\resultsFigureWidthScale\textwidth,
 axis y line*=left,
 xlabel=Sleeptime (ms),
 ymin = 0,
-ylabel=Average Cache hits,
-xtick={1, 2, 3, 4, 5, 6, 7, 8, 9},
-xticklabels={10, 15, 20, 25, 30, 35, 40, 45, 50},
-boxplot/draw direction=y
+%xmin = 0,
+ylabel=Average cache hits,
+%xtick={1, 2, 3, 4, 5, 6, 7, 8, 9},
+%xticklabels={10, 15, 20, 25, 30, 35, 40, 45, 50},
+%boxplot/draw direction=y,
+grid=both,
+%ymajorgrids=true,
+%yminorgrids=true,
+minor tick num=1
 ]
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\buildBoxPlot[black]{0}{0}{0}{0}{0}
+%\buildBoxPlot[black]{0}{0}{0}{0}{0}
+%\buildBoxPlot[black]{0}{0}{0}{0}{0}
+%\buildBoxPlot[black]{0}{0}{0}{0}{0}
+%\buildBoxPlot[black]{0}{0}{0}{0}{0}
+%\buildBoxPlot[black]{0}{0}{0}{0}{0}
+%\buildBoxPlot[black]{0}{0}{0}{0}{0}
+%\buildBoxPlot[black]{0}{0}{0}{0}{0}
+%\buildBoxPlot[black]{0}{0}{0}{0}{0}
+%\buildBoxPlot[black]{0}{0}{0}{0}{0}
 \addplot[thick, orange!70] coordinates {
-	(1 ,6.076278918444858)
-	(2 ,1.9250837336102817)
-	(3 ,2.206446850393701)
-	(4 ,1.044688862465319)
-	(5 ,1.3747593094220163)
-	(6 ,0.661782154722354)
-	(7 ,1.6464805561590268)
-	(8 ,0.46317152740208856)
-	(9 ,1.858914282814271)
+	(10 ,6.076278918444858)
+	(15 ,1.9250837336102817)
+	(20 ,2.206446850393701)
+	(25 ,1.044688862465319)
+	(30 ,1.3747593094220163)
+	(35 ,0.661782154722354)
+	(40 ,1.6464805561590268)
+	(45 ,0.46317152740208856)
+	(50 ,1.858914282814271)
 };
 \end{axis}
 \end{tikzpicture}

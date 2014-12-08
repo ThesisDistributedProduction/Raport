@@ -47,6 +47,8 @@ $N = \failingTurbineNumbers$
 
 
 \section{\ref{PS:Q:Performance}}
+\label{sec:Exper:perfom}
+
 %Scalability is by Bondi\cite{Bondi:2000:CSI:350391.350432} defined as \textit{the systems ability to accommodate an increasing number of elements or objects, to process growing volumes of work gracefully, and/or to be susceptible to enlargement}.
 
 The \ref{PS:Q:Performance} question asks if the proposed decentralized system is able to scale with the number of turbines in the system. The experiments that investigate this question has been split into two part. \newline
@@ -56,6 +58,7 @@ Part 1 aims to investigate the anticorrelation between regulation time and cache
 Part 2 aims to investigate the impact on regulation time and cache read count when the number of turbines are scaled up in the proposed decentralized system. \newline
 
 \subsection{Part 1: Regulation time and the impact on cache read count}
+\label{subsec:Exper:perfom:1}
 The experiment below are made to show how the regulation time affect the cache read count in the decentralized system described in \cref{cha:decentralizedSystem}. 
 The experiments are performed with \testCycletimeNumbers ~cycle times.  
 
@@ -118,3 +121,11 @@ Each of these parameters behave differently when centralized compared to decentr
 		\item Stop logging after \experiemntRunTime.
 		\end{enumerate}
 \end{minipage}
+
+\begin{tabular}{ | c | c | c | c | c |}
+	\cline{1-3}
+	\cline{5-5}
+	t1 & t2 & t3 & \dots & tn \\
+	\cline{1-3}
+	\cline{5-5}
+\end{tabular}

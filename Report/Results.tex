@@ -1,5 +1,7 @@
 % !TeX spellcheck = en_US
 
+\newcommand{\resultsFigureWidthScale}{0.7}
+
 \chapter{Results}
 
 \section{\ref{PS:Q:Feasibility}}
@@ -21,47 +23,49 @@ The blue line illustrates the maximum available power production for the wind fa
 
 
 \section{\ref{PS:Q:Availability}}
-Randomly kill client, plot a few seconds of data around the event.
+\todo{Randomly kill client, plot a few seconds of data around the event.}
 
 \section{\ref{PS:Q:Performance}}
+The cycle times are calculated as the difference between the receive timestamp of the oldest turbine state package and a timestamp right after the new turbine state has been sent and the turbines setpoint has been set.
+The red cycle time plots are done with box plots and a line. The box plots whiskers show the extreme values max and min, the top and bottom of the box show the upper and lower quartile of the data, and the center line shows the median. The median is further highlighted by a red line.
 
-\subsection{Part 1}
+\subsection{\nameref{subsec:Exper:perfom:1}}
 
-Below are two \todo{Make sure we experiments number is correct} experiments, performed with a variating number of internal wait
+The results of one of the \nameref{sec:Exper:perfom} experiments plotted are plotted in \cref{fig:exp:decen:sleep2,fig:exp:decen:sleep2-cache}.
+The experiment where performed with a variating number of internal wait times.
 
 \begin{figure}[h]
-	\input{figures/tikz/results/Test5_decentral_cycle_msleep}
-	\caption{Decentralized solution with variable wait time cycle time experiment 1}
+	\centering
+	\input{figures/tikz/results/Test6_decentral_cycle_msleep}
+	\caption{Decentralized solution with variable wait time cycle time experiment}
 	\label{fig:exp:decen:sleep}
 \end{figure}
 
-\begin{figure}[h]
-	\input{figures/tikz/results/Test5_decentral_cycle_msleep_cache}
-	\caption{Decentralized solution with variable wait time cache reads experiment 1}
-	\label{fig:exp:decen:sleep_cache}
-\end{figure}
+\Cref{fig:exp:decen:sleep2} show the that the regulation cycle times and Wait times are linearly Dependant on each other, the maximum value with wait time 10 is outside the boundaries of the plot but is calculated to $148.91~ms.$ The upper and lower quartile are close together the exception is the $10~ms.$ wait time sample, the maximum being the $20~ms.$ wait time having a difference of $1.401~ms.$ between upper and lower quantile and the minimum being $45~ms.$ wait time with a difference of $0.402~ms.$. The maximum values again with the exception of the $10~ms.$ wait time sample follow the median values, the minimum values are able to reach low regulation cycle times much lower than the wait time used in the experiment.
 
 \begin{figure}[h]
-	\input{figures/tikz/results/Test6_decentral_cycle_msleep}
-	\caption{Decentralized solution with variable wait time cycle time experiment 2}
-	\label{fig:exp:decen:sleep2}
-\end{figure}
-
-\begin{figure}[h]
+	\centering
 	\input{figures/tikz/results/Test6_decentral_cycle_msleep_cache}
-	\caption{Decentralized solution with variable wait time cache reads experiment 2}
-	\label{fig:exp:decen:sleep2_cache}
+	\caption{Decentralized solution with variable wait time cache reads experiment}
+	\label{fig:exp:decen:sleep2-cache}
 \end{figure}
+
+Below are the cache reads figures, the orange line is the average cache reads.
+A cache read only happens in the decentralized solution and is a consequence of the separation of receiving data in a separate thread.
+The cache read happens if the wait time elapses before all turbine instances have responded with state information. The Number dos not include information of if the same turbine instance state has been read from cache twice in a row.
+
 
 \subsection{Part 2}
 
 \begin{figure}[h]
+	\centering
 	\input{figures/tikz/results/Test5_decentral_cycle}
 	\caption{Decentralized solution variable number of turbines experiment 1}
 	\label{fig:exp:decen:turbines}
 \end{figure}
 
 \begin{figure}[h]
+	\centering
 	\input{figures/tikz/results/Test5_decentral_cycle_cache}
 	\caption{Decentralized solution variable number of turbines experiment 1}
 	\label{fig:exp:decen:turbines_cache}
@@ -70,6 +74,7 @@ Below are two \todo{Make sure we experiments number is correct} experiments, per
 \section{\ref{PS:Q:Scalability}}
 
 \begin{figure}[h]
+	\centering
 	\input{figures/tikz/results/Test4_Central_cycle}
 	\caption{Centralized solution variable number of turbines experiment 1}
 	\label{fig:exp:cen:turbines}
