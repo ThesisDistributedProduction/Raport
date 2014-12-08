@@ -42,7 +42,7 @@ The current wind farm setup is illustrated on \cref{fig:currentSiemensSetup}. To
 	}
 \end{figure}
 
-For every transformer station there is a Park Pilot. The Park Pilots are responsible for wind farm regulation. This is done by monitoring all the turbines performance parameters and issuing setpoints for power production. The calculation of setpoints for each turbine consist of a number of steps as illustrated on figure \cref{fig:currentSiemensCycleTime}. First the Park Pilot must request data from each turbine in order to calculate setpoints based on updated values. The Park Pilot must wait for each turbine to answer the request. After receiving data from each turbine new setpoints are calculated and distributed to the turbines. The buffer is added to make sure setpoints has been properly distributed and that individual turbines have time to adjust their power production according to the new setpoint before a new request for turbine data is sent. Also the WaitForData block may vary in time depending on the current traffic of the network as well as the response time of the individual turbines.
+For every transformer station there is a Park Pilot. The Park Pilots are responsible for wind farm regulation. This is done by monitoring all the turbines performance parameters and issuing how much power a given turbine is to produce, from hereon called a setpoint. The calculation of setpoints for each turbine consist of a number of steps as illustrated on figure \cref{fig:currentSiemensCycleTime}. First the Park Pilot must request data from each turbine in order to calculate setpoints based on updated values. The Park Pilot must wait for each turbine to answer the request. After receiving data from each turbine new setpoints are calculated and distributed to the turbines. The buffer is added to make sure setpoints has been properly distributed and that individual turbines have time to adjust their power production according to the new setpoint before a new request for turbine data is sent. Also the WaitForData block may vary in time depending on the current traffic of the network as well as the response time of the individual turbines.
 
 \begin{figure}[!h]
 	\centering
@@ -136,27 +136,27 @@ The scope of this thesis is limited to the following areas:
 	\item Comparison of the decentralized solution to the current Siemens system to address problems \ref{PS:Q:Performance} and \ref{PS:Q:Scalability}.
 \end{itemize}
 
-The features of the Wind Park Supervisor will not be implemented in the decentralized solution. Furthermore the features of the Park Pilot implemented in the decentralized solution will be limited to focus on the features needed to address problems \ref{PS:Q:Availability}, \ref{PS:Q:Performance} and \ref{PS:Q:Scalability}.
+The features of the Wind Park Supervisor will not be implemented in the decentralized solution. The features of the Park Pilot implemented in the decentralized solution will be limited to focus on the features needed to address problems \ref{PS:Q:Availability}, \ref{PS:Q:Performance} and \ref{PS:Q:Scalability}.
 
-\section{Enabling comparison of current Siemens system with decentralized solution}
-\todo{Bad title, move to another chapter}
-In order to address the problems presented in \cref{sec:problemStatement} a common ground must be established for comparison purposes. The decentralized solution proposed in this thesis will not be directly comparable to the current Siemens system because we are unable to duplicate the environment of the current Siemens system. As a consequence of this a centralized solution resembling the current Siemens system must be developed to enable a comparison. As presented in \cref{fig:projectDiffOverview} there exist a difference between the current Siemens system and the centralized solution as well as a difference between the centralized solution and the decentralized solution, illustrated by deltas.
-
-\begin{figure}[!h]
-	\centering
-	\input{figures/tikz/ProjectDiffOverview}
-	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Comparison overview]{
-		\label{fig:projectDiffOverview} 
-		\footnotesize{%
-			Comparison overview.
-		}
-	}
-\end{figure}
-
-The delta between the current Siemens system and the centralized solution is minimized as much as possible based on information about the current Siemens system delivered by Siemens Wind Power. Since the operation and regulation of the current Siemens system is proprietary the full system information is not available. To make up for the missing information a number of assumptions has been done about the current Siemens system which is also a part of the delta. These assumptions will be detailed further in \cref{cha:existingSystem}. 
-
-The delta between the centralized solution and decentralized solution describes the difference in operation of a centralized system and a decentralized system.
+%\section{Enabling comparison of current Siemens system with decentralized solution}
+%\todo{Bad title, move to another chapter}
+%In order to address the problems presented in \cref{sec:problemStatement} a common ground must be established for comparison purposes. The decentralized solution proposed in this thesis will not be directly comparable to the current Siemens system because we are unable to duplicate the environment of the current Siemens system. As a consequence of this a centralized solution resembling the current Siemens system must be developed to enable a comparison. As presented in \cref{fig:projectDiffOverview} there exist a difference between the current Siemens system and the centralized solution as well as a difference between the centralized solution and the decentralized solution, illustrated by deltas.
+%
+%\begin{figure}[!h]
+%	\centering
+%	\input{figures/tikz/ProjectDiffOverview}
+%	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+%	\caption[Comparison overview]{
+%		\label{fig:projectDiffOverview} 
+%		\footnotesize{%
+%			Comparison overview.
+%		}
+%	}
+%\end{figure}
+%
+%The delta between the current Siemens system and the centralized solution is minimized as much as possible based on information about the current Siemens system delivered by Siemens Wind Power. Since the operation and regulation of the current Siemens system is proprietary the full system information is not available. To make up for the missing information a number of assumptions has been done about the current Siemens system which is also a part of the delta. These assumptions will be detailed further in \cref{cha:existingSystem}. 
+%
+%The delta between the centralized solution and decentralized solution describes the difference in operation of a centralized system and a decentralized system.
 
 %ASK SIEMENS HOW TO COMPARE AND MORE CONSTRAINTS??? 
 

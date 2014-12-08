@@ -27,6 +27,7 @@
 \usepackage{listings}
 \usepackage{todonotes}
 \usepackage{ulem}
+\usepackage{placeins}
 
 
 \definecolor{maroon}{rgb}{0.5,0,0}
@@ -236,7 +237,7 @@
 \newcommand{\inlineURL}[1]{\urlstyle{same}\url{#1}\urlstyle{tt}}
 
 
-\newcommand{\buildBoxPlot}[6][blue!60]{
+\newcommand{\buildBoxPlot}[6][blue]{
 	\addplot+[
 	#1,
 	solid,
@@ -278,6 +279,7 @@
 \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 \appendixpage
 \include{Appendix_HardwareSpec}
+\include{Appendix_TestResults}
 % include{appendix1}
 
 
