@@ -1,5 +1,7 @@
 % !TeX spellcheck = en_US
 
+\newcommand{\resultsFigureWidthScale}{0.7}
+
 \chapter{Results}
 
 \section{\ref{PS:Q:Feasibility}}
@@ -21,33 +23,45 @@ The blue line illustrates the maximum available power production for the wind fa
 
 
 \section{\ref{PS:Q:Availability}}
-Randomly kill client, plot a few seconds of data around the event.
+\todo{Randomly kill client, plot a few seconds of data around the event.}
 
 \section{\ref{PS:Q:Performance}}
 
+The cycle times are calculated as the difference between the receive timestamp of the oldest turbine state package and a timestamp right after the new turbine state has been sent and the turbines setpoint has been set.
+The red cycle time plots are done with box plots and a line. The box plots whiskers show the extreme values max and min, the top and bottom of the box show the upper and lower quartile of the data, and the center line shows the median. The median is further highlighted by a red line.
+
 \subsection{Part 1}
 
-Below are two \todo{Make sure we experiments number is correct} experiments, performed with a variating number of internal wait
+Below are two \todo{Make sure we experiments number is correct} experiments, performed with a variating number of internal wait, regulation cycle time(\cref{fig:exp:decen:sleep1,fig:exp:decen:sleep2}) and number of cache reads(\cref{fig:exp:decen:sleep1_cache,fig:exp:decen:sleep2_cache}) are plotted in separately.
 
 \begin{figure}[h]
+	\centering
 	\input{figures/tikz/results/Test5_decentral_cycle_msleep}
 	\caption{Decentralized solution with variable wait time cycle time experiment 1}
-	\label{fig:exp:decen:sleep}
+	\label{fig:exp:decen:sleep1}
 \end{figure}
 
 \begin{figure}[h]
-	\input{figures/tikz/results/Test5_decentral_cycle_msleep_cache}
-	\caption{Decentralized solution with variable wait time cache reads experiment 1}
-	\label{fig:exp:decen:sleep_cache}
-\end{figure}
-
-\begin{figure}[h]
-	\input{figures/tikz/results/Test6_decentral_cycle_msleep}
+	\centering
+		\input{figures/tikz/results/Test6_decentral_cycle_msleep}
 	\caption{Decentralized solution with variable wait time cycle time experiment 2}
 	\label{fig:exp:decen:sleep2}
 \end{figure}
 
+Below are the cache reads figures, the orange line is the average cache reads.
+A cache read only happens in the decentralized solution and is a consequence of the separation of receiving data in a separate thread.
+The cache read happens if the wait time elapses before all turbine instances have responded with state information. The Number dos not include information of if the same turbine instance state has been read from cache twice in a row.
+
 \begin{figure}[h]
+	\centering
+	\input{figures/tikz/results/Test5_decentral_cycle_msleep_cache}
+	\caption{Decentralized solution with variable wait time cache reads experiment 1}
+	\label{fig:exp:decen:sleep1_cache}
+\end{figure}
+
+
+\begin{figure}[h]
+	\centering
 	\input{figures/tikz/results/Test6_decentral_cycle_msleep_cache}
 	\caption{Decentralized solution with variable wait time cache reads experiment 2}
 	\label{fig:exp:decen:sleep2_cache}
@@ -56,12 +70,14 @@ Below are two \todo{Make sure we experiments number is correct} experiments, per
 \subsection{Part 2}
 
 \begin{figure}[h]
+	\centering
 	\input{figures/tikz/results/Test5_decentral_cycle}
 	\caption{Decentralized solution variable number of turbines experiment 1}
 	\label{fig:exp:decen:turbines}
 \end{figure}
 
 \begin{figure}[h]
+	\centering
 	\input{figures/tikz/results/Test5_decentral_cycle_cache}
 	\caption{Decentralized solution variable number of turbines experiment 1}
 	\label{fig:exp:decen:turbines_cache}
@@ -70,6 +86,7 @@ Below are two \todo{Make sure we experiments number is correct} experiments, per
 \section{\ref{PS:Q:Scalability}}
 
 \begin{figure}[h]
+	\centering
 	\input{figures/tikz/results/Test4_Central_cycle}
 	\caption{Centralized solution variable number of turbines experiment 1}
 	\label{fig:exp:cen:turbines}
