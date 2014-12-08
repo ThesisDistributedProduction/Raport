@@ -30,7 +30,7 @@ Message passing is a low-level communication paradigm, where processors communic
 With message passing being a low-level communication paradigm, the communication overhead is low compared to paradigms build on top of it. It is entirely up to the application developer to handle communication. This will in many cases result in better execution time, which is the most compelling argument for choosing message passing as communication paradigm. The problem with it being up to the developer, is that the developer needs to deal with configurations setup, such as sockets and marshaling, exception handling and who and when to communicate with when developing the application. This makes it hard to develop using message passing, especially when dealing with more complex applications~\cite{lu1995message}. 
 
 
-\subsection{Distributed shared memory}
+\subsection{Distributed shared memory}\label{sec:DSM}
 
 Shared memory is an attractive paradigm for designing parallel and distributed systems. Applications can use shared memory as a tool for the entire system to share a common state. However for loosely coupled distributed systems, no physically shared memory is available to support such a model. Distributed shared memory (DSM) is a way of providing physically distributed memory machines a shared memory abstraction, illustrated on \cref{fig:distributedSharedMemory}.
 
