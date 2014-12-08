@@ -2,7 +2,7 @@
 
 The problem statement (\cref{sec:problemStatement}) presents four questions for this project. The \ref{PS:Q:Feasibility} question being the primary question, from which the other three spawns. 
 
-To answer the \ref{PS:Q:Feasibility} question we have to identify the key services performed by the Wind Park Supervisor and the Park Pilots. These services must be provided by the new decentralized system such that removing the central control points, the Wind Park Supervisor and the Park Pilots, will not diminish the new decentralized systems function compared to the current system as described by the Siemens Case in \cref{sec:SiemensCase}. The following key services has been identified:
+To answer the \ref{PS:Q:Feasibility} question we have to identify the key services performed by the Wind Power Supervisor and the Park Pilots. These services must be provided by the new decentralized system such that removing the central control points, the Wind Power Supervisor and the Park Pilots, will not diminish the new decentralized systems function compared to the current system as described by the Siemens Case in \cref{sec:SiemensCase}. The following key services has been identified:
 
 \begin{enumerate}[label=\textbf{\alph*.}, ref=\textit{\alph*}]
 \item \label{Analysis:need:a} \textbf{Data aggregation} \\
@@ -12,7 +12,7 @@ To answer the \ref{PS:Q:Feasibility} question we have to identify the key servic
 	The individual turbines must be able to store data about wind speeds, individual power production as well as the state of wear on different parts of the turbine. Several data points are measured every second. As well as individual data, global data must be stored as well. Without a central storage point the global data must be distributed across the entire wind farm such that it is accessible by any turbine handling an external connection which may request such global data.
 
 \item \label{Analysis:need:c} \textbf{External communication} \\
-	The wind farm must be able to handle communication with the external world. Currently this is handled by both the Wind Park Supervisor and the Park Pilots depending on which data is relevant to the initiator of the external connection. The external communication must be handled by the turbines of the wind farm such that it is transparent to the initiator which node is actually performing the services requested.
+	The wind farm must be able to handle communication with the external world. Currently this is handled by both the Wind Power Supervisor and the Park Pilots depending on which data is relevant to the initiator of the external connection. The external communication must be handled by the turbines of the wind farm such that it is transparent to the initiator which node is actually performing the services requested.
 
 \item \label{Analysis:need:d} \textbf{Park regulation} \\
 	The wind farm must regulate the power production towards a global power production setpoint. Without a central controller to calculate the individual setpoints for all turbines these calculations must be done by each individual turbine.

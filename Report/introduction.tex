@@ -32,7 +32,7 @@ To uphold a constant power production level for the entire wind farm near real-t
 % Regulerings algoritmen tager kun 30 ms. 150 ms er cycle time
 
 \label{sec:SiemensCase}
-Siemens Wind Power builds wind farms of different sizes ranging from single turbines to well above one hundred turbines \cite{simensOffShoreProjects, simensOnShoreProjects}. 
+Siemens Wind Power builds wind farms of different sizes, ranging from a single turbine to well above one hundred turbines \cite{simensOffShoreProjects, simensOnShoreProjects}. 
 
 The current wind farm setup is illustrated on \cref{fig:currentSiemensSetup}. Today every turbine in a wind farm at Siemens Wind Power are equipped with computers for the purpose of data collection and for communication with the rest of the system. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, stores data and handles wind park communication with the outside world. At Siemens up to eight Park Pilots are present pr. wind farm and one Wind Power Supervisor.
 
@@ -50,7 +50,7 @@ The current wind farm setup is illustrated on \cref{fig:currentSiemensSetup}. To
 
 For every transformer station there is a Park Pilot. The Park Pilots are responsible for wind farm regulation, meaning issuing production goals for each turbine, based on the how much power the entire wind farm should produce and the state of each turbine within the wind farm. A production goal is how much power a given turbine should produce and are from hereon called a \textit{setpoint}. The state of a turbine is information regarding how much power the turbine can produce, based on wind- and weather conditions amongst others, and how much power the turbine currently is producing. 
 
-The Park Pilots at Siemens Wind Power spends 150 ms performing a single regulation. Regulation is performed infinitely many times throughout the lifespan of the wind farm, making regulation a cyclic process. The calculation of setpoints for each turbine consist of a number of steps as illustrated on figure \cref{fig:currentSiemensCycleTime}. First the Park Pilot must request the state of each turbine in order to calculate new setpoints. The Park Pilot must wait for each turbine to answer the request. After receiving data from each turbine new setpoints are calculated and distributed to the turbines. The buffer is added to make sure setpoints has been properly distributed and that individual turbines have time to adjust their power production according to the new setpoint before a new request for turbine data is sent. Also the time spent waiting for states may vary depending on the current traffic of the network as well as the response time of the individual turbines.
+The Park Pilots at Siemens Wind Power spends 150 ms performing a single regulation. Regulation is performed infinitely many times throughout the lifespan of the wind farm, making regulation a cyclic process. The calculation of setpoints for each turbine consist of a number of steps as illustrated on \cref{fig:currentSiemensCycleTime}. First the Park Pilot must request the state of each turbine in order to calculate new setpoints. The Park Pilot must wait for each turbine to answer the request. After receiving data from each turbine new setpoints are calculated and distributed to the turbines. The buffer is added to make sure setpoints has been properly distributed and that individual turbines have time to adjust their power production according to the new setpoint before a new request for turbine data is sent. Also the time spent waiting for states may vary depending on the current traffic of the network as well as the response time of the individual turbines.
 
 \begin{figure}[!h]
 	\centering
@@ -112,12 +112,12 @@ Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by dist
 \section{Problem statement}
 \label{sec:problemStatement}
 
-The purpose of this thesis is to design, implement and evaluate a solution for a Siemens wind farm, where the Wind Park Supervisor and the Park Pilots are decentralized by utilizing the free capacity residing in every turbine for the Siemens Wind Power case. The solution must be able to provide the same features as the current wind farm setup. 
+The purpose of this thesis is to design, implement and evaluate a solution for a Siemens wind farm, where the Wind Power Supervisor and the Park Pilots are decentralized by utilizing the free capacity residing in every turbine for the Siemens Wind Power case. The solution must be able to provide the same features as the current wind farm setup. 
 
 \paragraph{The following problems are addressed:}
 \begin{description} % [label={\arabic*.}, ref=\textit{\arabic*}]
 	%	\label{PS:Q:1}
-	\labitem{Feasibility}{PS:Q:Feasibility} How can we best re-implement the current Siemens system (\cref{sec:SiemensCase}) as a system where the Wind Park Supervisor and the Park Pilots are decentralized?
+	\labitem{Feasibility}{PS:Q:Feasibility} How can we best re-implement the current Siemens system (\cref{sec:SiemensCase}) as a system where the Wind Power Supervisor and the Park Pilots are decentralized?
 	%	\label{PS:Q:4}
 	\labitem{Availability}{PS:Q:Availability} Can we create a solution where removing one or more nodes from the system at runtime does not cause system failure?
 	%	\label{PS:Q:3}
@@ -144,7 +144,7 @@ The scope of this thesis is limited to the following areas:
 	\item Comparison of the decentralized solution to the current Siemens system to address problems \ref{PS:Q:Performance} and \ref{PS:Q:Scalability}.
 \end{itemize}
 
-The features of the Wind Park Supervisor will not be implemented in the decentralized solution.
+The features of the Wind Power Supervisor will not be implemented in the decentralized solution.
 
 %\section{Enabling comparison of current Siemens system with decentralized solution}
 %\todo{Bad title, move to another chapter}
