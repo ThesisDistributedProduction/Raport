@@ -24,8 +24,9 @@ The blue line illustrates the maximum available power production for the wind fa
 	}
 \end{figure}
 
-
-\section{\ref{PS:Q:Availability}}
+\section{\ref{PS:Q:Availability}}\FloatBarrier
+\label{sec:res:availability}
+The plots in \cref{fig:exp:availability_kill15,fig:exp:availability_kill10,fig:exp:availability_kill5,fig:exp:availability_kill1} show how the decentralized solution reacts when killing 1, 5, 10 and 15 turbines. To begin with there are 30 turbines, the setpoint is set to 2,000 for all setups except for when killing only one turbine(\cref{fig:exp:availability_kill1}) it was set to 20,000. This was done so that it was possible to visualy verify that the turbines reacted.
 
 \begin{figure}
 	\centering
@@ -55,8 +56,8 @@ The blue line illustrates the maximum available power production for the wind fa
 	\label{fig:exp:availability_kill15}
 \end{figure}
 
-
-\section{\ref{PS:Q:Performance}}
+\clearpage
+\section{\ref{PS:Q:Performance}}\FloatBarrier
 \label{sec:exp:performance}
 The cycle times are calculated as the difference between the receive timestamp of the oldest turbine state package and a timestamp right after the new turbine state has been sent and the turbines setpoint has been set.
 The regulation cycle time with variating number of turbines are done with box plots and a line. The box plots whiskers show the extreme values max and min, the top and bottom of the box show the upper and lower quartile of the data, and the center line shows the median. The median is further highlighted by a line.
@@ -87,6 +88,7 @@ A cache read only happens in the decentralized solution and is a consequence of 
 The cache read happens if the wait time elapses before all turbine instances have responded with state information. The Number dos not include information of if the same turbine instance state has been read from cache multiple times.
 The number of cache reads is declining, a fitted function of the plot has been put on top (red), the plot is in Matlab fitted against the function $\dfrac{a}{x + b} + c$.
 
+\clearpage
 \subsection{\nameref{subsec:Exper:perfom:2}}
 The plots in this section relates to the second part of the \nameref{sec:Exper:perfom} experiment. In this graph the regulation cycle time is plotted against a variating number of turbines.
 
@@ -113,9 +115,9 @@ It should be noted that all the data with a cycle time above 132~ms are collecte
 
 
 \cref{fig:exp:decen:turbines_cache} show the amount of cache reads the simulation had during part 2 of the experiment.
-The plot almost lines up with a exponential curve. Also \cref{fig:exp:decen:turbines,fig:exp:decen:turbines_cache} seams to suddenly increase around $65~ms.$
-
-\section{\ref{PS:Q:Scalability}}
+The plot almost lines up with a exponential curve. Also \cref{fig:exp:decen:turbines,fig:exp:decen:turbines_cache} seams to suddenly increase around 65 ms.
+\clearpage
+\section{\ref{PS:Q:Scalability}}\FloatBarrier
 
 \begin{figure}[h]
 	\centering
