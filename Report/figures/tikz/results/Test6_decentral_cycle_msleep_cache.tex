@@ -3,17 +3,21 @@
 [
 width=\resultsPlotWidthScale\textwidth,
 axis y line*=left,
-xlabel=Sleeptime (ms),
+xlabel=Wait time (ms),
 ymin = 0,
 %xmin = 0,
 ylabel=Average cache hits,
 %xtick={1, 2, 3, 4, 5, 6, 7, 8, 9},
 %xticklabels={10, 15, 20, 25, 30, 35, 40, 45, 50},
 %boxplot/draw direction=y,
-grid=both,
+%grid=both,
 %ymajorgrids=true,
 %yminorgrids=true,
-minor tick num=1
+ybar interval=0.7,
+ymajorgrids=true,
+%yminorgrids=true,
+minor y tick num=1
+%minor tick num=1
 ]
 %\buildBoxPlot[black]{0}{0}{0}{0}{0}
 %\buildBoxPlot[black]{0}{0}{0}{0}{0}
@@ -24,7 +28,7 @@ minor tick num=1
 %\buildBoxPlot[black]{0}{0}{0}{0}{0}
 %\buildBoxPlot[black]{0}{0}{0}{0}{0}
 %\buildBoxPlot[black]{0}{0}{0}{0}{0}
-\addplot[thick, orange!70] coordinates {
+\addplot coordinates {
 	(10 ,6.076278918444858)
 	(15 ,1.9250837336102817)
 	(20 ,2.206446850393701)
@@ -44,12 +48,12 @@ minor tick num=1
 %     b =      -8.622  (-11.55, -5.697)
 %     c =      0.9821  (0.01249, 1.952)
      
-\addplot[
-red,
-domain=10:50,
-samples=201,
-]
-{(7.017/(x-8.622))+ 0.9821};
+%\addplot[
+%red,
+%domain=10:50,
+%samples=201,
+%]
+%{(7.017/(x-8.622))+ 0.9821};
 
 \end{axis}
 \end{tikzpicture}
