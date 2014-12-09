@@ -1,17 +1,38 @@
 % !TeX spellcheck = en_US
 \chapter{Discussion}
 
-\section{Impact of turbine failures}
+\section{Impact of turbine failures on a decentralized solution}
 One of the main challenges of decentralized systems is to continue normal operation in the face of communication failure or node loss. This section addresses the \ref{PS:Q:Availability} problem of \cref{sec:problemStatement} which deal with the availability of the decentralized solution.
 
-As presented in
+As presented in figures [ref] the decentralized solution can handle the loss of turbines. A turbine is considered offline if it does not publish any new data to any other turbines within a 150 ms timespan as defined by the History QoS parameter described in \cref{sec:decen:ddsconf}.
+This upper limit of 150 ms is chosen because this is the upper limit of the regulation cycle time in the current Simens system.
+After the turbine has been detected as offline the remaining turbines in the wind farm will share the load of the missing turbines to keep the global power production of the park as close to the global setpoint as possible. The removal of one turbine from the windfarm is illustrated in .
+
+Removing several turbines from the system does not impede the overall function of the wind farm either. The remaining turbines will share the extra production between themselves and continue power production. The removal of several turbines are illustrated in figures .
+
+The time it takes the decentralized solution to detect a turbine loss and recover power production is dependent on the following parameters:
+
+\begin{itemize}
+	\item Time of turbine loss detection, which is defined by the History QoS to 150 ms, $I$.
+	\item Time between regulation cycles, in the test cases presented in \cref{sec:res:availability} the time is set to 20 ms, $S$.
+	\item Time of a single regulation cycle to calculate new setpoint for the individual turbines, which is time between regulation cycles deducted from the time of a regulation cycle. The time of a regulation cycle is obtained from the test data generated in \cref{sec:res:availability}. The regulation time becomes $20.19 - 20 = 0.19 ms$. , $C$.
+	\item Time for the turbine to regulate power production according to the new setpoint, which in the turbines simulated in the decentralized solution is a variable time to simulate a real regulation, $R$.
+\end{itemize}
+
+Thus the time for recovery of the power production when a turbine failure occurs can be calculated as $I + S + C + R$ which translates to $150 ms + 20 ms + 0.19 ms + R = 189 + R ms$. This time can be reduced by lowering the time it takes to detect a turbine is offline which increases the likelihood of detecting a delayed turbine as offline, or by lowering the time between regulation cycles which increases the likelihood of cache reads.
+
+Communication and regulation are only two parameters of availability though. To ensure that the wind farm is reachable from the outside world in the face of turbine failure, adds special requirements to the component chosen to handle external communication. A component capable of handling this specific problem has been described in \cref{cha:resourceManagement}.
+
+We also need to address the problem of data loss when a turbine is unresponsive. A turbine has several control and measurement points which are continually logged to a local data store. Should a turbine break down the local data may be destroyed with the turbine. This again sets special requirements to the component handling data storage. 
+
+Making the decentralized solution robust and able to handle the loss of turbines with regards to internal communication, regulation, external communication and data storage increases the overall availability of the wind farm. 
 
 \section{Number of turbines and the impact on regulation cycle time in the decentralized solution}
 \label{sec:disc:turbinesVScycletime}
 This section addresses the \ref{PS:Q:Performance} problem of \cref{sec:problemStatement}. In the current Siemens system the regulation cycle time of a single Park Pilot scales linearly with the number of turbines.
 The aim of the decentralized solution is to detach the regulation cycle time from being dependent on the number of turbines. 
 Looking at \cref{fig:exp:decen:turbines} in \cref{chap:results} we see that the decentralized solution is almost independent on the number of turbines.
-From 5 to 65 turbines the regulation cycle time is nearly constant on $20 ms$ with very little variation in the dataset and moderate extreme values.
+From 5 to 65 turbines the regulation cycle time is nearly constant on 20 ms with very little variation in the dataset and moderate extreme values.
 The regulation cycle time is caused by the fact that the regulation cycle in the decentralized system is not forced to wait for data before running the regulation algorithm because data is continually shared between turbines.
 
 When looking at regulation cycle time of the decentralized solution the number cache reads.
@@ -28,14 +49,14 @@ Disregarding the limitations imposed by the test setup we see that the regulatio
 The number of cache reads can be reduced by increasing the regulation cycle time as presented in \cref{fig:exp:decen:sleep-cache}.
 Thus the factor deciding the time of the regulation cycle is the maximum number of average cache reads accepted for a single regulation cycle.
 
-\section{Comparison of decentralized solution and centralized solution}
-The decentralized solution and the centralized solution is built with a very different architecture. This is reflected in the difference in the way the two solutions scale with the number of turbines. Looking at the figures for regulation cycle time in relation to the number of turbines for the decentralized and the centralized solution respectively we see that the figures reveals very different trends. The test results from the centralized solution presented in \cref{fig:exp:cen:turbines} shows how adding turbines increases the regulation cycle time. From 5 to 30 turbines the regulation time of the centralized solution increase slowly. After 35 turbines the increase in regulation cycle time becomes steeper. For every 15 turbines added the regulation cycle time increases with approximately $25 ms$. The relation between regulation cycle time and the number of turbines is caused by the direct impact the number of turbines have on the regulation cycle. The Park Pilot of the centralized solution must use additional time on querying each added turbine as well as wait for their individual reply before performing the regulation algorithm. Thus the scalability of the centralized solution is linear with a factor of $25 / 15 = 1.667$.
+\section{Comparison of the decentralized solution and the centralized solution}
+The decentralized solution and the centralized solution is built with a very different architecture. This is reflected in the difference in the way the two solutions scale with the number of turbines. Looking at the figures for regulation cycle time in relation to the number of turbines for the decentralized and the centralized solution respectively we see that the figures reveals different trends. The test results from the centralized solution presented in \cref{fig:exp:cen:turbines} shows how adding turbines increases the regulation cycle time. From 5 to 30 turbines the regulation time of the centralized solution increase slowly. After 35 turbines the increase in regulation cycle time becomes steeper. For every 15 turbines added the regulation cycle time increases with approximately $25 ms$. The relation between regulation cycle time and the number of turbines is caused by the direct impact the number of turbines have on the regulation cycle. The Park Pilot of the centralized solution must use additional time on querying each added turbine as well as wait for their individual reply before performing the regulation algorithm. Thus the scalability of the centralized solution is linear with a factor of $25 / 15 = 1.667$.
 
 The scalability of the decentralized solution is, as described in \cref{sec:disc:turbinesVScycletime}, does also scale linearly but the scale factor is much smaller at $0.033$.
 
 Comparing the the scalability of the centralized solution to the decentralized solution we see that the decentralized solution scales $1.667 / 0.033 = 50.51$ times better than the centralized solution.
 
-\section{Comparison of decentralized and current Siemens system}
+\section{Comparison of the decentralized solution and the current Siemens system}
 Comparing the decentralized and the current Siemens system directly is impossible given the differences in environment and architecture. Introducing a centralized solution is an attempt to bridge this gap. By comparing the decentralized solution to the centralized solution and measuring the improvements/demotions we can transfer these measures to the current Siemens system and an imagined decentralized implementation of the entire system. 
 
 \begin{itemize}

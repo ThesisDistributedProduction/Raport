@@ -35,15 +35,19 @@ The regulation algorithm is now computed on every turbine instead of computing t
 
 As \cref{fig:ioDecenRegAlg} implies, with the regulation algorithm performed on every turbine, decentralizing the Park Park onto the turbines also means that every turbine now needs the state of every other turbine in the wind farm.
 
+
+
 \section{Regulation cycle}
 
-Decentralizing the Park Pilot onto the turbines also means a change in the regulation cycle. The difference between the centralized regulation cycle and the decentralized regulation cycle is shown on \cref{fig:cycleCentralVSDecentral}. 
+Decentralizing the Park Pilot onto the turbines also means a change in the regulation cycle. The decentralized solution has been built with focus on scalability, in terms of increasing the number of turbines does not impact the regulation cycle, and performance, in terms of decreasing the regulation cycle time.
 
-Where a request for data and waiting for the corresponding reply for every turbine was needed for the Park Pilot in the centralized solution, turbines now publishes new states whenever a new setpoint has been calculated. Turbines publishes to a specific \textit{Topic} and are assigned a unique \textit{key}. Receiving states from other turbines is then handled and loaded asynchronously into memory by \textit{Connext}, thus making receiving states happen in parallel with the regulation algorithm. This enables \textit{Distributed Shared Memory (DSM)} (see \cref{sec:DSM} for \textit{DSM} description) like behavior for the decentralized solution, where the state of every turbine is shared with every other turbine in the wind farm. Since every turbine has a unique \textit{Topic key}, each turbine has assigned its own memory space, where only the turbine is allowed to write, as illustrated on \cref{fig:DSMlikeBehavior}, thus removing the possibility that turbines overwrite each others states. Using \textit{DSM} like behavior for the decentralized solution, means that every turbine has the latest state (assuming no package losses) of every other turbine available locally, thus removing the need for the request-reply part of the centralized regulation cycle.
+The following sections describes the decentralized regulation cycle. First by presenting how the decentralized regulation cycle differs from the centralized regulation cycle through, followed by a detailed description of how a single regulation cycle has been implemented. 
 
-% Noget om at det er okay, at state er op til 150 ms gammel
+%Finally the term \textit{cache reads} is discussed, which is introduced by the decentralized by a discussion of the introduction of cache reads.
 
+\subsection{Changes from the centralized regulation cycle}
 
+The difference between the centralized regulation cycle and the decentralized regulation cycle is illustrated on \cref{fig:cycleCentralVSDecentral}. 
 
 \begin{figure}
 	%The figure show how regulation time differs central vs decantral
@@ -60,6 +64,8 @@ Where a request for data and waiting for the corresponding reply for every turbi
 	\label{fig:cycleCentralVSDecentral}
 \end{figure}
 
+Where a request for data and waiting for the corresponding reply for every turbine was needed for the Park Pilot in the centralized solution, turbines now publishes new states whenever a new setpoint has been calculated. Turbines publishes to a specific \textit{Topic} and are assigned a unique \textit{key}. Receiving states from other turbines is then handled and loaded asynchronously into memory by \textit{Connext}, thus making receiving states happen in parallel with the regulation algorithm. This enables \textit{Distributed Shared Memory (DSM)} (see \cref{sec:DSM} for \textit{DSM} description) behavior for the decentralized solution, where the state of every turbine is shared with every other turbine in the wind farm. Since every turbine has a unique \textit{Topic key}, each turbine has assigned its own shared memory space, where only the turbine is allowed to write, as illustrated on \cref{fig:DSMlikeBehavior}, thus removing the possibility that turbines overwrite each others states. Using \textit{DSM} like behavior for the decentralized solution, means that receiving states from other turbines is abstracted away from the regulation cycle, enabling the turbines to assume that the latest state of every other turbine has been received and is available locally in memory, thus removing the need for the request-reply part of the centralized regulation cycle. The expectation is that removing the request-reply part of the algorithm decreases the regulation cycle time, since acquisition of turbines states are no longer a part of the cycle.  
+
 \begin{figure}
 	\begin{tabular}{ | c | c | c | c | c |}
 		\cline{1-3}
@@ -72,60 +78,86 @@ Where a request for data and waiting for the corresponding reply for every turbi
 	\label{fig:DSMlikeBehavior}
 \end{figure}
 
-\subsection{BLA}
+Removing the request-reply part of the regulation cycle for the decentralized solution, also removes the ability to ensure that regulation happens using latest states only, since a given turbine, when initiating the regulation cycle, reads the turbine states that is already in memory, instead of requesting all the latest states. This of cause forces a redefinition of when a state is usable for regulation. Instead of using latest states only, the decentralized solution defines a time limit that, when reached, changes the status of the state to old and thus not usable for regulation. Thus for the decentralized solution it is acceptable to perform regulation using states that are no older than the specified time limits. 
+
+To further decrease the regulation cycle time, strictly reliable messaging has been removed for the decentralized solution. A reply from all turbines at a specific point in the regulation cycle is no longer needed, thus package losses will no longer block the regulation cycle. Furthermore, with the time limit introduced, all states are no longer needed by every turbine, since states now only have to be strictly 'younger' than the specified time limit. Therefore to further reduce the regulation cycle, strictly reliable messaging has been removed. Instead, for the decentralized solution, best effort messaging, where data samples are sent once and missed samples are acceptable, has been used. This introduces determinism to the regulation cycle by removing potential communication delays, thus reducing the regulation cycle time. This also means that every turbine of the decentralized solution is only interested in the newest published state and not every state published, meaning a dropped state are overwritten by the state of the next regulation cycle for a given turbine.
+
+Each turbine only calculates its own setpoint. Thus after calculation, the new setpoint is set locally and the new state is published to the other turbines. The wait in the end is there to leave a small amount of time for \textit{Connext} to receive and overwrite states that have already been read.
+
+\subsection{Implementation}
+
+Before running the cycle illustrated on \cref{fig:decenRegCycle}, an initial setpoint is set and the corresponding state of the turbine is read, enabling publishing the turbine state as the first step of the regulation cycle. This is done to prevent the first cycle from being redundant due to lack of data from other turbines. 
 
 \begin{figure}
 	\centering
 	\begin{sequencediagram} %Created using pgf-umlsd
 		\newthread{parkPilot}{:Park Pilot}
-		\newthread{turbineDataReplier}{:Turbine Data Replier}
-		\newinst{turbine}{:Turbine}
-	
-		\begin{sdblock}{each turbine}{}
-			\mess[1]{parkPilot}{sendRequest}{turbineDataReplier}
-			\begin {call}{turbineDataReplier}{readData()}{turbine}{return data}
-			\end {call}
-			\mess[1]{turbineDataReplier}{sendReply}{parkPilot}
-		\end{sdblock}				
+		\newinst[2]{turbine}{:Turbine}
+		\newinst[2]{connext}{:Connext}
+		
+		\begin {messcall}{parkPilot}{publishState()}{connext}{}
+		\end {messcall}
+		\begin {call}{parkPilot}{readStates()}{connext}{states}
+		\end {call}
+		\begin {callself}{parkPilot}{regAlgorithm()}{setpoint}
+		\end {callself}
+		\begin {call}{parkPilot}{sendSetpoint()}{turbine}{setpoint}
+		\end {call}
+		\begin {call}{parkPilot}{readState()}{turbine}{state}
+		\end {call}	
+		\begin {callself}{parkPilot}{sleep()}{}
+		\end {callself}			
 	\end{sequencediagram}
 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[First part of the regulation cycle]{
-		\label{fig:getStatesOfTurbines} 
+	\caption[Decentralized regulation cycle sequence diagram]{
+		\label{fig:decenRegCycle} 
 		\footnotesize{%
-			First part of the regulation sequence: Getting the state of all turbines.
+			Decentralized regulation cycle sequence diagram.
 		}
 	}
 \end{figure}
 
+\Cref{fig:decenRegCycle} presents three objects:
 
-\section{DDS configuration}
+\begin{itemize}
+	\item The \textbf{Park Pilot} object which handles the regulation cycle. As opposed to the centralized solution, the Park Pilot object is now instantiated on every turbine in the wind farm, instead of being a single external component.
+	\item The \textbf{Turbine} object which serves as the interface to the underlying Turbine. The Turbine object for the purpose of this thesis is just a simulation of an actual turbine. Thus this object handles communication with a database with actual turbine data provided by Siemens.
+	\item \textit{Connext} is the underlying DDS framework used for communication, thus this is not an object instantiated by the Park Pilot. It is however what enables reception of data in parallel with the regulation cycle. 
+\end{itemize}
 
-\begin{tikzpicture} 
-\begin{umlseqdiag} 
-\umldatabase{DB} 
-\umlmulti{DataSimulator}
-\umlmulti{Regulation Controller}
-\umlmulti{Monitor}
-\begin{umlcall}[op=getAlldata(), type=asynchron, return=0]{DB}{DataSimulator}
-\begin{umlfragment}[type=ForAll, label=Samples, inner xsep=8, fill=white!10]
-\begin{umlcall}[op=Simumlation data, type=synchron, return=setpoint]{DataSimulator}{Regulation Controller}
+The Park Pilot publishes the state of the present turbine and reads the states of every turbine within the wind farm. Afterwards the regulation algorithm is performed and a setpoint for the present turbine is calculated and used to set a new state.
 
-\end{umlcall}
-\begin{umlfragment}[type=opt, fill=white!10]
-\begin{umlcall}[op=UpdateUI(), type=asynchron, return=0]{DataSimulator}{Monitor}
-\end{umlcall}
-\end{umlfragment}
-\end{umlfragment}
+The regulation algorithm used for the decentralized solution is the same used for the centralized solution described in \cref{sec:calculateSetpoints}.
 
-\begin{umlcall}[op=saveData(), type=asynchron, return=0]{DataSimulator}{DB}
-\end{umlcall}	
-\end{umlcall}
+\subsection{Cache reads}
 
-\end{umlseqdiag} 
-\end{tikzpicture}
+A cache read happens if the cycle time elapses before all turbine instances have responded with state information, resulting in the same state being read twice. Thus it is a natural result of separating receiving data from the regulation cycle, as done in the decentralized solution. \textit{Connext} only keeps track of data that has already been read but not how many times that data has been read. Thus a cache read does not include information regarding if the same state has been read multiple times.
 
-\includegraphics{figures/metapost/ClassDiagramHPPP.1}
+The regulation cycle of the decentralized solution does not directly include any communication, thus enabling a significant reduction of regulation cycle time. However, decreasing the cycle time, increases the 'pressure' on \textit{Connext} by increasing the number of regulation cycles pr. minute, thus increasing the number of states that needs to be published, thus increasing the number of states that needs to be received (assuming that the cycle time of all turbines are equally decreased). This ultimately results increased number of cache reads and increased network traffic. Thus reducing the regulation cycle time is expected to increase the number of cache reads.  
+
+Increasing the number of cache reads can be an issue, since it reduces the effectiveness of the regulation cycle. Having a high number of cache reads implies that the regulation has been performed using data used for the previous regulation, thus decreasing the effect of the current regulation.
+
+As a result of this trade-off between reduction in regulation cycle time and number of cache reads, a sleep in the end of the regulation cycle (as presented on \cref{fig:decenRegCycle}) has been implemented, in order to control the reduction of the regulation cycle. Thus the regulation cycle time is an input parameter of the decentralized solution.
+
+\section{DDS configuration} \label{sec:decen:ddsconf}
+
+\begin{figure}
+\begin{lstlisting}[language=XML]
+<participant_factory_qos>
+    <logging>
+        <verbosity>WARNING</verbosity>
+        <category>PLATFORM</category>
+        <print_format>VERBOSE_TIMESTAMPED</print_format>
+        <output_file>ddsadaptor.log</output_file>
+    </logging>
+</participant_factory_qos>
+\end{lstlisting}
+\caption[Decentralized participant factory QoS parameters]{
+		\label{fig:decParFacQos} 
+		\footnotesize{Participant factory QoS parameters of the decentralized solution.}
+	}
+\end{figure}
 
 \section{Graphical Interface} \label{sec:graphicalInterface}
 In order to visualize the system a graphical user interface has been constructed using Matlab, Simulink and DDS Blockset for Simulink.
