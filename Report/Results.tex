@@ -1,7 +1,7 @@
 % !TeX spellcheck = en_US
 
 \newcommand{\resultsPlotWidthScale}{1}
-\newcommand{\resultsFigureWidthScale}{0.6}
+\newcommand{\resultsFigureWidthScale}{0.8}
 
 \chapter{Results}
 \label{chap:results}
@@ -26,7 +26,8 @@ The blue line illustrates the maximum available power production for the wind fa
 
 \section{\ref{PS:Q:Availability}}\FloatBarrier
 \label{sec:res:availability}
-The plots in \cref{fig:exp:availability_kill15,fig:exp:availability_kill10,fig:exp:availability_kill5,fig:exp:availability_kill1} show how the decentralized solution reacts when killing 1, 5, 10 and 15 turbines. To begin with there are 30 turbines, the setpoint is set to 2,000 for all setups except for when killing only one turbine(\cref{fig:exp:availability_kill1}) it was set to 20,000. This was done so that it was possible to visualy verify that the turbines reacted.
+The plots in \cref{fig:exp:availability_kill15,fig:exp:availability_kill10,fig:exp:availability_kill5,fig:exp:availability_kill1} show how the decentralized solution reacts when killing 1, 5, 10 and 15 turbines. To begin with there are 30 turbines, the setpoint is set to 2,000 for all setups except for when killing only one turbine(\cref{fig:exp:availability_kill1}) it was set to 20,000. This was done so that it was possible to visually verify that the turbines reacted.
+The turbines are all running with a cycle time of 20 ms.
 
 \begin{figure}
 	\centering
@@ -67,7 +68,7 @@ The regulation cycle time with variating number of turbines are done with box pl
 The results of one of the \nameref{sec:Exper:perfom} experiments plotted are plotted in \cref{fig:exp:decen:sleep,fig:exp:decen:sleep-cache}.
 The experiment where performed with a variating number of internal wait times.
 
-\begin{figure}[h]
+\begin{figure}[h!]
 	\centering
 	\input{figures/tikz/results/Test6_decentral_cycle_msleep}
 	\caption{Decentralized solution with variable wait time cycle time experiment}
@@ -76,7 +77,7 @@ The experiment where performed with a variating number of internal wait times.
 
 \Cref{fig:exp:decen:sleep} show the that the regulation cycle times and wait times are linearly Dependant on each other, the maximum value with wait time 10 is outside the boundaries of the plot but is calculated to 148.91 ms The upper and lower quartile are close together the exception is the 10 ms wait time sample, the maximum being the 20 ms wait time having a difference of 1.401 ms between upper and lower quantile and the minimum being 45 ms wait time with a difference of 0.402 ms The maximum values again with the exception of the 10 ms wait time sample follow the median values, the minimum values are able to reach low regulation cycle times much lower than the wait time used in the experiment.
 
-\begin{figure}[h]
+\begin{figure}[h!]
 	\centering
 	\input{figures/tikz/results/Test6_decentral_cycle_msleep_cache}
 	\caption{Decentralized solution with variable wait time cache reads experiment}
@@ -86,13 +87,14 @@ The experiment where performed with a variating number of internal wait times.
 \Cref{fig:exp:decen:sleep-cache} show the average cache reads of the experiment.
 A cache read only happens in the decentralized solution and is a consequence of the separation of receiving data in a separate thread.
 The cache read happens if the wait time elapses before all turbine instances have responded with state information. The Number dos not include information of if the same turbine instance state has been read from cache multiple times.
-The number of cache reads is declining, a fitted function of the plot has been put on top (red), the plot is in Matlab fitted against the function $\dfrac{a}{x + b} + c$.
+The number of cache reads is declining. 
+%, a fitted function of the plot has been put on top (red), the plot is in Matlab fitted against the function $\dfrac{a}{x + b} + c$.
 
 \clearpage
 \subsection{\nameref{subsec:Exper:perfom:2}}
 The plots in this section relates to the second part of the \nameref{sec:Exper:perfom} experiment. In this graph the regulation cycle time is plotted against a variating number of turbines.
 
-\begin{figure}[h]
+\begin{figure}[h!]
 	\centering
 	\input{figures/tikz/results/Test5_decentral_cycle}
 	\caption{Decentralized solution variable number of turbines experiment 1}
@@ -106,7 +108,7 @@ The extreme regulation cycle time values all  stop close to 150 ms.
 At 70 turbines the maximum value sticks out notably it does look like a outlier however checking the raw data, it is not there are logged regulation cycle times for every ms value between it and the median.
 It should be noted that all the data with a cycle time above 132~ms are collected from the same test machine.
 
-\begin{figure}[h]
+\begin{figure}[h!]
 	\centering
 	\input{figures/tikz/results/Test5_decentral_cycle_cache}
 	\caption{Decentralized solution variable number of turbines experiment 1}
@@ -119,7 +121,7 @@ The plot almost lines up with a exponential curve. Also \cref{fig:exp:decen:turb
 \clearpage
 \section{\ref{PS:Q:Scalability}}\FloatBarrier
 
-\begin{figure}[h]
+\begin{figure}[h!]
 	\centering
 	\input{figures/tikz/results/Test4_Central_cycle}
 	\caption{Centralized solution variable number of turbines experiment 1}
