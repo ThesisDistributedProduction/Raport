@@ -1,69 +1,54 @@
-% !TeX spellcheck = en_US
 
-\newcommand{\resultsPlotWidthScale}{1}
-\newcommand{\resultsFigureWidthScale}{0.8}
+\section{\ref{PS:Q:Performance}}
+\subsection{Experimenit}
+\label{sec:Exper:perfom}
 
-\chapter{Results}
-\label{chap:results}
+%Scalability is by Bondi\cite{Bondi:2000:CSI:350391.350432} defined as \textit{the systems ability to accommodate an increasing number of elements or objects, to process growing volumes of work gracefully, and/or to be susceptible to enlargement}.
 
-\section{\ref{PS:Q:Feasibility}}
-\label{sec:exp:feasibility}
-Presented in \cref{fig:graphicalInterface} is shown a screenshot of the graphical interface while the decentralized solution is running 5 turbines.
-The global setpoint for power production is at 2000, illustrated by the red line and global power production is illustrated by the black line.
-The blue line illustrates the maximum available power production for the wind farm while the lines in the bottom around 400 is the power production of each individual turbine.
+The \ref{PS:Q:Performance} question asks if the proposed decentralized system is able to scale with the number of turbines in the system. The experiments that investigate this question has been split into two part. \newline
 
-\begin{figure} [!h]
-	\centering
-	\includegraphics[width=\resultsFigureWidthScale\textwidth]{gui.png} 
-	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Graphical interface running 5 turbines]{
-		\label{fig:graphicalInterface} 
-		\footnotesize{%
-			Graphical interface running 5 turbines.
-		}
-	}
-\end{figure}
+Part 1 aims to investigate the anticorrelation between regulation time and cache read count in the proposed decentralized system. This is relevant because changing the regulation time may have an impact on the number of cache reads. Choosing a regulation time that has a low number of cache read count for part 2 of the experiments will make it easier to identify how scaling up the number of turbines will affect cache read count. \newline
 
-\section{\ref{PS:Q:Availability}}\FloatBarrier
-\label{sec:res:availability}
-The plots in \cref{fig:exp:availability_kill15,fig:exp:availability_kill10,fig:exp:availability_kill5,fig:exp:availability_kill1} show how the decentralized solution reacts when killing 1, 5, 10 and 15 turbines. To begin with there are 30 turbines, the setpoint is set to 2,000 for all setups except for when killing only one turbine(\cref{fig:exp:availability_kill1}) it was set to 20,000. This was done so that it was possible to visually verify that the turbines reacted.
-The turbines are all running with a cycle time of 20 ms.
+Part 2 aims to investigate the impact on regulation time and cache read count when the number of turbines are scaled up in the proposed decentralized system. \newline
 
-\begin{figure}
-	\centering
-	\includegraphics[width=\resultsFigureWidthScale\textwidth]{figures/Results/availabilitytest30-29_setpoint_20000.PNG}
-	\caption{Availability test kill 1 out of 30 turbines}
-	\label{fig:exp:availability_kill1}
-\end{figure}
+\subsection{Part 1: Regulation time and the impact on cache read count}
+\label{subsec:Exper:perfom:1}
+The experiment below are made to show how the regulation time affect the cache read count in the decentralized system described in \cref{cha:decentralizedSystem}. 
+The experiments are performed with \testCycletimeNumbers ~cycle times.  
 
-\begin{figure}
-	\centering
-	\includegraphics[width=\resultsFigureWidthScale\textwidth]{figures/Results/availabilitytest30-25_setpoint_2000.PNG}
-	\caption{Availability test kill 5 out of 30 turbines}
-	\label{fig:exp:availability_kill5}
-\end{figure}
+The following procedure is used each time the experiment is performed:
+\begin{enumerate}
+	\item Start the system with a cycle time of N ms and 21 turbines.
+	\item Make sure the system is stable.
+	\item Start logging the reported regulation run time and cache read count.
+	\item Stop logging after \experiemntRunTime.
+\end{enumerate}
 
-\begin{figure}
-	\centering
-	\includegraphics[width=\resultsFigureWidthScale\textwidth]{figures/Results/availabilitytest30-20_setpoint_2000.PNG}
-	\caption{Availability test kill 10 out of 30 turbines}
-	\label{fig:exp:availability_kill10}
-\end{figure}
+\subsection{Part 2: Number of turbines and their impact on regulation time and cache read count}
+\label{subsec:Exper:perfom:2}
+The experiment below are made to show how the number of turbines affect the regulation cycle in the decentralized system described in \cref{cha:decentralizedSystem}.
 
-\begin{figure}
-	\centering
-	\includegraphics[width=\resultsFigureWidthScale\textwidth]{figures/Results/availabilitytest30-15_setpoint_2000.PNG}
-	\caption{Availability test kill 15 out of 30 turbines}
-	\label{fig:exp:availability_kill15}
-\end{figure}
+The experiments are performed with \testTurbineNumbers ~turbines. Besides turbines we are also going to modify ''Data Wait Time Frame'' witch is a constant that defines the time a turbine controller will wait for new updates before considering the other turbines offline and unavailable, i.e. regulation speed.
 
-\clearpage
-\section{\ref{PS:Q:Performance}}\FloatBarrier
+The test system is expected to be running only one instance in a real life implementation, therefore the test machine will only run one instance and the support machines will run the rest generating system load.
+The experiment is done with a variating N number of online turbines.
+
+The following procedure is used each time the experiment is performed:
+\begin{enumerate}
+	\item Start the system with N turbines.
+	\item Make sure the system is stable.
+	\item Start logging the reported regulation run time and cache read count.
+	\item Stop logging after \experiemntRunTime.
+\end{enumerate}
+
+
+\subsection{Results}
+
 \label{sec:exp:performance}
 The cycle times are calculated as the difference between the receive timestamp of the oldest turbine state package and a timestamp right after the new turbine state has been sent and the turbines setpoint has been set.
 The regulation cycle time with variating number of turbines are done with box plots and a line. The box plots whiskers show the extreme values max and min, the top and bottom of the box show the upper and lower quartile of the data, and the center line shows the median. The median is further highlighted by a line.
 
-\subsection{\nameref{subsec:Exper:perfom:1}}
+\subsubsection{\nameref{subsec:Exper:perfom:1}}
 
 The results of one of the \nameref{sec:Exper:perfom} experiments plotted are plotted in \cref{fig:exp:decen:sleep,fig:exp:decen:sleep-cache}.
 The experiment where performed with a variating number of internal wait times.
@@ -91,7 +76,7 @@ The number of cache reads is declining.
 %, a fitted function of the plot has been put on top (red), the plot is in Matlab fitted against the function $\dfrac{a}{x + b} + c$.
 
 \clearpage
-\subsection{\nameref{subsec:Exper:perfom:2}}
+\subsubsection{\nameref{subsec:Exper:perfom:2}}
 The plots in this section relates to the second part of the \nameref{sec:Exper:perfom} experiment. In this graph the regulation cycle time is plotted against a variating number of turbines.
 
 \begin{figure}[h!]
@@ -118,23 +103,6 @@ It should be noted that all the data with a cycle time above 132~ms are collecte
 
 \cref{fig:exp:decen:turbines_cache} show the amount of cache reads the simulation had during part 2 of the experiment.
 The plot almost lines up with a exponential curve. Also \cref{fig:exp:decen:turbines,fig:exp:decen:turbines_cache} seams to suddenly increase around 65 ms.
-\clearpage
-\section{\ref{PS:Q:Scalability}}\FloatBarrier
 
-\begin{figure}[h!]
-	\centering
-	\input{figures/tikz/results/Test4_Central_cycle}
-	\caption{Centralized solution variable number of turbines experiment 1}
-	\label{fig:exp:cen:turbines}
-\end{figure}
-
-The \nameref{subsec:Exper:Scale} experiment results are described in this section, these experiments are done against the centralized solution. \Cref{fig:exp:cen:turbines} show the comparison experiment done with the centralized solution. The median values initially are constant, this is from 10 turbines to 30 turbines, from 35 and up the median is linearly increasing.
-From 70 Turbines the regulation start to have larger max values which increases linearly as well.
-
-
-
-
-
-
-
+\subsection{Discussion}
 

@@ -1,0 +1,30 @@
+% !TeX spellcheck = en_US
+
+\chapter{Experiments, Results and Discussion}
+%\chapter{\ref{PS:Q:Feasibility}}
+
+\section{Experiments}\label{cha:experiments}
+
+The goal of this project is not only to build a control system that provides both scalability and availability, but also to compare it to the current solution by Siemens Wind Power.
+To evaluate the new decentralized system, the experiments in the following sections where created. 
+The experiments are grouped by in relation to the problem statements proposed in \cref{sec:problemStatement}.
+
+The experiments are performed using 3 laptops connected using a Gbit(IEEE 802.3ab) Ethernet router with IGMP support(see \cref{appendix:HardwareSpecification}), The laptops are however only using 100Mb(IEEE 802.3u) network adapters.
+One laptop is being used to capture test data and the others are running a number of turbines to generate network traffic.
+All test are run with CPU utilization on average below 90\% and network adapters are likewise monitored to ensure they are neither overloaded doing experiment runs
+Monitoring these two parameters are essential to getting usable test results, if the processor or network adapter is overloaded packages will not be sent sufficiently fast and will impact the regulation cycle time in a way that would never happen when running just one instance.
+
+Every experiment is run at least X \todo{Set correct value for X} times 
+
+\newcommand{\testTurbineNumbers}{2, 21, 41, 61, 81 and 101}
+\newcommand{\testCycletimeNumbers}{5ms, 10ms, 15ms, 20ms, 25ms and 30ms}
+\newcommand{\experiemntRunTime}{2mins}
+
+\newcommand{\resultsPlotWidthScale}{1}
+\newcommand{\resultsFigureWidthScale}{0.8}
+
+\input{results/experimentFeasability.tex}
+\input{results/experimentAvailability.tex}
+\input{results/experimentPerformance.tex}
+\input{results/experimentScalability.tex}
+
