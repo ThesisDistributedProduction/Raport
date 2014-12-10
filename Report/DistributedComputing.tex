@@ -1,6 +1,10 @@
 \section{Distributed computing}
 
-As mentioned, The Wind Power Supervisor (WPS) and the Park Pilot does not scale well with the number of turbines, which forces Siemens to set the regulation cycle time after worst case scenarios (see \cref{sec:SiemensCase} for details). Today the regulation cycle time is set to 150 ms and Siemens wants the regulation cycle time reduced to 10 ms. This is a major performance improvement and as such not a strict demand from the Siemens case, meaning any reduction in the 150 ms cycle time will be accepted. The goal for the decentralized solution to the Siemens case is therefore to reduce the regulation cycle time as much as possible.
+As mentioned, The Wind Power Supervisor (WPS) and the Park Pilot does not scale well with the number of turbines, which forces Siemens to set the regulation cycle time after worst case scenarios (see \cref{sec:SiemensCase} for details). 
+
+%The primary problem that Siemens want solved is improving scalability, in terms of increasing the number of turbines per park pilot. This problem is partly solved by decentralizing the solution by removing the need for an actual Park Pilot. However, even with a decentralized solution, in order to make the system scale in the sense that adding turbines does not impact the regulation cycle time, requesting states from all turbines must be removed from the regulation algorithm, since this part of the algorithm scales linearly.
+
+The regulation cycle time of the current Siemens system is set to 150 ms and Siemens wants the regulation cycle time reduced to 10 ms. This is a major performance improvement and as such not a strict demand from the Siemens case, meaning any reduction in the 150 ms cycle time will be accepted. The goal for the decentralized solution to the Siemens case is therefore to reduce the regulation cycle time as much as possible, and still be able to regulate.
 
 Looking at the park regulation cycle \cref{sec:SiemensCase}, the reason for it being slow is primarily the communication overhead involved, when requesting setpoints from every turbine and sending new setpoints to every turbine, and that this communication overhead increases with the number of turbines involved with the regulation. So to reduce the regulation cycle time, this communication overhead needs to be reduced, by letting each turbine perform the regulation cycle and calculate their own setpoints. 
 
@@ -163,7 +167,9 @@ Looking at the Siemens case (\cref{sec:SiemensCase}) the new distributed system 
 
 As mentioned, to perform the park regulation sequence, the windmill farm needs a global shared state, where information about every turbine available to every turbine performing park regulations. Therefore, if the decentralized version of the Siemens case were to be implemented using raw message passing, it would result in building some kind of DSM and/or publish/subscribe abstraction, with roughly the same communication overhead. To save the trouble of developing this abstraction, we conclude that message passing is not an option as communication paradigm.
 
-This leaves DSM and publish/subscribe as remaining paradigms, where one could imagine the Siemens case being implemented using either of the two. The abstraction of shared memory provided by DSM is attractive when looking looking at the Siemens case. As a system developer, being able to think of the global shared state as local memory is to prefer over event handling. The Data Distribution Service defined by the Object Management Group provides a middleware based on Real Time Publish-Subscribe with the ability to maintain a history of messages. This enables the use of publish/subscribe as well as the ability to maintain a global shared state through the message history.
+This leaves DSM and publish/subscribe as remaining paradigms, where one could imagine the Siemens case being implemented using either of the two. The abstraction of shared memory provided by DSM is attractive when looking looking at the Siemens case. As a system developer, being able to think of the global shared state as local memory is to prefer over event handling. Therefore DSM is chosen over publish/subscribe since publish/subscribe introduces event handling to the system.
+
+%The abstraction of shared memory provided by DSM is attractive when looking at the Siemens case. As a system developer, being able to think of the global shared state as local memory is to prefer over event handling. The Data Distribution Service defined by the Object Management Group provides a middleware based on Real Time Publish-Subscribe with the ability to maintain a history of messages. This enables the use of publish/subscribe as well as the ability to maintain a global shared state through the message history.
 
 %This leaves DSM and publish/subscribe as remaining paradigms, where one could imagine the Siemens case being implemented using either of the two. The abstraction of shared memory provided by DSM is attractive when looking looking at the Siemens case. As a system developer, being able to think of the global shared state as local memory is to prefer over event handling. Therefore DSM is chosen over publish/subscribe since publish/subscribe introduces event handling to the system.
 
@@ -214,48 +220,21 @@ This leaves DSM and publish/subscribe as remaining paradigms, where one could im
 
 
 
-%\subsection{State of the art DSM}
-
-%The regulation algorithm is a recursive algorithm, which performs calculations of new turbine set points using the following parameters:
-
-%\begin{itemize}
-%	\item Current state of every turbine in the farm.
-%	\item Max capacity of each turbine.
-%	\item Historic data from previous calculations.
-%\end{itemize} 
-
-
-
-%In order to remove the communication overhead from the regulation cycle time, information sharing through the chosen paradigm, DSM, needs to to be detached from the regulation cycle. 
-
-%Looking at the global shared state 
-
-% Removing communication overhead from the park regulation cycle involves the following
-
-%DSM is a paradigm well implemented through by many different frameworks, with their own individual and unique implementation.
-
-
-%Therefore, to determine which technology that is best suited for the Siemens case, the technologies will be compared on the following set of parameters: 
-
-%standalone: Type?
-%Distributed shared memory support
-%Distributed shared chache support
-%Distributed memeory support
-%Performance
-%Client/server?
-%Framework architecture. distributed shared memeory, client/server or not  
-%cost
+\subsection{State of the art DSM}
 
 %With DSM chosen as the communication paradigm, this chapter describes, evaluates and discusses different DSM technologies in order to find the technology best suited for Siemens.
+To perform the regulation algorithm as fast as possible, all data needed to perform the algorithm must be in memory before initializing the algorithm. This demand is a demand that can be met by implementing a topic based public-subscribe solution by assigning a topic specific to each turbine, thus we set the same demand for a DSM solution.
 
-%Standalone, avoid overhead
+Looking at DSM solutions we get the following three types of DSM:
 
-
-%\subsection{In memory databases}
+\paragraph{In-Memory Databases} (also known as Main Memory Databases) are databases stored in memory, instead conventional databases, that stores.  \cite{garcia1992main}
 %Client/server architecture
+%eventually consistent
 
-%\subsection{In-memory data grids}
-%Distributed memory. Only shared for replica reasons
+\paragraph{In-Memory Data Grids}
+%Distributed memory. Only shared for replica reasons.
+%Share nothing architecture
+
 
 %\subsubsection{Oracle Coherence}
 %dist. memory --> distributed chache
@@ -285,9 +264,6 @@ This leaves DSM and publish/subscribe as remaining paradigms, where one could im
 %opensource
 %http://hazelcast.com/products/hazelcast/
 
-%\subsubsection{Distributed shared cache}
-
-
 %\subsubsection{Infinispan}
 %promising
 
@@ -299,6 +275,77 @@ This leaves DSM and publish/subscribe as remaining paradigms, where one could im
 %\subsubsection{AppFabric}
 %Runs on IIS
 
+\paragraph{Distributed Shared Cache}
+
+
+
+
+%In order to remove the communication overhead from the regulation cycle time, information sharing through the chosen paradigm, DSM, needs to to be detached from the regulation cycle. 
+
+%DSM is a paradigm well implemented through by many different frameworks, with their own individual and unique implementation.
+
+
+%Therefore, to determine which technology that is best suited for the Siemens case, the technologies will be compared on the following set of parameters: 
+
+%standalone: Type?
+%Distributed shared memory support
+%Distributed shared chache support
+%Distributed memeory support
+%Performance
+%Client/server?
+%Framework architecture. distributed shared memeory, client/server or not  
+%cost
+
+
+
+%Standalone, avoid overhead
+
+
+%\subsection{In memory databases}
+%Client/server architecture
+
+%\subsection{In-memory data grids}
+%Distributed memory. Only shared for replica reasons
+
+
+%\subsubsection{Oracle Coherence}
+%dist. memory --> distributed chache
+%java, .net, c++
+%http://www.oracle.com/technetwork/middleware/coherence/distributed-caching-100021.html
+
+
+%\subsubsection{VMware Gemfire}
+%Contact sales
+%Not open source
+
+%\subsubsection{Gigaspaces XAP}
+%Share nothing architecture
+
+%\subsubsection{ScaleOut Software}
+%Java, .NET, C/C++ 
+%cash
+%Share nothing architecture
+%http://www.scaleoutsoftware.com/downloads-resources/downloads/
+
+%\subsubsection{NCache}
+%expensive
+%http://www.alachisoft.com/ncache/index.html
+
+%\subsubsection{Hazelcast}
+%java
+%opensource
+%http://hazelcast.com/products/hazelcast/
+
+%\subsubsection{Infinispan}
+%promising
+
+%\subsubsection{DSM in .NET}
+%IP multicast
+
+%casusally consistent: Writes that are potentially causally related must be seen by all processes in the same order. Concurrent writes may be seen in a different order on different machines.
+
+%\subsubsection{AppFabric}
+%Runs on IIS
 
 \subsection{Data Distribution Service for Real-Time Systems}
 The Data Distribution Service for Real-Time Systems hereafter called DDS is an Object Management Group standard defining a middleware for communication between information provideres and information consumers.
