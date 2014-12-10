@@ -15,9 +15,12 @@ The SCADA system and park regulators does not scale automatically with the numbe
 The power regulation performed by each park regulator is amongst others based on the current state of each turbine connected to the park regulator.
 The park regulator must request the current state of each connected turbine in order to be able to calculate if the power production of the wind farm is correct.
 If the power production of the wind farm needs adjustment the park regulator calculates new power production goals for each connected turbine and distributes these.
+
 Adding additional turbines to a park regulator will increase the time needed to collect the states of the connected turbines, calculate new power production goals and distribute these new power production goals to the connected turbines.
 Thus, increasing the number of turbines connected to a park regulator will increase the power regulation time.
 The increase in power regulation time is caused by the fact that the park regulator must request a state from an extra turbine and wait for the turbine to provide the state.
+
+Keeping the power regulation time low will allow for faster power regulation of the wind farm which in turn will enable the wind farm to comply with the needs of the power grid faster. Faster compliance to the needs of the power grid will enable the wind farm to help in stabilizing the power grid should power demand rise or fall unexpectedly. Thus, keeping a low power regulation time is important for a wind farm to be an asset of the power grid instead of a liability.
 
 %If the power regulation time exceeds a certain threshold the wind farm is no longer able to satisfy the regulation demands required by the power grid.
 %Thus, the number of turbines connected to a park regulator must be limited in order to uphold a power regulation cycle time that satisfy the requirements imposed by the power grid.
@@ -28,12 +31,78 @@ The increase in power regulation time is caused by the fact that the park regula
 %This interdependence between turbines forces the central control system to collect data from all turbines before a single new power production value can be calculated, which is time consuming. Adding turbines will additionally increase the time the centralized control system needs to calculate new power production values.
 %To uphold a constant power production level for the entire wind farm near real-time control and regulation is necessary thus the time consumption of the centralized control system must be minimized in effect limiting the number of turbines the centralized control system is able to handle.
 
-Both the SCADA system and the park regulators are essential for a Siemens Wind Power wind farm to function. Communication within the wind farm pass through these two components, and system failure in either the SCADA system or one of the park regulators may render parts of the wind farm unavailable, thus resulting in decreased control of the wind farm. This makes these components potential single points of failures to the wind farm. 
+Both the the park regulators and the SCADA system are essential for a Siemens Wind Power wind farm to function. Communication within the wind farm pass through these two components, and system failure in either the SCADA system or one of the park regulators may render parts of the wind farm unavailable, thus resulting in decreased control of the wind farm. This makes these components potential single points of failures to the wind farm. 
 
 %Despite the fact that the wind farms has grown to a size that is becoming increasingly hard to manage as a centralized control system, little research has been done in the area of decentralization a wind farm managements and controls components.
 
 As wind energy is recognized as one of the solutions to the renewable energy problem, wind park size and capacity keeps increasing.
 The need for wind farm scalability and availability is thus not only a challenge for Siemens Wind Power but for the entire industry.
+
+\section{Related work}
+The popularity of wind energy has lead to massive research within the area. Generally the research is focused on a number of areas:
+
+\begin{itemize}
+	\item Optimization of turbine design and construction materials.
+	\item Turbine and wind farm control.
+	\item Integration of wind farms into existing power grids.
+	\item Wind flow prediction and simulation.
+	\item Wake flow optimization and simulation.
+	\item Offshore wind farms.
+\end{itemize}
+
+%\section{Decentralized systems}
+%With the coming era of Internet of Things (IoT) the focus on decentralized systems and autonomic agents is greater than ever.
+%IoT devices must be able to communicate with each other directly without the need for an intermediate central server.
+%Furthermore the IoT devices must be largely autonomous since they cannot rely on a lasting connection to a server for control.
+%
+%A new approach to control of wind farms is to utilize game theory\cite{AModelFreeApproachToWindFarmControl}.
+%The turbines in a farm must cooperate to reach the desired goal of a chosen output.
+%The game theory approach use an iterative learning algorithm that converges against the optimal output after n iterations.
+
+\subsection{Aeolus}
+The Aeolus project was a large scale EU supported project which lasted from may 2008 to april 2011. It included project partners from 
+Aalborg University, Industrial Systems and Control Ltd in Glasgow, University of Zagreb, Energy Research Centre of the Netherlands and Vestas Wind Systems A/S.
+The main objectives of the project was to research and develop predictions of flows and incorporate data from a network of sensors, as well as research and develop control paradigms that acknowledges the uncertainty in the modeling and dynamically manages the flow resource in order to optimize specific control objectives.
+The project is relevant to this thesis because several approaches to control of a wind farm was evaluated.
+
+One approach was the hierarchical approach which uses local control on the turbine level and global control on the wind farm level~\cite{HeirarchicalWindFarmControl}.
+Setpoints for the global output of the wind farm are received by the controller on the wind farm level.
+So is the output for each turbine and the maximum available output for each turbine.
+The global controller calculates setpoints for each turbine based on the global setpoint and each turbines current and possible output.
+The controllers on turbine level is responsible for reaching the setpoint calculated by the global controller as well as making each turbine reach the setpoint in the most optimal manner(gearing, avoid ice over, avoid oscillation).
+The hierarchical approach is similar to the current approach used in the Siemens case.
+
+Another approach was the decentralized feed-forward approach~\cite{DecentralisedFeedforwardControlOfWindFarms} which takes advantage of the fact that turbines are placed in a farm by letting upwind turbines feed wind data to downwind turbines. 
+This allows downwind turbines to make adjustments to their production in order to exploit the coming wind in the best way.
+Furthermore a restricted communication model is used allowing turbines only to communicate with their neighbors.
+Using this decentralized feed-forward approach to control a wind farm can help even out the output of the farm since downwind turbines has additional information regarding wind speed to come to act upon. If upwind turbines power production is also a part of the feed-forward package downwind turbines may also be able to regulate overall wind farm production by evening out spikes from upwind turbines.
+In addition by only communicating with neighboring turbines in order to achieve improvements in output the need for a centralized node is alleviated.
+
+\subsection{Other related works}
+The European Union has a number of sponsored projects beside the Aeolus project:
+\begin{itemize}
+	\item IRPWIND which aim to accelerate the transition towards low-carbon energy through better integration of the European research activities~\cite{IRPWIND}. The program has six subprogrammes:
+	\begin{enumerate}
+		\item Wind conditions
+		\item Aerodynamics
+		\item Structures and Materials
+		\item Wind Integration
+		\item Offshore Wind Energy
+		\item Research Infrastructure
+	\end{enumerate}
+	\item INNWIND which focus is on accelerating the process of realizing the 20MW turbine~\cite{INNWIND}.
+	\item EERA-DTOC which focus is on creating a software tool for optimizing offshore wind farm design and clusters of wind farms~\cite{eera-dtoc}.
+\end{itemize}
+
+Likewise the  United States of America has a number of projects most of them performed by Sandia National Laboratories or National Renewable Energy Laboratory:
+\begin{itemize}
+	\item SWiFT which focus is on wake effects, turbine control and rotor development~\cite{SWiFT}.
+	\item Offshore Wind which focus on large rotor development and simulation algorithms~\cite{offshoreWind}.
+	\item Active Power Control focus on using wind turbines for active control of the power grid~\cite{activePowerControl}.
+\end{itemize}
+
+The area of the supporting software architecture and software stack is not a topic that has received much attention, presumably because the prevailing solutions are proprietary and therefore not available for public research.
+This thesis adds insight into which software components and technologies could be used in a wind farm thus filling in some of the gap in the research area.
 
 \section{Siemens Wind Power case}
 
@@ -156,6 +225,12 @@ The scope of this thesis is limited to the following areas:
 \end{itemize}
 
 The features of the Wind Power Supervisor will not be implemented in the decentralized solution.
+
+%\subsection{Game theory control}
+%A new approach to control of wind farms is to utilize game theory\cite{AModelFreeApproachToWindFarmControl}.
+%The turbines in a farm must cooperate to reach the desired goal of a chosen output current.
+%The game theory approach use an iterative learning algorithm that converges against the optimal output after n iterations.
+%According to the above referenced article improvements on up to 25\% is possible compared to other algorithms currently in use.
 
 %\section{Enabling comparison of current Siemens system with decentralized solution}
 %\todo{Bad title, move to another chapter}
