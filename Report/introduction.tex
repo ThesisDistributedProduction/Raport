@@ -11,20 +11,29 @@ Siemens Wind Power is increasingly focusing on the offshore wind farm market.
 The current setup of a wind farm requires additional infrastructure for management and control of the wind farm.
 In addition to the wind turbines, a wind farm at Siemens Wind Power consists of multiple park regulators for turbine control, and a Supervisory Control And Data Acquisition (SCADA) system, which handles data aggregation, logging and external data requests.
 
-Both the SCADA system and the park regulators are essential for a Siemens Wind Power wind farm to function. All communication within the wind farm pass through these two components, and system failure in either the SCADA system or one of the park regulators may render parts of the wind farm unavailable, thus resulting in decreased control of the wind farm. This makes these components potential single points of failures to the wind farm. 
+The SCADA system and park regulators does not scale automatically with the number of turbines. A park regulator can only handle power regulation for a certain amount of turbines, meaning the larger the wind farm, the more park regulators needs to be present to handle power regulation.
+The power regulation performed by each park regulator is amongst others based on the current state of each turbine connected to the park regulator.
+The park regulator must request the current state of each connected turbine in order to be able to calculate if the power production of the wind farm is correct.
+If the power production of the wind farm needs adjustment the park regulator calculates new power production goals for each connected turbine and distributes these.
+Adding additional turbines to a park regulator will increase the time needed to collect the states of the connected turbines, calculate new power production goals and distribute these new power production goals to the connected turbines.
+Thus, increasing the number of turbines connected to a park regulator will increase the power regulation time.
+The increase in power regulation time is caused by the fact that the park regulator must request a state from an extra turbine and wait for the turbine to provide the state.
 
-Furthermore the SCADA system and park regulators does not scale automatically with the number of turbines. A park regulator can only handle regulation for a certain amount of turbines, meaning the larger the wind farm, the more park regulators needs to be present to handle regulation.
+%If the power regulation time exceeds a certain threshold the wind farm is no longer able to satisfy the regulation demands required by the power grid.
+%Thus, the number of turbines connected to a park regulator must be limited in order to uphold a power regulation cycle time that satisfy the requirements imposed by the power grid.
 
-As wind energy is recognized as one of the solutions to the renewable energy problem, wind park size and capacity keeps increasing.
-The need for wind farm scalability and availability is thus not only a challenge for Siemens Wind Power but for the entire industry.
+%It is desirable to have the turbines regulate and match the power grid's current need as fast as possible. According to Siemens Wind Power most of the delay for this regulation is because of the way regulation currently uses network traffic. Reducing the number of network transmission required to regulate a turbine is needed.
+%The main problem being that with a centralized control systems a bottle neck is introduced through which all traffic must pass. This means the turbines must wait for the centralized control system to calculate and communicate values like the amount of power a single turbine must produce in order to meet the power production requirements of the entire wind farm.
+%As the wind farm is expected to operate as a single unit the power production of a single turbine is affected by the power production of all other turbines.
+%This interdependence between turbines forces the central control system to collect data from all turbines before a single new power production value can be calculated, which is time consuming. Adding turbines will additionally increase the time the centralized control system needs to calculate new power production values.
+%To uphold a constant power production level for the entire wind farm near real-time control and regulation is necessary thus the time consumption of the centralized control system must be minimized in effect limiting the number of turbines the centralized control system is able to handle.
+
+Both the SCADA system and the park regulators are essential for a Siemens Wind Power wind farm to function. Communication within the wind farm pass through these two components, and system failure in either the SCADA system or one of the park regulators may render parts of the wind farm unavailable, thus resulting in decreased control of the wind farm. This makes these components potential single points of failures to the wind farm. 
 
 %Despite the fact that the wind farms has grown to a size that is becoming increasingly hard to manage as a centralized control system, little research has been done in the area of decentralization a wind farm managements and controls components.
 
-It is desirable to have the turbines regulate and match the power grids current need as fast as possible. According to Siemens Wind Power most of the delay for this regulation is because of the way regulation currently uses network traffic. Reducing the number of network transmission required to regulate a turbine is needed.
-The main problem being that with a centralized control systems a bottle neck is introduced through witch all traffic must pass. This means the turbines must wait for the centralized control system to calculate and communicate values like the amount of power a single turbine must produce in order to meet the power production requirements of the entire wind farm.
-Since the wind farm is expected to operate as a single unit the power production of a single turbine is affected by the power production of all other turbines.
-This interdependence between all turbines forces the central control system to collect data from all turbines before a single new power production value can be calculated, which is time consuming. Adding turbines will additionally increase the time the centralized control system needs to calculate new power production values.
-To uphold a constant power production level for the entire wind farm near real-time control and regulation is necessary thus the time consumption of the centralized control system must be minimized in effect limiting the number of turbines the centralized control system is able to handle.
+As wind energy is recognized as one of the solutions to the renewable energy problem, wind park size and capacity keeps increasing.
+The need for wind farm scalability and availability is thus not only a challenge for Siemens Wind Power but for the entire industry.
 
 \section{Siemens Wind Power case}
 
@@ -34,9 +43,9 @@ To uphold a constant power production level for the entire wind farm near real-t
 \label{sec:SiemensCase}
 Siemens Wind Power builds wind farms of different sizes, ranging from a single turbine to well above one hundred turbines \cite{simensOffShoreProjects, simensOnShoreProjects}. 
 
-The current wind farm setup is illustrated on \cref{fig:currentSiemensSetup}. Today every turbine in a wind farm at Siemens Wind Power are equipped with computers for the purpose of data collection and for communication with the rest of the system. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, stores data and handles wind park communication with the outside world. At Siemens up to eight Park Pilots are present pr. wind farm and one Wind Power Supervisor.
+The current wind farm setup is illustrated on \cref{fig:currentSiemensSetup}. Today every turbine in a wind farm at Siemens Wind Power are equipped with computers for the purpose of turbine regulation and data logging. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, stores data and handles wind park communication with the outside world. At Siemens up to eight Park Pilots and one Wind Power Supervisor are present per wind farm.
 
-\begin{figure}
+\begin{figure}[!h]
 	\centering
 	\scalebox{0.7}{\input{figures/tikz/SystemOverview}}
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
@@ -48,9 +57,9 @@ The current wind farm setup is illustrated on \cref{fig:currentSiemensSetup}. To
 	}
 \end{figure}
 
-For every transformer station there is a Park Pilot. The Park Pilots are responsible for wind farm regulation, meaning issuing production goals for each turbine, based on the how much power the entire wind farm should produce and the state of each turbine within the wind farm. A production goal is how much power a given turbine should produce and are from hereon called a \textit{setpoint}. The state of a turbine is information regarding how much power the turbine can produce, based on wind- and weather conditions amongst others, and how much power the turbine currently is producing. 
+For every transformer station in the wind farm there is a Park Pilot. The Park Pilots are responsible for wind farm regulation, meaning issuing production goals for each turbine, based on the how much power the entire wind farm should produce and the state of each turbine within the wind farm. A production goal is how much power a given turbine should produce and are from hereon called a \textit{setpoint}. The state of a turbine is information regarding how much power the turbine can produce, based on wind and weather conditions amongst others, and the amount of power the turbine currently is producing. 
 
-The Park Pilots at Siemens Wind Power spends 150 ms performing a single regulation. Regulation is performed infinitely many times throughout the lifespan of the wind farm, making regulation a cyclic process. The calculation of setpoints for each turbine consist of a number of steps as illustrated on \cref{fig:currentSiemensCycleTime}. First the Park Pilot must request the state of each turbine in order to calculate new setpoints. The Park Pilot must wait for each turbine to answer the request. After receiving data from each turbine new setpoints are calculated and distributed to the turbines. The buffer is added to make sure setpoints has been properly distributed and that individual turbines have time to adjust their power production according to the new setpoint before a new request for turbine data is sent. Also the time spent waiting for states may vary depending on the current traffic of the network as well as the response time of the individual turbines.
+The Park Pilots at Siemens Wind Power spends 150 ms performing a single regulation. Regulation is performed continuously, making regulation a cyclic process. The calculation of setpoints for each turbine consist of a number of steps as illustrated on \cref{fig:currentSiemensCycleTime}. First the Park Pilot must request the state of each turbine in order to calculate new setpoints. The Park Pilot must wait for each turbine to answer the request. After receiving data from each turbine new setpoints are calculated and distributed to the turbines. The buffer is added to make sure setpoints has been properly distributed and that individual turbines have time to adjust their power production according to the new setpoint before a new request for turbine data is sent. Also the time spent waiting for states may vary depending on the current traffic of the network as well as the response time of the individual turbines.
 
 \begin{figure}[!h]
 	\centering
@@ -67,7 +76,7 @@ The Park Pilots at Siemens Wind Power spends 150 ms performing a single regulati
 Every turbine has a database for data logging purposes, this database is replicated to the Wind Power Supervisor.
 The Wind Power Supervisor does data aggregation on data from each turbine as well as store a copy of the replicated data.
 The turbines, Wind Power Supervisor and Park Pilots are connected with a gigabit network, which currently has plenty of extra capacity in terms of available bandwidth.
-Internally the turbine handles more than 50 control points and 200 measurement points and samples these every 50 ms.
+Internally, the turbine has more than 50 control points and 200 measurement points. The measurement points are sampled continually every 50 ms.
 
 %\begin{figure}
 %	\centering
@@ -100,36 +109,38 @@ Internally the turbine handles more than 50 control points and 200 measurement p
 
 \section{Thesis motivation}
 \label{sec:ThesisMotivation}
-Todays setup at Siemens Wind Power (\cref{sec:SiemensCase}) is an example of a system wished to be made less centralized. The current setup poses the following challenges to Siemens:  
+Today's setup at Siemens Wind Power (\cref{sec:SiemensCase}) is an example of a system wished to be made decentralized. The current setup poses the following challenges to Siemens:  
 
 \begin{itemize} 
 	\item Single point of failure. Should a Wind Power Supervisor or a Park Pilot fail, a part of the wind farm will become unavailable.
-	\item Low scalability. The Wind Power Supervisors and Park Pilots does not scale with the number of turbines. This is reflected in the wind farm regulation performance. Today a wind farm regulation cycle time is 150 ms. This regulation cycle time is set after worst case setpoint retrieval time, worst case new setpoint calculations and worst case time it takes to broadcast new setpoints. This ultimately depends on worst case number of turbines pr. Park Pilot.
+	\item Low scalability. The Wind Power Supervisors and Park Pilots does not scale well with the number of turbines. This is reflected in the wind farm regulation performance. Today a wind farm regulation cycle time is 150 ms. This regulation cycle time is set after worst case setpoint retrieval time, worst case new setpoint calculations and worst case time it takes to broadcast new setpoints. This ultimately depends on worst case number of turbines per Park Pilot.
 \end{itemize}
 
-Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by distributing their functionality to the turbines, utilizing the free computing capacity of the computers already residing in every turbine. This would increase availability by lowering the possibility of single point of failure. Furthermore this would increase scalability of the system, opening for performance optimizations of the wind farm regulation cycle time by detaching regulation time from the number of turbines pr. Park Pilot. 
+Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by distributing their functionality to the turbines, utilizing the free computing capacity of the computers already residing in every turbine. This would increase availability by lowering the possibility of single point of failure. Furthermore, this would increase scalability of the system, opening for performance optimizations of the wind farm regulation cycle time by detaching regulation time from the number of turbines pr. Park Pilot. 
 
 \section{Problem statement}
 \label{sec:problemStatement}
 
-The purpose of this thesis is to design, implement and evaluate a solution for a Siemens wind farm, where the Wind Power Supervisor and the Park Pilots are decentralized by utilizing the free capacity residing in every turbine for the Siemens Wind Power case. The solution must be able to provide the same features as the current wind farm setup. 
+The purpose of this thesis is to design, implement and evaluate a solution for a Siemens Wind Power wind farm, where the Wind Power Supervisor and the Park Pilots are decentralized by utilizing the free computational capacity residing in every turbine for the Siemens Wind Power case. The proposed decentralized solution must maintain the ability to control the turbine's power production in order to reach the power production goal of the wind farm. 
 
-\paragraph{The following problems are addressed:}
+\paragraph{Specifically, the following problems are addressed:}
 \begin{description} % [label={\arabic*.}, ref=\textit{\arabic*}]
 	%	\label{PS:Q:1}
 	\labitem{Feasibility}{PS:Q:Feasibility} How can we best re-implement the current Siemens system (\cref{sec:SiemensCase}) as a system where the Wind Power Supervisor and the Park Pilots are decentralized?
 	%	\label{PS:Q:4}
 	\labitem{Availability}{PS:Q:Availability} Can we create a solution where removing one or more nodes from the system at runtime does not cause system failure?
 	%	\label{PS:Q:3}
-	\labitem{Performance}{PS:Q:Performance} Can we create a solution that scales so the number of turbines does not impact the regulation cycle time?
+	\labitem{Performance}{PS:Q:Performance} Can we create a solution that scales such that the number of turbines does not impact the regulation cycle time?
 	%	\item Can we, with the new decentralized solution, reduce the current regulation cycle time of 150 ms?
 	%	\label{PS:Q:2}
-	\labitem{Scalability}{PS:Q:Scalability} How will the new decentralized solution influence the following parameters compared to the current Siemens system:
-	\begin{enumerate}
-		\item Time in milliseconds of a single regulation cycle.
-		\item Network traffic measured in bits per second.
-		\item Memory impact measured in bytes.
-	\end{enumerate}
+	\labitem{Scalability}{PS:Q:Scalability} How will the new decentralized solution influence regulation time of a single regulations cycle compared to the current Siemens system?
+	
+%	\labitem{Scalability}{PS:Q:Scalability} How will the new decentralized solution influence the following parameters compared to the current Siemens system:
+%	\begin{enumerate}
+%		\item Time in milliseconds of a single regulation cycle.
+%		\item Network traffic measured in bits per second.
+%		\item Memory impact measured in bytes.
+%	\end{enumerate}
 \end{description}
 
 The decentralized solution will be implemented as a prototype, for proof of concept and test purposes.
@@ -139,7 +150,7 @@ The decentralized solution will be implemented as a prototype, for proof of conc
 The scope of this thesis is limited to the following areas:
 
 \begin{itemize}
-	\item Analysis and identification of the state of the art software components that will enable a reimplementation of the current Siemens system as a decentralized system to address problem \ref{PS:Q:Feasibility}.
+	\item Analysis and identification of the state of the art software components that will enable a reimplementation of the current Siemens system as a decentralized system to address the problem denoted as \ref{PS:Q:Feasibility}.
 	\item Implementation of a decentralized solution that duplicates the central features of a Park Pilot needed to address problems \ref{PS:Q:Availability}, \ref{PS:Q:Performance} and \ref{PS:Q:Scalability} of the problem statement.
 	\item Comparison of the decentralized solution to the current Siemens system to address problems \ref{PS:Q:Performance} and \ref{PS:Q:Scalability}.
 \end{itemize}
