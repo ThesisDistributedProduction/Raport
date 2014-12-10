@@ -2,17 +2,53 @@
 
 \chapter{Experiments, Results and Discussion}
 \label{cha:experiments}
+This chapter contains the experiments, results and discussion of this thesis. A section of this chapter is devoted to each problem presented in \cref{sec:problemStatement}. Each section contains a description of the experiments performed to prove or disprove the problem, the results obtained from the experiment and a discussion of the results in relation to the original problem.
 
-The main goal of this project is to evaluate a decentralized solution for a turbine control system. The project is evaluated in terms of \ref{PS:Q:Feasibility}, \ref{PS:Q:Availability}, \ref{PS:Q:Performance} and \ref{PS:Q:Scalability} defined in \cref{sec:problemStatement}. \ref{PS:Q:Scalability} is evaluated against a centralized solution designed in corporation with Siemens Wind Power.
-To evaluate the new decentralized system, the experiments in the following sections where created. 
+%The main goal of this thesis is to evaluate a decentralized solution for the current Siemens system. The decentralized solution is evaluated in terms of \ref{PS:Q:Feasibility}, \ref{PS:Q:Availability}, \ref{PS:Q:Performance} and \ref{PS:Q:Scalability} defined in \cref{sec:problemStatement}. \ref{PS:Q:Scalability} is evaluated against a centralized solution designed to be as similar to the current Siemens system as possible.
+%To evaluate the decentralized solution, the experiments in the following sections where created. 
 %The experiments are grouped by in relation to the problem statements proposed in \cref{sec:problemStatement}.
 
-The experiments are performed using three laptops connected using a Gbit(IEEE 802.3ab) Ethernet router with IGMP support for hardware specifications see \cref{appendix:HardwareSpecification}, the laptops are using 100Mb(IEEE 802.3u) network adapters.
+%The experiments are performed using three laptops connected using a Gbit(IEEE 802.3ab) Ethernet router with IGMP support. for hardware specifications see \cref{appendix:HardwareSpecification}, the laptops are using 100Mb(IEEE 802.3u) network adapters.
 %One laptop is being used to capture test data and the others are running a number of turbines to generate network traffic.
-All test are run with CPU utilization on average below 90\% and network adapters are likewise monitored to ensure they are neither overloaded doing experiment runs. \todo{How do we defend this claim, I think we din't actualy do this}
-Monitoring these two parameters are essential to getting usable test results, if the processor or network adapter is overloaded packages will not be sent sufficiently fast and will impact the regulation cycle time in a way that would never happen when running just one instance.
+%All test are run with CPU utilization on average below 90\% and network adapters are likewise monitored to ensure they are neither overloaded doing experiment runs. \todo{How do we defend this claim, I think we din't actualy do this}
+%Monitoring these two parameters are essential to getting usable test results, if the processor or network adapter is overloaded packages will not be sent sufficiently fast and will impact the regulation cycle time in a way that would never happen when running just one instance.
 
-Every experiment is run at least X \todo{Set correct value for X} times 
+%Each experiment is performed such that minimum 1000 sample points are collected. \todo{Set correct value for X} 
+
+\section{Hardware specification of experiment setup}
+The hardware specification of the test setup is presented in \cref{tab:testsetup}
+
+\begin{table}[!h]
+	\begin{tabular}{l l}
+		\hline
+		\hline
+		\textbf{Hardware} & \textbf{Specification} \\
+		\hline
+		\hline
+		Macbook Pro A1502 & i5 4258U, 2.4 GhZ, 8 GB ram, Windows 8.1, SSD disk\\
+		\hline
+		Macbook Air A1466 &  i5 3427U, 1.8 GhZ, 4 GB ram, Ubuntu 14.10, SSD disk\\
+		\hline
+		Asus UX32V-R4002V & i7 3517U, 1.9 GhZ, 10 GB ram, Ubuntu 14.10, SSD disk\\
+		\hline
+		D-Link DIR-855 Router & IEEE 802.3ab 1000BASE-T, IGMP support\\
+		\hline
+		TU2-ET100 USB to Ethernet & IEEE 802.3u 100Base-TX\\
+		\hline
+		ASUS USB 2.0 to Ethernet & IEEE 802.3u 100Base-TX\\
+		\hline
+		\hline
+	\end{tabular}
+	
+	\caption[Hardware specification of experiment setup]{
+		\label{tab:testsetup}
+		\footnotesize{%
+			Hardware specification of experiment setup.
+		} 
+	}
+\end{table}
+
+\clearpage
 
 \newcommand{\testTurbineNumbers}{2, 21, 41, 61, 81 and 101}
 \newcommand{\testCycletimeNumbers}{5ms, 10ms, 15ms, 20ms, 25ms and 30ms}

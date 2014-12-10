@@ -1,12 +1,12 @@
-
 \section{\ref{PS:Q:Availability}}
-\subsection{Experiment}
-The \ref{PS:Q:Availability} question asks if the proposed decentralized system is able to continue its functions even though nodes are removed from the system at runtime.
+
+\subsection{Experiments}
+The \ref{PS:Q:Availability} problems address if the proposed decentralized system is able to continue its functions even though nodes are removed from the system at runtime.
 The proposed decentralized system should be able to continue maintaining the global setpoint of the park even if some turbines become unavailable, this of course assumes that available capacity is present in the park.
 
-The below experiment is repeated with a N failing turbines
+The below experiment is repeated with $N = 1, 5, 10, 15$ failing turbines of 30 running turbines.
+
 The experiment has the following procedure:
-$N = 1, 5, 10, 15$
 \begin{enumerate}
 	\item Start the system with 30 turbines.
 	\item Make sure the system is stable.
@@ -22,28 +22,28 @@ $N = 1, 5, 10, 15$
 The plots in \cref{fig:exp:availability_kill15,fig:exp:availability_kill10,fig:exp:availability_kill5,fig:exp:availability_kill1} show how the decentralized solution reacts when killing 1, 5, 10 and 15 turbines. To begin with there are 30 turbines, the setpoint is set to 2,000 for all setups except for when killing only one turbine(\cref{fig:exp:availability_kill1}) it was set to 20,000. This was done so that it was possible to visually verify that the turbines reacted.
 The turbines are all running with a cycle time of 20 ms.
 
-\begin{figure}
+\begin{figure} [!h]
 	\centering
 	\includegraphics[width=\resultsFigureWidthScale\textwidth]{figures/Results/availabilitytest30-29_setpoint_20000.PNG}
 	\caption{Availability test kill 1 out of 30 turbines}
 	\label{fig:exp:availability_kill1}
 \end{figure}
 
-\begin{figure}
+\begin{figure} [!h]
 	\centering
 	\includegraphics[width=\resultsFigureWidthScale\textwidth]{figures/Results/availabilitytest30-25_setpoint_2000.PNG}
 	\caption{Availability test kill 5 out of 30 turbines}
 	\label{fig:exp:availability_kill5}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width=\resultsFigureWidthScale\textwidth]{figures/Results/availabilitytest30-20_setpoint_2000.PNG}
 	\caption{Availability test kill 10 out of 30 turbines}
 	\label{fig:exp:availability_kill10}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width=\resultsFigureWidthScale\textwidth]{figures/Results/availabilitytest30-15_setpoint_2000.PNG}
 	\caption{Availability test kill 15 out of 30 turbines}
@@ -76,3 +76,5 @@ Internal communication and regulation are only two parameters of availability th
 We also need to address the problem of data loss when a turbine is unresponsive. A turbine has several control and measurement points which are continually logged to a local data store. Should a turbine break down the local data may be destroyed with the turbine. This again sets special requirements to the component handling data storage. In \cref{sec:databaseStorage} the requirements to the data storage component is described and MongoDB was presented as the best choice to solve the availability problem of data storage. MongoDB is capable of automatic replication of data between turbines such that data is still available should a turbine failure occur. As well as replication MongoDB provides automatic sharding of a database which enables global data to be stored across a number of nodes such that no single node contains all global data. Furthermore MongoDB supports aggregation of data across turbines to calculate aggregated values as for instance the global production of the wind farm.
 
 Making the decentralized solution robust and able to handle the loss of turbines with regards to internal communication, regulation of power production, external communication and data storage increases the overall availability of the wind farm. 
+
+\clearpage

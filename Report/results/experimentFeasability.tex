@@ -1,37 +1,35 @@
 
 \section{\ref{PS:Q:Feasibility}}
-\subsection{Experimenit}
+\subsection{Experiments}
 
-The \ref{PS:Q:Feasibility} question asks if it is possible to re-implement the current system at Siemens Wind Power as a decentralized system. The following experiment aims to investigate if the proposed decentralized system can perform the operations that the current centralized system at Siemens Wind Power is able to perform. More specifically the experiments aims to investigate if the proposed decentralized system is able to regulate the power production of each turbine in order to maintain the global power production goal.
+The \ref{PS:Q:Feasibility} problem address the possibility of reimplementing the current Siement system as a decentralized system. The following experiment aims to investigate if the decentralized solution is able to regulate the power production of each turbine in order to maintain the global power production goal.
+
 The experiment has the following procedure:
 \begin{enumerate}
-	\item Start the system with 100 turbines.
+	\item Start the system with 10 turbines.
 	\item Start the graphical interface described in \cref{sec:graphicalInterface}.
 	\item Observe that the global setpoint and the global production line on the graphical interface match.
 \end{enumerate}
 
-
-
-
-
-
-
-
-\subsection{Result}
+\subsection{Results}
 \label{sec:exp:feasibility}
 \begin{figure} [!h]
 	\centering
 	\includegraphics[width=\resultsFigureWidthScale\textwidth]{gui.png} 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Graphical interface running 5 turbines]{
+	\caption[Graphical interface running 10 turbines]{
 		\label{fig:graphicalInterface} 
 		\footnotesize{%
-			Graphical interface running 5 turbines.
+			Graphical interface running 10 turbines.
 		}
 	}
 \end{figure}
-Presented in \cref{fig:graphicalInterface} is shown a screenshot of the graphical interface while the decentralized solution is running 5 turbines.
-The global setpoint for power production is at 2000, illustrated by the red line and global power production is illustrated by the black line.
-The blue line illustrates the maximum available power production for the wind farm while the lines in the bottom around 400 is the power production of each individual turbine.
+
+Presented in \cref{fig:graphicalInterface} is a screenshot of the graphical interface while the decentralized solution is running 10 turbines.
+The global setpoint for power production is at just below 5000 kW, illustrated by the red line and global power production is illustrated by the black line also just below 5000 kW.
+The blue line illustrates the maximum available power production for the wind farm which during this experiment was above 10000 kW while the lines in the bottom around 500 kW is the current power production of each individual turbine.
 
 \subsection{Discussion}
+The experiment performed to prove that it is feasible to create a decentralized solution that is able to do power regulation is a simple run of the prototype of the decentralized solution. As such it is hard to deduce from a screenshot that the decentralized solution is actually able to perform power regulation but this experiment in correlation with the rest of the experiments performed in this chapter will show that the prototype is functioning.
+
+\clearpage
