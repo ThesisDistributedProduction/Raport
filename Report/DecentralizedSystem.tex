@@ -45,7 +45,7 @@ The following sections describes the decentralized regulation cycle. First by pr
 
 %Finally the term \textit{cache reads} is discussed, which is introduced by the decentralized by a discussion of the introduction of cache reads.
 
-\subsection{Changes from the centralized regulation cycle}
+\subsection{Changes from the centralized regulation cycle}\label{sec:regCycleChanges}
 
 The difference between the centralized regulation cycle and the decentralized regulation cycle is illustrated on \cref{fig:cycleCentralVSDecentral}. 
 
@@ -81,6 +81,8 @@ Where a request for data and waiting for the corresponding reply for every turbi
 Removing the request-reply part of the regulation cycle for the decentralized solution, also removes the ability to ensure that regulation happens using latest states only, since a given turbine, when initiating the regulation cycle, reads the turbine states that is already in memory, instead of requesting all the latest states. This of cause forces a redefinition of when a state is usable for regulation. Instead of using latest states only, the decentralized solution defines a time limit that, when reached, changes the status of the state to old and thus not usable for regulation. Thus for the decentralized solution it is acceptable to perform regulation using states that are no older than the specified time limits. 
 
 To further decrease the regulation cycle time, strictly reliable messaging has been removed for the decentralized solution. A reply from all turbines at a specific point in the regulation cycle is no longer needed, thus package losses will no longer block the regulation cycle. Furthermore, with the time limit introduced, all states are no longer needed by every turbine, since states now only have to be strictly 'younger' than the specified time limit. Therefore to further reduce the regulation cycle, strictly reliable messaging has been removed. Instead, for the decentralized solution, best effort messaging, where data samples are sent once and missed samples are acceptable, has been used. This introduces determinism to the regulation cycle by removing potential communication delays, thus reducing the regulation cycle time. This also means that every turbine of the decentralized solution is only interested in the newest published state and not every state published, meaning a dropped state are overwritten by the state of the next regulation cycle for a given turbine.
+
+Finally multicast has been enabled for the decentralized solution to greatly reduce the number of packages each turbine sends, when publishing a new state. With multicast enabled pnly one package is sent pr. new state, as opposed to the centralized solution sending a package pr. receiver. This reduces the load of each turbine, thus reduces the regulation cycle time. Furthermore, this also reduces overall network traffic.  
 
 Each turbine only calculates its own setpoint. Thus after calculation, the new setpoint is set locally and the new state is published to the other turbines. The wait in the end is there to leave a small amount of time for \textit{Connext} to receive and overwrite states that have already been read.
 
@@ -142,20 +144,183 @@ As a result of this trade-off between reduction in regulation cycle time and num
 
 \section{DDS configuration} \label{sec:decen:ddsconf}
 
+The key component used for communication is DDS (see \cref{sec:DSM} for DDS description). This section describes how DDS has been configured for the decentralized solution.
+
+\subsection{Interface Description Language}
+
+As with the centralized solution, Interface Description Language (IDL) has been used for generating Data Transfer Objects for the decentralized solution. See centralized IDL \cref{sec:cenIdl} for details.
+
+
+\subsection{Choosing Quality of Service parameters}\label{sec:decenChoosingQoS}
+
+The Quality of Service (QoS) parameters for the decentralized solution is based on the QoS parameters determined for the centralized solution, except for the following key areas:
+
+\begin{description}
+	\item[Reliability] of messaging has been changed to best effort messaging in order to reduce the regulation cycle time by introducing determinism into the regulation cycle. This means package drops are allowed for the decentralized solution.
+	\item[Durability] of the decentralized solution has been changed to local durability. This means new the current state of every turbine is sent to newly discovered turbines. Note with best effort messaging we cannot promise that the states are received, since package drops are allowed. Durability for the regulation cycle has only minor relevance, since newly arrived turbines will receive all states within a short amount of time after being discovered anyway. Thus this setting has only been applied, since an attempt to receive states upon startup is better than receiving no states at all. However, for real life purposes, the turbines should probably be configured with a default setpoint, which is used until data from all turbines has been received, in combination with this setting. 
+	\item[Throughput] remains the same as the throughput setting of the centralized solution but for a slightly different reason. New turbine states must be sent as soon as possible, which removes the need for batching. Thus regular throughput has been chosen for the decentralized solution. 
+	\item[Multicast] has been enabled to reduce regulation cycle time and network traffic, as explained in \cref{sec:regCycleChanges}.
+\end{description}
+
+\subsection{Detailed quality of service evaluation}
+
+This section provides a detailed evaluation of every parameter used for the decentralized QoS XML. The full QoS XML is presented but only parameter changes from the centralized solution are discussed.
+
+\paragraph{Participant factory} (\cref{fig:decParFacQos}) QoS parameters has been set to be the same as the centralized solution. See Participant factory description of \cref{sec:detailedQoSDesc}.
+
 \begin{figure}
 \begin{lstlisting}[language=XML]
 <participant_factory_qos>
-    <logging>
-        <verbosity>WARNING</verbosity>
-        <category>PLATFORM</category>
-        <print_format>VERBOSE_TIMESTAMPED</print_format>
-        <output_file>ddsadaptor.log</output_file>
-    </logging>
+	<logging>
+		<verbosity>WARNING</verbosity>
+		<category>PLATFORM</category>
+		<print_format>VERBOSE_TIMESTAMPED</print_format>
+		<output_file>ddsadaptor.log</output_file>
+	</logging>
 </participant_factory_qos>
 \end{lstlisting}
 \caption[Decentralized participant factory QoS parameters]{
 		\label{fig:decParFacQos} 
 		\footnotesize{Participant factory QoS parameters of the decentralized solution.}
+	}
+\end{figure}
+
+\paragraph{Participant} (\cref{fig:decParQos}) QoS parameters has been evaluated as follows (see Participant evaluation of \cref{sec:detailedQoSDesc} for parameters not described):
+
+\begin{itemize}
+	\item \textbf{.builtin.multicast\_enabled} value has been set to 1 for enabling multicast.
+\end{itemize}
+
+\begin{figure}
+\begin{lstlisting}[language=XML]
+<participant_qos>
+	<participant_name>
+		<name>TurbineParticipant</name>
+		<role_name>TurbineParticipantRole</role_name>
+	</participant_name>
+		<database>
+		<shutdown_cleanup_period>
+			<sec>DURATION_ZERO_SEC</sec>
+			<nanosec>1</nanosec>
+		</shutdown_cleanup_period>
+	</database>
+		<transport_builtin>
+			<mask>UDPv4</mask>
+		</transport_builtin>
+	<property>
+		<value>
+			<element>
+				<name>dds.transport.UDPv4.builtin.multicast_enabled</name>
+				<value>1</value>
+			</element>
+			<element>
+				<name>dds.transport.UDPv4.builtin.parent.message_size_max</name>
+				<value>65535</value>
+			</element>
+			<element>
+				<name>dds.transport.UDPv4.builtin.send_socket_buffer_size </name>
+				<value>65535</value>
+			</element>
+			<element>
+				<name>dds.transport.UDPv4.builtin.recv_socket_buffer_size</name>
+				<value>2097152</value>
+			</element>
+		</value>
+	</property>
+</participant_qos>
+\end{lstlisting}
+\caption[Decentralized participant QoS parameters]{
+		\label{fig:decParQos} 
+		\footnotesize{Participant QoS parameters of the decentralized solution.}
+	}
+\end{figure}
+
+\paragraph{Topic} (\cref{fig:decTopicQos}) QoS parameters are used to initialize DataReader and DataWriter QoS paramters. Thus parameters that applies to both DataReaders and DataWriters have been configured using a Topic profile. Topic QoS parameters have been evaluated as follows:
+
+\begin{itemize}
+	\item \textbf{reliability} of the decentralized solution has been set to best effort, as discussed in \cref{sec:decenChoosingQoS}, thus making package drops acceptable.
+	\item \textbf{durability} has been set to local durability, thus latest states from all online turbines are sent to newly added turbines.
+	
+	Note that in combination with best effort reliability, a newly added turbines is not ensured all turbine states. Furthermore the amount of states received from each turbines is the depth value set by the history QoS parameter.
+	\item \textbf{history} configures the number of data samples the send and receive buffers can contain on a per instance basis for keyed Topics. With KEEP\_LAST\_HISTORY\_QOS enabled, the latest values of the data samples are kept and the oldest ones are discarded when the limit as set by the depth parameter is reached. Thus the send and receive buffers of the decentralized solution acts like a circular buffer of length 1, meaning, in combination with best effort messaging, only newest states are relevant to the turbines.
+\end{itemize}
+
+\begin{figure}
+\begin{lstlisting}[language=XML]
+<topic_qos name="TurbineTopicQos">
+	<reliability>
+		<kind>DDS_BEST_EFFORT_RELIABILITY_QOS</kind>
+	</reliability>
+	<durability>
+		<kind>TRANSIENT_LOCAL_DURABILITY_QOS</kind>
+	</durability>
+	<history>
+		<kind>KEEP_LAST_HISTORY_QOS</kind>
+		<depth>1</depth>
+	</history>
+</topic_qos>
+\end{lstlisting}
+\caption[Decentralized Topic QoS parameters]{
+		\label{fig:decTopicQos} 
+		\footnotesize{Topic QoS parameters of the decentralized solution.}
+	}
+\end{figure}
+
+\paragraph{DataWriter} (\cref{fig:decDataWriterQos}) QoS parameters has been evaluated as follows (see DataWriter evaluation of \cref{sec:detailedQoSDesc} for parameters not described):
+
+\begin{itemize}
+	\item \textbf{lifespan} configures the expiration time of each data sample written by a DataWriter. Thus this parameter is only relevant to DataWriters. Each data sample has an associated expiration time, beyond which the data should not be delivered. Once the sample expires, the data sample will be removed from the DataReaders receive buffers. 
+	
+	This parameter configures the previously mentioned time limit (\cref{sec:regCycleChanges}) of the decentralized solution. A turbine state expires after 150000000 nanoseconds ($=150$ ms). This value is set after the cycle time of the current Siemens system, to ensure that the decentralized do not use any older data than what the current Siemens system use for regulation.
+	
+	Furthermore, this parameter also indirectly controls the how many and which turbines that should be used for the regulation algorithm. If a state gets older than 150 ms, the state is automatically removed from the receive buffer, thus it is removed from the data that is read and used for the regulation algorithm. This means that the regulation algorithm automatically scales with the number of turbines, from which a state has been received within the latest 150 ms. For the same reason this parameter is what makes the decentralized solution tolerant to turbine failures. If a turbines fails, the turbine's state eventually expires, thus removing the the turbine from the regulation algorithm.
+\end{itemize}
+
+\begin{figure}
+\begin{lstlisting}[language=XML]
+<datawriter_qos>
+	<publication_name>
+		<name>TurbineDataWriter</name>
+	</publication_name>
+	<lifespan>
+		<duration>
+			<sec>0</sec>
+			<nanosec>150000000</nanosec>
+		</duration>
+	</lifespan>
+</datawriter_qos>
+\end{lstlisting}
+\caption[Decentralized DataWriter QoS parameters]{
+		\label{fig:decDataWriterQos} 
+		\footnotesize{DataWriter QoS parameters of the decentralized solution.}
+	}
+\end{figure}
+
+\paragraph{DataReader} (\cref{fig:decDataReaderQos}) QoS parameters has been evaluated as follows (see DataReader evaluation of \cref{sec:detailedQoSDesc} for parameters not described):
+
+\begin{itemize}
+	\item \textbf{multicast} specifies the multicast addresses on which DataReaders receives data from DataWriters. 
+\end{itemize}
+
+\begin{figure}
+\begin{lstlisting}[language=XML]
+<datareader_qos>
+	<subscription_name>
+		<name>TurbineDataReader</name>
+	</subscription_name>
+	<multicast>
+		<kind>AUTOMATIC_TRANSPORT_MULTICAST_QOS</kind>
+		<value>
+			<element>
+				<receive_address>239.192.0.1</receive_address>
+			</element>
+		</value>
+	</multicast>
+</datareader_qos>
+\end{lstlisting}
+\caption[Decentralized DataReader QoS parameters]{
+		\label{fig:decDataReaderQos} 
+		\footnotesize{DataReader QoS parameters of the decentralized solution.}
 	}
 \end{figure}
 
