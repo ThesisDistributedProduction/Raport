@@ -2,123 +2,138 @@
 start chain=going right,
 diagram item/.style={
 	minimum width=30pt,
-	on chain,
-	join
+	on chain
+%	join
 }]
 
+\newcounter{TurbnieCounter}
+
+
+
 \newcommand\millFigure{\includegraphics[width=0.5cm]{MillSiluet}}
+\newcommand{\printTurbineID}{\ifnum\value{TurbnieCounter}<10 0\fi\arabic{TurbnieCounter}}
+\stepcounter{TurbnieCounter}
 
 \node [
 diagram item,
-label={[align=center]left:T11\\Spare}
-] {\millFigure};
+label={[align=center]left:T\printTurbineID\\Load Balancer Active}
+] (node) {\millFigure};
+\stepcounter{TurbnieCounter}
 
-\begin{scope}[start branch=1 going right]
 \node [
+continue chain = going right,
 diagram item,
-label={[align=center]right:T12\\Spare} %M2
+label={[align=center]above:T\printTurbineID\\Spare}
 ] {\millFigure};
+\stepcounter{TurbnieCounter}
 
-\node [	
-continue chain=going below right,
+\node [
+continue chain = going right,
 diagram item,
-label={[align=center]right:T14\\DB Shard}
+label={[align=center]above:T\printTurbineID\\Spare}
+] (CenterNode) {\millFigure};
+\stepcounter{TurbnieCounter}
+
+\node [
+continue chain = going right,
+diagram item,
+label={[align=center]above:T\printTurbineID\\Spare}
 ] {\millFigure};
+\stepcounter{TurbnieCounter}
+
+\node [
+continue chain = going right,
+diagram item,
+label={[align=center]right:T\printTurbineID\\External\\Interface}
+] {\millFigure};
+\stepcounter{TurbnieCounter}
 
 \node [
 continue chain = going below,
 diagram item,
-label={[align=center]right:T16\\DB Shard}
+label={[align=center]right:T\printTurbineID\\Spare}
 ] {\millFigure};
-
-\node [
-continue chain = going below left,
-diagram item,
-label={[align=center]right:T18\\LoadBalancer\\Secondary}
-] (endBranch1) {\millFigure};
-
-
-\end{scope}
-
-\node [
-continue chain = going below left,
-diagram item,
-label={[align=center]left:T13\\Spare}
-] {\millFigure};
+\stepcounter{TurbnieCounter}
 
 \node [
 continue chain = going below,
 diagram item,
-label={[align=center]left:T15\\External\\Interface}
+label={[align=center]right:T\printTurbineID\\Spare}
 ] {\millFigure};
-
-\node [
-continue chain = going below right,
-diagram item,
-label={[align=center]left:T17\\LoadBalancer\\Primary}
-] (end1) {\millFigure};
-
-
-%Lower ring
-\node [
-continue chain = going below,
-diagram item,
-label={[align=center]left:T21\\LoadBalancer\\Secondary}
-](start) {\millFigure};
-
-\begin{scope}[start branch=1 going right]
-\node [
-diagram item,
-label={[align=center]right:T22\\DB Shard}
-](startBranch) {\millFigure};
-
-\node [	
-continue chain=going below right,
-diagram item,
-label={[align=center]right:T24\\DB Shard}
-] {\millFigure};
+\stepcounter{TurbnieCounter}
 
 \node [
 continue chain = going below,
 diagram item,
-label={[align=center]right:T26\\DB Shard}
+label={[align=center]right:T\printTurbineID\\Spare}
 ] {\millFigure};
+\stepcounter{TurbnieCounter}
 
 \node [
-continue chain = going below left,
+continue chain = going left,
 diagram item,
-label={[align=center]right:T28\\Spare}
-] (endBranch2) {\millFigure};
-
-
-\end{scope}
-
-\node [
-continue chain = going below left,
-diagram item,
-label={[align=center]left:T23\\External\\Interface}
+label={[align=center]below:T\printTurbineID\\Spare}
 ] {\millFigure};
+\stepcounter{TurbnieCounter}
 
 \node [
-continue chain = going below,
+continue chain = going left,
 diagram item,
-label={[align=center]left:T25\\Spare}
+label={[align=center]below:T\printTurbineID\\Spare}
 ] {\millFigure};
+\stepcounter{TurbnieCounter}
 
 \node [
-continue chain = going below right,
+continue chain = going left,
 diagram item,
-label={[align=center]left:T27\\Spare}
-] (end2) {\millFigure};
+label={[align=center]below:T\printTurbineID\\Spare}
+] {\millFigure};
+\stepcounter{TurbnieCounter}
+
+\node [
+continue chain = going left,
+diagram item,
+label={[align=center]left:T\printTurbineID\\Sparey}
+] {\millFigure};
+\stepcounter{TurbnieCounter}
+
+\node [
+continue chain = going above,
+diagram item,
+label={[align=center]left:T\printTurbineID\\Spare}
+] {\millFigure};
+\stepcounter{TurbnieCounter}
+
+\node [
+continue chain = going above,
+diagram item,
+label={[align=center]left:T\printTurbineID\\Spare}
+] {\millFigure};
+\stepcounter{TurbnieCounter}
 
 
-\draw (endBranch1) -> (end1) node{};
-\draw (endBranch1) -> (startBranch) node{};
-\draw (endBranch1) -> (start) node{};
-\draw (end1) -> (startBranch) node{};
+\node [
+	draw,
+	below =2cm of CenterNode,
+	inner sep=0.5cm
+%label={[align=center]left:T\printTurbineID\\LoadBalancer\\Primary}
+] {switch};
 
 
 
-\draw (endBranch2) -> (end2) node{};
+%\node [
+%continue chain = going below,
+%diagram item,	
+%label={[align=center]right:T04\\LoadBalancer\\Primary}
+%] (end1) {\millFigure};
+
+%\draw (endBranch1) -> (end1) node{};
+%\draw (endBranch1) -> (startBranch) node{};
+%\draw (endBranch1) -> (start) node{};
+%\draw (end1) -> (startBranch) node{};
+
+
+
+%\draw (endBranch2) -> (end2) node{};
 
 \end{tikzpicture}
