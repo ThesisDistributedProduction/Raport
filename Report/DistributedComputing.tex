@@ -99,7 +99,7 @@ The publish/subscribe paradigm is event driven and corresponds to the observer d
 
 
 \subsection{Remote procedure call}
-
+\label{sec:analysis:rpc}
 Remote procedure call (RPC) is a communications paradigm built for client/server architecture~\cite{Microsoft2003RPC}, which makes remote interactions appear the same way as local interactions. The goal is to make the process of executing code on a remote machine as simple as calling a local function~\cite{dusseau2014intro} by factoring out common tasks, such as security, synchronization, and data flow handling. This explains the paradigms popularity in distributed computing. However distribution cannot be made completely transparent to the application, because it gives rise to further types of potential failures, like communication failures, that have to be dealt with explicitly~\cite{coulouris2005distributed}. 
 
 The idea of RPC is quite simple. When a remote procedure is invoked, the calling environment is suspended, the parameters are passed across the network to the environment where the procedure is to execute and the desired procedure is executed at that location. When execution is finished, return values are sent back to the calling environment, where execution resumes \cite{birrell1984implementing}.
@@ -305,24 +305,43 @@ Thus we conclude that frameworks implementing the DSM paradigm at application le
 %\subsubsection{AppFabric}
 %Runs on IIS
 
+\subsection{State of the art publish/subscribe}
+A number of different publish/subscribe standards exist.
+
+\begin{itemize}
+	\item Java Message Service
+	\item Common Object Request Broker Architecture Notification Service
+	\item Advanced Message Queuing Protocol
+	\item Data Distribution Service for Real-Time Systems
+\end{itemize}
+
+The Java Message Service (JMS)~\cite{hapner2002java} is a messaging API that allows application components based on Java EE to exchange messages using either point-to-point communication or publish-subscribe. As JMS is an API specification the underlying message service responsible for the actual message handling can be any messaging service, as long as it implements the JMS Provider interface. JMS provides a Java client application with easy access to a uniform interface for messaging. As there are no requirements to the decentralized solution this thesis aims to propose about the language used for implementation we choose to avoid language lock-in by choosing JMS as middleware. 
+
+The Common Object Request Broker Architecture Notification Service (CORBA NS)~\cite{corbanotificationservicespecification} is an Object Management Group standard defining a publish subscribe service for the Common Object Request Broker Architecture (CORBA). Corba builds on the RPC paradigm described in~\cref{sec:analysis:rpc}. CORBA addresses the problem of the strong coupling between components in RPC by introducing a Object Request Broker (ORB) as an intermediate between components and thereby decouple them from each other in space and synchronization terms. CORBA NS further decouples the components by removing the time coupling. Thus, even though CORBA builds on the strong coupled paradigm of RPC full decoupling is possible when adding the ORB and CORBA NS abstractions. The many layers if abstractions is a problem when looking at the time of message propagation. All messages must go through each abstraction layer at both the publisher and the subscriber side adding overhead to the message propagation time. Another problem with CORBA is the complexity of implementing it's API. As stated in ~\cite{Henning:2006:RFC:1142031.1142044}
+
+"\textit{...CORBA's object adapter requires more than 200 lines of interface definitions, even though the same functionality can be provided in about 30 lines-the other 170 lines contribute nothing to functionality, but severely complicate program interactions with the CORBA runtime...}".
+
+CORBA and CORBA NS has multiple features that could be interesting for a decentralized version of the current Siemens system, unfortunately the complexity and added overhead makes CORBA NS less attractive.
+
+The Advanced Message Queuing Protocol(AMQP) is an open standard protocol for message-oriented middleware defined by the Organization for the Advancement of Structured Information Standards (OASIS). The standard defines an interoperability wire-protocol designed to support a wide variety of messaging applications.
+
 \subsection{Data Distribution Service for Real-Time Systems}
-The Data Distribution Service for Real-Time Systems hereafter called DDS is an Object Management Group standard defining a middleware for communication between information provideres and information consumers.
+The Data Distribution Service for Real-Time Systems, hereafter called DDS, is an Object Management Group standard defining a middleware for communication between information provideres and information consumers.
 The standard is an API specification and an interoperability wire-protocol that defines a data-centric publish-subscribe architecture \cite{pardo2003omg}.
-The standard has been implemented by a number of software vendors, the most popular being the RTI Connext DDS implementation.
 
 The DDS standard provides a number of services that a decentralized system like the one this thesis aims to create could profit from.
 Services include amongst others:
 
 \begin{itemize}
-	\item Automatic node discovery.
-	\item A data-centric publish-subscribe approach that allows for distribution of data by topics, decoupling the nodes of the system.
-	\item Cross-platform support.
-	\item Fine grained control of Quality of Service parameters.
+	\item Automatic node discovery
+	\item A data-centric publish-subscribe approach that allows for distribution of data by topics, decoupling the nodes of the system
+	\item Cross-platform support
+	\item Fine grained control of Quality of Service parameters
 \end{itemize}
 
 DDS relies on the multicast features of the IP protocol which is described below.
 
-\subsubsection{IP Protocol Addressing Methodologies}
+\subsection{IP Protocol Addressing Methodologies}
 
 \begin{wrapfigure}{r}{0.225\textwidth}
 	\vspace{-20pt}
@@ -454,4 +473,4 @@ DDS provides Quality of Service(QoS) parameters to enable very fine grained cont
 Using the QoS of DDS a system can be configured to fit its environment and its requirements very tightly allowing efficient and reliable operation. QoS will be elaborated further in chapters \cref{cha:existingSystem} and \cref{cha:decentralizedSystem}.
 
 \subsection{Conclusion}
-The RTI Connext Data Distribution Service for Real Time Systems enables both communication using publish/subscribe as well as the ability to maintain a global shared state by preserving message history. Coupled with the fact that the middleware provides automatic node discovery, cross-platform support and fine grained control using Quality of Service parameters the RTI Connext Data Distribution Service for Real Time Systems is the best choice of middleware for the Siemens Case (\cref{sec:SiemensCase}).
+The Data Distribution Service enables both communication using publish/subscribe as well as the ability to maintain a global shared state by preserving message history. Coupled with the fact that the middleware provides automatic node discovery, cross-platform support and fine grained control using Quality of Service parameters the Data Distribution Service is the best choice of middleware for the Siemens Case (\cref{sec:SiemensCase}).
