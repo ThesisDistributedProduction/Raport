@@ -99,7 +99,7 @@ The publish/subscribe paradigm is event driven and corresponds to the observer d
 
 
 \subsection{Remote procedure call}
-
+\label{sec:analysis:rpc}
 Remote procedure call (RPC) is a communications paradigm built for client/server architecture~\cite{Microsoft2003RPC}, which makes remote interactions appear the same way as local interactions. The goal is to make the process of executing code on a remote machine as simple as calling a local function~\cite{dusseau2014intro} by factoring out common tasks, such as security, synchronization, and data flow handling. This explains the paradigms popularity in distributed computing. However distribution cannot be made completely transparent to the application, because it gives rise to further types of potential failures, like communication failures, that have to be dealt with explicitly~\cite{coulouris2005distributed}. 
 
 The idea of RPC is quite simple. When a remote procedure is invoked, the calling environment is suspended, the parameters are passed across the network to the environment where the procedure is to execute and the desired procedure is executed at that location. When execution is finished, return values are sent back to the calling environment, where execution resumes \cite{birrell1984implementing}.
@@ -162,12 +162,20 @@ A shortcoming of RPC is the strong coupling in time, space and synchronization. 
 %	}
 %\end{table}
 
-\subsection{Comparison with regards to the Siemens case}
+\subsection{Comparison with regards to the Siemens case}\label{distCompSiemensCaseComparison}
+
 Looking at the Siemens case (\cref{sec:SiemensCase}) the new distributed system must act as a single unit, be able to perform park regulations and scale easily with the number of turbines. Furthermore Siemens wish to remove single point of failures. With this in mind, the remote procedure call paradigm is not an option because it is tight coupled and build for a client/server architecture, which is exactly what Siemens is trying to avoid. One could imaging using a partial client/server architecture, with a communication hierarchy, however this would introduce some communication overhead~\cite{Yu1997JavaDSM} and single point of failures to the system.
 
 As mentioned, to perform the park regulation sequence, the windmill farm needs a global shared state, where information about every turbine available to every turbine performing park regulations. Therefore, if the decentralized version of the Siemens case were to be implemented using raw message passing, it would result in building some kind of DSM and/or publish/subscribe abstraction, with roughly the same communication overhead. To save the trouble of developing this abstraction, we conclude that message passing is not an option as communication paradigm.
 
-This leaves DSM and publish/subscribe as remaining paradigms, where one could imagine the Siemens case being implemented using either of the two. The abstraction of shared memory provided by DSM is attractive when looking looking at the Siemens case. As a system developer, being able to think of the global shared state as local memory is to prefer over event handling. Therefore DSM is chosen over publish/subscribe since publish/subscribe introduces event handling to the system.
+This leaves DSM and publish/subscribe as remaining paradigms. We present the following desired functionality of the chosen paradigm:
+\begin{enumerate}
+	\item Data must be copied and thus become locally available to all nodes in the system. This is to ensure that the regulation algorithm can be initiated without requesting data first. 
+	\item Functionality 1. also means that data must be published to other nodes, such that a newly calculated state of a given turbine will automatically become available to every other turbine. 
+	\item No locking of data when performing update operations. This is to ensure the regulation cycle can continue without being blocked by a turbine updating its state.
+\end{enumerate}
+
+One could imagine the Siemens case being implemented using either DSM or publish-subscribe. The abstraction of shared memory provided by DSM is attractive when looking looking at the Siemens case. As a system developer, being able to think of the global shared state as local memory is to prefer over event handling. However, publish behavior set by functionality 2. sounds like a publish-subscribe implementation. Therefore further investigation is needed in order to determine which one is preferred for the decentralized solution.
 
 %The abstraction of shared memory provided by DSM is attractive when looking at the Siemens case. As a system developer, being able to think of the global shared state as local memory is to prefer over event handling. The Data Distribution Service defined by the Object Management Group provides a middleware based on Real Time Publish-Subscribe with the ability to maintain a history of messages. This enables the use of publish/subscribe as well as the ability to maintain a global shared state through the message history.
 
@@ -223,78 +231,28 @@ This leaves DSM and publish/subscribe as remaining paradigms, where one could im
 \subsection{State of the art DSM}
 
 %With DSM chosen as the communication paradigm, this chapter describes, evaluates and discusses different DSM technologies in order to find the technology best suited for Siemens.
-To perform the regulation algorithm as fast as possible, all data needed to perform the algorithm must be in memory before initializing the algorithm. This demand is a demand that can be met by implementing a topic based public-subscribe solution by assigning a topic specific to each turbine, thus we set the same demand for a DSM solution.
+Looking for DSM frameworks for application level development, we are presented with with many types of In-Memory Databases (Redis~\cite{redis}, VoltDB~\cite{voltdb}, Gigaspaces XAP~\cite{gigaspacesxap}, ScaleOut Software~\cite{scaleout}, Hazelcast~\cite{hazelcast}, Oracle Coherence~\cite{oraclecoherence}, Memcached~\cite{memcached}, VMware Gemfire~\cite{gemfire}). In-Memory Databases (also known as Main Memory databases (MMDB)) are databases that stores data in memory. In a conventional database, disk data is primarily stored on the disk and may be cached into memory for access, where in a in-memory database, data is primarily stored in memory and may have a backup copy on the disk~\cite{garcia1992main}. MMDBs has a big potential for significant performance improvement over conventional databases, since there is virtually no I/O overhead for reading and writing the database, resulting in faster response time and improved throughput~\cite{lee2001single}.
 
-Looking at DSM solutions we get the following three types of DSM:
+All the above mentioned In-Memory Databases supports DSM behavior by copying stored data to all nodes of the system, thus making In-Memory Databases a potential for the decentralized solution. However, looking at functionality 1-3 mentioned in \cref{distCompSiemensCaseComparison}, using a database for handling communication is not will suited for the decentralized solution for the following reasons:
 
-\paragraph{In-Memory Databases} (also known as Main Memory Databases) are databases stored in memory, instead conventional databases, that stores.  \cite{garcia1992main}
-%Client/server architecture
-%eventually consistent
+\begin{itemize}
+	\item Most of the mentioned In-Memory Databases (Gigaspaces XAP~\cite{gigaspacesxap}, ScaleOut Software~\cite{scaleout}, Hazelcast~\cite{hazelcast}, Oracle Coherence~\cite{oraclecoherence}, Memcached~\cite{memcached}, VMware Gemfire~\cite{gemfire}) uses shared nothing (SN) architecture (also known as Sharding). SN is a distributed computing architecture where none of the nodes share memory or disk storage~\cite{stonebraker1986case}, thus without a single point of contention. For a In-Memeory Database this means that the database is partitioned throughout the nodes either by assigning different computers to deal with different users or queries, or by requiring every node to maintain its own copy of the application's data, using some kind of coordination protocol. This provides impressive scalability for a system using pure SN. However, since local copies of every state in the system is exactly what is desired for the decentralized solution, the SN architecture contradicts functionality 1. Furthermore, SN built databases introduces client-server architecture for broker implementation.
+	\item Others (Redis~\cite{redis}, VoltDB~\cite{voltdb}, Memcached~\cite{memcached}) uses a client-server architecture, where a broker is needed to keep track of where data is located. This introduces single point of failures and broker communication, which brings a communication overhead to the system. 
+	\item Database replication is not well suited for functionality 2. Database replication is built to ensure consistency between nodes, thus bringing an unnecessary overhead to the decentralized solution that results in increasing the regulation cycle time or, if lazy replication is used, late arrival of new states~\cite{wiesmann2000database}.
+\end{itemize}
 
-\paragraph{In-Memory Data Grids}
+Another DSM framework found is TreadMarks~\cite{keleher1994treadmarks} created at Rice University in 1994. However, this software is outdated (the TreadMarks homepage gives a 404 Not Found).
+
+Thus we conclude that frameworks implementing the DSM paradigm at application level is In-Memory Databases and not suited for the decentralized solution.
+
 %Distributed memory. Only shared for replica reasons.
 %Share nothing architecture
-
-
-%\subsubsection{Oracle Coherence}
-%dist. memory --> distributed chache
-%java, .net, c++
-%http://www.oracle.com/technetwork/middleware/coherence/distributed-caching-100021.html
-
-
-%\subsubsection{VMware Gemfire}
-%Contact sales
-%Not open source
-
-%\subsubsection{Gigaspaces XAP}
-%Share nothing architecture
-
-%\subsubsection{ScaleOut Software}
-%Java, .NET, C/C++ 
-%cash
-%Share nothing architecture
-%http://www.scaleoutsoftware.com/downloads-resources/downloads/
-
-%\subsubsection{NCache}
-%expensive
-%http://www.alachisoft.com/ncache/index.html
-
-%\subsubsection{Hazelcast}
-%java
-%opensource
-%http://hazelcast.com/products/hazelcast/
-
-%\subsubsection{Infinispan}
-%promising
-
-%\subsubsection{DSM in .NET}
-%IP multicast
 
 %casusally consistent: Writes that are potentially causally related must be seen by all processes in the same order. Concurrent writes may be seen in a different order on different machines.
 
 %\subsubsection{AppFabric}
 %Runs on IIS
 
-\paragraph{Distributed Shared Cache}
-
-
-
-
-%In order to remove the communication overhead from the regulation cycle time, information sharing through the chosen paradigm, DSM, needs to to be detached from the regulation cycle. 
-
-%DSM is a paradigm well implemented through by many different frameworks, with their own individual and unique implementation.
-
-
-%Therefore, to determine which technology that is best suited for the Siemens case, the technologies will be compared on the following set of parameters: 
-
-%standalone: Type?
-%Distributed shared memory support
-%Distributed shared chache support
-%Distributed memeory support
-%Performance
-%Client/server?
-%Framework architecture. distributed shared memeory, client/server or not  
-%cost
 
 
 
@@ -359,7 +317,11 @@ A number of different publish/subscribe standards exist.
 
 The Java Message Service (JMS)~\cite{hapner2002java} is a messaging API that allows application components based on Java EE to exchange messages using either point-to-point communication or publish-subscribe. As JMS is an API specification the underlying message service responsible for the actual message handling can be any messaging service, as long as it implements the JMS Provider interface. JMS provides a Java client application with easy access to a uniform interface for messaging. As there are no requirements to the decentralized solution this thesis aims to propose about the language used for implementation we choose to avoid language lock-in by choosing JMS as middleware. 
 
-The Common Object Request Broker Architecture Notification Service (CORBA NS)~\cite{corbanotificationservicespecification} is an Object Management Group standard defining a publish subscribe service for the Common Object Request Broker Architecture (CORBA). 
+The Common Object Request Broker Architecture Notification Service (CORBA NS)~\cite{corbanotificationservicespecification} is an Object Management Group standard defining a publish subscribe service for the Common Object Request Broker Architecture (CORBA). Corba builds on the RPC paradigm described in~\cref{sec:analysis:rpc}. CORBA addresses the problem of the strong coupling between components in RPC by introducing a Object Request Broker (ORB) as an intermediate between components and thereby decouple them from each other in space and synchronization terms. CORBA NS further decouples the components by removing the time coupling. Thus, even though CORBA builds on the strong coupled paradigm of RPC full decoupling is possible when adding the ORB and CORBA NS abstractions. The many layers if abstractions is a problem when looking at the time of message propagation. All messages must go through each abstraction layer at both the publisher and the subscriber side adding overhead to the message propagation time. Another problem with CORBA is the complexity of implementing it's API. As stated in ~\cite{Henning:2006:RFC:1142031.1142044}
+
+"\textit{...CORBA's object adapter requires more than 200 lines of interface definitions, even though the same functionality can be provided in about 30 lines-the other 170 lines contribute nothing to functionality, but severely complicate program interactions with the CORBA runtime...}".
+
+CORBA and CORBA NS has multiple features that could be interesting for a decentralized version of the current Siemens system, unfortunately the complexity and added overhead makes CORBA NS less attractive.
 
 The Advanced Message Queuing Protocol(AMQP) is an open standard protocol for message-oriented middleware defined by the Organization for the Advancement of Structured Information Standards (OASIS). The standard defines an interoperability wire-protocol designed to support a wide variety of messaging applications.
 
