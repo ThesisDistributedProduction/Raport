@@ -110,13 +110,66 @@ The Turbine Data Replier is instantiated with the Turbine object and runs on eve
 
 The Turbine object is the interface to the actual Turbine. The primary functionality of this object is to change state when a new setpoint is assigned to the object. Furthermore it reads data from the underlying MongoDB database. 
 
-\subsection{Calculate setpoints}\label{sec:calculateSetpoints}
+\subsection{Calculate setpoints (regAlgorithm)}\label{sec:calculateSetpoints}
 
-When the Park Pilot has received the states of all turbines the setpoints for all turbines are calculated. Since we don't have access to Siemens' regulation algorithm (see \cref{sec:cenRegAlgorithm}), we have developed our own simple regulation algorithm.
+When the Park Pilot has received the states of all turbines the setpoints for all turbines are calculated. Since we don't have access to Siemens' regulation algorithm (see \cref{sec:cenRegAlgorithm} for explanation), we have developed our own simple regulation algorithm. The code for this regulation algorithm is presented on \cref{fig:cenRegAlgCode}.
+
+\begin{figure}[!h]
+	\centering
+%	\includegraphics[width=0.3\textwidth,natwidth=250,natheight=200]{turbineDataMessage.PNG} 
+	\begin{lstlisting}[language=C++,tabsize=2,basicstyle=\small]
+void CentralizedParkPilot::regAlgorithm(
+	uint_fast32_t globalSetpoint,
+	LoanedSamples<TurbineDataMessage> &turbines)
+{
+	int availableTurbinesCount = turbines.length();
+
+	typedef LoanedSamples<TurbineDataMessage>::iterator iterator;
+	long localSetpoint = 0;
+
+	for (iterator it = turbines.begin(); it != turbines.end(); ++it) {
+		if (it->info().valid_data) {
+
+			if (it->data().currentProduction >= it->data().maxProduction) {
+				availableTurbinesCount--;
+			}
+		}
+		else
+			availableTurbinesCount--;
+	}
+
+	for (iterator it = turbines.begin(); it != turbines.end(); ++it) {
+		if (it->info().valid_data) {
+			if (availableTurbinesCount <= 0)
+				localSetpoint = globalSetpoint;
+			else
+				localSetpoint = globalSetpoint / availableTurbinesCount;
+
+			if (localSetpoint > it->data().maxProduction) {
+				localSetpoint = it->data().maxProduction;
+			}
+
+			_turbineOutlets[it->data().turbineId - START_ID]->
+						setSetpoint(localSetpoint);
+					
+			_turbineOutlets[it->data().turbineId - START_ID]->publishData();
+		}
+	}
+}
+	\end{lstlisting}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[The regulation algorithm of the centralized solution]{
+		\label{fig:cenRegAlgCode} 
+		\footnotesize{%
+			Code for the centralized regulation algorithm used to calculate setpoints.
+		}
+	}
+\end{figure}
+
 
 Our regulation algorithm works by first determining how many turbines that are available for production. This is done going through every turbine, checking if they currently hit their maximum production capacity. If a given turbine is producing at maximum capacity, a greater load cannot be assigned to it and the available turbine count is reduced. 
 
-Next the setpoint for every turbine is calculated. This is simply done by dividing the global setpoint for the entire park with the number of available turbines. If this new setpoint is higher than the maximum capacity of a given turbine, the turbine is set to produce at maximum capacity. If this happens, a gap between the maximum capacity and the calculated setpoint is left unhandled, and the wind farm is under-producing until the next cycle, where a new set of setpoints are calculated, with one less available turbine. Hence this gap will eventually be closed unless the maximum capacity of the entire park is reached.
+Next the setpoint for every turbine is calculated using this simple formula: $setpoint=globalSetpoint/availableTurbines$. If this new setpoint is higher than the maximum capacity of a given turbine, the turbine is set to produce at maximum capacity. If this happens, a gap between the maximum capacity and the calculated setpoint is left unhandled, and the wind farm is under-producing until the next cycle, where a new set of setpoints are calculated, with one less available turbine. Hence this gap will eventually be closed unless the maximum capacity of the entire park is reached.
 
 \subsection{Send setpoints}
 
@@ -174,7 +227,7 @@ The data transfer objects (DTO) used when sending messages from the turbines to 
 \begin{figure}[!h]
 	\centering
 %	\includegraphics[width=0.3\textwidth,natwidth=250,natheight=200]{turbineDataMessage.PNG} 
-	\begin{lstlisting}[language=C++]
+	\begin{lstlisting}[language=C++,tabsize=2,basicstyle=\small]
 	struct TurbineDataMessage {
 		long turbineId; //@key
 		long maxProduction;

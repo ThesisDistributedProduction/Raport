@@ -16,6 +16,9 @@ arrow/.style={
 	shorten >=2pt,
 }]
 
+\newcommand\millFigure{\includegraphics[width=0.7cm]{MillSiluet}}
+
+
 \begin{scope}[local bounding box=scope1]
 \node [
 diagram item,
@@ -44,13 +47,13 @@ label=center:Internet
 start branch=1 going below right,
 diagram item seperated,
 label={[align=center]above:Load\\Balancer\\(Backup)}
-] (LB2) {\includegraphics{Cisco_BW/distributed_director}};
+] (LB2) {\includegraphics{Cisco_BW/distributed_director} \millFigure};
 
 \node [
 continue chain=going below left,
 diagram item,
 label={[align=center]above:Load\\Balancer\\(Active)}
-] (LB1) {\includegraphics{Cisco_BW/distributed_director}};
+] (LB1) {\millFigure \includegraphics{Cisco_BW/distributed_director}};
 
 \node [
 continue chain = going below right,
@@ -60,20 +63,20 @@ diagram item
 \node [
 start branch=1 going below right,
 diagram item,
-label=below:Client 3 Handler
-] {\includegraphics{Cisco_BW/pc}};
+label=below:Turbine
+] {\millFigure};
 
 \node [
 start branch=1 going below left,
 diagram item,
-label=below:Client 1 Handler
-] (handler1) {\includegraphics{Cisco_BW/pc}};
+label=below:Turbine
+] (handler1) {\millFigure};
 
 \node [
 continue chain = going below,
 diagram item,
-label=below:Client 2 Handler
-] {\includegraphics{Cisco_BW/pc}};
+label=below:Turbine
+] {\millFigure};
 
 %Lines to/from LB2
 \draw[loosely dotted, arrow] (LB1) -- (LB2) node[fill=white,midway]{moniters};

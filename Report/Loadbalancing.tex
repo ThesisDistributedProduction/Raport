@@ -2,6 +2,7 @@
 \clearpage
 \section{Resource management} % Load balancing
 \label{cha:resourceManagement}
+
 %Below should
 %Having redundant systems provides a number of favourable traits like scalability and availability.
 %\paragraph{The setting}
@@ -15,8 +16,8 @@ By decentralizing the external interfaces, availability of theses systems can be
 A problem arises when external systems need to interact with the wind farm. 
 Transforming external interfaces from being central to being part of the turbines creates a problem for client applications.
 With multiple turbines able run serve requests and no quarantine that all turbines are online, How do they know witch turbine to connect to?
-Currently they use a single ip address for this, it is preferred to continue with this.
-
+Currently Siemens Wind Power uses a single ip address for external connections, it is preferred to also do so in an new decentralized solution.
+An other problem is that the turbines are limited in processing power, it is preferred to have the added load split evenly among the turbines.
 
 % % % % Below snippet migt be usefull for descriping docker % % % % % % %
 %Resource management is a key activity in a distributed decentralised system.
@@ -27,18 +28,55 @@ Currently they use a single ip address for this, it is preferred to continue wit
 %The resources important when making a distributed version of the Siemens case are here by identified as primarily: Processing time and Network bandwidth, secondarily: Hard drive I/O and memory operations.
 % % % % Above snippet migt be usefull for descriping docker % % % % % % %
 
-Resource management should be fair, this means the nodes should have the workload distributed as evenly as possible.
-There are different ways to handle this, some systems are able to split a single task up in equally large chunks for each node, in the Siemens case this could be the control algorithm that every turbine controller will need to run.
-In a system where the tasks can be split evenly among the nodes, resource management logic might not be needed as the system achieves a fair distribution by design, this can result in a much simpler design because of fewer components while also avoiding overhead due to resource management control algorithms.
-Some systems have many different tasks that runs independently of each other in the Siemens case this will be handling requests from secondary systems running outside the wind farm.
-The current Siemens system currently is designed to handle a hundred simultaneously connection from outside the wind farm. This workload needs to distributed fairly when building a decentralised system therefore dedicated resource management logic is needed.
+%Resource management should be fair, this means the nodes should have the workload distributed as evenly as possible.
+%There are different ways to handle this, some systems are able to split a single task up in equally large chunks for each node, in the Siemens case this could be the control algorithm that every turbine controller will need to run.
+%In a system where the tasks can be split evenly among the nodes, resource management logic might not be needed as the system achieves a fair distribution by design, this can result in a much simpler design because of fewer components while also avoiding overhead due to resource management control algorithms.
+%Some systems have many different tasks that runs independently of each other in the Siemens case this will be handling requests from secondary systems running outside the wind farm.
+%The current Siemens system currently is designed to handle a hundred simultaneously connection from outside the wind farm. This workload needs to distributed fairly when building a decentralised system therefore dedicated resource management logic is needed.
 
 \subsection{Load Balancing}
-Software responsible for handling resource management is refereed to as a load balancer.
-Load balancers can be applied in layers with different responsibility from geographically distributing traffic \todo{ref DNS loadbalncer} to distributing packets to available nodes in a round robin pattern to monitoring nodes and choosing the node with the least load, some even inspect packages to distribute based on package content.
+A load balancer is a network component capable of distributing incoming connections from clients to multiple server.
 
-Load balancers come in different complexity and with the ability to manage resource in various ways.
-From naively assigning clients with a round robin based algorithm to distributing connections based on monitoring node resources like available CPU time. \todo{make ref}
+\begin{figure}
+	\centering	
+	%	\scalebox{0.7}{\input{figures/tikz/LoadBalancerOverview}}
+	\scalebox{0.7}{\input{figures/tikz/ReguestRoutingInsteadOfBalancing}}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Distributed system with two load balancing turbines]{
+		\label{fig:loadBalancingSetup2Balancers} 
+		\footnotesize{%
+			A distributed system with two load balancing turbines.
+		}
+	}
+\end{figure}
+
+
+\paragraph{Single entry point}
+Providing a single entry point is simple assigning a static ip address to a turbine would do that, however this introduces a single point of failure.
+To overcome this the load balancer must be supplemented by at least one backup load balancer, it must be able to takeover the address of the failing load balancer in order to keep the wind farm available.
+This can be done using a virtual ip address, and having the node with the active load balancer respond to it.
+If the node with the active load balancer fails the virtual ip address can be transferred to a backup load balancer and it will then become the active load balancer. To let other network participant know that the ip has moved to a new address a ARP announcement can be sent allowing them to update their ARP cache.
+
+\paragraph{Detecting node failure}
+Detection of a failed load balancer must be done by the backup nodes, generally there are two ways this can be done, either actively pinging the active load balancer or having the load balancer periodically sent data package also know as heartbeats. This setup is illustrated in \cref{fig:loadBalancingSetup2Balancers}.
+
+
+\paragraph{Abstraction levels} %DNS Datacenter Application
+Load balancing can be done taking into account many parameters from a simply passing packets to servers in a round robin pattern, to monitoring performance parameters of the servers selecting the one with most free capacity. Some load balancers even inspect packages e.g. pass the HTTP headers URL field to select a server responsible for a specific resource.
+There also exists load balancers witch are integrated in every client and server, these are however not and option since clients are not always possible to modify.
+
+\begin{enumerate}
+	\item Round robin
+	\item Server performance monitoring
+	\item Package inspection
+\end{enumerate}
+
+
+%Software responsible for handling resource management is refereed to as a load balancer.
+%Load balancers can be applied in layers with different responsibility from geographically distributing traffic \todo{ref DNS loadbalncer} to distributing packets to available nodes in a round robin pattern to monitoring nodes and choosing the node with the least load, some even inspect packages to distribute based on package content.
+
+%Load balancers come in different complexity and with the ability to manage resource in various ways.
+%From naively assigning clients with a round robin based algorithm to distributing connections based on monitoring node resources like available CPU time. \todo{make ref}
 Some Load balancers require client and or server integration \todo{make ref} while some function completely transparent to network nodes. \todo{make ref}
 The Siemens case uses standard protocols where some client applications are build by a third party,
 therefore client integration is not possible with all public interfaces, and is not investigated further.
@@ -55,7 +93,8 @@ The Siemens case needs a Load balancer system with the following properties:
 
 
 To achieve property \ref{List:LB:SingleEntryPoint} and \ref{List:LB:LoadBalFailover}.
-The systems needs to respond to a single external IP address. To do this multiple nodes share the same IP address, multiple protocols exists witch can do this "Common Address Redundancy Protocol\todo{https://www.freebsd.org/doc/handbook/carp.html}, Virtual Router Redundancy Protocol\todo{http://tools.ietf.org/html/rfc2338} and \cite{zhang2000linuxVirtualServer}".\todo{Put in refferences instead} To provide seamless transfer of the virtual ip address ARP announcements are used to inform the local network of the transfer. The backup load balancer monitors the active load balancer and will takeover the virtual ip when the Active load balancer is unavailable and itself become primary this is illustrated in \cref{fig:loadBalancingSetup2Balancers}, this monitoring can be done with the active client sending out periodic heartbeats, or the backup sending ICMP ECHO\_REQUEST.
+The systems needs to respond to a single external IP address. To do this multiple nodes share the same IP address, multiple protocols exists witch can do this "Common Address Redundancy Protocol\todo{https://www.freebsd.org/doc/handbook/carp.html}, Virtual Router Redundancy Protocol\todo{http://tools.ietf.org/html/rfc2338} and \cite{zhang2000linuxVirtualServer}".\todo{Put in refferences instead} To provide seamless transfer of the virtual ip address ARP announcements are used to inform the local network of the transfer.
+The backup load balancer monitors the active load balancer and will takeover the virtual ip when the Active load balancer is unavailable and itself become primary this is illustrated in \cref{fig:loadBalancingSetup2Balancers}, this monitoring can be done with the active client sending out periodic heartbeats, or the backup sending ICMP ECHO\_REQUEST.
 Property \ref{List:LB:DetectFailedNodes} requires the load balancer to monitor local nodes for availability, this is to ensure that client connections are not being redirected to a faulty node. This is most easily achived with a ICMP ECHO\_REQUEST otherwise known as a ping request, 
 
 
@@ -73,19 +112,6 @@ A secondary needs to monitor the primary load balancer and step in if it stops r
 This can be done using a virtual private IP, which is the address for all incoming requests. Also there exists solutions witch does all this in a completely distributed manner avoiding having a central server as load balancer  \textbf{[?]}, %\cite{Some cite I ahven't found yet}, 
 this is even in some cases extended to include the clients in the act of load balancing \textbf{[?]}. % \cite{Some cite to netflix eureka balancer}.
 
-\begin{figure}
-	\centering	
-%	\scalebox{0.7}{\input{figures/tikz/LoadBalancerOverview}}
-	\scalebox{0.7}{\input{figures/tikz/ReguestRoutingInsteadOfBalancing}}
-	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Distributed System with 2 load balancing nodes]{
-		\label{fig:loadBalancingSetup2Balancers} 
-		\footnotesize{%
-			A Distributed System with 2 load balancing nodes.
-		}
-	}
-\end{figure}
-
 In this solution the load balancer needs to balance external connections to different protocols like HTTP and Modbus, however a solution witch can be extended to any restful protocol is needed.
 Also balancing of node roles depending on the amount incoming traffic on different interfaces will be needed.
 Should all this be done automatically or is it better to define this manually???
@@ -99,9 +125,9 @@ Load balances can provide various features, related to offloading the real serve
 	\scalebox{0.7}{\input{figures/tikz/SystemOverviewFromLoadBalancer}}
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[System overview from the load balancer viewpoint]{
-		\label{fig:loadBalancingSetup} 
+		\label{fig:parkOverview} 
 		\footnotesize{%
-			A system overview from the load balancer viewpoint.
+			A system overview of park nodes.
 		}
 	}
 \end{figure}
