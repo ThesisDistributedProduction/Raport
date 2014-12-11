@@ -130,7 +130,63 @@ Before running the cycle illustrated on \cref{fig:decenRegCycle}, an initial set
 
 The Park Pilot publishes the state of the present turbine and reads the states of every turbine within the wind farm. Afterwards the regulation algorithm is performed and a setpoint for the present turbine is calculated and used to set a new state.
 
-The regulation algorithm used for the decentralized solution is the same used for the centralized solution described in \cref{sec:calculateSetpoints}.
+The regulation algorithm used for the decentralized solution is the same used for the centralized solution described in \cref{sec:calculateSetpoints}, with the exception that the setpoint calculated is kept for local purposes instead of sending the setpoint to all turbines. The regulation algorithm code for the decentralized solution is presented on \cref{fig:decenRegAlgCode}.
+
+\begin{figure}[!h]
+	\centering
+%	\includegraphics[width=0.3\textwidth,natwidth=250,natheight=200]{turbineDataMessage.PNG} 
+	\begin{lstlisting}[language=C++,tabsize=2,basicstyle=\small]
+uint_fast32_t DecentralizedParkPilot::regAlgorithm(
+	uint_fast32_t globalSetpoint,
+	TurbineMessageSeq turbines,
+	uint_fast32_t maxProd,
+	uint_fast32_t currentProd,
+	uint_fast32_t setPoint,
+	DDS_SampleInfoSeq turbineInfos,
+	uint_fast32_t &cacheCount )
+{
+	cacheCount = 0;
+	if (currentProd >= maxProd)
+		return maxProd;
+
+	int availableTurbinesCount = turbines.length();
+
+	for (int i = 0; i < turbines.length(); i++)
+	{
+		if (!turbineInfos[i].valid_data) {
+			availableTurbinesCount--;
+			continue;
+		}
+
+		if (turbineInfos[i].sample_state == DDS_READ_SAMPLE_STATE) {
+			cacheCount++;
+		}
+
+		if (turbines[i].currentProduction >= turbines[i].maxProduction)
+			availableTurbinesCount--;
+	}
+	uint_fast32_t localSetpoint = 0;
+
+	if (availableTurbinesCount <= 0)
+		localSetpoint = globalSetpoint;
+	else
+		localSetpoint = globalSetpoint / availableTurbinesCount;
+
+	if (localSetpoint > maxProd) {
+		localSetpoint = maxProd;
+	}
+
+	return localSetpoint;
+}
+	\end{lstlisting}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[The regulation algorithm of the decentralized solution]{
+		\label{fig:decenRegAlgCode} 
+		\footnotesize{%
+			Code for the decentralized regulation algorithm used to calculate setpoints.
+		}
+	}
+\end{figure}
 
 \subsection{Cache reads}
 
