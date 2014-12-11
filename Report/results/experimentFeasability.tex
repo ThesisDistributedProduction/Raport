@@ -26,10 +26,12 @@ The experiment has the following procedure:
 \end{figure}
 
 Presented in \cref{fig:graphicalInterface} is a screenshot of the graphical interface while the decentralized solution is running 10 turbines.
-The global setpoint for power production is at just below 5000 kW, illustrated by the red line and global power production is illustrated by the black line also just below 5000 kW.
-The blue line illustrates the maximum available power production for the wind farm which during this experiment was above 10000 kW while the lines in the bottom around 500 kW is the current power production of each individual turbine.
+The global setpoint for power production is illustrated by the red line and is showing a value of just below 5000 kW. The global power production is illustrated by the black line also just below 5000 kW.
+The blue line illustrates the maximum available power production for the wind farm which, during this experiment, was above 10000 kW. The lines at the bottom shows values of around 500 kW and they each represents the current power production of each turbine.
 
 \subsection{Discussion}
-The experiment performed to prove that it is feasible to create a decentralized solution that is able to do power regulation is a simple run of the prototype of the decentralized solution. As such it is hard to deduce from a screenshot that the decentralized solution is actually able to perform power regulation but this experiment in correlation with the rest of the experiments performed in this chapter will show that the prototype is functioning.
+The experiment performed to prove whether or not it is feasible to create a decentralized solution that is able to do power regulation, consists of a simple run of the prototype of the decentralized solution. The global setpoint and the global production line match and thus we conclude that we have a working prototype, that can regulate according to the global setpoint. Each turbine is expected to produce $globalSetpoint/nTurbines=5000kW/10=500kW$(see \cref{sec:calculateSetpoints} for detailed description of the regulation algorithm), which they do. The slight deviation (the deviation that makes each turbine produce close to 500kW and not exactly 500kW) is due to the regulation algorithm being inaccurate. For the purpose of this experiment, the fact that the regulation algorithm is inaccurate is acceptable since the regulation algorithm is black box and not the focus of this thesis.
+
+As such it is hard to deduce from a screenshot that the decentralized solution is actually able to perform power regulation, but this experiment in correlation with the rest of the experiments performed in this chapter will show that the prototype is functioning.
 
 \clearpage
