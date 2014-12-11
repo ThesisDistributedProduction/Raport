@@ -5,6 +5,12 @@
 		on chain,
 		join
 	},
+	arrow/.style={
+		<-,
+		thick,
+		shorten <=2pt,
+		shorten >=2pt,
+	},
 	diagram item seperated/.style={
 			minimum width=80pt,
 			on chain
@@ -24,13 +30,13 @@
 \node [
 	start branch=1 going below right,
 	diagram item seperated,
-	label={[align=center]right:Load\\Balancer\\(Secondary)}
+	label={[align=center]right:Load\\Balancer\\(Backup)}
 ] (LB2) {\includegraphics{Cisco_BW/distributed_director}};
 
 \node [
 	continue chain=going below left,
 	diagram item,
-	label={[align=center]left:Load\\Balancer\\(Primary)}
+	label={[align=center]left:Load\\Balancer\\(Active)}
 ] (LB1) {\includegraphics{Cisco_BW/distributed_director}};
 
 \node [
@@ -58,7 +64,7 @@
 ] {\includegraphics{Cisco_BW/pc}};
 
 %Lines to/from LB2
-\draw[loosely dotted] (LB1) -> (LB2) node[fill=white,midway]{heatbeat};
+\draw[loosely dotted, arrow] (LB1) -- (LB2) node[fill=white,midway]{Moniters};
 \draw[dashed] (Internet) -> (LB2);
 \draw[dashed] (LB2) -> (farm);
 

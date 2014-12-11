@@ -1,40 +1,45 @@
 % !TeX spellcheck = en_GB
+\clearpage
 \section{Resource management} % Load balancing
 \label{cha:resourceManagement}
 %Below should
 %Having redundant systems provides a number of favourable traits like scalability and availability.
 
-Resource management is a key activity in a distributed decentralised system.
-A decentralised system consists of a number of nodes with various resources available. 
-The primary resources important to the Siemens case are: Memory, Processing time, Network bandwidth and Hard drive I/O operations. %TODO review at intet mangler
+Resource management is a key activity in a distributed decentralised system. \todo{But is it in all?}
+A decentralised system consists of a number of nodes with various resources available.
+Every node in a distributed version of the current Siemens system will need to handle data logging (disk I/O), replication(Network), setpoint calculation(Processing Time).
+Having a regulation cycle across a network means sharing states. When this regulation cycle is in the milliseconds range the amount of data that needs to be transferred increases.
+Besides what every node needs to handle there are other tasks required by the current Siemens system that can not or does not need to be run on all nodes. These are data aggregation and external interfaces (HTTP, Modbus, etc).
+The resources important when making a distributed version of the Siemens case are here by identified as primarily: Processing time and Network bandwidth, secondarily: Memory and Hard drive I/O operations.
 
 Resource management should be fair, this means the nodes should have the workload distributed as evenly as possible.
-There are different ways to handle this, some systems are able to split a single task up in equally large chunks for each node, in the Siemens case this is similar to the control algorithm that every turbine controller will need to run.
-In a system where the tasks can be split evenly among the nodes, resource management logic might not be need as the system achieves a fair distribution by design, needless to say this can result in a much simpler design because of fewer components while avoid overhead due to resource management control algorithms. %and data aggregation functionality?
-Others have many different tasks that can run independently of each other in the Siemens case this will be handling requests from users and secondary systems running outside the wind farm.
-In the Siemens case the system currently is designed to at peak to handle a hundred simultaneously connected clients from outside the wind farm. This workload needs to distributed fairly when building a decentralised system therefore dedicated resource management logic is needed.
+There are different ways to handle this, some systems are able to split a single task up in equally large chunks for each node, in the Siemens case this could be the control algorithm that every turbine controller will need to run.
+In a system where the tasks can be split evenly among the nodes, resource management logic might not be needed as the system achieves a fair distribution by design, this can result in a much simpler design because of fewer components while also avoiding overhead due to resource management control algorithms.
+Some systems have many different tasks that runs independently of each other in the Siemens case this will be handling requests from secondary systems running outside the wind farm.
+The current Siemens system currently is designed to handle a hundred simultaneously connection from outside the wind farm. This workload needs to distributed fairly when building a decentralised system therefore dedicated resource management logic is needed.
 
 \subsection{Load Balancing}
-Software responsible for handling resource management is often refereed to as a load balancer.
+Software responsible for handling resource management is refereed to as a load balancer.
 Load balancers come in different complexity and with the ability to manage resource in various ways.
-From naively assigning clients with a round robin based algorithm to distributing connections based on resource monitoring.
-Some Load balancers require client and or server integration some function completely independently.
-The Siemens case uses standard protocol where the client application is build by a third party,
+From naively assigning clients with a round robin based algorithm to distributing connections based on monitoring node resources like available CPU time. \todo{make ref}
+Some Load balancers require client and or server integration \todo{make ref} while some function completely transparent to network nodes. \todo{make ref}
+The Siemens case uses standard protocols where some client applications are build by a third party,
 therefore client integration is not possible with all public interfaces, and is not investigated further.
 
 The Siemens case needs a Load balancer system with the following properties:
 \begin{enumerate}[label=\textbf{P.\arabic*}, ref=\textit{P.\arabic*}]
-	\item \label{List:LB:SingleEntryPoint}Allow the decentralised system to behave like a single server for the clients, providing a single entry points for clients to connect to
-	\item Monitors current available server resources
-	\item Detect and exclude faulty nodes 
-	\item Support Load balancer fail over
+	\item \label{List:LB:SingleEntryPoint}Allow the decentralised solution to behave like a single system for external clients, providing a single entry points for clients to connect to
+	\item \label{List:LB:LoadBalFailover} Support load balancer fail over
+	\item \label{List:LB:DetectFailedNodes} Detect and exclude faulty nodes 
+	\item Support at least 100 concurrent connections
 	\item Have minimum resource impact on the host machine
+%	\item Monitors current available server resources
 \end{enumerate}
 
 
-To achieve property \ref{List:LB:SingleEntryPoint}.
-The systems needs to respond to a single external IP address, there exists ways to do this.
-CARP[?], VRRP[?], HSRP[?]
+To achieve property \ref{List:LB:SingleEntryPoint} and \ref{List:LB:LoadBalFailover}.
+The systems needs to respond to a single external IP address. To do this multiple nodes share the same IP address, multiple protocols exists witch can do this "Common Address Redundancy Protocol\todo{https://www.freebsd.org/doc/handbook/carp.html}, Virtual Router Redundancy Protocol\todo{http://tools.ietf.org/html/rfc2338} and \cite{zhang2000linuxVirtualServer}".\todo{Put in refferences instead} To provide seamless transfer of the virtual ip address ARP announcements are used to inform the local network of the transfer. The backup load balancer monitors the active load balancer and will takeover the virtual ip when the Active load balancer is unavailable and itself become primary this is illustrated in \cref{fig:loadBalancingSetup2Balancers}, this monitoring can be done with the active client sending out periodic heartbeats, or the backup sending ICMP ECHO\_REQUEST.
+Property \ref{List:LB:DetectFailedNodes} requires the load balancer to monitor local nodes for availability, this is to ensure that client connections are not being redirected to a faulty node. This is most easily achived with a ICMP ECHO\_REQUEST otherwise known as a ping request, 
 
 
 A candidate for this kind of monitoring is the Linux Virtual Server project \cite{zhang2000linuxVirtualServer}.
