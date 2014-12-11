@@ -173,7 +173,14 @@ The data transfer objects (DTO) used when sending messages from the turbines to 
 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=0.3\textwidth,natwidth=250,natheight=200]{turbineDataMessage.PNG} 
+%	\includegraphics[width=0.3\textwidth,natwidth=250,natheight=200]{turbineDataMessage.PNG} 
+	\begin{lstlisting}[language=C++]
+	struct TurbineDataMessage {
+		long turbineId; //@key
+		long maxProduction;
+		long currentProduction;	
+	}	
+	\end{lstlisting}
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[Centralized turbine reply message]{
 		\label{fig:cenTurbineDataMessage} 
