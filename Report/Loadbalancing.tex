@@ -4,26 +4,28 @@
 \label{cha:resourceManagement}
 %Below should
 %Having redundant systems provides a number of favourable traits like scalability and availability.
-\paragraph{The setting}
-The current Siemens system has multiple external systems used for configuration of parameters and monitoring power production. The protocols used are HTTP, Modbus and some more protocols specific to wind farms. The system also currently has a central database responsible for doing backup of all data produced by the turbines as well as calculating aggregated data such as total production and averages. Data aggregation is resource heavy task since each turbines produces data every 50 ms from 200 measurement points.
+%\paragraph{The setting}
+The current Siemens system has multiple external systems used for configuration of parameters and monitoring power production. The protocols used are HTTP, Modbus and some more protocols specific to wind farms. Currently the system is designed to handle 100 concurrent connections.
+%The system also currently has a central database responsible for doing backup of all data produced by the turbines as well as calculating aggregated data such as total production and averages. Data aggregation is resource heavy task since each turbines produces data every 50 ms from 200 measurement points.
 
-\paragraph{The benefits}
-By distributing the current data aggregation tasks the system can be made to scale better, since adding more turbines would increase the amount of processing power available.
+%\paragraph{The benefits}
+By decentralizing the external interfaces, availability of theses systems can be increased. Currently if the Wind Power Supervisor fails external monitoring will be limited. In a decentralized solution a failing server can be discovered and a backup could replace it immediately. Furthermore if the number of external clients should increase it will be simpler to share workload across nodes.
 
-\paragraph{The problem}
-By distributing the current Siemens system, a problem arises when external systems need to interact with the wind farm. External system currently communicate with the wind farm over Modbus, HTTP and some more custom protocols.
-Transforming these external interfaces from being central to being part of the turbines creates a problem for client applications, how do they know witch turbine to connect to? They should only need to know a single ip address of the wind farm.
+%\paragraph{The problem}
+A problem arises when external systems need to interact with the wind farm. 
+Transforming external interfaces from being central to being part of the turbines creates a problem for client applications.
+With multiple turbines able run serve requests and no quarantine that all turbines are online, How do they know witch turbine to connect to?
+Currently they use a single ip address for this, it is preferred to continue with this.
 
 
-
-
-
-Resource management is a key activity in a distributed decentralised system.
-A decentralised system consists of a number of nodes with various resources available.
-Every node in a distributed version of the current Siemens system will need to handle data logging (disk I/O), replication (Network), setpoint calculation(Processing Time).
-Having a regulation cycle across a network means sharing states. When this regulation cycle is in the milliseconds range the amount of data that needs to be transferred increases.
-Besides what every node needs to handle there are other tasks required by the current Siemens system that can not or does not need to be run on all nodes. These are data aggregation(Processing, Memory) and external interfaces like HTTP, Modbus, etc (Processing, Network).
-The resources important when making a distributed version of the Siemens case are here by identified as primarily: Processing time and Network bandwidth, secondarily: Hard drive I/O and memory operations.
+% % % % Below snippet migt be usefull for descriping docker % % % % % % %
+%Resource management is a key activity in a distributed decentralised system.
+%A decentralised system consists of a number of nodes with various resources available.
+%Every node in a distributed version of the current Siemens system will need to handle data logging (disk I/O), replication (Network), setpoint calculation(Processing Time).
+%Having a regulation cycle across a network means sharing states. When this regulation cycle is in the milliseconds range the amount of data that needs to be transferred increases.
+%Besides what every node needs to handle there are other tasks required by the current Siemens system that can not or does not need to be run on all nodes. These are data aggregation(Processing, Memory) and external interfaces like HTTP, Modbus, etc (Processing, Network).
+%The resources important when making a distributed version of the Siemens case are here by identified as primarily: Processing time and Network bandwidth, secondarily: Hard drive I/O and memory operations.
+% % % % Above snippet migt be usefull for descriping docker % % % % % % %
 
 Resource management should be fair, this means the nodes should have the workload distributed as evenly as possible.
 There are different ways to handle this, some systems are able to split a single task up in equally large chunks for each node, in the Siemens case this could be the control algorithm that every turbine controller will need to run.
