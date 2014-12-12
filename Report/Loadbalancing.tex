@@ -88,7 +88,7 @@ A similar possibility is to forward the package by changing the receivers mac ad
 	\caption[Load balancer data transportation]{
 		\label{fig:LoadbalancerOperation} 
 		\footnotesize{%
-			Load balancer data transportation,the left side illustrates load balancing with no direct server client communication and to the right with direct server to client communication.
+			Load balancer data transportation, the left side illustrates load balancing with no direct server client communication and to the right with direct server to client communication.
 		}
 	}
 \end{figure}
@@ -111,35 +111,52 @@ Here are some example job scheduling strategies:
 	\item[Shortest expected delay] strategy keeps track of when a server has received a request and when it is expected to be finished processing a requests. The processing time for a single request is statically defined per server.
 	% (Ci + 1) / Ui Ci equal number of server i connections, Ui equal the time the servers takes to process a single request.
 	
+	\item[Performance monitoring] adds overhead by the added network packages and keeping tack of the current performance of the servers. It however ensure that the server with the most free capacity will receive the connection. Free capacity can be defined as free processing time, available memory or another resource.
+	
 	\item[Package inspection] opens up the package and passes higher protocol headers. HTTP headers could be passed to identify what service the URL is trying to connect to, this can be handy when using using a restful api to build the monitoring platform.
 	It also makes it possible to split services up in slow and fast running services, helping to make sure that services which need to be fast are not begin slowed down by services which needs to make data heavy calculations.
 	Doing this would still allow having other distribution strategies to further split up the workload.
-	Doing package inspection uses more Processing time on the load balancer than the other options since the it needs to process multiple layers of network abstraction to get to the relevant information. In the OSI-model the ip address is defined in layer 3 and the HTTP and Modbus protocols are both part of the application layer and in Layer 7. 
+	Furthermore it can be used to access session information and make sure that each user with the same session id gets redirected to the same server, even though using a different connection.
+	Doing package inspection uses more Processing time on the load balancer than the other options since the it needs to process multiple layers of network abstraction to get to the relevant information. HTTP and Modbus protocols are both part of the application layer and in Layer 7 in the OSI-model, this means that the load balancer need to process multiple layers of the network protocol to retrieve this information. 
 	
-	\item[Performance monitoring] adds overhead by the added network packages and keeping tack of the current performance of the servers. It however ensure that the server with the most free capacity will receive the connection. Free capacity can be defined as free processing time, available memory or another resource.
 \end{description}
 None of the strategies and communication platforms described scales infinitely as they all are based on a single active load balancer handling all incoming traffic however the methods described should be more than enough to handle the 100 concurrent connections the current Siemens system has now with plenty of room for expansion. 
 
+
+%\paragraph{Extra features}
+
 \paragraph{Candidate systems}
-A candidate for this kind of monitoring is the Linux Virtual Server project \cite{zhang2000linuxVirtualServer} (LVS).
-The load balancer is build directly into the Linux kernel.
-Because LVS is build into the kernel it can redirect traffic on the data-link OSI Layer 2, This is not allowed by user space applications.
+
+\begin{description}
+\item[NGINX] is a application level load balancer with a built in high performance\todo{ref} web server, it does can inspect http headers and use the information within to distribute traffic to servers groups.
+The server support round robin, least connected, ip hash and hash load balancing strategies. 
+NGINX is in the basic open source version unable to work with TCP/IP connections for load balancing how ever a paid plus version existent witch can do this.
+It would be needed if other TCPI/IP protocols should be supported.
+The open source is licensed with the FreeBSD License.
+
+\item[Linux Virtual Server Project\cite{zhang2000linuxVirtualServer} (LVS)] is build directly into the Linux kernel.
+Because LVS is build into the kernel it can redirect traffic on the data-link OSI layer 2, This is not allowed by user space applications.
 It supports load balancer fail over based on heart beat monitoring.
 LVS supports  Round robin, Least-Connection and Shortest Expected Delay Scheduling job scheduling strategies.
 
+%http://www.cisco.com/c/en/us/support/docs/ip/border-gateway-protocol-bgp/5212-46.html
+%\item[Cisco Routers] Load balancing is built into all of Cisco's routers which supports, 
+
+\end{description}
 
 
-\begin{figure}
-	\centering
-	\scalebox{0.7}{\input{figures/tikz/SystemOverviewFromLoadBalancer}}
-	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[System overview from the load balancer viewpoint]{
-		\label{fig:parkOverview} 
-		\footnotesize{%
-			A system overview of park nodes.
-		}
-	}
-\end{figure}
+
+%\begin{figure}
+%	\centering
+%	\scalebox{0.7}{\input{figures/tikz/SystemOverviewFromLoadBalancer}}
+%	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+%	\caption[System overview from the load balancer viewpoint]{
+%		\label{fig:parkOverview} 
+%		\footnotesize{%
+%			A system overview of park nodes.
+%		}
+%	}
+%\end{figure}
 
 
 % % % %%SingleEntryPoint and List:LB:LoadBalFailover % % % % % % % %
