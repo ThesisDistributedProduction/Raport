@@ -306,6 +306,8 @@ Thus we conclude that frameworks implementing the DSM paradigm at application le
 %Runs on IIS
 
 \subsection{State of the art publish/subscribe}
+The following section contains a presentation of a number of publish/subscribe standards. Each standard will be evaluated and a one will be chosen as the best suited publish/subscribe standard for the decentralized solution.
+
 \paragraph{Java Message Service} (JMS)~\cite{hapner2002java} is a messaging API that allows application components based on Java EE to exchange messages using either point-to-point communication or publish-subscribe. As JMS is an API specification the underlying message service responsible for the actual message handling can be any messaging service, as long as it implements the JMS Provider interface.
 
 \begin{figure}[!h]
@@ -331,7 +333,7 @@ CORBA addresses the problem of the strong coupling between components in RPC by 
 	\includegraphics[width=0.6\textwidth,natwidth=610,natheight=642]{corbaArchitecture.png} 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[JMS overview]{
-		\label{fig:jmsOverview} 
+		\label{fig:corbaOverview} 
 		\footnotesize{%
 			CORBA overview.
 		}
@@ -354,7 +356,7 @@ There are a number of client implementations in different languages~\cite{amqpim
 	\includegraphics[width=0.6\textwidth,natwidth=610,natheight=642]{amqpArchitecture.png} 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[JMS overview]{
-		\label{fig:jmsOverview} 
+		\label{fig:amqpOverview} 
 		\footnotesize{%
 			AMQP overview.
 		}
@@ -372,7 +374,7 @@ The standard is an API specification and an interoperability wire-protocol that 
 	\includegraphics[width=0.6\textwidth,natwidth=610,natheight=642]{ddsArchitecture.png} 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[JMS overview]{
-		\label{fig:jmsOverview} 
+		\label{fig:ddsOverview} 
 		\footnotesize{%
 			DDS overview.
 		}

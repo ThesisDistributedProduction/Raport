@@ -220,9 +220,9 @@ The Setpoint Listener object is a listener on the setpoint topic. The setpoint t
 
 The key component used for communication is DDS (see \cref{sec:DSM}). This section describes how DDS has been configured for the centralized solution.
 
-\subsection{Interface Description Language}\label{sec:cenIdl}
+\subsection{Interface Definition Language}\label{sec:cenIdl}
 
-The data transfer objects (DTO) used when sending messages from the turbines to the Park Pilot, and the other way around, is created using the RTI Connext Interface Description Language~\cite{rtiConnextUsersManual}. DTOs are defined in an IDL file (see \cref{fig:cenTurbineDataMessage} for IDL example). From there the actual implementations of the IDL definitions are auto generated from the command prompt using the \textit{rtiddsgen}~\cite{rtiConnextUsersManual} command.
+The data transfer objects (DTO) used when sending messages from the turbines to the Park Pilot, and the other way around, is created using the RTI Connext Interface Definition Language~\cite{rtiConnextUsersManual}. DTOs are defined in an IDL file (see \cref{fig:cenTurbineDataMessage} for IDL example). From there the actual implementations of the IDL definitions are auto generated from the command prompt using the \textit{rtiddsgen}~\cite{rtiConnextUsersManual} command.
 
 \begin{figure}[!h]
 	\centering
