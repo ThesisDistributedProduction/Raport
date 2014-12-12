@@ -4,7 +4,7 @@
 
 Wind energy is widely becoming recognized as one of the most cost efficient renewable energy sources.
 It is predicted that by the end of 2014 the worlds wind energy production will reach 360GW which is around 4\% of the worlds electricity demand~\cite{worldwidewindcapacity}.
-Heavyweight energy consumer USA has declared a goal of reaching 20\% wind energy of the total energy consumed in 2030~\cite{20percentenergy}, the European Union has committed to a similar goal that 20\% of the total energy consumption must come from renewable sources by 2020~\cite{directive2009}. For comparison up to a 100\% of the total energy consumption of Denmark can be covered by wind power on days with optimal wind conditions~\cite{100percentwindenergy}.
+Heavyweight energy consumer USA has declared a goal of reaching 20\% wind energy of the total energy consumed in 2030~\cite{20percentenergy}, the European Union has committed to a similar goal that 20\% of the total energy consumption must come from renewable sources by 2020~\cite{directive2009}. For comparison, up to a 100\% of the total energy consumption of Denmark can be covered by wind power on days with optimal wind conditions~\cite{100percentwindenergy}.
 
 Siemens Wind Power is one of the worlds leading producers of wind turbines, with a global market share of 9.5\% in 2012~\cite{worldmarketupdate2012}.
 Siemens Wind Power is increasingly focusing on the offshore wind farm market.
@@ -12,15 +12,17 @@ The current setup of a wind farm requires additional infrastructure for manageme
 In addition to the wind turbines, a wind farm at Siemens Wind Power consists of multiple park regulators for turbine control, and a Supervisory Control And Data Acquisition (SCADA) system, which handles data aggregation, logging and external data requests.
 
 The SCADA system and park regulators does not scale automatically with the number of turbines. A park regulator can only handle power regulation for a certain amount of turbines, meaning the larger the wind farm, the more park regulators needs to be present to handle power regulation.
-The power regulation performed by each park regulator is amongst others based on the current state of each turbine connected to the park regulator.
-The park regulator must request the current state of each connected turbine in order to be able to calculate if the power production of the wind farm is correct.
-If the power production of the wind farm needs adjustment the park regulator calculates new power production goals for each connected turbine and distributes these.
+The power regulation performed by each park regulator, calculates if the power production of the wind farm is correct and adjusts and distributes the production goals of each turbine accordingly. This power regulation is, amongst others, based on the current state of each turbine connected to the park regulator. So in order to perform park regulations, the park regulator must first acquire the current state of each connected turbine.
+% amongst others, based on the current state of each turbine connected to the park regulator.
+%So in order to perform park regulations, the park regulator must first request the current state of each connected turbine. %in order to be able to calculate if the power production of the wind farm is correct.
+%If the power production of the wind farm needs adjustment, the park regulator calculates new power production goals for each connected turbine and distributes these.
 
-Adding additional turbines to a park regulator will increase the time needed to collect the states of the connected turbines, calculate new power production goals and distribute these new power production goals to the connected turbines.
-Thus, increasing the number of turbines connected to a park regulator will increase the power regulation time.
-The increase in power regulation time is caused by the fact that the park regulator must request a state from an extra turbine and wait for the turbine to provide the state.
+Increasing the number of turbines connected to a park regulator increases the number of turbine states that needs to be acquired, the number of power production goals that needs to be calculated and the number of these goals that needs to be distributed. Thus increasing the number of turbines connected to a park regulator, increases the time it takes to perform these regulations. The increase in power regulation time is primarily caused by the acquiring of states, since the park regulator must request an extra turbine state and wait for the corresponding reply per extra turbine added.
+% will increase the time needed to collect the states of the connected turbines, calculate new power production goals and distribute these new power production goals to the connected turbines.
+%Thus, increasing the number of turbines connected to a park regulator will increase the power regulation time.
+%The increase in power regulation time is primarily caused by acquiring states of each turbine, since acquiring states involves . This  the fact that the park regulator must request a state from an extra turbine and wait for the turbine to provide the state.
 
-Keeping the power regulation time low will allow for faster power regulation of the wind farm which in turn will enable the wind farm to comply with the needs of the power grid faster. Faster compliance to the needs of the power grid will enable the wind farm to help in stabilizing the power grid should power demand rise or fall unexpectedly. Thus, keeping a low power regulation time is important for a wind farm to be an asset of the power grid instead of a liability.
+Keeping the power regulation time low will allow for faster power regulation of the wind farm, which in turn will enable the wind farm to comply with the needs of the power grid faster. Faster compliance to the needs of the power grid will enable the wind farm to help in stabilizing the power grid faster, should power demand rise or fall unexpectedly. Thus, keeping a low power regulation time is important for a wind farm to be an asset of the power grid instead of a liability.
 
 %If the power regulation time exceeds a certain threshold the wind farm is no longer able to satisfy the regulation demands required by the power grid.
 %Thus, the number of turbines connected to a park regulator must be limited in order to uphold a power regulation cycle time that satisfy the requirements imposed by the power grid.
@@ -31,7 +33,7 @@ Keeping the power regulation time low will allow for faster power regulation of 
 %This interdependence between turbines forces the central control system to collect data from all turbines before a single new power production value can be calculated, which is time consuming. Adding turbines will additionally increase the time the centralized control system needs to calculate new power production values.
 %To uphold a constant power production level for the entire wind farm near real-time control and regulation is necessary thus the time consumption of the centralized control system must be minimized in effect limiting the number of turbines the centralized control system is able to handle.
 
-Both the the park regulators and the SCADA system are essential for a Siemens Wind Power wind farm to function. Communication within the wind farm pass through these two components, and system failure in either the SCADA system or one of the park regulators may render parts of the wind farm unavailable, thus resulting in decreased control of the wind farm. This makes these components potential single points of failures to the wind farm. 
+Both the park regulators and the SCADA system are essential for a Siemens Wind Power wind farm to function. Communication within the wind farm pass through these two components, and system failure in either the SCADA system or one of the park regulators may render parts of the wind farm unavailable, thus resulting in decreased control of the wind farm. This makes these components potential single points of failures to the wind farm. 
 
 %Despite the fact that the wind farms has grown to a size that is becoming increasingly hard to manage as a centralized control system, little research has been done in the area of decentralization a wind farm managements and controls components.
 
