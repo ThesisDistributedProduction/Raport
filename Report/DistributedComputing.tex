@@ -359,7 +359,7 @@ As seen in \cref{fig:networkUnicast} the source node only send packet to one nod
 
 \paragraph{Broadcast} is the direct opposite of unicast, it provides one to all communication, illustrated in \cref{fig:networkBroadcast}. All in this context mens all machines on the same subnet or locally behind the nearest router.
 The source node only needs to send one packet to reach every other node, copying of the packet is done in the network by switches and routers.
-There exist a broadcast address for every subnet and a special address witch broadcast to all machines within the local network separated from the outside with a router.
+There exist a broadcast address for every subnet and a special address which broadcast to all machines within the local network separated from the outside with a router.
 %The broadcast address for a given subnet can be found by doing a bitwise or operation on the local ip address with the binary complement of the subnet mask ($broadcast~address~=~local~ip~|~!subnet~mask$). To broadcast to all subnets behind the nearest router the address $255.255.255$ can be used, other protocols have similar capabilities.
 Broadcast does not support TCP/IP and delivers packet in a best effort way, this means that there is no guarantee or feedback of if the packet arrived, all this has to be built on top if needed.
 On large networks there can be a lot of broadcast traffic that every node needs to decide if it needs to respond to or discard.
@@ -367,7 +367,7 @@ In the new IPv6 broadcast is no longer supported \cite{RFC4291_AddressingIPv6Dra
 
 \paragraph{Multicast} is a combination of unicast and broadcast and can be configured to be used as either one, however this is not what it is designed for. Multicast is designed to provide one to many communication as illustrated in \cref{fig:networkMulticast}.
 Multicasting works using multicast groups, these groups are maintained by routers and layer 2 switches. The way a node is added to a multicast group is by transmitting a packet requesting a group membership using the IGMP protocol. Each multicast group is associated with a multicast ip address, this ip address is used by the transmitting node when a packet is to be transmitted to a multicast group.
-Communicating via multicating is efficient and ensures that each node can be configured to handle a minimum number of packets, routers and switches however has a added responsibility of maintaining information of witch multicast address each port is associated with and transmitting packets to all of them.
+Communicating via multicating is efficient and ensures that each node can be configured to handle a minimum number of packets, routers and switches however has a added responsibility of maintaining information of which multicast address each port is associated with and transmitting packets to all of them.
 
 \subsubsection{Main DDS entities}
 RTI Connext provides a number of entities that must be present in a system in order to enable commmunication.
