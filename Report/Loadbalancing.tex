@@ -59,7 +59,9 @@ This can be done using a virtual ip address, and having the node with the active
 If the node with the active load balancer fails the virtual ip address can be transferred to a backup load balancer and it will then become the active load balancer. To let other network participant know that the ip has moved to a new address a ARP announcement can be sent allowing them to update their ARP cache.
 
 \paragraph{Detecting node failure}
-Detection of a failed load balancer must be done by the backup nodes, generally there are two ways this can be done, either actively pinging the active load balancer or having the load balancer periodically sent data package also know as heartbeats. This setup is illustrated in \cref{fig:loadBalancingSetup2Balancers}.
+Detection of a failed load balancer must be done by the backup nodes, generally there are two ways this can be done, either actively pinging the active load balancer or having the load balancer periodically sent data package also know as heartbeats.
+Besides monitoring the active load balancer the backup load balancers must also keep a synchronised copy of the active load balancers connections table that contains a list of open connections between clients and servers.
+This setup is illustrated in \cref{fig:loadBalancingSetup2Balancers}.
 
 
 \paragraph{Load balancer to server communication}
@@ -86,43 +88,44 @@ A similar possibility is to forward the package by changing the receivers mac ad
 	\caption[Load balancer data transportation]{
 		\label{fig:LoadbalancerOperation} 
 		\footnotesize{%
-			Load balancer data transportation,the left side illustrates load balancing without TCP handoff and to the right with TCP handoff
+			Load balancer data transportation,the left side illustrates load balancing with no direct server client communication and to the right with direct server to client communication.
 		}
 	}
 \end{figure}
 
 
-\paragraph{Control algorithms} %DNS Datacenter Application
+\paragraph{Job scheduling strategies} %DNS Datacenter Application
 There are multiple ways to distribute traffic that could apply to a decentralized solution.
 %Load balancing can be done taking into account many parameters from a simply passing packets to servers in a round robin pattern, to monitoring performance parameters of the servers selecting the one with most free capacity. Some load balancers even inspect packages e.g. pass the HTTP headers URL field to select a server responsible for a specific resource.
 Solutions that require client integration or is made for entirely different purposes are omitted as they do not apply to this situation.
-Here are some existing strategies:
-\begin{enumerate}
-	\item Round robin (OSI Layer 2 or 3) % Weighted
-	\item Least-Connection (OSI Layer 2 or 3) % Weighted
-	\item Package inspection (OSI Layer 7)
-	\item Performance monitoring
-\end{enumerate}
+Here are some example job scheduling strategies:
 
-Round robin as the name implies distributes connections to servers equally to each server, it is the most basic of the strategies discussed. In many situations this is will give fair distribution of workload, however this is only true if connecting clients require equal amount of data per connection. If the system has a asymmetric load round robin can provide a unfair distribution of workload. 
-Round robin has the least overhead.
+\begin{description}
+	\item[Round robin] as the name implies distributes connections to servers equally to each server, it is the most basic of the strategies discussed. In many situations this is will give fair distribution of workload, however this is only true if connecting clients require equal amount of data per connection. If the system has a asymmetric load round robin can provide a unfair distribution of workload. 
+	Round robin has the least overhead.
+	
+	\item[Least connection] takes advantage of the fact that the load balancer need to keep track of open connections. This information is used in the strategy to assign new connections to the node which currently has the fewest connections.
+	This ensures that long running connections are not causing nodes to be overloaded with connections.
+	without needing extra communication with the server.
+	
+	\item[Shortest expected delay] strategy keeps track of when a server has received a request and when it is expected to be finished processing a requests. The processing time for a single request is statically defined per server.
+	% (Ci + 1) / Ui Ci equal number of server i connections, Ui equal the time the servers takes to process a single request.
+	
+	\item[Package inspection] opens up the package and passes higher protocol headers. HTTP headers could be passed to identify what service the URL is trying to connect to, this can be handy when using using a restful api to build the monitoring platform.
+	It also makes it possible to split services up in slow and fast running services, helping to make sure that services which need to be fast are not begin slowed down by services which needs to make data heavy calculations.
+	Doing this would still allow having other distribution strategies to further split up the workload.
+	Doing package inspection uses more Processing time on the load balancer than the other options since the it needs to process multiple layers of network abstraction to get to the relevant information. In the OSI-model the ip address is defined in layer 3 and the HTTP and Modbus protocols are both part of the application layer and in Layer 7. 
+	
+	\item[Performance monitoring] adds overhead by the added network packages and keeping tack of the current performance of the servers. It however ensure that the server with the most free capacity will receive the connection. Free capacity can be defined as free processing time, available memory or another resource.
+\end{description}
+None of the strategies and communication platforms described scales infinitely as they all are based on a single active load balancer handling all incoming traffic however the methods described should be more than enough to handle the 100 concurrent connections the current Siemens system has now with plenty of room for expansion. 
 
-Least-Connection takes advantage of the fact that the load balancer need to keep track of open connections. This information is used in the strategy to assign new connections to the node which currently has the fewest connections.
-This ensures that long running connections are not causing nodes to be overloaded with connections.
-without needing extra communication with the server.
-
-Package inspection opens up the package and passes higher protocol headers. HTTP headers could be passed to identify what service the URL is trying to connect to, this can be handy when using using a restful api to build the monitoring platform.
-It also makes it possible to split services up in slow and fast running services, helping to make sure that services which need to be fast are not begin slowed down by services which needs to make data heavy calculations.
-Doing this would still allow having other distribution strategies to further split up the workload.
-Doing package inspection uses more Processing time on the load balancer than the other options since the it needs to process multiple layers of network abstraction to get to the relevant information. In the OSI-model the ip address is defined in layer 3 and the HTTP and Modbus protocols are both part of the application layer and in Layer 7. 
-
-Performance monitoring adds overhead by the added network packages and keeping tack of the current performance of the servers. It however ensure that the server with the most free capacity will receive the connection. Free capacity can be defined as free processing time, available memory or another resource.
-
-
-\paragraph{Extra Features}
-
-A candidate for this kind of monitoring is the Linux Virtual Server project \cite{zhang2000linuxVirtualServer}.
-
+\paragraph{Candidate systems}
+A candidate for this kind of monitoring is the Linux Virtual Server project \cite{zhang2000linuxVirtualServer} (LVS).
+The load balancer is build directly into the Linux kernel.
+Because LVS is build into the kernel it can redirect traffic on the data-link OSI Layer 2, This is not allowed by user space applications.
+It supports load balancer fail over based on heart beat monitoring.
+LVS supports  Round robin, Least-Connection and Shortest Expected Delay Scheduling job scheduling strategies.
 
 
 

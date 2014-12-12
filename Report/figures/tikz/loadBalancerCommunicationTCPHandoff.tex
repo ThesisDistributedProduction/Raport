@@ -3,7 +3,7 @@ start chain=going right,
 diagram item/.style={
 	minimum width=80pt,
 	on chain,
-	join
+%	join
 },
 diagram item seperated/.style={
 	minimum width=90pt,
@@ -23,7 +23,7 @@ every join/.style={arrow}
 
 \node [
 diagram item,
-label=above:Client 1
+label=above:Client
 ] (client) {\includegraphics{Cisco_BW/pc}};
 
 
@@ -45,5 +45,8 @@ label={[align=center]above:server}
 \draw[arrow] (server.180) -- (client.0);
 
 
+\draw[arrow] (client.320) -> (LB.160);
+
+\draw[arrow] (LB.10) -> (server.230);
 
 \end{tikzpicture}
