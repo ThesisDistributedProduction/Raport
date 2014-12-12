@@ -2,8 +2,8 @@
 start chain=going right,
 diagram item/.style={
 	minimum width=80pt,
-	on chain
-%	join
+	on chain,
+	join
 },
 diagram item seperated/.style={
 	minimum width=90pt,
@@ -31,7 +31,7 @@ label=above:Client 1
 continue chain=going below right,
 diagram item,
 label={[align=center]above:Load\\Balancer}
-] (LB) {\millFigure \includegraphics{Cisco_BW/distributed_director}};
+] {\millFigure \includegraphics{Cisco_BW/distributed_director}};
 
 
 \node [
@@ -40,14 +40,10 @@ diagram item,
 label={[align=center]above:server}
 ] (server) {\millFigure};
 
-\draw[arrow, dashed, gray] (client.10) -- (server.170);
-\draw[arrow, dashed, gray] (server.180) -- (client.0);
+\draw[arrow] (server) -> (client);
+%\draw[arrow] (server.170) -> (client.10);
+%\draw[arrow] (client.350) -> (server.190);
 
-\draw[arrow] (client.320) -> (LB.160);
-\draw[arrow] (LB.170) -> (client.310);
-
-\draw[arrow] (LB.10) -> (server.230);
-\draw[arrow] (server.250) -> (LB.0);
 
 
 \end{tikzpicture}

@@ -34,6 +34,7 @@ An other problem is that the turbines are limited in processing power, it is pre
 %Some systems have many different tasks that runs independently of each other in the Siemens case this will be handling requests from secondary systems running outside the wind farm.
 %The current Siemens system currently is designed to handle a hundred simultaneously connection from outside the wind farm. This workload needs to distributed fairly when building a decentralised system therefore dedicated resource management logic is needed.
 
+\FloatBarrier
 \subsection{Load Balancing}
 A load balancer is a network component capable of distributing incoming connections from clients to multiple server.
 
@@ -62,51 +63,50 @@ Detection of a failed load balancer must be done by the backup nodes, generally 
 
 
 \paragraph{Load balancer to server communication}
-The key objective of a load balancer is connecting clients to servers. There are more than 
+The key objective of a load balancer is connecting clients to servers. In a basic load balancer this involves keeping track of active connections and transfer packages to the correct server. 
 
-\input{figures/tikz/loadBalancerCommunication}
+\begin{figure}
+	\centering
+	\scalebox{0.7}{\input{figures/tikz/loadBalancerCommunicationTCPHandoff}}
+	\scalebox{0.7}{\input{figures/tikz/loadBalancerCommunication}}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Load balancer data transportation]{
+		\label{fig:LoadbalancerOperation} 
+		\footnotesize{%
+			Load balancer data transportation.
+		}
+	}
+\end{figure}
+
 
 \paragraph{Control algorithms} %DNS Datacenter Application
 There are multiple ways to distribute traffic that could apply to a decentralized solution.
 %Load balancing can be done taking into account many parameters from a simply passing packets to servers in a round robin pattern, to monitoring performance parameters of the servers selecting the one with most free capacity. Some load balancers even inspect packages e.g. pass the HTTP headers URL field to select a server responsible for a specific resource.
 Solutions that require client integration or is made for entirely different purposes are omitted as they do not apply to this situation.
-
+Here are some existing strategies:
 \begin{enumerate}
-	\item Round robin
-	\item Server performance monitoring
-	\item Package inspection
+	\item Round robin (OSI Layer 2 or 3)
+	\item Least-Connection (OSI Layer 2 or 3)
+	\item Package inspection (OSI Layer 7)
+	\item Performance monitoring
 \end{enumerate}
 
-Round robin as the name implies distributes connections to servers equally to each server, it does however not automatically result in a fair distribution of traffic since connected clients might not require equal amount of data per connection.
-This type has the least overhead but also assumes that data transferred for each connection are almost equal to do a fair distribution.
+Round robin as the name implies distributes connections to servers equally to each server, it is the most basic of the strategies discussed. In many situations this is will give fair distribution of workload, however this is only true if connecting clients require equal amount of data per connection. If the system has a asymetric load round robin can provide a unfair distribution of workload. 
+Round robin has the least overhead.
 
-Server performance monitoring adds overhead by the added network packages and keeping tack of the current performance of the servers. It however ensure that the server with the most free capacity will receive the connection. Free capacity can be defined as free processing time, available memory or another resource.
+Least-Connection
 
-Package inspection opens up the package and passes higher protocol headers. This could for instance be HTTP headers in order to identify what service the URL is trying to connect to. This allows the system to be split up in smaller specialized parts, having one server deliver aggregated data and another deliver raw data. It also makes it possible to split it up in slow and fast running services, helping to make sure that services which need to be fast are not begin slowed down by services which need to make long calculations.
+Package inspection opens up the package and passes higher protocol headers. This could for instance be HTTP headers in order to identify what service the URL is trying to connect to.
+It also makes it possible to split services up in slow and fast running services, helping to make sure that services which need to be fast are not begin slowed down by services which needs to make data heavy calculations.
+Doing this would still allow having other distribution strategies to further split up the workload.
+Doing package inspection uses more Processing time on the load balancer than the other options since the it needs to process multiple layers of network abstraction to get to the relevant information. In the OSI-model the ip address is defined in layer 3 and the HTTP and Modbus protocols are both part of the application layer and in Layer 7. 
+
+Performance monitoring adds overhead by the added network packages and keeping tack of the current performance of the servers. It however ensure that the server with the most free capacity will receive the connection. Free capacity can be defined as free processing time, available memory or another resource.
 
 
+\paragraph{Extra Features}
 
-%Software responsible for handling resource management is refereed to as a load balancer.
-%Load balancers can be applied in layers with different responsibility from geographically distributing traffic \todo{ref DNS loadbalncer} to distributing packets to available nodes in a round robin pattern to monitoring nodes and choosing the node with the least load, some even inspect packages to distribute based on package content.
-
-%Load balancers come in different complexity and with the ability to manage resource in various ways.
-%From naively assigning clients with a round robin based algorithm to distributing connections based on monitoring node resources like available CPU time. \todo{make ref}
-%Some Load balancers require client and or server integration \todo{make ref} while some function completely transparent to network nodes. \todo{make ref}
-%The Siemens case uses standard protocols where some client applications are build by a third party,
-%therefore client integration is not possible with all public interfaces, and is not investigated further.
-
-%The Siemens case needs a Load balancer system with the following properties:
-%\begin{enumerate}[label=\textbf{P.\arabic*}, ref=\textit{P.\arabic*}]
-%	\item \label{List:LB:SingleEntryPoint}Allow the decentralised solution to behave like a single system for external clients, providing a single entry points for clients to connect to
-%	\item \label{List:LB:LoadBalFailover} Support load balancer fail over
-%	\item \label{List:LB:DetectFailedNodes} Detect and exclude faulty nodes 
-%	\item Support at least 100 concurrent connections
-%	\item Have minimum resource impact on the host machine
-%%	\item Monitors current available server resources
-%\end{enumerate}
-%
-%
-%To achieve property \ref{List:LB:SingleEntryPoint} and \ref{List:LB:LoadBalFailover}.
+% % % %%SingleEntryPoint and List:LB:LoadBalFailover % % % % % % % %
 %The systems needs to respond to a single external IP address. To do this multiple nodes share the same IP address, multiple protocols exists which can do this "Common Address Redundancy Protocol\todo{https://www.freebsd.org/doc/handbook/carp.html}, Virtual Router Redundancy Protocol\todo{http://tools.ietf.org/html/rfc2338} and \cite{zhang2000linuxVirtualServer}".\todo{Put in refferences instead} To provide seamless transfer of the virtual ip address ARP announcements are used to inform the local network of the transfer.
 %The backup load balancer monitors the active load balancer and will takeover the virtual ip when the Active load balancer is unavailable and itself become primary this is illustrated in \cref{fig:loadBalancingSetup2Balancers}, this monitoring can be done with the active client sending out periodic heartbeats, or the backup sending ICMP ECHO\_REQUEST.
 %Property \ref{List:LB:DetectFailedNodes} requires the load balancer to monitor local nodes for availability, this is to ensure that client connections are not being redirected to a faulty node. This is most easily achived with a ICMP ECHO\_REQUEST otherwise known as a ping request, 
@@ -135,7 +135,7 @@ Load balances can provide various features, related to offloading the real serve
 
 
 \begin{figure}
-	\centering	
+	\centering
 	\scalebox{0.7}{\input{figures/tikz/SystemOverviewFromLoadBalancer}}
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[System overview from the load balancer viewpoint]{

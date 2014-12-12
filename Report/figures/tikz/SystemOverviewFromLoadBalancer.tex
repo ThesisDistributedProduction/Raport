@@ -4,6 +4,12 @@ diagram item/.style={
 	minimum width=30pt,
 	on chain
 %	join
+},
+connection/.style={
+%	->,
+	thick,
+	shorten <=2pt,
+	shorten >=2pt,
 }]
 
 \newcounter{TurbnieCounter}
@@ -16,108 +22,122 @@ diagram item/.style={
 
 \node [
 diagram item,
-label={[align=center]left:T\printTurbineID\\Load Balancer Active}
+label={[align=center]above:T\printTurbineID\\Load Balancer Active}
 ] (CenterNode) {\millFigure};
 \stepcounter{TurbnieCounter}
 
 \node [
-continue chain = going right,
-diagram item,
-label={[align=center]above:T\printTurbineID\\Spare}
-] {\millFigure};
-\stepcounter{TurbnieCounter}
+draw,
+below =2cm of CenterNode,
+inner sep=0.5cm
+%label={[align=center]left:T\printTurbineID\\LoadBalancer\\Primary}
+] (Switch) {switch};
+\draw[connection] (Switch) -- (CenterNode);
+
 
 \node [
 continue chain = going right,
 diagram item,
 label={[align=center]above:T\printTurbineID\\Spare}
-] {\millFigure};
+] (Turbine) {\millFigure};
 \stepcounter{TurbnieCounter}
+\draw[connection] (Switch) -- (Turbine);
+
+\node [
+continue chain = going right,
+diagram item,
+label={[align=center]right:T\printTurbineID\\Spare}
+] (Turbine) {\millFigure};
+\stepcounter{TurbnieCounter}
+\draw[connection] (Switch) -- (Turbine);
 
 \node [
 continue chain = going below,
 diagram item,
-label={[align=center]above:T\printTurbineID\\Spare}
-] {\millFigure};
+label={[align=center]right:T\printTurbineID\\Spare}
+] (Turbine) {\millFigure};
 \stepcounter{TurbnieCounter}
+\draw[connection] (Switch) -- (Turbine);
 
 \node [
 continue chain = going below,
 diagram item,
 label={[align=center]right:T\printTurbineID\\External\\Interface}
-] {\millFigure};
+] (Turbine) {\millFigure};
 \stepcounter{TurbnieCounter}
+\draw[connection] (Switch) -- (Turbine);
 
 \node [
 continue chain = going below,
 diagram item,
 label={[align=center]right:T\printTurbineID\\Spare}
-] {\millFigure};
+] (Turbine) {\millFigure};
 \stepcounter{TurbnieCounter}
-
-\node [
-continue chain = going left,
-diagram item,
-label={[align=center]right:T\printTurbineID\\Spare}
-] {\millFigure};
-\stepcounter{TurbnieCounter}
-
-\node [
-continue chain = going left,
-diagram item,
-label={[align=center]right:T\printTurbineID\\Spare}
-] {\millFigure};
-\stepcounter{TurbnieCounter}
+\draw[connection] (Switch) -- (Turbine);
 
 \node [
 continue chain = going left,
 diagram item,
 label={[align=center]below:T\printTurbineID\\Spare}
-] {\millFigure};
+] (Turbine) {\millFigure};
 \stepcounter{TurbnieCounter}
+\draw[connection] (Switch) -- (Turbine);
 
 \node [
 continue chain = going left,
 diagram item,
 label={[align=center]below:T\printTurbineID\\Spare}
-] {\millFigure};
+] (Turbine) {\millFigure};
 \stepcounter{TurbnieCounter}
+\draw[connection] (Switch) -- (Turbine);
+
+\node [
+continue chain = going left,
+diagram item,
+label={[align=center]below:T\printTurbineID\\Spare}
+] (Turbine) {\millFigure};
+\stepcounter{TurbnieCounter}
+\draw[connection] (Switch) -- (Turbine);
+
+\node [
+continue chain = going left,
+diagram item,
+label={[align=center]left:T\printTurbineID\\Spare}
+] (Turbine) {\millFigure};
+\stepcounter{TurbnieCounter}
+\draw[connection] (Switch) -- (Turbine);
 
 \node [
 continue chain = going above,
 diagram item,
-label={[align=center]below:T\printTurbineID\\Spare}
-] {\millFigure};
+label={[align=center]left:T\printTurbineID\\Spare}
+] (Turbine) {\millFigure};
 \stepcounter{TurbnieCounter}
+\draw[connection] (Switch) -- (Turbine);
 
 \node [
 continue chain = going above,
 diagram item,
 label={[align=center]left:T\printTurbineID\\Sparey}
-] {\millFigure};
+] (Turbine) {\millFigure};
 \stepcounter{TurbnieCounter}
+\draw[connection] (Switch) -- (Turbine);
 
 \node [
 continue chain = going above,
 diagram item,
 label={[align=center]left:T\printTurbineID\\Spare}
-] {\millFigure};
+] (Turbine) {\millFigure};
 \stepcounter{TurbnieCounter}
+\draw[connection] (Switch) -- (Turbine);
 
 \node [
 continue chain = going right,
 diagram item,
-label={[align=center]left:T\printTurbineID\\Spare}
-] {\millFigure};
+label={[align=center]above:T\printTurbineID\\Spare}
+] (Turbine) {\millFigure};
 \stepcounter{TurbnieCounter}
-
-
-\node [
-	draw,
-	below =2cm of CenterNode,
-	inner sep=0.5cm
-%label={[align=center]left:T\printTurbineID\\LoadBalancer\\Primary}
-] {switch};
+\draw[connection] (Switch) -- (Turbine);
 
 
 
