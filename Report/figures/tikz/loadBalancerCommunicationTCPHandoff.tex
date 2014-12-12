@@ -40,9 +40,9 @@ diagram item,
 label={[align=center]above:server}
 ] (server) {\millFigure};
 
-\draw[arrow] (server) -> (client);
-%\draw[arrow] (server.170) -> (client.10);
-%\draw[arrow] (client.350) -> (server.190);
+%\draw[arrow] (server) -> (client);
+\draw[arrow, dashed, gray] (client.10) -- (server.170);
+\draw[arrow] (server.180) -- (client.0);
 
 
 

@@ -1,5 +1,5 @@
 % !TeX spellcheck = en_GB
-\clearpage
+%\clearpage
 \section{Resource management} % Load balancing
 \label{cha:resourceManagement}
 
@@ -63,17 +63,30 @@ Detection of a failed load balancer must be done by the backup nodes, generally 
 
 
 \paragraph{Load balancer to server communication}
-The key objective of a load balancer is connecting clients to servers. In a basic load balancer this involves keeping track of active connections and transfer packages to the correct server. 
+The key objective of a load balancer is connecting clients to servers.
+When a load balancer receives a package it must identify if it belongs to a already open connection.
+If the connection belongs to a already open connection, the package is sent to the server which originally received the connection, else the scheduling strategy is used to forward the package and the connection is recorded as open between the client and server in a table by the load balancer.
+When a connection is closed or has timed out it is removed from the load balancers table. See the illustration to the left in \cref{fig:LoadbalancerOperation} the grey dashed arrows are the connection as perceived by the client and the black arrows are the real connection.
+
+%\paragraph{LoadBalancer NAT}
+There are different ways to forward packages a basic version functions by doing network address translations similar to home routers.
+The load balancer forwards the package to a server on the network, when the server responds it does the reverse and forwards the package to the client.
+
+%\paragraph{LoadBalancer Tunneling}
+The Load balancer can also tunnel the connection, by warping the package in an other package and then transmit it to the server. This requires the server to setup to unwrap these packages. The servers must be setup with the same virtual ip as the load balancer and be configured to now respond to arp requests to that ip address. This avoids ip address conflicts. When the server is done processing it can now respond using the virtual ip address directly to the client avoiding the load balancer.
+%\paragraph{LoadBalancer Direct routing}
+A similar possibility is to forward the package by changing the receivers mac address. Again the server need to be configured with the same virtual ip address and not to respond to arp packages on that ip address, but in this setup also be connected to the same network segment as mac addresses are not used when routing. This method has the least overhead but also has the least flexibility. Both tunnelling and forwarding using mac address are show in the illustration to the right in \cref{fig:LoadbalancerOperation}, the perceived connection is dashed and grey when different form the real flow in black.
+
 
 \begin{figure}
 	\centering
-	\scalebox{0.7}{\input{figures/tikz/loadBalancerCommunicationTCPHandoff}}
 	\scalebox{0.7}{\input{figures/tikz/loadBalancerCommunication}}
-	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\scalebox{0.7}{\input{figures/tikz/loadBalancerCommunicationTCPHandoff}}
+		\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
 	\caption[Load balancer data transportation]{
 		\label{fig:LoadbalancerOperation} 
 		\footnotesize{%
-			Load balancer data transportation.
+			Load balancer data transportation,the left side illustrates load balancing without TCP handoff and to the right with TCP handoff
 		}
 	}
 \end{figure}
@@ -85,18 +98,20 @@ There are multiple ways to distribute traffic that could apply to a decentralize
 Solutions that require client integration or is made for entirely different purposes are omitted as they do not apply to this situation.
 Here are some existing strategies:
 \begin{enumerate}
-	\item Round robin (OSI Layer 2 or 3)
-	\item Least-Connection (OSI Layer 2 or 3)
+	\item Round robin (OSI Layer 2 or 3) % Weighted
+	\item Least-Connection (OSI Layer 2 or 3) % Weighted
 	\item Package inspection (OSI Layer 7)
 	\item Performance monitoring
 \end{enumerate}
 
-Round robin as the name implies distributes connections to servers equally to each server, it is the most basic of the strategies discussed. In many situations this is will give fair distribution of workload, however this is only true if connecting clients require equal amount of data per connection. If the system has a asymetric load round robin can provide a unfair distribution of workload. 
+Round robin as the name implies distributes connections to servers equally to each server, it is the most basic of the strategies discussed. In many situations this is will give fair distribution of workload, however this is only true if connecting clients require equal amount of data per connection. If the system has a asymmetric load round robin can provide a unfair distribution of workload. 
 Round robin has the least overhead.
 
-Least-Connection
+Least-Connection takes advantage of the fact that the load balancer need to keep track of open connections. This information is used in the strategy to assign new connections to the node which currently has the fewest connections.
+This ensures that long running connections are not causing nodes to be overloaded with connections.
+without needing extra communication with the server.
 
-Package inspection opens up the package and passes higher protocol headers. This could for instance be HTTP headers in order to identify what service the URL is trying to connect to.
+Package inspection opens up the package and passes higher protocol headers. HTTP headers could be passed to identify what service the URL is trying to connect to, this can be handy when using using a restful api to build the monitoring platform.
 It also makes it possible to split services up in slow and fast running services, helping to make sure that services which need to be fast are not begin slowed down by services which needs to make data heavy calculations.
 Doing this would still allow having other distribution strategies to further split up the workload.
 Doing package inspection uses more Processing time on the load balancer than the other options since the it needs to process multiple layers of network abstraction to get to the relevant information. In the OSI-model the ip address is defined in layer 3 and the HTTP and Modbus protocols are both part of the application layer and in Layer 7. 
@@ -106,31 +121,8 @@ Performance monitoring adds overhead by the added network packages and keeping t
 
 \paragraph{Extra Features}
 
-% % % %%SingleEntryPoint and List:LB:LoadBalFailover % % % % % % % %
-%The systems needs to respond to a single external IP address. To do this multiple nodes share the same IP address, multiple protocols exists which can do this "Common Address Redundancy Protocol\todo{https://www.freebsd.org/doc/handbook/carp.html}, Virtual Router Redundancy Protocol\todo{http://tools.ietf.org/html/rfc2338} and \cite{zhang2000linuxVirtualServer}".\todo{Put in refferences instead} To provide seamless transfer of the virtual ip address ARP announcements are used to inform the local network of the transfer.
-%The backup load balancer monitors the active load balancer and will takeover the virtual ip when the Active load balancer is unavailable and itself become primary this is illustrated in \cref{fig:loadBalancingSetup2Balancers}, this monitoring can be done with the active client sending out periodic heartbeats, or the backup sending ICMP ECHO\_REQUEST.
-%Property \ref{List:LB:DetectFailedNodes} requires the load balancer to monitor local nodes for availability, this is to ensure that client connections are not being redirected to a faulty node. This is most easily achived with a ICMP ECHO\_REQUEST otherwise known as a ping request, 
-
-
 A candidate for this kind of monitoring is the Linux Virtual Server project \cite{zhang2000linuxVirtualServer}.
 
-
-
-At a lower tier it could be machine level based on performance parameters like , and finally application level based on the content of the request \textbf{[?]}. %\cite{Citation is missing and I need to find it}.
-There exists a lot of solution specific load balancers.
-A node balancer is a service which distributes incoming requests, among the services registered on the network.
-The distribution is based on different policies like dividing packages or picking the one with most free CPU capacity.
-The load balancer could be a single point of failure, it should for this reason always have one or more backups as seen in \cref{fig:loadBalancingSetup}.
-The load balancer monitors the real servers and only parses on requests to running servers.
-A secondary needs to monitor the primary load balancer and step in if it stops responding.
-This can be done using a virtual private IP, which is the address for all incoming requests. Also there exists solutions which does all this in a completely distributed manner avoiding having a central server as load balancer  \textbf{[?]}, %\cite{Some cite I ahven't found yet}, 
-this is even in some cases extended to include the clients in the act of load balancing \textbf{[?]}. % \cite{Some cite to netflix eureka balancer}.
-
-In this solution the load balancer needs to balance external connections to different protocols like HTTP and Modbus, however a solution which can be extended to any restful protocol is needed.
-Also balancing of node roles depending on the amount incoming traffic on different interfaces will be needed.
-Should all this be done automatically or is it better to define this manually???
-
-Load balances can provide various features, related to offloading the real server and node management. % SSL decryprtion, caching, authentication, ...
 
 
 
@@ -145,6 +137,28 @@ Load balances can provide various features, related to offloading the real serve
 		}
 	}
 \end{figure}
+
+
+% % % %%SingleEntryPoint and List:LB:LoadBalFailover % % % % % % % %
+%The systems needs to respond to a single external IP address. To do this multiple nodes share the same IP address, multiple protocols exists which can do this "Common Address Redundancy Protocol\todo{https://www.freebsd.org/doc/handbook/carp.html}, Virtual Router Redundancy Protocol\todo{http://tools.ietf.org/html/rfc2338} and \cite{zhang2000linuxVirtualServer}".\todo{Put in refferences instead} To provide seamless transfer of the virtual ip address ARP announcements are used to inform the local network of the transfer.
+%The backup load balancer monitors the active load balancer and will takeover the virtual ip when the Active load balancer is unavailable and itself become primary this is illustrated in \cref{fig:loadBalancingSetup2Balancers}, this monitoring can be done with the active client sending out periodic heartbeats, or the backup sending ICMP ECHO\_REQUEST.
+%Property \ref{List:LB:DetectFailedNodes} requires the load balancer to monitor local nodes for availability, this is to ensure that client connections are not being redirected to a faulty node. This is most easily achived with a ICMP ECHO\_REQUEST otherwise known as a ping request, 
+
+
+ %\cite{Citation is missing and I need to find it}.
+%There exists a lot of solution specific load balancers.
+%A node balancer is a service which distributes incoming requests, among the services registered on the network.
+%The distribution is based on different policies like dividing packages or picking the one with most free CPU capacity.
+%The load balancer could be a single point of failure, it should for this reason always have one or more backups as seen in \cref{fig:loadBalancingSetup}.
+%The load balancer monitors the real servers and only parses on requests to running servers.
+%A secondary needs to monitor the primary load balancer and step in if it stops responding.
+%This can be done using a virtual private IP, which is the address for all incoming requests. Also there exists solutions which does all this in a completely distributed manner avoiding having a central server as load balancer  \textbf{[?]}, %\cite{Some cite I ahven't found yet}, 
+
+%In this solution the load balancer needs to balance external connections to different protocols like HTTP and Modbus, however a solution which can be extended to any restful protocol is needed.
+%Also balancing of node roles depending on the amount incoming traffic on different interfaces will be needed.
+%Should all this be done automatically or is it better to define this manually???
+
+%Load balances can provide various features, related to offloading the real server and node management. % SSL decryprtion, caching, authentication, ...
 
  
 %\paragraph{consider the} 
@@ -262,7 +276,7 @@ Load balances can provide various features, related to offloading the real serve
 
 
 
-
+\FloatBarrier
 
 
 
