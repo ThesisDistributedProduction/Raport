@@ -1,16 +1,13 @@
 \section{Database storage}
 \label{sec:databaseStorage}
-Data storage is important in a system like a wind farm.
-A lot of data must be persisted like weather data, health data of the different parts of every turbine and production data.
-These records are important both for immediate use to view the current state of the system but also for review in the future for instance to predict weather trends or replace worn down parts of turbine before they break completely.
-
+Data storage is vital to a wind farm in order to keep track of the wear of turbine parts, and to persist production and sensor data for later use.
 Currently data is aggregated from each turbine and stored on a central node.
 This node will over time aggregate hundreds of gigabytes of information.
 The data on the node is secured by backup but it is still a single point of failure.
-Take out the data storage node or the communication to it and a lot of information will be lost.
+Take out the data storage node or the communication to it and gigabytes of valuable information may be lost.
 
-By distributing the data of the system between all the connected nodes we achieve better redundancy because the data is present on many different nodes.
-Should a node become unavailable another node can communicate the same data in effect strengthening the availability of the system.
+By distributing the data of the system between all the connected nodes the wind farm will achieve higher availability because the data is present on many different nodes.
+Should a node become unavailable another node can communicate the same data.
 
 This chapter contains a description of a number of relevant data storage technologies and a discussion of which technology is the best suited for a system like the Siemens case presented in \cref{sec:SiemensCase}.
 
@@ -50,7 +47,7 @@ RDBMSs support ACID transactions which ensures operations in the database are pr
 %This mismatch between object representation and relational representation can cause both performance problems, the JOIN operation in SQL is very costly, as well as considerable development time spent mapping one structure to the other.
 %The performance problem multiplies in a distributed database if the RDBMS must do JOIN operations across the network in order to aggregate data.
 
-A problem with a traditional RDBMS is that they are designed for vertical scaling~\cite{Atzeni:TheRelationalModelIsDead}. If a traditional RDBMS has problems handling data the solution is to add a bigger harddrive or invest in a faster CPU. This makes sense in a world were hardware is very expensive like it was when the traditional RDBMSs saw the light of day~\cite{Stonebraker:TheEndOfAnArchitecturalEra}. Today horizontal scaling is preferred. If a system has a problem with the data load add another machine or add five others if that is what it takes. Since horizontal scalability is a very important feature of the data storage system the traditional RDBMS is not a viable option.
+A problem with a traditional RDBMS is that they are designed for vertical scaling~\cite{Atzeni:TheRelationalModelIsDead}. If a traditional RDBMS cannot handle the amount of data it is supposed to the solution is to add a bigger harddrive or invest in a faster CPU. This makes sense in a world were hardware is very expensive like it was when the traditional RDBMSs saw the light of day~\cite{Stonebraker:TheEndOfAnArchitecturalEra}. Today horizontal scaling is preferred. If a system has a problem with the data load, add another machine or add five others if that is what it takes. Since horizontal scalability is a very important feature of the data storage system the traditional RDBMS is not a viable option.
 
 \subsection{Schema-less storage, NoSQL}
 \label{sec:nosql}
@@ -344,7 +341,7 @@ NewSQL promises to keep the ACID properties and transactions of the traditional 
 Since both NoSQL and NewSQL seems like fitting technologies for data management in the Siemens case a further comparison between two state of the art implementations must be done in order to decide which technology will be the best suited.
 
 \subsection{State of the art NoSQL}
-To identify state of the NoSQL and NewSQL databases a website called  \inlineURL{db-engines.com}~\cite{db-engines} is used.
+To identify state of the NoSQL and NewSQL databases the website \inlineURL{db-engines.com}~\cite{db-engines} is used.
 This website maintain a list of more than 200 different databases ranked by popularity. The list is updated monthly based on search engine popularity, discussion threads, job-offers, mentions on LinkedIn and tweets. This does not give the complete and objective ranking but it gives a pointer to the most popular database in their respective category.
 
 Since we expect a stream of measured values from a wide range of parameters on every turbine a key-value store seems to be the obvious choice of NoSQL storage method. On top of the continuous stream of measured values aggregated measures must be obtained for the entire farm. This implies that custom software must be built to aggregate data from all the data stores and calculate aggregated values or that the data store has built in features for aggregation and calculation of aggregate values. Furthermore it is important that the database management system is able to do replication of data and automatic failover in order to achieve high availability.
