@@ -306,40 +306,85 @@ Thus we conclude that frameworks implementing the DSM paradigm at application le
 %Runs on IIS
 
 \subsection{State of the art publish/subscribe}
-A number of different publish/subscribe standards exist.
+\paragraph{Java Message Service} (JMS)~\cite{hapner2002java} is a messaging API that allows application components based on Java EE to exchange messages using either point-to-point communication or publish-subscribe. As JMS is an API specification the underlying message service responsible for the actual message handling can be any messaging service, as long as it implements the JMS Provider interface.
 
-\begin{itemize}
-	\item Java Message Service
-	\item Common Object Request Broker Architecture Notification Service
-	\item Advanced Message Queuing Protocol
-	\item Data Distribution Service for Real-Time Systems
-\end{itemize}
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.6\textwidth,natwidth=610,natheight=642]{jmsArchitecture.png} 
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[JMS overview]{
+		\label{fig:jmsOverview} 
+		\footnotesize{%
+			JMS overview.
+		}
+	}
+\end{figure}
 
-The Java Message Service (JMS)~\cite{hapner2002java} is a messaging API that allows application components based on Java EE to exchange messages using either point-to-point communication or publish-subscribe. As JMS is an API specification the underlying message service responsible for the actual message handling can be any messaging service, as long as it implements the JMS Provider interface. JMS provides a Java client application with easy access to a uniform interface for messaging. As there are no requirements to the decentralized solution this thesis aims to propose about the language used for implementation we choose to avoid language lock-in by choosing JMS as middleware. 
+JMS introduces a messaging server to facilitate communication between clients. This can be compared to the Park Pilots of the current Siemens system as the scalability of JMS will depend on how well the messaging server handles multiple clients. To avoid single points of failure multiple servers are needed for failover. Removing Park Pilots be decentralizing them and then adding JMS messaging servers to support publish/subscribe messaging may improve scalability but in the end we retain the centralized architecture where communication must flow through central points in the network which is not desirable. 
 
-The Common Object Request Broker Architecture Notification Service (CORBA NS)~\cite{corbanotificationservicespecification} is an Object Management Group standard defining a publish subscribe service for the Common Object Request Broker Architecture (CORBA).
-Corba builds on the RPC paradigm described in~\cref{sec:analysis:rpc}.
+\paragraph{Common Object Request Broker Architecture Notification Service} (CORBA NS)~\cite{corbanotificationservicespecification} is an Object Management Group standard defining a publish subscribe service for the Common Object Request Broker Architecture (CORBA).
+CORBA builds on the RPC paradigm described in~\cref{sec:analysis:rpc}.
 CORBA addresses the problem of the strong coupling between components in RPC by introducing a Object Request Broker (ORB) as an intermediate between components and thereby decouple them from each other in space and synchronization terms. CORBA NS further decouples the components by removing the time coupling.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.6\textwidth,natwidth=610,natheight=642]{corbaArchitecture.png} 
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[JMS overview]{
+		\label{fig:jmsOverview} 
+		\footnotesize{%
+			CORBA overview.
+		}
+	}
+\end{figure}
+
 Thus, even though CORBA builds on the strong coupled paradigm of RPC full decoupling is possible when adding the ORB and CORBA NS abstractions. The many layers if abstractions is a problem when looking at the time of message propagation.
 All messages must go through each abstraction layer at both the publisher and the subscriber side adding overhead to the message propagation time. Another problem with CORBA is the complexity of implementing it's API. As stated in ~\cite{Henning:2006:RFC:1142031.1142044}
 
 "\textit{...CORBA's object adapter requires more than 200 lines of interface definitions, even though the same functionality can be provided in about 30 lines-the other 170 lines contribute nothing to functionality, but severely complicate program interactions with the CORBA runtime...}".
 
-CORBA and CORBA NS has multiple features that could be interesting for a decentralized version of the current Siemens system, unfortunately the complexity and added overhead makes CORBA NS less attractive.
+CORBA and CORBA NS has multiple features that are interesting for a decentralized version of the current Siemens system, unfortunately the complexity and added overhead makes CORBA NS less attractive.
 
-The Advanced Message Queuing Protocol(AMQP)~\cite{amqp} is an open standard protocol for message-oriented middleware defined by the Organization for the Advancement of Structured Information Standards (OASIS). 
+\paragraph{Advanced Message Queuing Protocol}(AMQP)~\cite{amqp} is an open standard protocol for message-oriented middleware defined by the Organization for the Advancement of Structured Information Standards (OASIS). 
 The standard defines an interoperability wire-protocol designed to support a wide variety of messaging applications. In order to use AMQP on the application level a client implementation of the AMQP protocol must be used. 
-There are a number of client implementations in different languages~\cite{amqpimplementations}. AMQP sends messages via multiple message queues. 
-A message has a routing key that decides which queue it is to enter in order to reach the subscribers of the message. Using a broker in a decentralized architecture may cause problems if the number of messages that is sent in the network exceed the capacity of the broker. 
+There are a number of client implementations in different languages~\cite{amqpimplementations}. AMQP sends messages via multiple message queues.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.6\textwidth,natwidth=610,natheight=642]{amqpArchitecture.png} 
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[JMS overview]{
+		\label{fig:jmsOverview} 
+		\footnotesize{%
+			AMQP overview.
+		}
+	}
+\end{figure}
+
+A message has a routing key that decides which queue it is to enter in order to reach the subscribers of the message. Using a broker in a decentralized architecture may cause problems if the number of messages that is sent in the network exceed the capacity of the broker.
 The broker is a single point of failure which is unfortunate since this thesis aims to remove single point of failures from the current Siemens system.
 
-The Data Distribution Service for Real-Time Systems (DDS) is an Object Management Group standard defining a middleware for communication between information provideres and information consumers.
-The standard is an API specification and an interoperability wire-protocol that defines a data-centric publish-subscribe architecture \cite{pardo2003omg}. DDS has no central broker meaning all cache and queuing of messages happens at the client. Since there is no central broker clients sends messages directly to each other using multicast in order to limit the number of packages in the network. The decentral architecture of DDS allows for great scalability since there is no central points that will be congested if the number of packages in the network increase.
+\paragraph{Data Distribution Service for Real-Time Systems} (DDS) is an Object Management Group standard defining a middleware for communication between information provideres and information consumers.
+The standard is an API specification and an interoperability wire-protocol that defines a data-centric publish-subscribe architecture \cite{pardo2003omg}.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.6\textwidth,natwidth=610,natheight=642]{ddsArchitecture.png} 
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[JMS overview]{
+		\label{fig:jmsOverview} 
+		\footnotesize{%
+			DDS overview.
+		}
+	}
+\end{figure}
+
+DDS has no central broker meaning all cache and queuing of messages happens at the client. As there is no central broker clients sends messages directly to each other using multicast in order to limit the number of packages in the network. The decentral architecture of DDS allows for great scalability since there is no central points that will be congested if the number of packages in the network increase.
 
 As DDS is the best candidate for a middleware for the decentralized solution it will be presented in depth in the following section.
 %As DDS is the best candidate for a middleware for the decentralized solution it will be investigated in depth in the following section to ensure it's ability to scale.
 
-\subsection{Data Distribution Service for Real-Time Systems}
+\section{Data Distribution Service for Real-Time Systems}
 The DDS standard provides a number of services that a decentralized system like the one this thesis aims to create could profit from.
 Services include amongst others:
 
@@ -380,7 +425,7 @@ In the new IPv6 broadcast is no longer supported \cite{RFC4291_AddressingIPv6Dra
 Multicasting works using multicast groups, these groups are maintained by routers and layer 2 switches. The way a node is added to a multicast group is by transmitting a packet requesting a group membership using the IGMP protocol. Each multicast group is associated with a multicast ip address, this ip address is used by the transmitting node when a packet is to be transmitted to a multicast group.
 Communicating via multicating is efficient and ensures that each node can be configured to handle a minimum number of packets, routers and switches however has a added responsibility of maintaining information of witch multicast address each port is associated with and transmitting packets to all of them.
 
-\subsubsection{Main DDS entities}
+\subsection{Main DDS entities}
 RTI Connext provides a number of entities that must be present in a system in order to enable commmunication.
 
 \begin{itemize}
@@ -415,7 +460,7 @@ RTI Connext provides a number of entities that must be present in a system in or
 	}
 \end{figure}
 
-\subsubsection{Node discovery}
+\subsection{Node discovery}
 Node discovery in DDS is performed using the Simple Discovery Protocol(SDP).
 This protocol describes a sequence of messages that are sent between DDS entities in order for them to automatically discover each other.
 Node discovery is important in a system like the Siemens Case described in \cref{sec:SiemensCase} because the regulation of a wind farm requires data from all turbines in order to regulate the overall wind farm production correctly.
@@ -458,7 +503,7 @@ Since a wind farm has a limited number of endpoints, less than 300 turbines, the
 
 The Simple Discovery Protocol does not scale well with the number of endpoints. This problem is currently under research and solutions have been proposed. As of the time of writing none of the proposed solutions to the problem are well suited for use in this thesis. Further research in the area may present new solutions to the problem that are well suited for use in a multicast enabled system with less than 300 nodes.
 
-\subsubsection{Quality of Service}
+\subsection{Quality of Service}
 DDS provides Quality of Service(QoS) parameters to enable very fine grained control over the behavior of the deployed DDS entities in a system. To create a decentralized system several of the QoS parameters are interesting.
 
 \begin{itemize}
