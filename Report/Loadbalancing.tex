@@ -35,7 +35,7 @@ An other problem is that the turbines are limited in processing power, it is pre
 %The current Siemens system currently is designed to handle a hundred simultaneously connection from outside the wind farm. This workload needs to distributed fairly when building a decentralised system therefore dedicated resource management logic is needed.
 
 \FloatBarrier
-\subsection{Load Balancing}
+%\subsection{Load Balancing}
 A load balancer is a network component capable of distributing incoming connections from clients to multiple server.
 
 \begin{figure}
@@ -52,19 +52,19 @@ A load balancer is a network component capable of distributing incoming connecti
 \end{figure}
 
 
-\paragraph{Single entry point}
+%\paragraph{Single entry point}
 Providing a single entry point is simple assigning a static ip address to a turbine would do that, however this introduces a single point of failure.
 To overcome this the load balancer must be supplemented by at least one backup load balancer, it must be able to takeover the address of the failing load balancer in order to keep the wind farm available.
 This can be done using a virtual ip address, and having the node with the active load balancer respond to it.
 If the node with the active load balancer fails the virtual ip address can be transferred to a backup load balancer and it will then become the active load balancer. To let other network participant know that the ip has moved to a new address a ARP announcement can be sent allowing them to update their ARP cache.
 
-\paragraph{Detecting node failure}
+%\paragraph{Detecting node failure}
 Detection of a failed load balancer must be done by the backup nodes, generally there are two ways this can be done, either actively pinging the active load balancer or having the load balancer periodically sent data package also know as heartbeats.
 Besides monitoring the active load balancer the backup load balancers must also keep a synchronised copy of the active load balancers connections table that contains a list of open connections between clients and servers.
 This setup is illustrated in \cref{fig:loadBalancingSetup2Balancers}.
 
 
-\paragraph{Load balancer to server communication}
+%\paragraph{Load balancer to server communication}
 The key objective of a load balancer is connecting clients to servers.
 When a load balancer receives a package it must identify if it belongs to a already open connection.
 If the connection belongs to a already open connection, the package is sent to the server which originally received the connection, else the scheduling strategy is used to forward the package and the connection is recorded as open between the client and server in a table by the load balancer.
@@ -94,7 +94,7 @@ A similar possibility is to forward the package by changing the receivers mac ad
 \end{figure}
 
 
-\paragraph{Job scheduling strategies} %DNS Datacenter Application
+%\paragraph{Job scheduling strategies} %DNS Datacenter Application
 There are multiple ways to distribute traffic that could apply to a decentralized solution.
 %Load balancing can be done taking into account many parameters from a simply passing packets to servers in a round robin pattern, to monitoring performance parameters of the servers selecting the one with most free capacity. Some load balancers even inspect packages e.g. pass the HTTP headers URL field to select a server responsible for a specific resource.
 Solutions that require client integration or is made for entirely different purposes are omitted as they do not apply to this situation.
