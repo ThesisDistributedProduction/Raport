@@ -1,0 +1,49 @@
+\begin{tikzpicture}[
+start chain=going right,
+diagram item/.style={
+	minimum width=80pt,
+	on chain,
+	join
+},
+diagram item seperated/.style={
+	minimum width=90pt,
+	on chain
+},
+arrow/.style={
+	->,
+	thick,
+	shorten <=2pt,
+	shorten >=2pt,
+},
+every join/.style={arrow}
+]
+
+
+\newcommand\millFigure{\includegraphics[width=0.79cm]{MillSiluet}}
+
+\node [
+diagram item,
+label=above:Client 1
+] (client) {\includegraphics{Cisco_BW/pc}};
+
+
+\node [
+continue chain=going below right,
+diagram item,
+label={[align=center]above:Load\\Balancer}
+] {\millFigure \includegraphics{Cisco_BW/distributed_director}};
+
+
+\node [
+continue chain = going above right,
+diagram item,
+label={[align=center]above:server}
+] (server) {\millFigure};
+
+\draw[arrow] (server) -> (client);
+%\draw[arrow] (server.170) -> (client.10);
+%\draw[arrow] (client.350) -> (server.190);
+
+
+
+\end{tikzpicture}

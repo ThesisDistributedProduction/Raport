@@ -17,20 +17,6 @@ diagram item/.style={
 \node [
 diagram item,
 label={[align=center]left:T\printTurbineID\\Load Balancer Active}
-] (node) {\millFigure};
-\stepcounter{TurbnieCounter}
-
-\node [
-continue chain = going right,
-diagram item,
-label={[align=center]above:T\printTurbineID\\Spare}
-] {\millFigure};
-\stepcounter{TurbnieCounter}
-
-\node [
-continue chain = going right,
-diagram item,
-label={[align=center]above:T\printTurbineID\\Spare}
 ] (CenterNode) {\millFigure};
 \stepcounter{TurbnieCounter}
 
@@ -44,6 +30,20 @@ label={[align=center]above:T\printTurbineID\\Spare}
 \node [
 continue chain = going right,
 diagram item,
+label={[align=center]above:T\printTurbineID\\Spare}
+] {\millFigure};
+\stepcounter{TurbnieCounter}
+
+\node [
+continue chain = going below,
+diagram item,
+label={[align=center]above:T\printTurbineID\\Spare}
+] {\millFigure};
+\stepcounter{TurbnieCounter}
+
+\node [
+continue chain = going below,
+diagram item,
 label={[align=center]right:T\printTurbineID\\External\\Interface}
 ] {\millFigure};
 \stepcounter{TurbnieCounter}
@@ -56,14 +56,7 @@ label={[align=center]right:T\printTurbineID\\Spare}
 \stepcounter{TurbnieCounter}
 
 \node [
-continue chain = going below,
-diagram item,
-label={[align=center]right:T\printTurbineID\\Spare}
-] {\millFigure};
-\stepcounter{TurbnieCounter}
-
-\node [
-continue chain = going below,
+continue chain = going left,
 diagram item,
 label={[align=center]right:T\printTurbineID\\Spare}
 ] {\millFigure};
@@ -72,7 +65,7 @@ label={[align=center]right:T\printTurbineID\\Spare}
 \node [
 continue chain = going left,
 diagram item,
-label={[align=center]below:T\printTurbineID\\Spare}
+label={[align=center]right:T\printTurbineID\\Spare}
 ] {\millFigure};
 \stepcounter{TurbnieCounter}
 
@@ -91,7 +84,14 @@ label={[align=center]below:T\printTurbineID\\Spare}
 \stepcounter{TurbnieCounter}
 
 \node [
-continue chain = going left,
+continue chain = going above,
+diagram item,
+label={[align=center]below:T\printTurbineID\\Spare}
+] {\millFigure};
+\stepcounter{TurbnieCounter}
+
+\node [
+continue chain = going above,
 diagram item,
 label={[align=center]left:T\printTurbineID\\Sparey}
 ] {\millFigure};
@@ -105,7 +105,7 @@ label={[align=center]left:T\printTurbineID\\Spare}
 \stepcounter{TurbnieCounter}
 
 \node [
-continue chain = going above,
+continue chain = going right,
 diagram item,
 label={[align=center]left:T\printTurbineID\\Spare}
 ] {\millFigure};

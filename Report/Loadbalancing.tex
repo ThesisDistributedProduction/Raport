@@ -15,7 +15,7 @@ By decentralizing the external interfaces, availability of theses systems can be
 %\paragraph{The problem}
 A problem arises when external systems need to interact with the wind farm. 
 Transforming external interfaces from being central to being part of the turbines creates a problem for client applications.
-With multiple turbines able run serve requests and no quarantine that all turbines are online, How do they know witch turbine to connect to?
+With multiple turbines able run serve requests and no quarantine that all turbines are online, How do they know which turbine to connect to?
 Currently Siemens Wind Power uses a single ip address for external connections, it is preferred to also do so in an new decentralized solution.
 An other problem is that the turbines are limited in processing power, it is preferred to have the added load split evenly among the turbines.
 
@@ -61,9 +61,15 @@ If the node with the active load balancer fails the virtual ip address can be tr
 Detection of a failed load balancer must be done by the backup nodes, generally there are two ways this can be done, either actively pinging the active load balancer or having the load balancer periodically sent data package also know as heartbeats. This setup is illustrated in \cref{fig:loadBalancingSetup2Balancers}.
 
 
-\paragraph{Abstraction levels} %DNS Datacenter Application
-Load balancing can be done taking into account many parameters from a simply passing packets to servers in a round robin pattern, to monitoring performance parameters of the servers selecting the one with most free capacity. Some load balancers even inspect packages e.g. pass the HTTP headers URL field to select a server responsible for a specific resource.
-There also exists load balancers witch are integrated in every client and server, these are however not and option since clients are not always possible to modify.
+\paragraph{Load balancer to server communication}
+The key objective of a load balancer is connecting clients to servers. There are more than 
+
+\input{figures/tikz/loadBalancerCommunication}
+
+\paragraph{Control algorithms} %DNS Datacenter Application
+There are multiple ways to distribute traffic that could apply to a decentralized solution.
+%Load balancing can be done taking into account many parameters from a simply passing packets to servers in a round robin pattern, to monitoring performance parameters of the servers selecting the one with most free capacity. Some load balancers even inspect packages e.g. pass the HTTP headers URL field to select a server responsible for a specific resource.
+Solutions that require client integration or is made for entirely different purposes are omitted as they do not apply to this situation.
 
 \begin{enumerate}
 	\item Round robin
@@ -71,31 +77,39 @@ There also exists load balancers witch are integrated in every client and server
 	\item Package inspection
 \end{enumerate}
 
+Round robin as the name implies distributes connections to servers equally to each server, it does however not automatically result in a fair distribution of traffic since connected clients might not require equal amount of data per connection.
+This type has the least overhead but also assumes that data transferred for each connection are almost equal to do a fair distribution.
+
+Server performance monitoring adds overhead by the added network packages and keeping tack of the current performance of the servers. It however ensure that the server with the most free capacity will receive the connection. Free capacity can be defined as free processing time, available memory or another resource.
+
+Package inspection opens up the package and passes higher protocol headers. This could for instance be HTTP headers in order to identify what service the URL is trying to connect to. This allows the system to be split up in smaller specialized parts, having one server deliver aggregated data and another deliver raw data. It also makes it possible to split it up in slow and fast running services, helping to make sure that services which need to be fast are not begin slowed down by services which need to make long calculations.
+
+
 
 %Software responsible for handling resource management is refereed to as a load balancer.
 %Load balancers can be applied in layers with different responsibility from geographically distributing traffic \todo{ref DNS loadbalncer} to distributing packets to available nodes in a round robin pattern to monitoring nodes and choosing the node with the least load, some even inspect packages to distribute based on package content.
 
 %Load balancers come in different complexity and with the ability to manage resource in various ways.
 %From naively assigning clients with a round robin based algorithm to distributing connections based on monitoring node resources like available CPU time. \todo{make ref}
-Some Load balancers require client and or server integration \todo{make ref} while some function completely transparent to network nodes. \todo{make ref}
-The Siemens case uses standard protocols where some client applications are build by a third party,
-therefore client integration is not possible with all public interfaces, and is not investigated further.
+%Some Load balancers require client and or server integration \todo{make ref} while some function completely transparent to network nodes. \todo{make ref}
+%The Siemens case uses standard protocols where some client applications are build by a third party,
+%therefore client integration is not possible with all public interfaces, and is not investigated further.
 
-The Siemens case needs a Load balancer system with the following properties:
-\begin{enumerate}[label=\textbf{P.\arabic*}, ref=\textit{P.\arabic*}]
-	\item \label{List:LB:SingleEntryPoint}Allow the decentralised solution to behave like a single system for external clients, providing a single entry points for clients to connect to
-	\item \label{List:LB:LoadBalFailover} Support load balancer fail over
-	\item \label{List:LB:DetectFailedNodes} Detect and exclude faulty nodes 
-	\item Support at least 100 concurrent connections
-	\item Have minimum resource impact on the host machine
-%	\item Monitors current available server resources
-\end{enumerate}
-
-
-To achieve property \ref{List:LB:SingleEntryPoint} and \ref{List:LB:LoadBalFailover}.
-The systems needs to respond to a single external IP address. To do this multiple nodes share the same IP address, multiple protocols exists witch can do this "Common Address Redundancy Protocol\todo{https://www.freebsd.org/doc/handbook/carp.html}, Virtual Router Redundancy Protocol\todo{http://tools.ietf.org/html/rfc2338} and \cite{zhang2000linuxVirtualServer}".\todo{Put in refferences instead} To provide seamless transfer of the virtual ip address ARP announcements are used to inform the local network of the transfer.
-The backup load balancer monitors the active load balancer and will takeover the virtual ip when the Active load balancer is unavailable and itself become primary this is illustrated in \cref{fig:loadBalancingSetup2Balancers}, this monitoring can be done with the active client sending out periodic heartbeats, or the backup sending ICMP ECHO\_REQUEST.
-Property \ref{List:LB:DetectFailedNodes} requires the load balancer to monitor local nodes for availability, this is to ensure that client connections are not being redirected to a faulty node. This is most easily achived with a ICMP ECHO\_REQUEST otherwise known as a ping request, 
+%The Siemens case needs a Load balancer system with the following properties:
+%\begin{enumerate}[label=\textbf{P.\arabic*}, ref=\textit{P.\arabic*}]
+%	\item \label{List:LB:SingleEntryPoint}Allow the decentralised solution to behave like a single system for external clients, providing a single entry points for clients to connect to
+%	\item \label{List:LB:LoadBalFailover} Support load balancer fail over
+%	\item \label{List:LB:DetectFailedNodes} Detect and exclude faulty nodes 
+%	\item Support at least 100 concurrent connections
+%	\item Have minimum resource impact on the host machine
+%%	\item Monitors current available server resources
+%\end{enumerate}
+%
+%
+%To achieve property \ref{List:LB:SingleEntryPoint} and \ref{List:LB:LoadBalFailover}.
+%The systems needs to respond to a single external IP address. To do this multiple nodes share the same IP address, multiple protocols exists which can do this "Common Address Redundancy Protocol\todo{https://www.freebsd.org/doc/handbook/carp.html}, Virtual Router Redundancy Protocol\todo{http://tools.ietf.org/html/rfc2338} and \cite{zhang2000linuxVirtualServer}".\todo{Put in refferences instead} To provide seamless transfer of the virtual ip address ARP announcements are used to inform the local network of the transfer.
+%The backup load balancer monitors the active load balancer and will takeover the virtual ip when the Active load balancer is unavailable and itself become primary this is illustrated in \cref{fig:loadBalancingSetup2Balancers}, this monitoring can be done with the active client sending out periodic heartbeats, or the backup sending ICMP ECHO\_REQUEST.
+%Property \ref{List:LB:DetectFailedNodes} requires the load balancer to monitor local nodes for availability, this is to ensure that client connections are not being redirected to a faulty node. This is most easily achived with a ICMP ECHO\_REQUEST otherwise known as a ping request, 
 
 
 A candidate for this kind of monitoring is the Linux Virtual Server project \cite{zhang2000linuxVirtualServer}.
@@ -104,15 +118,15 @@ A candidate for this kind of monitoring is the Linux Virtual Server project \cit
 
 At a lower tier it could be machine level based on performance parameters like , and finally application level based on the content of the request \textbf{[?]}. %\cite{Citation is missing and I need to find it}.
 There exists a lot of solution specific load balancers.
-A node balancer is a service witch distributes incoming requests, among the services registered on the network.
+A node balancer is a service which distributes incoming requests, among the services registered on the network.
 The distribution is based on different policies like dividing packages or picking the one with most free CPU capacity.
 The load balancer could be a single point of failure, it should for this reason always have one or more backups as seen in \cref{fig:loadBalancingSetup}.
 The load balancer monitors the real servers and only parses on requests to running servers.
 A secondary needs to monitor the primary load balancer and step in if it stops responding.
-This can be done using a virtual private IP, which is the address for all incoming requests. Also there exists solutions witch does all this in a completely distributed manner avoiding having a central server as load balancer  \textbf{[?]}, %\cite{Some cite I ahven't found yet}, 
+This can be done using a virtual private IP, which is the address for all incoming requests. Also there exists solutions which does all this in a completely distributed manner avoiding having a central server as load balancer  \textbf{[?]}, %\cite{Some cite I ahven't found yet}, 
 this is even in some cases extended to include the clients in the act of load balancing \textbf{[?]}. % \cite{Some cite to netflix eureka balancer}.
 
-In this solution the load balancer needs to balance external connections to different protocols like HTTP and Modbus, however a solution witch can be extended to any restful protocol is needed.
+In this solution the load balancer needs to balance external connections to different protocols like HTTP and Modbus, however a solution which can be extended to any restful protocol is needed.
 Also balancing of node roles depending on the amount incoming traffic on different interfaces will be needed.
 Should all this be done automatically or is it better to define this manually???
 
