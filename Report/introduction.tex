@@ -20,7 +20,7 @@ The power regulation performed by each park regulator, calculates if the power p
 Increasing the number of turbines connected to a park regulator increases the number of turbine states that needs to be acquired, the number of power production goals that needs to be calculated and the number of these goals that needs to be distributed. Thus increasing the number of turbines connected to a park regulator, increases the time it takes to perform these regulations. The increase in power regulation time is primarily caused by the acquiring of states, since the park regulator must request an extra turbine state and wait for the corresponding reply per extra turbine added.
 % will increase the time needed to collect the states of the connected turbines, calculate new power production goals and distribute these new power production goals to the connected turbines.
 %Thus, increasing the number of turbines connected to a park regulator will increase the power regulation time.
-%The increase in power regulation time is primarily caused by acquiring states of each turbine, since acquiring states involves . This  the fact that the park regulator must request a state from an extra turbine and wait for the turbine to provide the state.
+%The increase in power regulation time is primarily caused by acquiring states of each turbine, since acquiring states involves . This  the fact that the park regulator must request a state from an extra turbine sand wait for the turbine to provide the state.
 
 The linear relation between number of turbines and the power regulation time forces Siemens Wind Power to limit the number of turbines connected to a single park regulator. It also limits the scalability of the wind farm as adding more turbines may simultaneously require the addition of extra park regulators.
 
@@ -121,9 +121,10 @@ Today's setup at Siemens Wind Power (\cref{sec:SiemensCase}) is an example of a 
 \begin{itemize} 
 	\item Single point of failure. Should a Wind Power Supervisor or a Park Pilot fail, a part of the wind farm will become unavailable.
 	\item Low scalability. The Wind Power Supervisors and Park Pilots does not scale well with the number of turbines. This is reflected in the wind farm regulation performance. Today a wind farm regulation cycle time is 150 ms. This regulation cycle time is set after worst case setpoint retrieval time, worst case new setpoint calculations and worst case time it takes to broadcast new setpoints. This ultimately depends on worst case number of turbines per Park Pilot.
+	\item High regulation cycle time. As mentioned, the regulation cycle time of the current Siemens system is 150 ms and is a direct result of the low scalability. Siemens expects a demand for a lower regulation cycle time in the future.
 \end{itemize}
 
-Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by distributing their functionality to the turbines, utilizing the free computing capacity of the computers already residing in every turbine. This would increase availability by lowering the possibility of single point of failure. Furthermore, this would increase scalability of the system, opening for performance optimizations of the wind farm regulation cycle time by detaching regulation time from the number of turbines pr. Park Pilot. 
+Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by distributing their functionality to the turbines, utilizing the free computing capacity of the computers already residing in every turbine. This would increase availability by lowering the possibility of single point of failure. Furthermore, this would increase scalability of the system, opening for performance optimizations of the wind farm regulation cycle time by decreasing the coupling between the regulation cycle time and the number of turbines per Park Pilot. 
 
 \section{Problem statement}
 \label{sec:problemStatement}

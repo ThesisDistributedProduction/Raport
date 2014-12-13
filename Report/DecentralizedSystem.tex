@@ -1,5 +1,5 @@
 % !TeX spellcheck = en_US
-\chapter{The Proposed Decentralized Solution}\label{cha:decentralizedSystem}
+\chapter{The proposed decentralized solution}\label{cha:decentralizedSystem}
 
 This chapter describes the proposed decentralized solution created to address the four problems presented in the problem statement (\cref{sec:problemStatement}). The expectation is that the decentralized solution will perform better than the centralized solution (presented in \cref{cha:existingSystem}) on the following parameters:
 
@@ -66,9 +66,9 @@ The difference between the centralized regulation cycle and the decentralized re
 	\label{fig:cycleCentralVSDecentral}
 \end{figure}
 
-In the centralized solution a request for data and waiting for the corresponding reply for every turbine was a requirement for the Park Pilot, turbines in the decentralized solution publish new states whenever a new setpoint has been calculated. Turbines publishes to a specific \textit{Topic} and are assigned a unique \textit{keys}. Receiving states from other turbines is handled and loaded asynchronously into memory by \textit{Connext}, thus receiving states is a parallel process running alongside the regulation algorithm.
-This enables a \textit{Distributed Shared Memory (DSM)} (see \cref{sec:DSM} for \textit{DSM} description) behavior for the decentralized solution, where the state of every turbine is shared with every other turbine in the wind farm.
-As every turbine has a unique \textit{Topic key}, each turbine has assigned its own shared memory space, where only the turbine is allowed to write, as illustrated on \cref{fig:DSMlikeBehavior}, thus removing the possibility that turbines overwrite each others states. Using \textit{DSM} like behavior for the decentralized solution, means that receiving states from other turbines is abstracted away from the regulation cycle, enabling the turbines to assume that the latest state of every other turbine has been received and is available locally in memory. This alleviates the need for the request-reply part of the centralized regulation cycle. The expectation is that removing the request-reply part of the algorithm decreases the regulation cycle time, since acquisition of turbine states are no longer a part of the regulation cycle.  
+In the centralized solution a request for data and waiting for the corresponding reply for every turbine was a requirement for the Park Pilot, turbines in the decentralized solution publish new states whenever a new setpoint has been calculated. Turbines publishes to a specific Topic and are assigned a unique keys. Receiving states from other turbines is handled and loaded asynchronously into memory by Connext, thus receiving states is a parallel process running alongside the regulation algorithm.
+This enables a \textit{Distributed Shared Memory (DSM)} (see \cref{sec:DSM} for DSM description) behavior for the decentralized solution, where the state of every turbine is shared with every other turbine in the wind farm.
+As every turbine has a unique Topic key, each turbine has assigned its own shared memory space, where only the turbine is allowed to write, as illustrated on \cref{fig:DSMlikeBehavior}, thus removing the possibility that turbines overwrite each others states. Using DSM like behavior for the decentralized solution, means that receiving states from other turbines is abstracted away from the regulation cycle, enabling the turbines to assume that the latest state of every other turbine has been received and is available locally in memory. This alleviates the need for the request-reply part of the centralized regulation cycle. The expectation is that removing the request-reply part of the algorithm decreases the regulation cycle time, since acquisition of turbine states are no longer a part of the regulation cycle.  
 
 \begin{figure}[!h]
 	\begin{tabular}{ | c | c | c | c | c |}
@@ -89,7 +89,7 @@ Instead of strictly reliable messaging the decentralized solution use best effor
 
 Finally multicast has been enabled for the decentralized solution to greatly reduce the number of packages each turbine sends, when publishing a new state. With multicast enabled only one package is sent pr. new state, as opposed to the centralized solution which sends a package per receiver. This reduces the load of each turbine and decreases the regulation cycle time. Furthermore, this also reduces overall network traffic.  
 
-Each turbine only calculate it's own setpoint. Thus after calculation, the new setpoint is set locally and the new state is published to the other turbines. The wait time at the end of the regulation cycle is needed in order to leave a small amount of time for \textit{Connext} to receive and overwrite states that have already been read.
+Each turbine only calculate it's own setpoint. Thus after calculation, the new setpoint is set locally and the new state is published to the other turbines. The wait time at the end of the regulation cycle is needed in order to leave a small amount of time for Connext to receive and overwrite states that have already been read.
 
 \subsection{Implementation}
 
@@ -130,7 +130,7 @@ Before running the regulation cycle illustrated on \cref{fig:decenRegCycle}, an 
 \begin{itemize}
 	\item The \textbf{Park Pilot} object which handles the regulation cycle. As opposed to the centralized solution, the Park Pilot object is now instantiated on every turbine in the wind farm, instead of being a single external component.
 	\item The \textbf{Turbine} object which serves as the interface to the underlying Turbine. The Turbine object for the purpose of this thesis is just a simulation of an actual turbine. Thus this object handles communication with a database with actual turbine data provided by Siemens Wind Power.
-	\item \textbf{\textit{Connext}} is the underlying DDS framework used for communication, thus this is not an object instantiated by the Park Pilot. It is however what enables reception of data in parallel with the regulation cycle. 
+	\item \textbf{Connext} is the underlying DDS framework used for communication, thus this is not an object instantiated by the Park Pilot. It is however what enables reception of data in parallel with the regulation cycle. 
 \end{itemize}
 
 The Park Pilot publishes the state of the present turbine and reads the states of every turbine within the wind farm. Afterwards the regulation algorithm is performed and a setpoint for the present turbine is calculated and used to set a new state.
@@ -195,9 +195,9 @@ uint_fast32_t DecentralizedParkPilot::regAlgorithm(
 
 \subsection{Cache reads}
 
-A cache read happens if the cycle time elapses before all turbine instances have responded with state information, resulting in the same state being read twice. Thus it is a natural result of separating receiving data from the regulation cycle, as done in the decentralized solution. \textit{Connext} only keeps track of data that has already been read but not how many times that data has been read. Thus a cache read does not include information regarding if the same state has been read multiple times.
+A cache read happens if the cycle time elapses before all turbine instances have responded with state information, resulting in the same state being read twice. Thus it is a natural result of separating receiving data from the regulation cycle, as done in the decentralized solution. Connext only keeps track of data that has already been read but not how many times that data has been read. Thus a cache read does not include information regarding if the same state has been read multiple times.
 
-The regulation cycle of the decentralized solution does not directly include any communication, thus enabling a significant reduction of regulation cycle time. However, decreasing the cycle time, increases the 'pressure' on \textit{Connext} by increasing the number of regulation cycles pr. minute, thus increasing the number of states that needs to be published, thus increasing the number of states that needs to be received (assuming that the cycle time of all turbines are equally decreased). This ultimately results in increased number of cache reads and increased network traffic. Thus decreasing the regulation cycle time will increase the number of cache reads.  
+The regulation cycle of the decentralized solution does not directly include any communication, thus enabling a significant reduction of regulation cycle time. However, decreasing the cycle time, increases the 'pressure' on Connext by increasing the number of regulation cycles pr. minute, thus increasing the number of states that needs to be published, thus increasing the number of states that needs to be received (assuming that the cycle time of all turbines are equally decreased). This ultimately results in increased number of cache reads and increased network traffic. Thus decreasing the regulation cycle time will increase the number of cache reads.  
 
 Increasing the number of cache reads can be an issue, since it reduces the effectiveness of the regulation cycle. Having a high number of cache reads implies that the regulation has been performed using data used for the previous regulation, thus decreasing the effect of the current regulation.
 
@@ -384,87 +384,3 @@ This section provides a detailed evaluation of every parameter used for the dece
 		\footnotesize{DataReader QoS parameters of the decentralized solution.}
 	}
 \end{figure}
-
-\chapter{Graphical user interface} \label{sec:graphicalInterface}
-This chapter describes a graphical user interface created to visualize the power production of the turbines in the decentralized solution. Furthermore, DDS Blockset for Simulink is presented and how it is used to capture and log data from both the centralized and the decentralized solution.
-
-The graphical user interface has been constructed using Matlab, Simulink and DDS Blockset for Simulink.
-These tools combined allows the creation of a Simulink model which taps into the communication of the DDS framework.
-The data collected via the Simulink models can then be transferred to Matlab for further processing or visualization.
-
-The main objective of the graphical interface is to visualize what messages is currently flowing in the system but almost as important is the ability to collect data for further analysis.
-Matlab is a powerful tool for anlysis and having data transferred live from the DDS framework to Matlab allows for both live as well as in depth analysis on datasets collected during experiments.
-
-Currently only the decentralized solution can be visualized and controlled using the graphical interface. Given the scope and focus of this thesis the value added by visualizing the centralised solution would be minimal. Both the decentralized and centralized solutions are able to log data using the Simulink models.
-
-\section{DDS Blockset for Simulink}
-RTI has created a Blockset for Simulink allowing a Simulink model to interact with the DDS Participant and other entities in a DDS enabled network.
-The blockset consists of a toolbox containing 6 blocks. Common for all blocks except the DDS Time block is that they can be configured with a default or custom Quality of Service (QoS) profile as well as a sample time. The QoS profile must match the QoS profile used in the network which the Simulink model is to interact with. The sample time is related to the Simulink model and specifies the timeinterval between samples.
-
-\begin{figure}[h]
-\includegraphics[width=\textwidth]{figures/DDSBlockset}
-\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[DDSBlockset blocks for Simulink]{
-		\label{fig:DDSBlocksetBlocks} 
-		\footnotesize{%
-			DDSBlockset blocks for Simulink.
-		}
-	}
-\end{figure}
-
-
-\paragraph{The DomainParticipant block} is the equivalent to the \textit{DomainParticipant} entity in DDS. This block allows for configuration of a DomainID which links the \textit{DomainParticipant} to a specific DDS domain.
-
-\paragraph{The Publisher/Subscriber block} can be configured as either a \textit{Publisher} or a \textit{Subscriber} and will act as either based on the chosen configuration.
-
-\paragraph{The DataWriter block} is the equivalent to the \textit{DataWriter} entity in DDS. This block can write data to a \textit{Topic} in DDS. The DataWriter block must be configured with the name of the \textit{Topic} as well as the name of the Topic Type created by the Simulink Bus that is input to the DataWriter.
-
-\paragraph{The DataReader block} is the equivalent to the \textit{DataReader} entity in DDS. This block can read data from a \textit{Topic} in DDS. The DataReader block must be configured with the name of the \textit{Topic} as well as the name of the Topic Type created by the Simulink Bus that is input to the DataReader block. The DataReader block can also be configured to either use Read() or Take() for obtaining data from DDS. The Read() command will leave copy data from DDS memory, the Take() command will remove the data from DDS memory. The DataReader block is able to either poll DDS for data, or wait until data is ready or a timeout occurs.
-
-\paragraph{The DDSTarget block} controls how code is generated for the DDS blocks in the Simulink model. It is possible to configure which version of DDS code will be generated for, either RTI Connext DDS(default), or RTI Connext Micro DDS. The type system can be configured to either static or dynamic as well as the discovery mode.
-
-\paragraph{The Time block} returns the current time from DDS output in seconds and nanoseconds.
-
-\section{Simulink model of the decentralized solution}\label{subsec:decentralizedmodel}
-
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{figures/DecentralizedModel}
-\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Decentralized Simulink model]{
-		\label{fig:decentralizedSimulinkModel} 
-		\footnotesize{%
-			Decentralized Simulink model.
-		}
-	}
-\end{figure}
-
-The Simulink model of the decentralized solution is simple. The decentralized Simulink model has a DomainParticipant block in order to be able to receive data from the same domain as the turbines. It also has a Time block to enable logging and graphing of the current DDS time. Since the decentralized solution only uses one DDS message type, TurbineMessage \cref{sec:decenIdl}, to communicate between the turbines in the system, the decentralized Simulink model has only one Subscriber block and one DataReader block. The Subscriber block specifies the Topic to subscribe to and the DataReader block receives events every time a new TurbineMessage is available. The TurbineMessage that is received is logged to a .mat file together with the current DDS time for later use.
-
-In order to transfer data from the Simulink model to Matlab eventlisteners must be implemented in a Matlab .m file. In the decentralized solution the eventhandler listens for incoming events on the bus object that receives new data from the DataReader block. When new data is received the event fires and data can be collected from the Simulink model. Furthermore, model execution can be controlled from Matlab, as well as parameters like model runtime.
-
-\section{Simulink model of the centralized solution}\label{subsec:centralizedmodel}
-The Simulink model of the centralized solution is a bit more complex. The centralized solution contains three different messagetypes, TurbineDataMessage, RequestMessage, SetpointMessage, \cref{sec:cenIdl} that all run on different topics. Because of this the centralized Simulink model contains one DomainParticipant, three Subscribers, one for each topic, and three DataReaders, one for each message type, in order to capture the communication in the centralized solution. Every message received is logged to a .mat file together with the current DDS time.
-
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{figures/CentralizedModel}
-\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Centralized Simulink model]{
-		\label{fig:centralizedSimulinkModel} 
-		\footnotesize{%
-			Centralized Simulink model.
-		}
-	}
-\end{figure}
-
-\section{Installation of DDS Blockset for Simulink}
-To install DDS Blockset for Simulink follow the steps provided by Mathworks \cite{DDSBlocksetPilotSupportPackageUserGuide}. The installation is short but as described below additional work has to be done in order to make DDS Blockset for Simulink work properly with Matlab and Interface Definition Language files.
-
-The problems described in the section all relates to installation of DDS Blockset for Simulink using Matlab 2013b on a Windows 8.1 x64 environment.
-Other environments may be more or less optimal but have not been tested during this thesis.
-
-There are a few caveats to be avoided when installing DDS Blockset for Simulink on Windows.
-After installation of DDSBlockset for Simulink completes make sure the NDDSHOME path variable is set to \path{C:\Program Files(x86)\RTI}.
-Notice that this path is different from the default path recommended by RTI which is \path{C:\Program Files(x86)\RTI\ndds.5.0.0} (version numbers may change).
-
-DDS Blockset for Simulink has an import feature for import of Interface Definition Language files. The import process creates a Simulink bus that the Simulink model can hook into and pull data from. In order to enable import of Interface Definition Language files additional setup must be performed.
-Since Matlab does not provide a compiler for C++ on x64 systems one must be downloaded. Microsoft provides a compiler in the Microsoft Windows SDK 7.1. Matlab must be told to use the compiler by using the \path{mex -setup} command. Finally the location of the binaries and the libraries that are downloaded with the new compiler must be added to path.

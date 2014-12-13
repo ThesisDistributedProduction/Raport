@@ -15,27 +15,28 @@ Storage technologies will be compared on a set of parameters that are relevant t
 
 \begin{enumerate}
 \item \textbf{Scalability} \\
-The storage technology must be able to scale horizontally in order to allow a varying number of nodes.
+The storage technology must be able to scale horizontally in order to allow a varying number of turbines.
 
 \item \textbf{Availability} \\
 The data in the system must be available for processing at any time.
 
 \item \textbf{Replication} \\
 The data in the system must be replicated between nodes in order to avoid data loss should one node be damaged.
+
 \item \textbf{Failover} \\
 The data storage technology must be able to seamlessly switch from a damaged node to a working node if a failure occurs.
 
 \item \textbf{Sharding} \\
-The data storage technology must support automatic partitioning of datasets that are larger than the physical storage on one node.
+The data storage technology must support automatic partitioning of datasets that are larger than the physical storage on one turbine.
 
 \item \textbf{Aggregation} \\
-The data storage technology must support aggregation of data.
+The data storage technology must support aggregation of data for calculation of aggregate values like power production.
 \end{enumerate}
 
 \subsection{Relational storage, SQL}
 \label{sec:sql}
 The traditional way of storing data is in a Relational Database Management System(RDBMS).
-These databases rely on a schema to arrange data in tables and their relations.
+These databases rely on a schema to arrange data in tables with relationships between data.
 Using SQL it is easy to query data and to do aggregate operations.
 RDBMSs support ACID transactions which ensures operations in the database are processed reliably.
 
@@ -47,22 +48,22 @@ RDBMSs support ACID transactions which ensures operations in the database are pr
 %This mismatch between object representation and relational representation can cause both performance problems, the JOIN operation in SQL is very costly, as well as considerable development time spent mapping one structure to the other.
 %The performance problem multiplies in a distributed database if the RDBMS must do JOIN operations across the network in order to aggregate data.
 
-A problem with a traditional RDBMS is that they are designed for vertical scaling~\cite{Atzeni:TheRelationalModelIsDead}. If a traditional RDBMS cannot handle the amount of data it is supposed to the solution is to add a bigger harddrive or invest in a faster CPU. This makes sense in a world were hardware is very expensive like it was when the traditional RDBMSs saw the light of day~\cite{Stonebraker:TheEndOfAnArchitecturalEra}. Today horizontal scaling is preferred. If a system has a problem with the data load, add another machine or add five others if that is what it takes. Since horizontal scalability is a very important feature of the data storage system the traditional RDBMS is not a viable option.
+A problem with a traditional RDBMS is that they are designed for vertical scaling~\cite{Atzeni:TheRelationalModelIsDead}. If a traditional RDBMS cannot handle the amount of data it is supposed to, the solution is to add a bigger harddrive or invest in a faster CPU. This makes sense in a world were hardware is very expensive like it was when the traditional RDBMSs saw the light of day~\cite{Stonebraker:TheEndOfAnArchitecturalEra}. Today horizontal scaling is preferred. If a system has a problem with the data load, add another machine or add five others if that is what it takes. Since horizontal scalability is a very important feature of the data storage system of a wind farm the traditional RDBMS is not a viable option for decentralization of the current Siemens system.
 
 \subsection{Schema-less storage, NoSQL}
 \label{sec:nosql}
-Since 2009 the schema-less storage methods have become increasingly popular.
+Since 2009 the schema-less storage methods have become increasingly popular~\cite{Stonebraker:2010:SDV:1721654.1721659}.
 Relational databases could no longer keep up with the task of storing and querying big data.
 A new breed of schema-less storage systems became popular because they could handle some of the problems big data caused for the relational storage systems.
 This new breed of databases are designed for horizontal scalability and without strict schemas allowing a more flexible data model. 
 They are capable of handling large scale amounts of data both for data storage but also for analysis or batch operations.
-The downside however is the lack of the ACID properties which results in decreased consistency and the lack of transactions. %TODO: Dårligt formuleret omskriv!
+The downside however is the lack of the ACID properties which results in decreased consistency and the lack of transactions.
 
 The schema-less databases can be divided roughly into four categories~\cite{Fowler:IntroNoSQL, Moniruzzaman:NoSQLDatabaseNewEraOfDatabasesForBigDataAnalysis}:
 
 \begin{itemize}
 	\item \textbf{Document databases} \\
-	The document databases are primarily used to store semi structured data in the form of documents. The data is stored in attribute name-value pairs, where the attributes may vary between rows.
+	The document databases are primarily used to store semi structured data in the form of documents. The data is stored in attribute name-value pairs, where the attributes may vary between rows (non strict schema).
 	
 	\item \textbf{Key-value databases} \\
 	The key-value databases are primarily used for fast lookup of data based on a key. The data is stored in key-value pairs.
@@ -308,11 +309,11 @@ The schema-less databases can be divided roughly into four categories~\cite{Fowl
 
 \subsection{Relational storage that scale, NewSQL}
 \label{sec:newsql}
-NewSQL data stores aim to bring the relational data model into the world of horizontal scalability and flexible data models while maintaining the ACID properties and transactions of the traditional RDBMS~\cite{Cattell:ScalableSQLAndNoSQLDataStores}.
+NewSQL data stores aim to bring the relational data model into the world of horizontal scalability and flexible data models, while maintaining the ACID properties and transactions of the traditional RDBMS~\cite{Cattell:ScalableSQLAndNoSQLDataStores}.
 This is obtained by implementing a completely new architecture~\cite{CORBETT:SpannerGooglesGloballyDistributedDatabase}.
 Starting from nothing with a new architecture allows the NewSQL data stores to be designed to take advantage of the distributed paradigms and to incorporate more flexibility into the schema structure.
 The key differences between traditional SQL data stores and the NewSQL data stores are therefore found in the way the NewSQL data stores are built for scalability and throughput.
-They try to avoid the major performance barriers which are locking, write-ahead logging, buffer pool overhead and latching~\cite{Stonebraker:NewSQLvsNoSQLForNewOLTP}.
+NewSQL data stores try to avoid the major performance barriers of the traditional SQL data stores which are locking, write-ahead logging, buffer pool overhead and latching~\cite{Stonebraker:NewSQLvsNoSQLForNewOLTP}.
 
 Locking can be avoided by performing transactions in timestamp order or using multi version concurrency control.
 Write-ahead logging can be avoided by doing automatic replication and failover.
@@ -325,26 +326,26 @@ Other features like distributed concurrency control and distributed query proces
 NewSQL data stores are divided into three categories~\cite{Prasanns:NewSQLTheNewWayToHandleBigData}:
 
 \begin{itemize}
-\item New databases: Completely new systems designed for scalability and throughput.
-\item New MySQL storage engine: Keep the existing MySQL interface and redesign the storage engine in order to achieve scalability.
-\item Transparent clustering and sharding: Provide extra features for transparent clustering and sharding on top of existing database systems. 
+\item New databases: Completely new data storage systems designed for scalability and throughput.
+\item New MySQL storage engine: Keep the existing MySQL interface and redesign the data storage engine in order to achieve scalability.
+\item Transparent clustering and sharding: Provide extra features for transparent clustering and sharding on top of traditional SQL data store systems. 
 \end{itemize}
 
 \subsection{SQL, NoSQL or NewSQL?}
-This thesis aims to create a decentralized system with scalability and redundancy as the most important parameters.
+This thesis aims to create a decentralized system with scalability and availability as the most important goals.
 This means that traditional SQL is not an option because of the poor scalability.
 
-NoSQL and NewSQL has clear advantages because they are built as a consequence of the shortcomings of the traditional database systems when it comes to decentralized systems.
-NoSQL has the advantage of high scalability and high throughput on data analysis, but the cost is a lack of ACID and transactions.
-NewSQL promises to keep the ACID properties and transactions of the traditional database systems while simultaneously allowing horizontal scalability and high throughput.
+NoSQL and NewSQL has clear advantages because they are built as a consequence of the shortcomings of the traditional SQL data store systems one of which is horizontal scalability.
+NoSQL has the advantage of horizontal scalability and flexible schema, but the cost is a lack of ACID and transactions.
+NewSQL promises to keep the ACID properties and transactions of the traditional SQL data store systems while simultaneously allowing horizontal scalability and higher throughput by removing some of the performance barriers of the traditional SQL data store systems, such as locking, write-ahead logging, buffer pool overhead and latching.
 
-Since both NoSQL and NewSQL seems like fitting technologies for data management in the Siemens case a further comparison between two state of the art implementations must be done in order to decide which technology will be the best suited.
+Since both NoSQL and NewSQL are suited technologies for database storage in a decentralized version of the current Siemens system a further comparison between two state of the art implementations must be done in order to decide which technology will be the best suited.
 
 \subsection{State of the art NoSQL}
-To identify state of the NoSQL and NewSQL databases the website \inlineURL{db-engines.com}~\cite{db-engines} is used.
+To identify state of the NoSQL and NewSQL databases the website \inlineURL{http://www.db-engines.com}~\cite{db-engines} is used.
 This website maintain a list of more than 200 different databases ranked by popularity. The list is updated monthly based on search engine popularity, discussion threads, job-offers, mentions on LinkedIn and tweets. This does not give the complete and objective ranking but it gives a pointer to the most popular database in their respective category.
 
-Since we expect a stream of measured values from a wide range of parameters on every turbine a key-value store seems to be the obvious choice of NoSQL storage method. On top of the continuous stream of measured values aggregated measures must be obtained for the entire farm. This implies that custom software must be built to aggregate data from all the data stores and calculate aggregated values or that the data store has built in features for aggregation and calculation of aggregate values. Furthermore it is important that the database management system is able to do replication of data and automatic failover in order to achieve high availability.
+Since we expect a stream of measured values from a wide range of parameters on every turbine a key-value store would be the obvious choice of NoSQL storage method. On top of the continuous stream of measured values aggregated values must be calculated for the entire wind farm. Thus, it would be an advantage of the data store has features for such aggregation and aggregate calculation. Furthermore it is important that the database management system is able to replicate data and do automatic failover in order to achieve high availability.
 Within the top 20 databases on the list we find 5 NoSQL databases:
 
 \begin{itemize}
@@ -357,29 +358,29 @@ Within the top 20 databases on the list we find 5 NoSQL databases:
 
 Redis and Memcached are both key-value stores. Memcached is a very simply yet powerful distributed memory caching system.
 It operates with a key for every entry and a value of raw data.
-Memcached does not understand data structures so data must be serialized before upload.
-Memcache does not support replication neither does it support advanced aggregate operations.
+Memcached does not support data structures which means data must be serialized before upload to the data store.
+Memcached does not support replication, neither does it support advanced aggregate operations.
 
 Redis is a more advanced key-value store.
-It allows storing of data structures like lists, sets, hashmaps and so on.
+It allows storing of data structures like lists, sets, hashmaps etc.
 Redis does not support aggregate operations.
 Redis does not itself allow sharding but an extension called Redis Cluster do. This extension has just entered beta test phase and is not yet production ready.
 
-Since both the key-value stores in the top 20 databases are used more like distributed memory than data stores they maintain a very simplistic approach to the interaction with data.
+Since both the key-value stores in the top 20 databases are used more like distributed memory than data stores they maintain a very simplistic approach to storage of data.
 None of them support aggregate operations which is crucial for doing calculation over the entire farm.
 
 The remaining NoSQL data stores are either document stores, MongoDB, or column-family stores, Cassandra and HBase.
-Since data mostly has the structure of a parameter and a value it seems excessive to use a column-family data store. 
+Since data mostly has the structure of a parameter and a value it is excessive to use a column-family data store. 
 Column-family data stores are used for columns of related data which is sparse in this system.
 
 That leaves the document store. MongoDB uses JSON-style documents to store data.
 It can replicate and shard data. 
 There is support for automatic failover if an instance is unavailable.
-MongoDB supports data aggregation and mapreduce allowing aggregate operations before data is returned from the database.
+MongoDB supports data aggregation and mapreduce, allowing aggregate operations before data is returned from the database.
 In terms of availability, data distribution and aggregate operations MongoDB is the best of the NoSQL data stores.
 
 \subsection{State of the art NewSQL}
-Looking at the db-engines.com database list once more we find that the four highest ranking NewSQL databases are within the top 100 databases:
+Looking at the \inlineURL{http://www.db-engines.com} database list once more we find that the four highest ranking NewSQL databases are within the top 100 databases:
 
 \begin{itemize}
 \item SAP HANA~\cite{saphana} ranked 23.
@@ -391,12 +392,12 @@ Looking at the db-engines.com database list once more we find that the four high
 SAP HANA is developed by SAP.
 It combines database and data processing in-memory.
 SAP HANA supports planning, text processing and business analytics.
-The platform has a lot of features but it is too excessive for this system.
+The platform has a lot of features but it is too excessive for the version of the decentralized current Siemens system that this thesis aim to make plausible.
 
 Drizzle is an open source fork of MySQL reimplemented to support a plugin-based architecture.
 The reimplementation is mainly focused on optimization for cloud infrastructure and web applications.
 Lately it seems that the development has slowed and the project stalled.
-The project homepage have several dead links and the last modification to the code was in may 2014.
+The project homepage has several dead links and the last modification to the code was in may 2014.
 
 NuoDB is a peer-to-peer oriented approach to the scalable database. Certain processes called Transaction Managers and Storage Managers share data on a peer-to-peer basis with no single point of failure.
 This architecture supports sharding and replication.
@@ -405,7 +406,7 @@ What further separates NuoDB from the other NewSQL data stores is its ease of co
 VoltDB is a database built with the limitations of the traditional database systems in mind. Its focus is to avoid these limitations to achieve high throughput and scalability. The database is promoted on its high throughput compared to both traditional SQL databases and to other NoSQL and NewSQL databases.
 
 Since all NewSQL databases are built for scalability, availability and use SQL as the query language they are able to scale, replicate and aggregate data.
-In terms of ease of use NuoDB is the best choice but in terms of throughput VoltDB has some impressive benchmarks.
+In terms of ease of use NuoDB is the best choice but in terms of throughput VoltDB has some impressive benchmarks~\cite{voldbBestInClass}.
 Since this system is a production system with feedback loops lasting only milliseconds throughput is important and that is why VoltDB is the best NewSQL alternative.
 
 \subsection{Comparison of MongoDB and VoltDB}
@@ -456,12 +457,12 @@ The comparison is based on the parameters presented in \cref{sec:databaseStorage
 \end{table}
 
 \subsection{Conclusion}
-Choosing a data store these days is not easy. The data store business has been the disrupted by the amount of data generated by web 2.0. 
-A number of new databases has spawned trying to solve the problems of traditional RDBMSs. 
-The industry has not yet come to terms with the correct solution to the big data problem and therefore the best fitting solution as of now must be found.
+Choosing a data store these days is not easy. The data store business has been the disrupted by the amount of data generated by social networks, image sharing sites and the likes. 
+A number of new databases has evolved trying to solve the problems of traditional RDBMSs. 
+The industry has not yet come to terms with the correct solution to the big data problem and therefore the best fitting solution as of now must be located.
 MongoDB and VoltDB are two very different approaches to solve one problem.
 MongoDB provides a tested solution that is very popular. VoltDB is the new solution promising even better features than MongoDB but the adaptation is still narrow.
 For the Siemens case we choose MongoDB as the database.
 The wider industry adaptation is a clear sign that MongoDB is a more mature and stable solution.
-The popularity of MongoDB also means that a lot of resources and help is available.
+The popularity of MongoDB also means that a lot of resources is available.
 MongoDB is a proven solution compared to the promising but yet untested VoltDB.
