@@ -1,5 +1,23 @@
 % !TeX spellcheck = en_US
 \chapter{Conclusion}
+Today, wind farms created by Siemens Wind Power has a centralized setup. Two central nodes exist in the wind farms, the Park Pilot and the Wind Power Supervisor. The Park Pilot is responsible for regulation of the power production of every turbine and for regulating the power production of the wind farm itself. The Wind Power Supervisor is responsible for data storage and external communication. The centralized approach to wind farm control poses a number of challenges for Siemens Wind Power.
+
+The first challenge is a problem of scalability. The Park Pilot does not scale well with the number of turbines. This forces Siemens Wind Power to install several Park Pilots in one wind farm in order to properly regulate the power production of the turbines and the wind farm itself.
+
+The second challenge is a problem of availability. Using centralized components as the Park Pilot and the Wind Power Supervisor introduces single points of failure in the wind farm. If a Park Pilot or the Wind Power Supervisor unexpectedly breaks down, parts of the wind farm are no longer available.
+
+Thus, Siemens Wind Power wishes to increase the scalability and the availability of the wind farm setup by decentralizing the Park Pilots and the Wind Power Supervisor, such that their functionality is placed in the turbines.
+
+In order to investigate the feasibility of decentralizing the Park Pilots and the Wind Power Supervisor the two components has been analyzed to identify the key services they provide.
+
+The key service of the Park Pilots is to communicate with the turbines in order to regulate their accumulated power production according to the power production goal of the wind farm. Thus, to decentralize the Park Pilots the turbines must be able to communicate such that each turbine's power production can be regulated according to the power production goal of the wind farm without a centralized Park Pilot.
+
+The key services of the Wind Power Supervisor is to facilitate external communication and to aggregate and calculate aggregate values for the wind farm. Thus, to decentralize the Wind Power Supervisor the turbines must be able to facilitate external communication as well as data aggregation across the wind farm.
+
+Components able to provide decentralized communication, decentralized external communication and dezentralized data aggregation and storage in a decentralized environment has been identified. For decentralized communication between turbines the Data Distribution Service for Real Time Systems (DDS) is recommended. DDS supports communication using the publish/subscribe paradigm without a centralized broker. Furthermore, DDS is able to use multicast for transmission of network packages which limits the number of packages in the network thereby increasing the scalability of DDS. For decentralized external communication ???????????\todo{insert loadbalancing here} is recommended. ???????????? is awesome for somethig something. For data storage and data aggregation MongoDB is recommended. MongoDB is able to scale horizontally as well as do replication of data such that in the event of a turbine failure data is not lost. MongoDB also supports sharding of a database which is important as the data aggregated across the wind farm will accumulate to a size that no single turbine is able to store.
+
+Using the identified components above we deem it feasible to decentralize the current wind farm setup of a Siemens Wind Power wind farm.
+
 
 Conclusion - discussion - perspektivering
 
