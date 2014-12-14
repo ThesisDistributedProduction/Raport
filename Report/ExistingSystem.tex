@@ -112,7 +112,7 @@ The Turbine object is the interface to the actual Turbine. The primary functiona
 
 \subsection{Calculate setpoints (regAlgorithm)}\label{sec:calculateSetpoints}
 
-When the Park Pilot has received the states of all turbines the setpoints for all turbines are calculated. Since we don't have access to Siemens' regulation algorithm (see \cref{sec:cenRegAlgorithm} for explanation), we have developed our own simple regulation algorithm. The code for this regulation algorithm is presented on \cref{fig:cenRegAlgCode}.
+When the Park Pilot has received the states of all turbines the setpoints for all turbines are calculated. Since we don't have access to Siemens' regulation algorithm (see \cref{sec:cenRegAlgorithm} for explanation), we have developed our own simple regulation algorithm. The code for this regulation algorithm is presented in \cref{fig:cenRegAlgCode}.
 
 \begin{figure}[!h]
 	\centering
@@ -416,7 +416,7 @@ The section provides a detailed evaluation of every parameter of the chosen prof
 
 \paragraph{Topic} QoS parameters are not presented by the Current Siemens System QoS XML file and thus no Topic QoS profile has been applied to the centralized solution. 
 
-\paragraph{DataWriter} QoS parameters has been set after the profile SwpStrictReliableNoDurability from the current Siemens system QoS XML file (\cref{appendix:siemensQosFile}), as discussed in \cref{sec:choosingQosParams}. Combining the SwpStrictReliableNoDurability profile with the two underlying base profiles (SwpReliableNoDurability and SwpBestEffort) we get the QoS parameters presented on \cref{fig:writerQoS}. The DataWriter parameters presented on \cref{fig:writerQoS} has been evaluated as follows:
+\paragraph{DataWriter} QoS parameters has been set after the profile SwpStrictReliableNoDurability from the current Siemens system QoS XML file (\cref{appendix:siemensQosFile}), as discussed in \cref{sec:choosingQosParams}. Combining the SwpStrictReliableNoDurability profile with the two underlying base profiles (SwpReliableNoDurability and SwpBestEffort) we get the QoS parameters presented in \cref{fig:writerQoS}. The DataWriter parameters presented in \cref{fig:writerQoS} has been evaluated as follows:
 
 \begin{itemize}
 	\item \textbf{liveliness (removed)} configures how Connext determines whether a DataWriter is alive, meaning if the DataWriter is reachable by other DDS entities. A lease\_duration specifies the maximum time at which packets that indicate that the DataWriter is still alive are sent to matching DataReaders. If the lease\_duration is exceeded, an on\_liveliness\_changed event is triggered on subscribers within the Topic. The centralized solution is not built to be fault tolerant or to detect any changes in number of turbines. Thus this parameter has been removed.
@@ -503,7 +503,7 @@ The section provides a detailed evaluation of every parameter of the chosen prof
 
 \FloatBarrier
 
-\paragraph{DataReader} QoS parameters has been set after the profile SwpStrictReliableNoDurability from the current Siemens system QoS XML file (\cref{appendix:siemensQosFile}), as discussed in \cref{sec:choosingQosParams}. This is the same profile used to configure DataWriter QoS. Combining the SwpStrictReliableNoDurability profile with the two underlying base profiles (SwpReliableNoDurability and SwpBestEffort) we get the QoS parameters presented on \cref{fig:readerQoS}. The DataReader parameters presented on \cref{fig:readerQoS} has been evaluated as follows:
+\paragraph{DataReader} QoS parameters has been set after the profile SwpStrictReliableNoDurability from the current Siemens system QoS XML file (\cref{appendix:siemensQosFile}), as discussed in \cref{sec:choosingQosParams}. This is the same profile used to configure DataWriter QoS. Combining the SwpStrictReliableNoDurability profile with the two underlying base profiles (SwpReliableNoDurability and SwpBestEffort) we get the QoS parameters presented in \cref{fig:readerQoS}. The DataReader parameters presented in \cref{fig:readerQoS} has been evaluated as follows:
 
 \begin{itemize}
 	\item \textbf{liveliness (removed)} see DataWriter liveliness QoS evaluation above for parameter description. 
