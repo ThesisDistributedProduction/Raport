@@ -179,7 +179,7 @@ LVS is the best choice for the decentralized version of the current Siemens syst
 
 
 % % % %%SingleEntryPoint and List:LB:LoadBalFailover % % % % % % % %
-%The systems needs to respond to a single external IP address. To do this multiple nodes share the same IP address, multiple protocols exists which can do this "Common Address Redundancy Protocol\todo{https://www.freebsd.org/doc/handbook/carp.html}, Virtual Router Redundancy Protocol\todo{http://tools.ietf.org/html/rfc2338} and \cite{zhang2000linuxVirtualServer}".\todo{Put in refferences instead} To provide seamless transfer of the virtual ip address ARP announcements are used to inform the local network of the transfer.
+%The systems needs to respond to a single external IP address. To do this multiple nodes share the same IP address, multiple protocols exists which can do this "Common Address Redundancy Protocol\todo{https://www.freebsd.org/doc/handbook/carp.html}, Virtual Router Redundancy Protocol\todo{http://tools.ietf.org/html/rfc2338} and~\cite{zhang2000linuxVirtualServer}".\todo{Put in refferences instead} To provide seamless transfer of the virtual ip address ARP announcements are used to inform the local network of the transfer.
 %The backup load balancer monitors the active load balancer and will takeover the virtual ip when the Active load balancer is unavailable and itself become primary this is illustrated in \cref{fig:loadBalancingSetup2Balancers}, this monitoring can be done with the active client sending out periodic heartbeats, or the backup sending ICMP ECHO\_REQUEST.
 %Property \ref{List:LB:DetectFailedNodes} requires the load balancer to monitor local nodes for availability, this is to ensure that client connections are not being redirected to a faulty node. This is most easily achived with a ICMP ECHO\_REQUEST otherwise known as a ping request, 
 
@@ -310,7 +310,7 @@ LVS is the best choice for the decentralized version of the current Siemens syst
 %Different load balancing methods will are here briefly described:
 %%Load balancing for large systems can be split in tiers.
 %\paragraph{Dynamic DNS}
-%is a load balancer built into the DNS service, it distributes load in a round robin manner as well as using region knowledge of where the request was revived from \cite{Amazon:Route53}. DNS based load balancing is among the most scalable solutions that does not need any special configuration of either client nor server. However is does not provide any monitoring of server performance parameters, and once the DNS lookup is over the service does not play any role in load balancing related to one that specific client until the DNS cache is refreshed. This type of loadbalancing is not applicable since 
+%is a load balancer built into the DNS service, it distributes load in a round robin manner as well as using region knowledge of where the request was revived from~\cite{Amazon:Route53}. DNS based load balancing is among the most scalable solutions that does not need any special configuration of either client nor server. However is does not provide any monitoring of server performance parameters, and once the DNS lookup is over the service does not play any role in load balancing related to one that specific client until the DNS cache is refreshed. This type of loadbalancing is not applicable since 
 
 
 

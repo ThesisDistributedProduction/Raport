@@ -102,7 +102,7 @@ The publish/subscribe paradigm is event driven and corresponds to the observer d
 \label{sec:analysis:rpc}
 Remote procedure call (RPC) is a communications paradigm built for client/server architecture~\cite{Microsoft2003RPC}, which makes remote interactions appear the same way as local interactions. The goal is to make the process of executing code on a remote machine as simple as calling a local function~\cite{dusseau2014intro} by factoring out common tasks, such as security, synchronization, and data flow handling. This explains the paradigms popularity in distributed computing. However distribution cannot be made completely transparent to the application, because it gives rise to further types of potential failures, like communication failures, that have to be dealt with explicitly~\cite{coulouris2005distributed}. 
 
-The idea of RPC is quite simple. When a remote procedure is invoked, the calling environment is suspended, the parameters are passed across the network to the environment where the procedure is to execute and the desired procedure is executed at that location. When execution is finished, return values are sent back to the calling environment, where execution resumes \cite{birrell1984implementing}.
+The idea of RPC is quite simple. When a remote procedure is invoked, the calling environment is suspended, the parameters are passed across the network to the environment where the procedure is to execute and the desired procedure is executed at that location. When execution is finished, return values are sent back to the calling environment, where execution resumes~\cite{birrell1984implementing}.
 
 A shortcoming of RPC is the strong coupling in time, space and synchronization. Although solutions have been presented to remove the synchronization coupling by future remote invocation. Remote method invocation is a paradigm where RPC as been applied to object-oriented contexts~\cite{eugster2003many}.
 
@@ -116,14 +116,14 @@ A shortcoming of RPC is the strong coupling in time, space and synchronization. 
 
 %\section{Notification}
 %
-%The notification paradigm corresponds to the observer design pattern. It works by having subscribers register their interest directly with the publishers, which manages subscriptions and send events. It is usually implemented using two asynchronous invocations, in order to enforce synchronization decoupling: the first is sent by the client to the server, containing invocation arguments and a callback reference to the client, and the second is sent by the server to the client to return one or more replies. However publishers and subscribers remain coupled in time and space. Furthermore the communication management is left to the publisher. This can become a problem as the system grows in size \cite{eugster2003many}.
+%The notification paradigm corresponds to the observer design pattern. It works by having subscribers register their interest directly with the publishers, which manages subscriptions and send events. It is usually implemented using two asynchronous invocations, in order to enforce synchronization decoupling: the first is sent by the client to the server, containing invocation arguments and a callback reference to the client, and the second is sent by the server to the client to return one or more replies. However publishers and subscribers remain coupled in time and space. Furthermore the communication management is left to the publisher. This can become a problem as the system grows in size~\cite{eugster2003many}.
 
 %Publish/Subscribe where subscribers register their interest directly with publishers, which manages subscriptions and send events.
 
 %event driven
 
 %\section{Message queuing}
-%Message queuing is a message-centric approach that usually integrate some form of publish/subscribe transaction. It works by having producers append messages to a global FIFO or priority queue asynchronously and consumers dequeue them synchronously from that same queue, where messages can only be consumed by one consumer. At an interaction level message queues recall much of DSM, where producers feed messages to some global memory space. Similarly to DSM, producers and consumers are decoupled in both space and time, where synchronous decoupling is only present for the producers \cite{eugster2003many}.
+%Message queuing is a message-centric approach that usually integrate some form of publish/subscribe transaction. It works by having producers append messages to a global FIFO or priority queue asynchronously and consumers dequeue them synchronously from that same queue, where messages can only be consumed by one consumer. At an interaction level message queues recall much of DSM, where producers feed messages to some global memory space. Similarly to DSM, producers and consumers are decoupled in both space and time, where synchronous decoupling is only present for the producers~\cite{eugster2003many}.
 
 %Global FIFO kø. Til hvis man er ligeglad med, hvem der tager opgaven??
 
@@ -367,7 +367,7 @@ A message has a routing key that decides which queue it is to enter in order to 
 The broker is a single point of failure which is unfortunate since this thesis aims to remove single point of failures from the current Siemens system.
 
 \paragraph{Data Distribution Service for Real-Time Systems} (DDS) is an Object Management Group standard defining a middleware for communication between information provideres and information consumers.
-The standard is an API specification and an interoperability wire-protocol that defines a data-centric publish-subscribe architecture \cite{pardo2003omg}.
+The standard is an API specification and an interoperability wire-protocol that defines a data-centric publish-subscribe architecture~\cite{pardo2003omg}.
 
 \begin{figure}[!h]
 	\centering
@@ -407,7 +407,7 @@ DDS relies on the multicast features of the IP protocol which is described below
 	\vspace{-10pt}
 \end{wrapfigure}
 
-The IP protocol defines different communication methodologies among these are: Unicast, Broadcast \cite{RFC0919_Broadcast} and Multicast \cite{RFC1112_Multicast_IGMPv1}.
+The IP protocol defines different communication methodologies among these are: Unicast, Broadcast~\cite{RFC0919_Broadcast} and Multicast~\cite{RFC1112_Multicast_IGMPv1}.
 These methodologies each allow for different kinds of communication.
 
 \paragraph{Unicast} is the simplest and most used methodology, it is provides point to point communication and is the basis for most TCP/IP communication.
@@ -421,7 +421,7 @@ There exist a broadcast address for every subnet and a special address which bro
 %The broadcast address for a given subnet can be found by doing a bitwise or operation on the local ip address with the binary complement of the subnet mask ($broadcast~address~=~local~ip~|~!subnet~mask$). To broadcast to all subnets behind the nearest router the address $255.255.255$ can be used, other protocols have similar capabilities.
 Broadcast does not support TCP/IP and delivers packet in a best effort way, this means that there is no guarantee or feedback of if the packet arrived, all this has to be built on top if needed.
 On large networks there can be a lot of broadcast traffic that every node needs to decide if it needs to respond to or discard.
-In the new IPv6 broadcast is no longer supported \cite{RFC4291_AddressingIPv6Draft} and is replaced by multicast protocols, this makes it optional to listen to broadcast traffic and possibly increase performance.
+In the new IPv6 broadcast is no longer supported~\cite{RFC4291_AddressingIPv6Draft} and is replaced by multicast protocols, this makes it optional to listen to broadcast traffic and possibly increase performance.
 
 \paragraph{Multicast} is a combination of unicast and broadcast and can be configured to be used as either one, however this is not what it is designed for. Multicast is designed to provide one to many communication as illustrated in \cref{fig:networkMulticast}.
 Multicasting works using multicast groups, these groups are maintained by routers and layer 2 switches. The way a node is added to a multicast group is by transmitting a packet requesting a group membership using the IGMP protocol. Each multicast group is associated with a multicast ip address, this ip address is used by the transmitting node when a packet is to be transmitted to a multicast group.
@@ -457,7 +457,7 @@ RTI Connext provides a number of entities that must be present in a system in or
 	\caption[DDS entities]{
 		\label{fig:ddsEntities} 
 		\footnotesize{%
-			DDS entites as presented in RTI Connext Core Libraries and Utilities User's Manual \cite{rtiConnextUsersManual}.
+			DDS entites as presented in RTI Connext Core Libraries and Utilities User's Manual~\cite{rtiConnextUsersManual}.
 		}
 	}
 \end{figure}
@@ -486,18 +486,18 @@ After this phase has been completed all \textit{DomainParticipants} in the syste
 	\caption[DDS discovery phases]{
 		\label{fig:DDSdiscovery} 
 		\footnotesize{%
-			DDS discovery phases as presented in RTI Connext Core Libraries and Utilities User's Manual \cite{rtiConnextUsersManual}.
+			DDS discovery phases as presented in RTI Connext Core Libraries and Utilities User's Manual~\cite{rtiConnextUsersManual}.
 		}
 	}
 \end{figure}
 
-Since the SEDP registers all the \textit{DataWriters} and \textit{DataReaders} in the system the protocol scales poorly \cite{(CFDP)}. The discovery time and number of packets sent grows as the number of endpoints increase. This affects the scalability of the system directly. To avoid the increase in discovery time different protocols has been proposed to solve the scalability problem. 
+Since the SEDP registers all the \textit{DataWriters} and \textit{DataReaders} in the system the protocol scales poorly~\cite{(CFDP)}. The discovery time and number of packets sent grows as the number of endpoints increase. This affects the scalability of the system directly. To avoid the increase in discovery time different protocols has been proposed to solve the scalability problem. 
 
 \paragraph{Content-based Filtering Discovery Protocol(CFDP)} is similar to SDP during the SPDP phase but it differs in the SEDP phase where changes has been made in order to facilitate content-based discovery of endpoints. The filtering allows the \textit{DomainParticipant} to reduce the number of discovery messages to the number of endpoints that needs to communicate with the \textit{DomainParticipant} and its local endpoints. Currently CFDP has only been tested using unicast and here the protocol outperforms SDP in terms of network usage, packages sent and discovery time. However if multicast is used as the underlying transport protocol SDP outperforms CFDP. This happens because SDP only needs one multicast for all \textit{DomainParticipants}. CFDP in contrast will need one multicast address for each content filter used. This limitation in CFDP is proposed as a subject for further research.
 
 Since CFDP does not outperform SDP when using multicast, CFDP is not suited as the discovery protocol for the system described in this thesis.
 
-\paragraph{A discovery protocol based on Bloom filters} has been proposed as well \cite{monedero2009dds}. Similar to CFDP the Bloom filter approach aims to reduce the number of packets that needs to be exchanged in order to discover endpoints in the system. The Bloom filter approach introduces a Bloom filter for each \textit{DomainParticipant} that contains information describing the local endpoints. During the SPDP phase the Bloom filters are distributed to all \textit{DomainParticipants}. In this way information of all endpoints in the system has been distributed when the SEDP phase begins allowing the \textit{DomainParticipants} to decrease the number of discovery messages sent to the number of endpoints that it must know in order to facilitate communication for its local \textit{DataReaders} and \textit{DataWriters}. 
+\paragraph{A discovery protocol based on Bloom filters} has been proposed as well~\cite{monedero2009dds}. Similar to CFDP the Bloom filter approach aims to reduce the number of packets that needs to be exchanged in order to discover endpoints in the system. The Bloom filter approach introduces a Bloom filter for each \textit{DomainParticipant} that contains information describing the local endpoints. During the SPDP phase the Bloom filters are distributed to all \textit{DomainParticipants}. In this way information of all endpoints in the system has been distributed when the SEDP phase begins allowing the \textit{DomainParticipants} to decrease the number of discovery messages sent to the number of endpoints that it must know in order to facilitate communication for its local \textit{DataReaders} and \textit{DataWriters}. 
 
 Again the main advantage of using Bloom filters is found in the unicast scenario. In a multicast scenario there still are advantages of using the Bloom filter approach because the \textit{DomainParticipants} are able to limit the number of discovery messages compared to SDP. The advantage of using the Bloom filter approach increases as the ratio between endpoints and \textit{DomainParticipants} increase.
 
