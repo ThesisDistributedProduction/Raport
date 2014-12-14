@@ -193,7 +193,7 @@ uint_fast32_t DecentralizedParkPilot::regAlgorithm(
 	}
 \end{figure}
 
-\subsection{Cache reads}
+\subsection{Cache reads}\label{sec:cachereads}
 
 A cache read happens if the cycle time elapses before all turbine instances have responded with state information, resulting in the same state being read twice. Thus it is a natural result of separating receiving data from the regulation cycle, as done in the decentralized solution. Connext only keeps track of data that has already been read but not how many times that data has been read. Thus a cache read does not include information regarding if the same state has been read multiple times.
 

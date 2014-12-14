@@ -8,39 +8,41 @@
 
 %Scalability is by Bondi\cite{Bondi:2000:CSI:350391.350432} defined as \textit{the systems ability to accommodate an increasing number of elements or objects, to process growing volumes of work gracefully, and/or to be susceptible to enlargement}.
 
-The \ref{PS:Q:Performance} question asks if the proposed decentralized system is able to scale with the number of turbines in the system. The experiments that investigate this question has been split into two part. \newline
+The \ref{PS:Q:Performance} question asks if the proposed decentralized solution is able to keep a constant regulation cycle time independent from the number of turbines. This problem operates in a 3-dimensional space with cycle time (ms), number of cache reads and number of turbines as parameters. To study the correlation between the parameters, we isolate two parameters by making the third constant.
 
-Part 1 aims to investigate the anticorrelation between regulation time and cache read count in the proposed decentralized system. This is relevant because changing the regulation time may have an impact on the number of cache reads. Choosing a regulation time that has a low number of cache read count for part 2 of the experiments will make it easier to identify how scaling up the number of turbines will affect cache read count. \newline
+Thus to fully address \ref{PS:Q:Performance} this experiment has been divided into two experiments:
+ 
+\begin{description}
+	\item[Experiment 1] aims to investigate the anti-correlation between the implemented sleep time of the regulation cycle and the number of cache reads for the decentralized system. This is relevant because changing the sleep time is expected to impact the number of cache reads, since an increase in sleep time increases the time Connext has to overwrite received states, thus decreasing the number of cache reads (as explained in \cref{sec:cachereads}: Cache reads). Thus the constant for this is experiment is the number of turbines.
+	\item[Experiment 2] aims to investigate the impact on the regulation cycle time and the number of cache reads when increasing the number of turbines in the decentralized solution, and thus answer the \ref{PS:Q:Performance} problem. The constant for this experiment is the sleep time.
+\end{description}
 
-Part 2 aims to investigate the impact on regulation time and cache read count when the number of turbines are scaled up in the proposed decentralized system. \newline
-
-\subsection{Part 1: Regulation time and the impact on cache read count}
+\subsection{Experiment 1: How sleep time impacts the regulation cycle time and the number of cache reads}
 \label{subsec:Exper:perfom:1}
-The experiment below are made to show how the regulation time affect the cache read count in the decentralized system described in \cref{cha:decentralizedSystem}. 
-The experiments are performed with \testCycletimeNumbers ~cycle times.  
+The purpose of this experiment is to show how the sleep time affects the number of cache reads and the regulation cycle time for the decentralized solution (see \cref{sec:cachereads} for cache reads description).  
+The experiment is performed with cycle time t=\testCycletimeNumbers.  
 
 The following procedure is used each time the experiment is performed:
 \begin{enumerate}
-	\item Start the system with a cycle time of N ms and 21 turbines.
+	\item Start the system with a cycle time of t ms and 21 turbines.
 	\item Make sure the system is stable.
-	\item Start logging the reported regulation run time and cache read count.
+	\item Start logging the regulation cycle time and the number of cache reads.
 	\item Stop logging after \experiemntRunTime.
 \end{enumerate}
 
-\subsection{Part 2: Number of turbines and their impact on regulation time and cache read count}
+\subsection{Experiment 2: How the number of turbines impacts the regulation cycle time and the number of cache reads}
 \label{subsec:Exper:perfom:2}
-The experiment below are made to show how the number of turbines affect the regulation cycle in the decentralized system described in \cref{cha:decentralizedSystem}.
+The purpose of this experiment is to answer the \ref{PS:Q:Performance} problem, by showing how the number of turbines affects the regulation cycle time for the decentralized solution. To complete the picture we also investigate how the number of turbines affects the cache reads, since an expected side effect of increasing the number of turbines also increases the number of cache reads as described in \cref{sec:cachereads}.
 
-The experiments are performed with \testTurbineNumbers ~turbines. Besides turbines we are also going to modify ''Data Wait Time Frame'' witch is a constant that defines the time a turbine controller will wait for new updates before considering the other turbines offline and unavailable, i.e. regulation speed.
+The experiments are performed with n=\testTurbineNumbers ~turbines. The sleep time is set to 20 ms and is constant for this experiment.
 
-The test system is expected to be running only one instance in a real life implementation, therefore the test machine will only run one instance and the support machines will run the rest generating system load.
-The experiment is done with a variating N number of online turbines.
+The test system is expected to be running only one instance in a real life implementation, therefore the machine logging the data will only run one instance and the supporting machines will run the rest generating system load.
 
 The following procedure is used each time the experiment is performed:
 \begin{enumerate}
 	\item Start the system with N turbines.
 	\item Make sure the system is stable.
-	\item Start logging the reported regulation run time and cache read count.
+	\item Start logging the reported regulation run time and the number of cache reads.
 	\item Stop logging after \experiemntRunTime.
 \end{enumerate}
 
@@ -48,8 +50,21 @@ The following procedure is used each time the experiment is performed:
 \subsection{Results}
 
 \label{sec:exp:performance}
-The cycle times are calculated as the difference between the receive timestamp of the oldest turbine state package and a timestamp right after the new turbine state has been sent and the turbines setpoint has been set.
-The regulation cycle time with variating number of turbines are done with box plots and a line. The box plots whiskers show the extreme values max and min, the top and bottom of the box show the upper and lower quartile of the data, and the center line shows the median. The median is further highlighted by a line.
+The cycle regulation time is defined as the difference between the receive timestamp of the oldest turbine state(tOldestState) received and the timestamp sampled right after, a new turbine state has been sent (tSent) (as illustrated on \cref{fig:timingDecentral}):
+
+$$regulation~cycle~time=tSent-tOldestState$$
+
+\begin{figure}[b]
+	\input{figures/tikz/timingDiagramDecntral}
+	\caption{Decentralized regulation time}
+	\label{fig:timingDecentral}
+\end{figure}
+
+The timestamp of the oldest turbine state is used to include network traffic in the regulation cycle time, as opposed to just sampling the time locally.
+
+The box plots (\cref{fig:exp:decen:sleep} and )
+
+ are are plotted using done with box plots and a line. The box plots whiskers show the extreme values max and min, the top and bottom of the box show the upper and lower quartile of the data, and the center line shows the median. The median is further highlighted by a line.
 
 \subsubsection{\nameref{subsec:Exper:perfom:1}}
 
