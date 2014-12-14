@@ -77,7 +77,7 @@ The red line plots the medians.
 	\label{fig:exp:decen:sleep}
 \end{figure}
 
-\Cref{fig:exp:decen:sleep} show that the regulation cycle times and wait times are linearly dependent on each other. The maximum value with wait time 10 is outside the boundaries of the plot but is calculated to 148.91 ms. The upper and lower quartile are close together the exception is the 10 ms wait time sample. The maximum being the 20 ms wait time having a difference of 1.401 ms between upper and lower quantile and the minimum being 45 ms wait time with a difference of 0.402 ms. The maximum values again with the exception of the 10 ms wait time sample follow the median values, the minimum values are able to reach low regulation cycle times much lower than the wait time used in the experiment.
+\Cref{fig:exp:decen:sleep} show that the regulation cycle time and sleep time are linearly dependent. Outliers are focused around the boxes with the exception of the 10 ms data point. The 10 ms data point has box edges further apart from each other than other data points. This is caused by having too many turbine instances running on the same PC's, thus stressing the experiment equipment (see \cref{sec:hardwareSepc} for hardware specification) too much, which causes package delays. Hence the 10 ms data point cannot be completely trusted.
 
 \begin{figure}[h!]
 	\centering
@@ -86,15 +86,13 @@ The red line plots the medians.
 	\label{fig:exp:decen:sleep-cache}
 \end{figure}
 
-\Cref{fig:exp:decen:sleep-cache} show the average cache reads of the experiment.
-A cache read only happens in the decentralized solution and is a consequence of the separation of receiving data in a separate thread.
-The cache read happens if the wait time elapses before all turbine instances have responded with state information. The Number dos not include information of if the same turbine instance state has been read from cache multiple times.
-The number of cache reads is declining. 
+\FloatBarrier
+
+\Cref{fig:exp:decen:sleep-cache} show that the average cache reads is declining when increasing the sleep time. As described in \cref{sec:cachereads}, cache reads only indicates if a given state has been read before, thus the number does not increase with the number times the same state has been read. Again, the 10 ms data point cannot be completely trusted due to limited experiment equipment.
 %, a fitted function of the plot has been put on top (red), the plot is in Matlab fitted against the function $\dfrac{a}{x + b} + c$.
 
 \clearpage
 \subsubsection{\nameref{subsec:Exper:perfom:2}}
-The plots in this section relates to the second part of the \nameref{sec:Exper:perfom} experiment. In this graph the regulation cycle time is plotted against a variating number of turbines.
 
 \begin{figure}[h!]
 	\centering
@@ -105,7 +103,8 @@ The plots in this section relates to the second part of the \nameref{sec:Exper:p
 	\label{fig:exp:decen:turbines}
 \end{figure}
 
-\cref{fig:exp:decen:turbines} show regulation cycle time of the decentralized system compared with a variating number of turbines. The internal sleep parameter is fixed as 20~ms
+\Cref{fig:exp:decen:turbines} shows how the regulation cycle time of the decentralized solution changes according to the number of turbines.
+
 It is seen the system performs with a constant regulation cycle time with 5 to 90 turbines, if only observing the median.
 The quartiles are with the exception of the 5 turbines experiment of almost constant until 65, the same applies to the maximum values.
 The extreme regulation cycle time values all  stop close to 150 ms.
