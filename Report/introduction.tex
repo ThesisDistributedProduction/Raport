@@ -124,7 +124,7 @@ Today's setup at Siemens Wind Power (\cref{sec:SiemensCase}) is an example of a 
 	\item High regulation cycle time. As mentioned, the regulation cycle time of the current Siemens system is 150 ms and is a direct result of the low scalability. Siemens expects a demand for a lower regulation cycle time in the future.
 \end{itemize}
 
-Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by distributing their functionality to the turbines, utilizing the free computing capacity of the computers already residing in every turbine. This would increase availability by lowering the possibility of single point of failure. Furthermore, this would increase scalability of the system, opening for performance optimizations of the wind farm regulation cycle time by decreasing the coupling between the regulation cycle time and the number of turbines per Park Pilot. 
+Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by distributing their functionality to the turbines, utilizing the free computing capacity of the computers already residing in every turbine. This would increase availability by lowering the possibility of single point of failure. Furthermore, this would increase scalability of the system, opening for performance optimizations of the wind farm regulation cycle time by decreasing the coupling between the regulation cycle time and the number of turbines. 
 
 \section{Problem statement}
 \label{sec:problemStatement}
@@ -138,11 +138,17 @@ The purpose of this thesis is to design, implement and evaluate a solution for a
 	%	\label{PS:Q:4}
 	\labitem{Availability}{PS:Q:Availability} Can we create a solution where removing one or more nodes from the system at runtime does not cause system failure?
 	%	\label{PS:Q:3}
-	\labitem{Performance}{PS:Q:Performance} Can we create a solution that scales such that the number of turbines does not impact the regulation cycle time?
+	\labitem{Scalability}{PS:Q:Performance} Can we create a solution that scales such that the number of turbines does not impact the regulation cycle time?
 	%	\item Can we, with the new decentralized solution, reduce the current regulation cycle time of 150 ms?
 	%	\label{PS:Q:2}
-	\labitem{Scalability}{PS:Q:Scalability} How will the new decentralized solution influence regulation time of a single regulations cycle compared to the current Siemens system?
+	\labitem{Performance}{PS:Q:Scalability} Will the regulation cycle time of the new decentralized solution scale better than the current Siemens system in terms of number of turbines per Park Pilot?
 	
+	%How will the regulation cycle time of the new decentralized solution scale compared to the current Siemens system in terms of number of turbines?
+	
+	%Will the new decentralized solution scaler better than the current Siemens system and thus decreasing the coupling between the regulation cycle time and the number of turbines. 
+	
+%How will the new decentralized solution influence the relation between number of turbines and regulation cycle time?	
+
 %	\labitem{Scalability}{PS:Q:Scalability} How will the new decentralized solution influence the following parameters compared to the current Siemens system:
 %	\begin{enumerate}
 %		\item Time in milliseconds of a single regulation cycle.
