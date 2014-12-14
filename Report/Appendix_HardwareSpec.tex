@@ -1,22 +1,710 @@
 
-\chapter{Hardware Specifications}\label{appendix:HardwareSpecification}
+%\chapter{Hardware Specifications}\label{appendix:HardwareSpecification}
+%
+%
+%\section{D-link DIR-855, Gigabyte Router}
+%
+%
+%
+%\section{Macbook pro}\label{appendix:hardwareSpecification_pro}
+%
+%\section{Asus UX32VD}\label{appendix:hardwareSpecification_asus}
+%
+%\section{Macbook Air}\label{appendix:hardwareSpecification_air}
 
 
-\section{D-link DIR-855, Gigabyte Router}
+\chapter{Siemens Quality of Service XML file}\label{appendix:siemensQosFile}
+\begin{lstlisting}[language=XML]
+<?xml version="1.0" encoding="UTF-8"?>
 
+<dds>
+	<qos_library name="DefaultLibrary"><
+		<qos_profile name="ParticipantQOS"
+	 is_default_participant_factory_profile="true">
+			<participant_factory_qos>
+				<entity_factory>
+					<autoenable_created_entities>
+						false
+					</autoenable_created_entities>
+				</entity_factory>
+				<logging>
+					<verbosity>WARNING</verbosity>
+					<category>PLATFORM</category>
+					<print_format>VERBOSE_TIMESTAMPED</print_format>
+					<output_file>ddsadaptor.log</output_file>
+				</logging>
+			</participant_factory_qos>
 
+			<participant_qos>
+				<database>
+					<shutdown_cleanup_period>
+						<sec>DURATION_ZERO_SEC</sec>
+						<nanosec>1</nanosec>
+					</shutdown_cleanup_period>
+				</database>
+				<participant_name>
+					<name>Siemens Wind Power DDS Adaptor</name>
+				</participant_name>
+				<transport_builtin>
+					<mask>UDPv4</mask>
+				</transport_builtin>
+				<discovery>
+					<multicast_receive_addresses/>
+					<initial_peers/>
+				</discovery>
+				<receiver_pool>
+					<buffer_size>65535</buffer_size>
+				</receiver_pool>
+				<property>
+					<value>
+						<element>
+							<name>
+								dds.transport.UDPv4.builtin.ignore_nonup_interfaces
+							</name>
+							<value>0</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.UDPv4.builtin.multicast_enabled
+							</name>
+							<value>0</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.UDPv4.builtin.parent.message_size_max
+							</name>
+							<value>65535</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.UDPv4.builtin.send_socket_buffer_size
+							</name>
+							<value>65535</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.UDPv4.builtin.recv_socket_buffer_size
+							</name>
+							<value>2097152</value>
+						</element>
+					</value>
+				</property>
+			</participant_qos>
+		</qos_profile>
 
-\section{Macbook pro}\label{appendix:hardwareSpecification_pro}
+		<qos_profile name="ParticipantQOS_Dtls"
+		 base_name="ParticipantQOS">
+			<participant_qos>
+				<transport_builtin>
+					<mask>MASK_NONE</mask>
+				</transport_builtin>
+				<property inherit="false">
+					<value>
+						<element>
+							<name>
+								dds.transport.DTLS.dtls1.ignore_nonup_interfaces
+							</name>
+							<value>0</value>
+						</element>
+						<element>
+							<name>dds.transport.load_plugins</name>
+							<value>dds.transport.DTLS.dtls1</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.DTLS.dtls1.library
+							</name>
+							<value>nddstransporttls</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.DTLS.dtls1.create_function
+							</name>
+							<value>NDDS_Transport_DTLS_create</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.DTLS.dtls1.parent.message_size_max
+							</name>
+							<value>16384</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.DTLS.dtls1.send_socket_buffer_size
+							</name>
+							<value>16384</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.DTLS.dtls1.recv_socket_buffer_size
+							</name>
+							<value>2097152</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.DTLS.dtls1.tls.verify.ca_file
+							</name>
+							<value>cacert.pem</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.DTLS.dtls1.tls.identity.certificate_chain_file
+							</name>
+							<value>peer1.pem</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.DTLS.dtls1.recv_decode_buffer_size
+							</name>
+							<value>16384</value>
+						</element>
+					</value>
+				</property>
+			</participant_qos>
+		</qos_profile>
 
-\section{Asus UX32VD}\label{appendix:hardwareSpecification_asus}
+		<qos_profile name="SwpBestEffort">
+			<datareader_qos>
+				<liveliness>
+					<lease_duration>
+						<sec>1</sec>
+						<nanosec>0</nanosec>
+					</lease_duration>
+				</liveliness>
+				<reliability>
+					<kind>BEST_EFFORT_RELIABILITY_QOS</kind>
+				</reliability>
+				<history>
+					<kind>KEEP_LAST_HISTORY_QOS</kind>
+					<depth>1</depth>
+				</history>
+				
+				<protocol>
+					<rtps_reliable_reader>
+						<min_heartbeat_response_delay>
+							<sec>0</sec>
+							<nanosec>0</nanosec>
+						</min_heartbeat_response_delay>
+						<max_heartbeat_response_delay>
+							<sec>0</sec>
+							<nanosec>0</nanosec>
+						</max_heartbeat_response_delay>
+					</rtps_reliable_reader>
+				</protocol>
+			</datareader_qos>
+				
+			<datawriter_qos>
+				<liveliness>
+					<lease_duration>
+						<sec>1</sec>
+						<nanosec>0</nanosec>
+					</lease_duration>
+				</liveliness>
+				<reliability>
+					<kind>BEST_EFFORT_RELIABILITY_QOS</kind>
+				</reliability>
+				<history>
+					<kind>KEEP_LAST_HISTORY_QOS</kind>
+					<depth>1</depth>
+				</history>
+				
+				<protocol>
+					<rtps_reliable_writer>
+						<low_watermark>5</low_watermark>
+						<high_watermark>15</high_watermark>
+						<heartbeat_period>
+							<sec>0</sec>
+							<nanosec>100000000</nanosec>
+						</heartbeat_period>
+						<fast_heartbeat_period>
+							<sec>0</sec>
+							<nanosec>10000000</nanosec>
+						</fast_heartbeat_period>
+						<late_joiner_heartbeat_period>
+							<sec>0</sec>
+							<nanosec>10000000</nanosec>
+						</late_joiner_heartbeat_period>
+						<max_heartbeat_retries>500</max_heartbeat_retries>
+						<min_nack_response_delay>
+							<sec>0</sec>
+							<nanosec>0</nanosec>
+						</min_nack_response_delay>
+						<max_nack_response_delay>
+							<sec>0</sec>
+							<nanosec>0</nanosec>
+						</max_nack_response_delay>
+						<min_send_window_size>32</min_send_window_size>
+						<max_send_window_size>32</max_send_window_size>
+					</rtps_reliable_writer>
+				</protocol>
+			</datawriter_qos>
+		</qos_profile>
 
-\section{Macbook Air}\label{appendix:hardwareSpecification_air}
+		<qos_profile name="SwpReliableNoDurability"
+		 base_name="SwpBestEffort">
+			<datareader_qos>
+				<reliability>
+					<kind>RELIABLE_RELIABILITY_QOS</kind>
+				</reliability>
+			</datareader_qos>
+		
+			<datawriter_qos>
+				<reliability>
+					<kind>RELIABLE_RELIABILITY_QOS</kind>
+				</reliability>
+			</datawriter_qos>
+		</qos_profile>
 
+		<qos_profile name="SwpReliable"
+		 base_name="SwpReliableNoDurability">
+			<datareader_qos>
+				<durability>
+					<kind>TRANSIENT_LOCAL_DURABILITY_QOS</kind>
+				</durability>
+			</datareader_qos>
+		
+			<datawriter_qos>
+				<durability>
+					<kind>TRANSIENT_LOCAL_DURABILITY_QOS</kind>
+				</durability>
+			</datawriter_qos>
+		</qos_profile>
 
-\chapter{Siemens QoS XML file}\label{appendix:siemensQosFile}
+		<qos_profile name="SwpStrictReliableNoDurability"
+		 base_name="SwpReliableNoDurability">
+			<datareader_qos>
+				<history>
+					<kind>KEEP_ALL_HISTORY_QOS</kind>
+				</history>
+				<resource_limits>
+					<max_samples_per_instance>20</max_samples_per_instance>
+				</resource_limits>
+			</datareader_qos>
+		
+			<datawriter_qos>
+				<history>
+					<kind>KEEP_ALL_HISTORY_QOS</kind>
+				</history>
+				<resource_limits>
+					<max_samples_per_instance>20</max_samples_per_instance>
+				</resource_limits>
+				<reliability>
+					<max_blocking_time>
+						<sec>5</sec>
+						<nanosec>0</nanosec>
+					</max_blocking_time>
+				</reliability>
+			</datawriter_qos>
+		</qos_profile>
 
+		<qos_profile name="SwpStrictReliable"
+		 base_name="SwpStrictReliableNoDurability">
+			<datareader_qos>
+				<durability>
+					<kind>TRANSIENT_LOCAL_DURABILITY_QOS</kind>
+				</durability>
+			</datareader_qos>
+			
+			<datawriter_qos>
+				<durability>
+					<kind>TRANSIENT_LOCAL_DURABILITY_QOS</kind>
+				</durability>
+			</datawriter_qos>
+		</qos_profile>
 
-\chapter{Centralized Solution QoS XML file}\label{appendix:centralizedQosFile}
+		<qos_profile name="SwpHighThroughputBestEffort"
+		 base_name="SwpBestEffort">
+			<datawriter_qos>
+				<writer_resource_limits>
+					<max_batches>32</max_batches>
+					<initial_batches>32</initial_batches>
+				</writer_resource_limits>
+				<resource_limits>
+					<max_samples>LENGTH_UNLIMITED</max_samples>
+				</resource_limits>
+		
+				<protocol>
+					<rtps_reliable_writer>
+						<heartbeat_period>
+							<sec>0</sec>
+							<nanosec>100000000</nanosec>
+						</heartbeat_period>
+						<fast_heartbeat_period>
+							<sec>0</sec>
+							<nanosec>10000000</nanosec>
+						</fast_heartbeat_period>
+						<late_joiner_heartbeat_period>
+							<sec>0</sec>
+							<nanosec>10000000</nanosec>
+						</late_joiner_heartbeat_period>
+						<max_heartbeat_retries>1000</max_heartbeat_retries>
+						<min_send_window_size>32</min_send_window_size>
+						<max_send_window_size>32</max_send_window_size>
+					
+					</rtps_reliable_writer>
+				</protocol>
+		
+				<batch>
+					<enable>true</enable>
+					<max_data_bytes>8000</max_data_bytes>
+					<max_meta_data_bytes>8000</max_meta_data_bytes>
+					<max_samples>LENGTH_UNLIMITED</max_samples>
+					<max_flush_delay>
+						<sec>0</sec>
+						<nanosec>50000000</nanosec>
+					</max_flush_delay>
+					<source_timestamp_resolution>
+						<sec>DURATION_INFINITE_SEC</sec>
+						<nanosec>DURATION_INFINITE_NSEC</nanosec>
+					</source_timestamp_resolution>
+				</batch>
+			</datawriter_qos>
+		</qos_profile>
+		
+		<qos_profile name="SwpHighThroughputReliable"
+		 base_name="SwpReliable">
+			<datawriter_qos>
+				<writer_resource_limits>
+					<max_batches>32</max_batches>
+					<initial_batches>32</initial_batches>
+				</writer_resource_limits>
+				<resource_limits>
+					<max_samples>LENGTH_UNLIMITED</max_samples>
+				</resource_limits>
+				
+				<protocol>
+					<rtps_reliable_writer>
+						<heartbeat_period>
+							<sec>0</sec>
+							<nanosec>100000000</nanosec>
+						</heartbeat_period>
+						<fast_heartbeat_period>
+							<sec>0</sec>
+							<nanosec>10000000</nanosec>
+						</fast_heartbeat_period>
+						<late_joiner_heartbeat_period>
+							<sec>0</sec>
+							<nanosec>10000000</nanosec>
+						</late_joiner_heartbeat_period>
+						<max_heartbeat_retries>1000</max_heartbeat_retries>
+						<min_send_window_size>32</min_send_window_size>
+						<max_send_window_size>32</max_send_window_size>
+					
+					</rtps_reliable_writer>
+				</protocol>
+				
+				<batch>
+					<enable>true</enable>
+					<max_data_bytes>8000</max_data_bytes>
+					<max_meta_data_bytes>8000</max_meta_data_bytes>
+					<max_samples>LENGTH_UNLIMITED</max_samples>
+					<max_flush_delay>
+						<sec>0</sec>
+						<nanosec>50000000</nanosec>
+					</max_flush_delay>
+					<source_timestamp_resolution>
+						<sec>DURATION_INFINITE_SEC</sec>
+						<nanosec>DURATION_INFINITE_NSEC</nanosec>
+					</source_timestamp_resolution>
+				</batch>
+			</datawriter_qos>
+		</qos_profile>
+		
+		<qos_profile name="SwpHighThroughputStrictReliable"
+		 base_name="SwpStrictReliable">
+			<datawriter_qos>
+				<writer_resource_limits>
+					<max_batches>32</max_batches>
+					<initial_batches>32</initial_batches>
+				</writer_resource_limits>
+				<resource_limits>
+					<max_samples>LENGTH_UNLIMITED</max_samples>
+				</resource_limits>
+		
+				<protocol>
+					<rtps_reliable_writer>
+						<heartbeat_period>
+							<sec>0</sec>
+							<nanosec>100000000</nanosec>
+						</heartbeat_period>
+						<fast_heartbeat_period>
+							<sec>0</sec>
+							<nanosec>10000000</nanosec>
+						</fast_heartbeat_period>
+						<late_joiner_heartbeat_period>
+							<sec>0</sec>
+							<nanosec>10000000</nanosec>
+						</late_joiner_heartbeat_period>
+						<max_heartbeat_retries>1000</max_heartbeat_retries>
+						<min_send_window_size>32</min_send_window_size>
+						<max_send_window_size>32</max_send_window_size>
+					</rtps_reliable_writer>
+				</protocol>
+				
+				<batch>
+					<enable>true</enable>
+					<max_data_bytes>8000</max_data_bytes>
+					<max_meta_data_bytes>8000</max_meta_data_bytes>
+					<max_samples>LENGTH_UNLIMITED</max_samples>
+					<max_flush_delay>
+						<sec>0</sec>
+						<nanosec>50000000</nanosec>
+					</max_flush_delay>
+					<source_timestamp_resolution>
+						<sec>DURATION_INFINITE_SEC</sec>
+						<nanosec>DURATION_INFINITE_NSEC</nanosec>
+					</source_timestamp_resolution>
+				</batch>
+			</datawriter_qos>
+		</qos_profile>
+	</qos_library>
+</dds>
+\end{lstlisting}
 
+\chapter{Centralized Solution Quality of Service XML file}\label{appendix:centralizedQosFile}
+\begin{lstlisting}[language=XML]
+<?xml version="1.0" encoding="UTF-8"?>
 
-\chapter{Decentralized Solution QoS XML file}\label{appendix:decentralizedQosFile}
+<dds>
+	<qos_library name="Turbine_Library">
+		<qos_profile name="Turbine_Profile" is_default_qos="true">	
+			<participant_factory_qos>
+				<logging>
+					<verbosity>WARNING</verbosity>
+					<category>PLATFORM</category>
+					<print_format>VERBOSE_TIMESTAMPED</print_format>
+					<output_file>ddsadaptor.log</output_file>
+				</logging>
+			</participant_factory_qos>
+			
+			<participant_qos>
+				<participant_name>
+					<name>TurbineParticipant</name>
+					<role_name>TurbineParticipantRole</role_name>
+				</participant_name>
+				<database>
+					<shutdown_cleanup_period>
+						<sec>DURATION_ZERO_SEC</sec>
+						<nanosec>1</nanosec>
+					</shutdown_cleanup_period>
+				</database>
+				<transport_builtin>
+					<mask>UDPv4</mask>
+				</transport_builtin>
+				<property>
+					<value>
+						<element>
+							<name>
+								dds.transport.UDPv4.builtin.parent.message_size_max
+							</name>
+							<value>65535</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.UDPv4.builtin.send_socket_buffer_size
+							</name>
+							<value>65535</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.UDPv4.builtin.recv_socket_buffer_size
+							</name>
+							<value>2097152</value>
+						</element>
+					</value>
+				</property>
+			</participant_qos>
+			
+			<datawriter_qos>
+				<publication_name>
+					<name>TurbineDataWriter</name>
+				</publication_name>
+				<reliability>
+					<kind>DDS_RELIABLE_RELIABILITY_QOS</kind>
+					<max_blocking_time>
+						<sec>5</sec>
+						<nanosec>0</nanosec>
+					</max_blocking_time>
+				</reliability>
+				
+				<history>
+					<kind>KEEP_ALL_HISTORY_QOS</kind>
+				</history>
+			
+				<resource_limits>
+					<max_samples_per_instance>20</max_samples_per_instance>
+				</resource_limits>
+			
+				<protocol>
+					<rtps_reliable_writer>
+						<low_watermark>1</low_watermark>
+						<high_watermark>15</high_watermark>
+						<heartbeat_period>
+							<sec>0</sec>
+							<nanosec>100000000</nanosec>
+						</heartbeat_period>
+						<fast_heartbeat_period>
+							<sec>0</sec>
+							<nanosec>10000000</nanosec>
+						</fast_heartbeat_period>
+						<late_joiner_heartbeat_period>
+							<sec>0</sec>
+							<nanosec>10000000</nanosec>
+						</late_joiner_heartbeat_period>
+						<max_heartbeat_retries>500</max_heartbeat_retries>
+						<min_nack_response_delay>
+							<sec>0</sec>
+							<nanosec>0</nanosec>
+						</min_nack_response_delay>
+						<max_nack_response_delay>
+							<sec>0</sec>
+							<nanosec>0</nanosec>
+						</max_nack_response_delay>
+					</rtps_reliable_writer>
+				</protocol>
+			</datawriter_qos>
+			
+			<datareader_qos>
+				<subscription_name>
+					<name>TurbineDataReader</name>
+				</subscription_name>
+				<reliability>
+					<kind>DDS_RELIABLE_RELIABILITY_QOS</kind>
+				</reliability>
+				
+				<history>
+					<kind>KEEP_ALL_HISTORY_QOS</kind>
+				</history>
+				<resource_limits>
+					<max_samples_per_instance>20</max_samples_per_instance>
+				</resource_limits>
+				
+				<protocol>
+					<rtps_reliable_reader>
+						<min_heartbeat_response_delay>
+							<sec>0</sec>
+							<nanosec>0</nanosec>
+						</min_heartbeat_response_delay>
+						<max_heartbeat_response_delay>
+							<sec>0</sec>
+							<nanosec>0</nanosec>
+						</max_heartbeat_response_delay>
+					</rtps_reliable_reader>
+				</protocol>
+			</datareader_qos>
+		</qos_profile>
+	</qos_library>
+</dds>
+\end{lstlisting}
+
+\chapter{Decentralized Solution Quality of Service XML file}\label{appendix:decentralizedQosFile}
+\begin{lstlisting}[language=XML]
+<?xml version="1.0"?>
+
+<dds>
+	<qos_library name="Turbine_Library">
+		<qos_profile name="Turbine_Profile" is_default_qos="true">
+			<participant_factory_qos>
+				<logging>
+					<verbosity>WARNING</verbosity>
+					<category>PLATFORM</category>
+					<print_format>VERBOSE_TIMESTAMPED</print_format>
+					<output_file>ddsadaptor.log</output_file>
+				</logging>
+			</participant_factory_qos>
+			
+			<participant_qos>
+				<participant_name>
+					<name>TurbineParticipant</name>
+					<role_name>TurbineParticipantRole</role_name>
+				</participant_name>
+				<database>
+					<shutdown_cleanup_period>
+						<sec>DURATION_ZERO_SEC</sec>
+						<nanosec>1</nanosec>
+					</shutdown_cleanup_period>
+				</database>
+				<transport_builtin>
+					<mask>UDPv4</mask>
+				</transport_builtin>
+				<receiver_pool>
+					<buffer_size>LENGTH_AUTO</buffer_size>
+				</receiver_pool>
+				<property>
+					<value>
+						<element>
+							<name>
+								dds.transport.UDPv4.builtin.multicast_enabled
+							</name>
+							<value>1</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.UDPv4.builtin.parent.message_size_max
+							</name>
+							<value>65535</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.UDPv4.builtin.send_socket_buffer_size
+							</name>
+							<value>65535</value>
+						</element>
+						<element>
+							<name>
+								dds.transport.UDPv4.builtin.recv_socket_buffer_size
+							</name>
+							<value>2097152</value>
+						</element>
+					</value>
+				</property>
+			</participant_qos>
+			
+			<topic_qos name="TurbineTopicQos">
+				<reliability>
+					<kind>DDS_BEST_EFFORT_RELIABILITY_QOS</kind>
+				</reliability>
+				<durability>
+					<kind>TRANSIENT_LOCAL_DURABILITY_QOS</kind>
+				</durability>
+			</topic_qos>
+			
+			<datawriter_qos>
+				<publication_name>
+					<name>TurbineDataWriter</name>
+				</publication_name>
+				<history>
+					<kind>KEEP_LAST_HISTORY_QOS</kind>
+					<depth>1</depth>
+				</history>
+				<lifespan>
+					<duration>
+						<sec>0</sec>
+						<nanosec>150000000</nanosec>
+					</duration>
+				</lifespan>
+			</datawriter_qos>
+			
+			<datareader_qos>
+				<subscription_name>
+					<name>TurbineDataReader</name>
+				</subscription_name>
+				<history>
+					<kind>KEEP_LAST_HISTORY_QOS</kind>
+					<depth>1</depth>
+				</history>
+				<multicast>
+					<kind>
+						AUTOMATIC_TRANSPORT_MULTICAST_QOS
+					</kind>
+					<value>
+						<element>
+							<receive_address>239.192.0.1</receive_address>
+						</element>
+					</value>
+				</multicast>
+			</datareader_qos>
+		</qos_profile>
+	</qos_library>
+</dds>
+\end{lstlisting}
