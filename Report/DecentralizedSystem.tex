@@ -20,7 +20,7 @@ First the changes to the regulation algorithm to make it compatible with a decen
 
 \section{Regulation algorithm}
 
-Decentralizing the regulation algorithm from the centralized solution (\cref{sec:cenRegAlgorithm}), we get the input/outputs presented on \cref{fig:ioDecenRegAlg}.
+Decentralizing the regulation algorithm from the centralized solution (\cref{sec:cenRegAlgorithm}), we get the input/outputs presented in \cref{fig:ioDecenRegAlg}.
 
 \begin{figure}[!h]
 	\centering
@@ -49,7 +49,7 @@ The following sections presents the decentralized regulation cycle. First by des
 
 \subsection{Changes compared to the centralized regulation cycle}\label{sec:regCycleChanges}
 
-The difference between the centralized regulation cycle and the decentralized regulation cycle is illustrated on \cref{fig:cycleCentralVSDecentral}. 
+The difference between the centralized regulation cycle and the decentralized regulation cycle is illustrated in \cref{fig:cycleCentralVSDecentral}. 
 
 \begin{figure}[!h]
 	%The figure show how regulation time differs central vs decantral
@@ -68,7 +68,7 @@ The difference between the centralized regulation cycle and the decentralized re
 
 In the centralized solution a request for data and waiting for the corresponding reply for every turbine was a requirement for the Park Pilot, turbines in the decentralized solution publish new states whenever a new setpoint has been calculated. Turbines publishes to a specific Topic and are assigned a unique keys. Receiving states from other turbines is handled and loaded asynchronously into memory by Connext, thus receiving states is a parallel process running alongside the regulation algorithm.
 This enables a \textit{Distributed Shared Memory (DSM)} (see \cref{sec:DSM} for DSM description) behavior for the decentralized solution, where the state of every turbine is shared with every other turbine in the wind farm.
-As every turbine has a unique Topic key, each turbine has assigned its own shared memory space, where only the turbine is allowed to write, as illustrated on \cref{fig:DSMlikeBehavior}, thus removing the possibility that turbines overwrite each others states. Using DSM like behavior for the decentralized solution, means that receiving states from other turbines is abstracted away from the regulation cycle, enabling the turbines to assume that the latest state of every other turbine has been received and is available locally in memory. This alleviates the need for the request-reply part of the centralized regulation cycle. The expectation is that removing the request-reply part of the algorithm decreases the regulation cycle time, since acquisition of turbine states are no longer a part of the regulation cycle.  
+As every turbine has a unique Topic key, each turbine has assigned its own shared memory space, where only the turbine is allowed to write, as illustrated in \cref{fig:DSMlikeBehavior}, thus removing the possibility that turbines overwrite each others states. Using DSM like behavior for the decentralized solution, means that receiving states from other turbines is abstracted away from the regulation cycle, enabling the turbines to assume that the latest state of every other turbine has been received and is available locally in memory. This alleviates the need for the request-reply part of the centralized regulation cycle. The expectation is that removing the request-reply part of the algorithm decreases the regulation cycle time, since acquisition of turbine states are no longer a part of the regulation cycle.  
 
 \begin{figure}[!h]
 	\begin{tabular}{ | c | c | c | c | c |}
@@ -93,7 +93,7 @@ Each turbine only calculate it's own setpoint. Thus after calculation, the new s
 
 \subsection{Implementation}
 
-Before running the regulation cycle illustrated on \cref{fig:decenRegCycle}, an initial setpoint is set and the corresponding state of the turbine is read, enabling publishing of the turbine state as the first step of the regulation cycle. This is done to prevent the first cycle from being redundant due to lack of data from other turbines. 
+Before running the regulation cycle illustrated in \cref{fig:decenRegCycle}, an initial setpoint is set and the corresponding state of the turbine is read, enabling publishing of the turbine state as the first step of the regulation cycle. This is done to prevent the first cycle from being redundant due to lack of data from other turbines. 
 
 \begin{figure}[!h]
 	\centering
@@ -135,7 +135,7 @@ Before running the regulation cycle illustrated on \cref{fig:decenRegCycle}, an 
 
 The Park Pilot publishes the state of the present turbine and reads the states of every turbine within the wind farm. Afterwards the regulation algorithm is performed and a setpoint for the present turbine is calculated and used to set a new state.
 
-The regulation algorithm used for the decentralized solution is the same used for the centralized solution described in \cref{sec:calculateSetpoints}, with the exception that the setpoint calculated is kept for local purposes instead of sending the setpoint to all turbines. The regulation algorithm code for the decentralized solution is presented on \cref{fig:decenRegAlgCode}.
+The regulation algorithm used for the decentralized solution is the same used for the centralized solution described in \cref{sec:calculateSetpoints}, with the exception that the setpoint calculated is kept for local purposes instead of sending the setpoint to all turbines. The regulation algorithm code for the decentralized solution is presented in \cref{fig:decenRegAlgCode}.
 
 \begin{figure}[!h]
 	\centering
@@ -201,7 +201,7 @@ The regulation cycle of the decentralized solution does not directly include any
 
 Increasing the number of cache reads can be an issue, since it reduces the effectiveness of the regulation cycle. Having a high number of cache reads implies that the regulation has been performed using data used for the previous regulation, thus decreasing the effect of the current regulation.
 
-As a result of this trade-off between reduction in regulation cycle time and number of cache reads, a sleep is introduced at the end of the regulation cycle (as presented on \cref{fig:decenRegCycle}), in order to control the reduction of the regulation cycle. Thus the regulation cycle time is an input parameter of the decentralized solution.
+As a result of this trade-off between reduction in regulation cycle time and number of cache reads, a sleep is introduced at the end of the regulation cycle (as presented in \cref{fig:decenRegCycle}), in order to control the reduction of the regulation cycle. Thus the regulation cycle time is an input parameter of the decentralized solution.
 
 \section{DDS configuration} \label{sec:decen:ddsconf}
 
