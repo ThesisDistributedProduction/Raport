@@ -1,5 +1,6 @@
 % !TeX spellcheck = en_US
 \chapter{Conclusion}
+%Intro
 Today, wind farms created by Siemens Wind Power has a centralized setup. Two central nodes exist in the wind farms, the Park Pilot and the Wind Power Supervisor. The Park Pilot is responsible for regulation of the power production of every turbine and for regulating the power production of the wind farm itself. The Wind Power Supervisor is responsible for data storage and external communication. The centralized approach to wind farm control poses a number of challenges for Siemens Wind Power.
 
 The first challenge is a problem of scalability. The Park Pilot does not scale well with the number of turbines. This forces Siemens Wind Power to install several Park Pilots in one wind farm in order to properly regulate the power production of the turbines and the wind farm itself.
@@ -8,6 +9,7 @@ The second challenge is a problem of availability. Using centralized components 
 
 Thus, Siemens Wind Power wishes to increase the scalability and the availability of the wind farm setup by decentralizing the Park Pilots and the Wind Power Supervisor, such that their functionality is placed in the turbines.
 
+%Feasibility
 In order to investigate the feasibility of decentralizing the Park Pilots and the Wind Power Supervisor the two components has been analyzed to identify the key services they provide.
 
 The key service of the Park Pilots is to communicate with the turbines in order to regulate their accumulated power production according to the power production goal of the wind farm. Thus, to decentralize the Park Pilots the turbines must be able to communicate such that each turbine's power production can be regulated according to the power production goal of the wind farm without a centralized Park Pilot.
@@ -18,6 +20,7 @@ Components able to provide decentralized communication, decentralized external c
 
 Using the identified components above we conclude that it is feasible to decentralize the current wind farm setup of a Siemens Wind Power wind farm.
 
+%Availability
 Decentralizing the Park Pilots and the Wind Power Supervisor is expected to increase the availability of the wind farm. This puts certain requirements on the power regulation of the turbines, DDS, LVS and MongoDB.
 
 Experiments show that the proposed decentralized solution is able to maintain wind farm power production in the face of turbine failures. Should a turbine become unavailable the remaining turbines are regulated such that they increase their power production in order to compensate for the unavailable turbine. Thus, internal communication handled by DDS is able to continue despite turbine failure.
@@ -26,8 +29,21 @@ LVS and MongoDB has not been implemented in the proposed decentralized solution,
 
 By the experiment performed and the abilities of maintaining operation in spite of node failure of LVS and MongoDB, we conclude that removing one or more turbines from the system at runtime will not cause system failure. Decentralizing the current wind farm setup of a Siemens Wind Power wind farm will increase availability by removing the single points of failure embodied by the Park Pilots and the Wind Power Supervisor. By introducing failure resistant components capable of providing the same services as the Park Pilots and the Wind Power Supervisor the availability of the wind farm will be further increased.
 
+%Scalability
+Decentralizing the Park Pilots and the Wind Power supervisor is expected to increase scalability as well as availability.
 
+%The results of the experiments performed with regards to scalability shows that the proposed decentralized solution scales near constant with the number of turbines in terms of regulation cycle time.
+The test setup for testing the scalability of the proposed decentralized solution imposed certain limitations with regard to the maximum number of turbines the experiments could be performed on, which is reflected in the results. Disregarding the results that was a direct consequence of the limited test setup a trend emerged. The regulation cycle time scales near constant with the number of turbines in terms of regulation cycle time. This was expected as the decentralized solution was designed with the goal of detaching the regulation cycle time from the number of turbines. A certain trade off had to be made in order to achieve near constant scalability. This trade off was in the form of cache reads. Cache reads happens when a turbine does not manage to update other turbines about it's current state between regulation cycles. This forces the other turbines to make use of data from cache which is obviously not optimal, but a better solution than waiting for the missing states to be delivered. As the number of turbines increase the number of cache reads increase with a factor of 0.033 extra cache read for every turbine added.
 
-Conclusion - discussion - perspektivering
+Detaching the regulation cycle time from the number of turbines has not been completely achieved as the state of one turbine must be calculated with the use of the states of every other turbine in the wind farm. The overhead associated with this calculation though is low enough that it is not visible in the result sets. What is visible from the result sets is that choosing the correct sleep time of the regulation cycles and accepting a number of cache reads the time of network communication can be factored out of the regulation cycle time for the majority of the regulation cycles.
 
-Vis resultaternes indflydelse for Siemens!
+%Performance
+Comparing how the proposed decentralized solution performs with regard to scalability in terms of number of turbines to the current Siemens system was not an option, since it was impossible to recreate the test environment Siemens Wind Power uses to test their current system. To enable a comparison a centralized solution was created. The proposed centralized solution was created to closely mirror the current Siemens system with regards to the steps of the regulation cycle and the centralized architecture. Thus, comparing the scalability of the centralized solution to the decentralized solution will give a rough estimate of how a decentralized version of the current Siemens system compares to the current Siemens system.
+
+In order to compare the centralized and the decentralized solutions the scalability with regards to number of turbines was measured on the centralized solution. Again the test setup imposed certain limits on the experiments. Disregarding the results that was a direct consequence of the limited test setup it was found that the regulation cycle time of the centralized solution was linear with the number of turbines with a factor of 1.667 ms extra regulation cycle time for every turbine added.
+
+From the experiments performed it can be concluded that the decentralized solution scales better than the centralized solution. Compared directly on regulation cycle time the scalability of the decentralized solution, which is nearly constant, is an overwhelming improvement. But a trade off has been made in terms of cache reads. This trade off can be limited by increasing the sleep time of the regulation cycle, thus increasing the regulation cycle time.\todo{Will the decentralized solution still scale better if we keep increasing the regulation cyc time in order to keep cache reads as low as possible?}
+
+%Summary and beautifull ending
+%This thesis has explored the feasibility of decentralizing the setup of a Simens Wind Power wind farm. It has been proven that it is feasible to decentralize the current wind farm setup of a Siemens Wind Power wind farm and in addition gain a number of advantages. By decentralizing the current wind farm setup it is possible to increase the scalability and availability of the wind farm. Thus,
+This thesis has explored the consequences of decentralizing a Siemens Wind Power wind farm. It has been proven that decentralizing a Siemens Wind Power wind farm is feasible. This has been done by identifying state of the art software components suitable for operation in a decentralized system. A prototype of both a centralized and decentralized wind farm has been created in order to compare differences in scalability and availability of the two. It has been shown that the scalability of the decentralized solution is near constant and thus an improvement compared to the centralized solution. The availability of the decentralized solution is increased as it does not contain any single points of failure as opposed to the centralized solution. The potential gain of decentralizing a Siemens Wind Power wind farm is thus a highly scalable, robust system, capable of tolerating failures and able to scale to a wast number of turbines without the need of additional support infrastructure.

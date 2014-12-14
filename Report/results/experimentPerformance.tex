@@ -101,12 +101,12 @@ We use the following box plot type (for \cref{fig:exp:decen:sleep} and \cref{fig
 	\label{fig:exp:decen:turbines}
 \end{figure}
 
-\Cref{fig:exp:decen:turbines} shows how the regulation cycle time of the decentralized solution changes according to the number of turbines.
-
-It is seen the system performs with a constant regulation cycle time with 5 to 90 turbines, if only observing the median.
-The quartiles are with the exception of the 5 turbines experiment of almost constant until 65, the same applies to the maximum values.
-The extreme regulation cycle time values all  stop close to 150 ms.
-At 70 turbines the maximum value sticks out notably it does look like a outlier however checking the raw data, it is not there are logged regulation cycle times for every ms value between it and the median.
+\Cref{fig:exp:decen:turbines} shows how the regulation cycle time of the decentralized solution changes with the number of turbines.
+The median of the regulation cycle time is nearly  constant from 5 to 80 turbines.
+The quartiles are with the exception of the 5 turbines experiment of almost constant until 65 turbines, the same applies to the maximum values.
+The extreme regulation cycle time values all stop close to 150 ms.
+As the number of turbines increase the number of outliers increase as well.
+When the number of turbines reach 85 the distribution of datapoints starts to widen. The outliers take on more extreme values as well. This can be explained by limitations in the test setup. Thus, results from 85 turbines to 100 turbines are not to be taken into account.
 It should be noted that all the data with a cycle time above 132~ms are collected from the same test machine.
 
 \begin{figure}[h!]
@@ -117,27 +117,26 @@ It should be noted that all the data with a cycle time above 132~ms are collecte
 \end{figure}
 
 
-\cref{fig:exp:decen:turbines_cache} show the amount of cache reads the simulation had during part 2 of the experiment.
-The plot almost lines up with a exponential curve. Also \cref{fig:exp:decen:turbines,fig:exp:decen:turbines_cache} seams to suddenly increase around 65 ms.
+\cref{fig:exp:decen:turbines_cache} shows the change in number of cache reads when the number of turbines increase. The number of cache reads are below 4 from 5 turbines to 80 turbines, with an increasing trend. From 85 turbines to 95 turbines the number of cache reads increase exponentially. This can again be explained by limitations in the test setup.
 
 \subsection{Discussion}
 \label{sec:disc:turbinesVScycletime}
 In the current Siemens system the regulation cycle time of a single Park Pilot scales linearly with the number of turbines.
 The aim of the decentralized solution is to detach the regulation cycle time from the number of turbines. 
 Looking at \cref{fig:exp:decen:turbines} we see that the decentralized solution seems to be independent of the number of turbines, if the number of turbines is sufficiently low.
-From 5 to 65 turbines the regulation cycle time is nearly constant at 20 ms.
+From 5 to 80 turbines the regulation cycle time is nearly constant at 20 ms.
 The near constant regulation cycle time is caused by the fact that the regulation cycle in the decentralized solution is not forced to wait for data before running the regulation algorithm because data is continually shared between turbines. Adding a turbine to the decentralized solution adds an extra turbine state to factor into the setpoint calculation in the regulation algorithm. This and the added network traffic for the new turbine is the consequence of adding new turbines.
 
 When looking at regulation cycle time of the decentralized solution we must also look at the number of cache reads.
 As explained in \cref{sec:exp:performance} a cache read happens when a turbine does not provide a new turbine state package before the next regulation cycle is started.
 This forces the regulation cycle to use old data read from cache.
-Looking at \cref{fig:exp:decen:turbines_cache} we see that the average number of cache reads in the decentralized solution are below 2 and increasing slightly until we reach 65 turbines. From there the number of cache reads increase exponentially.
+Looking at \cref{fig:exp:decen:turbines_cache} we see that the average number of cache reads in the decentralized solution are below 2 and increasing slightly until we reach 85 turbines. From there the number of cache reads increase exponentially.
 
-The increase in regulation cycle time and cache reads when the number of turbines reaches 65 can be explained by the fact that the network equipment of the test setup is approaching maximum throughput capacity which may cause lost or delayed network packages.
+The increase in regulation cycle time and cache reads when the number of turbines reaches 85 can be explained by the fact that the network equipment of the test setup is approaching maximum throughput capacity which may cause lost or delayed network packages.\todo{Er det korrekt?}
 Since regulation cycle time in the decentralized system is dependent on the reception time of the oldest turbine state package as explained in \cref{sec:exp:performance} the loss or delay of network packages has a direct impact on regulation cycle time.
 Similarly lost or delayed network packages increases the use of cached data. The increased regulation cycle time and cache reads are thus not a limitation of the decentralized solution but a limitation imposed by the test setup. In order to create a realistic comparison we must disregard the results that are a direct effect of the limitations of our test setup.
 
-Disregarding the limitations imposed by the test setup we see that the regulation cycle time is constant. In terms of regulation cycle time the decentralized solution scales indefinitely. As stated above there is a small increase in regulation cycle time for every turbine added because the state of this turbine has to be taken into consideration when calculating new setpoints on all other turbines. This time addition is not visible on \cref{fig:exp:decen:turbines}. Thus the regulation cycle time will be affected by the addition of turbines but the effect is so small that it is indistinguishable by other factors. Looking at the raw test data 
+Disregarding the limitations imposed by the test setup we see that the regulation cycle time is constant. In terms of regulation cycle time the decentralized solution scales indefinitely. As stated above there is a small increase in regulation cycle time for every turbine added because the state of this turbine has to be taken into consideration when calculating new setpoints on all other turbines. This time addition is not visible on \cref{fig:exp:decen:turbines}. Thus the regulation cycle time will be affected by the addition of turbines but the effect is so small that it is indistinguishable by other factors.
 
 Still disregarding the limitations imposed by the test setup when looking at the scale factor of the number of cache reads we see another result. The number of cache reads increases slowly with a factor of around 1 cache read for every 30 turbines added, which gives a scale factor of $1 / 30 = 0.033$.
 
