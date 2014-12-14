@@ -1,12 +1,14 @@
 \section{\ref{PS:Q:Scalability}}
 
-\textit{How will the new decentralized solution influence regulation time of a single regulations cycle compared to the current Siemens system?}
+\textit{Will the regulation cycle time of the new decentralized solution scale better than the current Siemens system in terms of number of turbines per Park Pilot?}\newline\newline
+
+\noindent As mentioned in \cref{cha:existingSystem}: The Proposed Centralized Solution, the centralized solution is only a simulation of the current Siemens system. Thus to complete the comparison between the decentralized solution and the current Siemens system, the discussion section of this experiment also contains a discussion with regards to differences between the centralized solution and the current Siemens system (described in \cref{sec:CenAndCurrentSiemensSystemComparison}).
 
 \subsection{Experiment}
 \label{subsec:Exper:Scale}
-Question \ref{PS:Q:Scalability} of \cref{sec:problemStatement} asks how the proposed decentralized system compares to the existing centralized system\cref{cha:existingSystem}) at Siemens Wind Power with regards to a number of parameters.
-The experiments below aims to show how the number of turbines and regulation speed affect the regulation algorithm, memory consumption and Network traffic.
-Each of these parameters behave differently when centralized compared to decentralized as seen in \cref{fig:timingCentralVSDecentral} the decentralized system does not wait for new data before doing calculations. Because of this the proposed decentralized version has a extra parameter which indicate how much data was updated before the calculation started.
+
+The \ref{PS:Q:Scalability} problem asks for a comparison between the decentralized solution and the current Siemens system, in order to determine which on of the systems that scales best, in terms of decreasing the coupling between the regulation cycle time and the number of turbines. For this experiment we compare the results of the \ref{PS:Q:Performance} problem with acquired results from the centralized solution. Thus for this comparison, we study how the regulation cycle time changes when increasing the number of turbines for both systems.
+
 
 \begin{figure}[b]
 	%The figure show how regulation time differs central vs decantral
@@ -22,9 +24,18 @@ Each of these parameters behave differently when centralized compared to decentr
 	\label{fig:timingCentralVSDecentral}
 \end{figure}
 
-	The centralized version is split into two applications a client and a server.
-	The aim is to compare the regulation time, therefore the client side of the application is not measured. This means that the decentralized version is at a slight disadvantage.
-	The following procedure is used each time the experiment is done, the procedure is done with N simulated turbines for both :
+The regulation time differences of the two systems is illustrated on \cref{fig:timingCentralVSDecentral}. The cycle regulation time of the decentralized solution is defined as the difference between the receive timestamp of the oldest turbine state (tOldestState) received and the timestamp sampled right after, a new turbine state has been sent (tSent):
+
+$$regulation~cycle~time=tSent-tOldestState$$
+
+The timestamp of the oldest turbine state is used to include network traffic in the regulation cycle time, as opposed to just sampling the time locally.
+
+The aim is to compare the regulation time, therefore the client side of the application is not measured. This means that the decentralized version is at a slight disadvantage.
+
+We use the following box plot type (for \cref{fig:exp:decen:sleep} and \cref{fig:exp:decen:turbines}): The central mark is the median, the edges of the box are the 25th and 75th percentiles, the whiskers extend to the most extreme data points not considered outliers, and outliers are plotted individually. The whisker length is denoted as 1.5 IQR. 
+
+
+The following procedure is used each time the experiment is done, the procedure is done with N simulated turbines for both :
 
 \begin{minipage}{\textwidth}
 	\begin{enumerate}
