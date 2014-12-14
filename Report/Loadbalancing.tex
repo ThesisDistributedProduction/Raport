@@ -6,22 +6,22 @@
 %Below should
 %Having redundant systems provides a number of favourable traits like scalability and availability.
 %\paragraph{The setting}
-The current Siemens system has multiple external systems used for configuration of parameters and monitoring power production. The protocols used are HTTP, Modbus and some more protocols specific to wind farms. Currently the system is designed to handle 100 concurrent connections.
+The current Siemens system communicates with multiple external systems which enable external configuration of control parameters or external monitoring of power production. The protocols used for the external communication are HTTP, Modbus and other protocols specific to wind farms. Currently the system is designed to handle 100 concurrent external communication connections.
 %The system also currently has a central database responsible for doing backup of all data produced by the turbines as well as calculating aggregated data such as total production and averages. Data aggregation is resource heavy task since each turbines produces data every 50 ms from 200 measurement points.
 
 %\paragraph{The benefits}
-By decentralizing the external interfaces, availability of theses systems can be increased. Currently if the Wind Power Supervisor fails external monitoring will be limited. In a decentralized solution a failing server can be discovered and a backup could replace it immediately. Furthermore if the number of external clients should increase it will be simpler to share workload across nodes.
+By decentralizing the external communication interfaces, availability of the decentralized version of the current Siemens systems can be increased. Currently if the Wind Power Supervisor is unavailable external communication will be limited. In a decentralized solution a failing server can be discovered and a backup could replace it immediately. Furthermore if the number of external clients should increase it will be simpler to share workload across turbines.
 
 %\paragraph{The problem}
 A problem arises when external systems need to interact with the wind farm. 
-Transforming external interfaces from being central to being part of the turbines creates a problem for client applications.
-With multiple turbines able run serve requests and no quarantine that all turbines are online, How do they know which turbine to connect to?
-Currently Siemens Wind Power uses a single ip address for external connections, it is preferred to also do so in an new decentralized solution.
-An other problem is that the turbines are limited in processing power, it is preferred to have the added load split evenly among the turbines.
+Transforming external communication interfaces from being central to being part of the turbines creates a problem for client applications.
+With multiple turbines able to serve requests and no guarantee that all turbines are online, how do they know which turbine to connect to?
+Currently Siemens Wind Power uses a single ip address for external communication, it is preferred to also do so in an a decentralized version of the current Siemens system.
+Another problem is that the turbines have limited processing power, it is preferred to have the added load of external communication divided evenly among the turbines of the wind farm.
 
 \FloatBarrier
 \subsection{Load Balancing}
-A load balancer is a network component capable of distributing incoming connections from clients to multiple server.
+A load balancer is a network component capable of distributing incoming connections from external clients to multiple server.
 
 \begin{figure}
 	\centering	
@@ -37,41 +37,41 @@ A load balancer is a network component capable of distributing incoming connecti
 \end{figure}
 
 
-\paragraph{Single entry point}
-Providing a single entry point is simple assigning a static ip address to a turbine would do that, however this introduces a single point of failure.
-To overcome this the load balancer must be supplemented by at least one backup load balancer, it must be able to takeover the address of the failing load balancer in order to keep the wind farm available.
-This can be done using a virtual ip address, and having the node with the active load balancer respond to it.
-If the node with the active load balancer fails the virtual ip address can be transferred to a backup load balancer and it will then become the active load balancer. To let other network participant know that the ip has moved to a new address a ARP announcement can be sent allowing them to update their ARP cache.
+\subsubsection{Single entry point}
+Providing a single entry point is as simple as assigning a static ip address to a turbine, however this introduces a single point of failure should the turbine become unavailable.
+To overcome this the load balancer must be supplemented by at least one backup load balancer which, in the event of failure, can take over the address of the failing load balancer in order to keep the wind farm available.
+This can be done using a virtual ip address, and having the turbine with the active load balancer respond to it.
+If the turbine with the active load balancer becomes unavailable the virtual ip address can be transferred to a backup load balancer which will then become the active load balancer. To let other network participant know that the virtual ip address has moved to a new address a Address Resolution Request (ARP) announcement can be sent allowing them to update their ARP cache.
 
 %\paragraph{Detecting node failure}
-Detection of a failed load balancer must be done by the backup nodes, generally there are two ways this can be done, either actively pinging the active load balancer or having the load balancer periodically sent data package also know as heartbeats.
+Detection of an unavailable load balancer must be done by the backup turbines, generally there are two ways this can be accomplished, either by actively pinging the active load balancer continuously or having the load balancer periodically send data package also know as heartbeats.
 Besides monitoring the active load balancer the backup load balancers must also keep a synchronised copy of the active load balancers connections table that contains a list of open connections between clients and servers.
 This setup is illustrated in \cref{fig:loadBalancingSetup2Balancers}.
 
 
-\paragraph{Load balancer to server communication}
+\subsubsection{Load balancer forwarding}
 The key objective of a load balancer is connecting clients to servers.
-When a load balancer receives a package it must identify if it belongs to a already open connection.
-If the connection belongs to a already open connection, the package is sent to the server which originally received the connection, else the scheduling strategy is used to forward the package and the connection is recorded as open between the client and server in a table by the load balancer.
-When a connection is closed or has timed out it is removed from the load balancers table. See the illustration to the left in \cref{fig:LoadbalancerOperation} the grey dashed arrows are the connection as perceived by the client and the black arrows are the real connection.
+When a load balancer receives a package it must identify if the package belongs to a already open connection.
+If the package belongs to a already open connection, the package is sent to the server which originally received the connection, if not a scheduling strategy is used to forward the package and the connection is recorded as open between the client and server in a table by the load balancer.
+When a connection is closed or has timed out it is removed from the load balancers table. See the illustration to the left in \cref{fig:LoadbalancerOperation}. The grey dashed arrows are the connection as perceived by the client and the black arrows are the real connection handled by the load balancer.
 
-There are different ways to forward packages but in general there are 3 major version:
+There are different ways to forward packages but in general three are prominent:
 \begin{description}
 	\item[Network address translation (NAT)] is a basic version which functions like the NAT in home routers.
 	The load balancer forwards the package to a server on the network, when the server responds it does the reverse and forwards the package to the client.
 	This means all traffic must pass through the load balancer, this is seen in \cref{fig:LoadbalancerOperation} left illustration. 
 	
-	\item[Tunnelling] van be used to forward pacakges to the server, this is done by warping the package in another package and then transmit it to the server.
+	\item[Tunnelling] can be used to forward pacakges to the server, this is done by wrapping the package inside another package and then transmit it to the server.
 	The server then unwraps the package and processes it. This requires the server to be setup to unwrap these packages.
-	For this to work the servers must also be setup with the same virtual ip as the load balancer and be configured to not respond to arp requests for that virtual ip address.
-	When the server is done processing it can now respond using the virtual ip address directly to the client avoiding the load balancer.
-	This method has less overhead because of less communication the principle is seen in \cref{fig:LoadbalancerOperation} right illustration.
+	For this to work the servers must also be setup with the same virtual ip as the load balancer and be configured to not respond to ARP requests for that virtual ip address.
+	When the server is done processing the unwrapped package it can now respond using the virtual ip address directly to the client avoiding the load balancer.
+	This method has less overhead because of less communication. The principle is presented in \cref{fig:LoadbalancerOperation} right illustration.
 	This method works across Ethernet segments.
 	
-	\item[Direct routing] is similar possibility is to forward the package by changing the receivers mac address.
-	Again the server need to be configured with the same virtual ip address to not respond to arp packages for that virtual ip address, but in this setup it must also be connected to the same Ethernet segment as mac addresses are not used when routing across Ethernet segments.
+	\item[Direct routing] is similar to tunnelling it forwards the package by changing the receivers mac address instead of wrapping the package.
+	Again the server must be configured with the same virtual ip address to not respond to ARP packages for that virtual ip address, but in this setup it must also be connected to the same Ethernet segment as mac addresses are not used when routing across Ethernet segments.
 	This method has the least overhead, but it does not work across Ethernet segments.
-	Both tunnelling and forwarding using mac address are show in the illustration to the right in \cref{fig:LoadbalancerOperation}, the perceived connection is dashed and grey when different form the real flow in black.
+	Both tunnelling and forwarding using mac address are illustrated in \cref{fig:LoadbalancerOperation} to the right, the perceived connection is dashed and grey when different form the real flow in black.
 	
 \end{description}
 
@@ -83,70 +83,70 @@ There are different ways to forward packages but in general there are 3 major ve
 	\caption[Load balancer data transportation]{
 		\label{fig:LoadbalancerOperation} 
 		\footnotesize{%
-			Load balancer data transportation, the left side illustrates load balancing with no direct server client communication and to the right with direct server to client communication.
+			Load balancer data transportation. The left side illustrates load balancing with no direct server client communication and the right side illustrates a direct server to client communication.
 		}
 	}
 \end{figure}
 
 
-\paragraph{Job scheduling strategies} %DNS Datacenter Application
+\subsubsection{Job scheduling strategies} %DNS Datacenter Application
 There are multiple ways to distribute traffic that could apply to a decentralized solution.
 %Load balancing can be done taking into account many parameters from a simply passing packets to servers in a round robin pattern, to monitoring performance parameters of the servers selecting the one with most free capacity. Some load balancers even inspect packages e.g. pass the HTTP headers URL field to select a server responsible for a specific resource.
-Solutions that require client integration or is made for entirely different purposes are omitted as they do not apply to this situation.
-Here are some example job scheduling strategies:
+Solutions that require client integration or is made for entirely different purposes are omitted as they are not usable for a system that has to be decentralized internally with a single entry point.
+Job scheduling strategies are presented below:
 
 \begin{description}
-	\item[Round robin] as the name implies distributes connections to servers equally to each server, it is the most basic of the strategies discussed. In many situations this is will give fair distribution of workload, however this is only true if connecting clients require equal amount of data per connection. If the system has a asymmetric load round robin can provide a unfair distribution of workload. 
+	\item[Round robin] as the name implies distributes connections to servers equally to each server, it is the most basic of the strategies discussed. In many situations this will give a fair distribution of workload, however this is only true if connecting clients require equal amount of data per connection. If the system has an asymmetric load round robin can provide an unfair distribution of workload. 
 	Round robin has the least overhead.
 	
 	\item[Least connection] takes advantage of the fact that the load balancer need to keep track of open connections. This information is used in the strategy to assign new connections to the node which currently has the fewest connections.
-	This ensures that long running connections are not causing nodes to be overloaded with connections.
-	without needing extra communication with the server.
+	This ensures that long running connections are not causing nodes to be overloaded with new connections.
+	This is done without adding extra overhead since data is already available at the load balancer.
 	
 	\item[Shortest expected delay] strategy keeps track of when a server has received a request and when it is expected to be finished processing a requests. The processing time for a single request is statically defined per server.
 	% (Ci + 1) / Ui Ci equal number of server i connections, Ui equal the time the servers takes to process a single request.
 	
-	\item[Performance monitoring] adds overhead by the added network packages and keeping tack of the current performance of the servers. It however ensure that the server with the most free capacity will receive the connection. Free capacity can be defined as free processing time, available memory or another resource.
+	%\item[Performance monitoring] adds overhead because additional network packages has to be exchanged to keep track of the current performance of the servers. It however ensures that the server with the most free capacity will receive the connection. Free capacity can be defined as free processing time, available memory or any other resource.
 	
-	\item[Package inspection] opens up the package and passes higher protocol headers. HTTP headers could be passed to identify what service the URL is trying to connect to, this can be handy when using using a restful api to build the monitoring platform.
-	It also makes it possible to split services up in slow and fast running services, helping to make sure that services which need to be fast are not begin slowed down by services which needs to make data heavy calculations.
-	Doing this would still allow having other distribution strategies to further split up the workload.
+	\item[Package inspection] opens up the network package and reads higher level protocol headers. HTTP headers could be read to identify what service the URL is trying to connect to. This can be handy when using a restful Application Programming Interface (API) to for instance build a monitoring platform.
+	It also makes it possible to divide services up in slow and fast running services, to make sure that services which needs to respond fast are not being slowed down by services that perform data heavy calculations.
+	Using package inspection would still allow other distribution strategies to further divide the workload.
 	Furthermore it can be used to access session information and make sure that each user with the same session id gets redirected to the same server, even though using a different connection.
-	Doing package inspection uses more Processing time on the load balancer than the other options since the it needs to process multiple layers of network abstraction to get to the relevant information. HTTP and Modbus protocols are both part of the application layer and in Layer 7 in the OSI-model, this means that the load balancer need to process multiple layers of the network protocol to retrieve this information. 
+	Doing package inspection uses more processing time on the load balancer than the other options, as several layers of network abstractions needs to be processed to get to the relevant information. %HTTP and Modbus protocols are both part of the application layer and in Layer 7 in the OSI-model, this means that the load balancer need to process multiple layers of the network protocol to retrieve this information. 
 	
 \end{description}
-None of the strategies and communication platforms described scales infinitely as they all are based on a single active load balancer handling all incoming traffic however the methods described should be more than enough to handle the 100 concurrent connections the current Siemens system has now with plenty of room for expansion. 
+None of the job scheduling strategies or load balancer forwarding described above scales infinitely as they all are based on a single active load balancer handling all incoming traffic. However, the methods described should be more than enough to handle the 100 concurrent connections that the current Siemens system currently handles. 
 
 %\paragraph{Extra features}
 
 %\paragraph{Existing systems}
-There exist a number project capable of doing the above mentioned load balancing.
+\subsubsection{State of the art load balancers}
+There exist a number of projects capable of performing load balancing as presented in the previous sections.
 
 
 \begin{description}
-\item[Linux Virtual Server Project\cite{zhang2000linuxVirtualServer} (LVS)] is build directly into the Linux kernel.
-Because LVS is build into the kernel it can redirect traffic on the data-link OSI layer 2, this is not allowed by user space applications.
-It supports load balancer fail over based on heart beat monitoring.
+\item[Linux Virtual Server Project~\cite{zhang2000linuxVirtualServer} (LVS)] is built into the Linux kernel.
+Because LVS is build into the kernel it can redirect traffic on the data-link layer (OSI layer 2).
+It supports load balancer failover based on heart beat monitoring.
 LVS supports Round robin, Least-Connection and Shortest Expected Delay Scheduling job scheduling strategies.
 
-
-\item[NGINX\cite{NGINX_LoadBalancer}] is a application level load balancer with a built in high performance web server, it can do http headers inspection and use the information within to distribute traffic to servers in groups.
+\item[NGINX~\cite{NGINX_LoadBalancer}] is an application level load balancer with a built in high performance webserver, it is able to do http header inspection and use the information of the headers to distribute traffic to servers in groups.
 The server support round robin, least connected, ip hash and hash load balancing strategies. 
-NGINX is in the basic open source version is unable to work directly with TCP/IP connections, a paid NGINX plus version existent witch can do this.
-It would be needed if other TCP/IP based protocols should be supported like Modbus.
-It works on both Linux and windows platforms.
-The open source is licensed with the FreeBSD License.
+NGINX in the basic open source version is unable to work directly with TCP/IP connections, a paid NGINX plus version exist which can do this.
+TCP/IP connection support would be needed if other TCP/IP based protocols should be supported like for instance Modbus.
+NGINX works on both Linux and windows platforms.
 
 %http://www.cisco.com/c/en/us/support/docs/ip/border-gateway-protocol-bgp/5212-46.html
 %\item[Cisco Routers] Load balancing is built into all of Cisco's routers which supports, 
 \end{description}
 %
-LVS should be able to outperform NGINX in raw performance since supports letting the server communicate directly back to the client.
-Since most clients request data in a monitoring system, it is fair to assume that more packages are being sent to the client than to the server.
-NGINX comes with http header inspection capabilities, however the new decentralized solution needs to support more than just http clients.
-Both load balancers can work directly with TCP/IP connections.
-A solution could be build witch uses NGINX on top of LVS to handle sessions, and fine grained distribution of requests based on URL.
+LVS should be able to outperform NGINX in terms of performance since LVS supports letting the server communicate directly back to the client.
+Since most communication in a monitoring system is from source to sink, in this situation from wind farm to client application, it is fair to assume that more packages are being sent to the client application than to the server residing in the wind farm.
+NGINX comes with http header inspection capabilities, however the decentralized version of the current Simens system must support more than just http clients.
+Both load balancers work directly with TCP/IP connections.
+A solution could be created which uses NGINX on top of LVS to handle sessions, and fine grained distribution of requests based on URL.
 
+LVS is the best choice for the decentralized version of the current Siemens system because of the performance gains obtained by the kernel level optimization.
 
 %\begin{figure}
 %	\centering
