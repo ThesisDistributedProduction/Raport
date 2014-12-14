@@ -1,12 +1,13 @@
 \chapter{The proposed centralized solution}\label{cha:existingSystem}
 
-The \ref{PS:Q:Scalability} problem in the problem statement(\cref{sec:problemStatement}) requires a comparison between the decentralized solution and the current system at Siemens on different parameters. Ideally, for us to compare the two systems on equal terms, both systems should be implemented in the same environment. However, since we do not have access to the environment where the current system at Siemens is implemented, we have chosen to build our own version of the current Siemens system, in the same environment as the decentralized solution.
+The \ref{PS:Q:Scalability} problem in the problem statement(\cref{sec:problemStatement}) requires a comparison on scalability in terms of numbers of turbines, between the decentralized solution and the current Siemens system. Ideally, for us to compare the two systems on equal terms, both systems should be implemented in the same environment. However, since we are only working with a small part of the current Siemens system, and do not have access to it or their test setup, we have chosen to build our own version of the current Siemens system, in the same environment as the decentralized solution.
 
-This version of the current Siemens system, from now on referred to as the centralized solution, is built from what Siemens has informed about the current Siemens system. The goal of the centralized solution is to create a foundation for a comparison between the decentralized solution and the current Siemens system, by making the system architecture around the regulation algorithm the only parameter changed from the centralized solution to the decentralized solution, thus ruling out the environment difference of the two systems as a parameter. This means the centralized solution is built to enable the collection of data that can be used to compare the two systems. As a result, we aim to compare the decentralized solutions test results with the centralized solutions test results, collected within the same environment, to more accurately address the \cref{PS:Q:Scalability} problem.
+This version of the current Siemens system, from now on referred to as the centralized solution, is built from what Siemens has informed about the current Siemens system. The goal of the centralized solution is to create a foundation for a comparison between the decentralized solution and the current Siemens system, by making the system architecture around the regulation algorithm the only difference between the centralized solution and the decentralized solution, thus ruling out the environment difference of the two systems as a parameter. The centralized solution is built to enable the collection of data that can be used to compare the two systems. We aim to compare the decentralized solution's test results with the centralized solution's test results, collected within the same environment, to accurately address the \cref{PS:Q:Scalability} problem.
 
-However in order to completely answer the \ref{PS:Q:Scalability} question, and compare the decentralized solution with the current Siemens system, another comparison must be introduced: A comparison between our centralized solution and the current Siemens system. This comparison is relevant in order to close the remaining 'comparison-gap' between the decentralized solution and the current Siemens system. This comparison will be a theoretical comparison between the centralized solution and the current Siemens system, and based on assumptions made when building the centralized solution.
+In order to completely answer the \ref{PS:Q:Scalability} question, and compare the decentralized solution with the current Siemens system, another comparison must be introduced: A comparison between our centralized solution and the current Siemens system. This comparison is done in order to close the remaining 'comparison-gap' between the decentralized solution and the current Siemens system. 
+This comparison will be based on information form Siemens and assumptions made when building the centralized solution.
 
-As presented in \cref{fig:projectDiffOverview} there exist a difference between the current Siemens system and the centralized solution as well as a difference between the centralized solution and the decentralized solution, illustrated by deltas.
+There exist a difference between the current Siemens system and the centralized solution as well as a difference between the centralized solution and the decentralized solution, illustrated by deltas in \cref{fig:projectDiffOverview}.
 
 \begin{figure}[!h]
 	\centering
@@ -20,14 +21,12 @@ As presented in \cref{fig:projectDiffOverview} there exist a difference between 
 	}
 \end{figure}
 
-The delta between the current Siemens system and the centralized solution is minimized as much as possible based on information about the current Siemens system delivered by Siemens Wind Power. Since the operation and regulation of the current Siemens system is proprietary the full system information is not available. To make up for the missing information a number of assumptions has been done about the current Siemens system which is also a part of the delta.
-The delta between the centralized solution and decentralized solution describes the difference in operation of a centralized system and a decentralized system.
+The delta between the current Siemens system and the centralized solution is minimized based on information delivered by Siemens Wind Power. Since the operation and regulation of the current Siemens system is proprietary the full system information is not available. To make up for the missing information a number of assumptions has been made about the current Siemens system which is also a part of the delta.
 
-The thesis motivation (\cref{sec:ThesisMotivation}) describes a brief overview of the current system at Siemens. This chapter gives a detailed description of the key component of the current Siemens system: The regulation algorithm. Furthermore the chapter describes the centralized solution followed by a theoretical comparison between the centralized solution and the current Siemens system. 
+The thesis motivation (\cref{sec:ThesisMotivation}) describes a brief overview of the current Siemens system. This chapter gives a description of the regulation algorithm, which is a key component of the current Siemens system. Furthermore the chapter describes the centralized solution followed by a theoretical comparison between the centralized solution and the current Siemens system. 
 
 \section{Regulation algorithm}\label{sec:cenRegAlgorithm}
-
-The regulation algorithm is a key component of the current Siemens system and it is where new setpoints are calculated. Since the purpose of this thesis is not to improve any regulation algorithms, the regulation algorithm has been considered a black box in development of both the centralized and the decentralized solution. What is important to this thesis is that the algorithm used is the same in both the centralized and the decentralized solution, to make sure the two solutions are compared on the same terms. 
+The regulation algorithm is a key component of the current Siemens system and it is where new setpoints are calculated. Since it is not the purpose of this thesis to improve the regulation algorithms, the regulation algorithm has been considered a black box in the development of both the centralized and the decentralized solution. What is important to this thesis is that the algorithm used is the same in both the centralized and the decentralized solution, to make sure the two solutions are compared on the same terms. 
 
 %To get as realistic a picture of the system as possible of the regulation algorithm, we tried to gain access to the algorithm Siemens currently use, but due to the regulation algorithm at Siemens being a commercial secret, this was not possible.
 
@@ -44,20 +43,21 @@ The regulation algorithm is a key component of the current Siemens system and it
 	}
 \end{figure}
 
-With the algorithm being a black box, the input/output parameters of the regulation algorithm was studied to provide the correct communication circumstances for the regulation algorithm. \Cref{fig:ioCenRegAlg} presents a simple input/output overview of the regulation algorithm. Input/output parameters of the regulation algorithm are as follows:
+With the algorithm being a black box, the input/output parameters where studied to provide the optimal network communication around the regulation algorithm. \Cref{fig:ioCenRegAlg} presents a simple input/output overview of the regulation algorithm. The Input/output parameters are as follows:
 
 \begin{description}
 	\item The \textbf{global setpoint} of the wind farm. This is the production goal of the wind farm. %Which means all turbines combined should produce.
 	\item The \textbf{setpoint} of each turbine, calculated from the regulation algorithm. 
 	\item The \textbf{current production} of the turbine.
-	\item The \textbf{maximum production} of the turbine. In real-life, this parameter is amongst others determined from the wind conditions around the turbine.
+	\item The \textbf{maximum production} of the turbine. The data is provided by Siemens, this parameter is primarily determined from the wind conditions around the turbine.
 \end{description}
 
-These input/output parameters of the regulation algorithm is simplified compared to the current Siemens system. The data used is more og less irrelevant for the purpose of this thesis as long as both the decentralized solution and the centralized solution are using the same data and as long as both systems are able to perform the same simple regulation.
+These input/output parameters of the regulation algorithm are simplified compared to the current Siemens system and only regulates active power production. The data used is more og less irrelevant for the purpose of this thesis as long as both the decentralized solution and the centralized solution are using the same data and as long as both systems are able to perform the same simple regulation.
+The data used is for adding dynamic to the setup and does not impact regulation performance.
 
 \section{Regulation cycle}\label{sec:currentSystemCen} 
 
-The first area studied when building the centralized solution, was building the frames for the regulation algorithm (see \cref{sec:cenRegAlgorithm}), meaning how to communicate the input/output around the centralized solution.
+The first area studied when building the centralized solution, was building the frames for the regulation algorithm, meaning how to communicate the input/output around the centralized solution.
 
 This section describes the components of a regulation cycle in the centralized solution. The regulation cycle consist of a number of steps presented in \cref{fig:timingCentral}.
 
@@ -104,7 +104,7 @@ A simple overview of the first part of the regulation cycle is presented on \cre
 	\item [Turbine] The underlying turbine object is the interface to the Turbine, which handles communication with the underlying database with simulation data.
 \end{description}
 
-The Park Pilot sends a request to a specific DDS Topic and then waits until it has received a reply from all the turbines subscribing to this DDS Topic, which in our case is all turbines. In a real-life implementation of the centralized solution, a timer should be implemented to determine how long to wait for the replies, and maybe even mark a turbine as offline, if a given turbine does not reply within that time frame. However, since this is a prototype for comparison purposes, this functionality has not been implemented. The request message, sent from the Park Pilot, contains the regulation cycle time, which is only used for data logging purposes (i.e. not used by the turbines).
+The Park Pilot sends a request to a specific DDS Topic and then waits until it has received a reply from all the turbines subscribing to this DDS Topic, which in our case is all turbines. In a real-life implementation of the centralized solution, a timer should be implemented to determine how long to wait for the replies. The turbine should be marked as offline, if it does not reply within that time frame. However, since this is a prototype for comparison purposes only, this functionality has not been implemented. The request message, sent from the Park Pilot, contains the regulation cycle time, which is only used for data logging purposes (i.e. not used by the turbines).
 
 The Turbine Data Replier is instantiated with the Turbine object and runs on every turbine. After instantiation, the Turbine Data Replier goes into an infinite loop which first waits infinitely until a request is received, reads turbine data from the Turbine object and finally sends a reply containing the data to the Park Pilot. Ideally, the Turbine Data Replier object should have been implemented as a listener on the request topic using RTI Connext SimpleReplier~\cite{rtiConnextUsersManual}. However, we could not get it to work using the SimpleReplier but waiting infinitely for a request works just as well for our purpose.
 
@@ -347,7 +347,7 @@ The section provides a detailed evaluation of every parameter of the chosen prof
 	
 	\item \textbf{transport\_builtin} configures the built-in transport plugins (UDPv4/IP, UDPv6/IP, TCP/IP, TLS, DTLS, shared memory, etc.) used by the DomainParticipants. By default UDPv4 and shared memory plugins are enabled. For the centralized solution, the shared memory plugin is disabled (set to UDPv4 only) such that applications running on the same node do not use shared memory to communicate. This is done since our test setup only involves 3 test machines, each simulating a number of turbines. As such, communication through shared memory is not acceptable, because the turbines must communicate as if they are separate machines.
 	
-	\item \textbf{receiver\_pool (removed)} configures the internal Connext thread used to process the data received from a transport. As such, the \textbf{buffer\_size} configures the size of the receive buffer in bytes. The default value of this property is set to the largest message size of all installed transports, which is needed for the centralized solution. Thus the default value is sufficient and the custom value used in the current Siemens system is removed from the centralized solutions QoS file.
+	\item \textbf{receiver\_pool (removed)} configures the internal Connext thread used to process the data received from a transport. As such, the \textbf{buffer\_size} configures the size of the receive buffer in bytes. The default value of this property is set to the largest message size of all installed transports, which is needed for the centralized solution. Thus the default value is sufficient and the custom value used in the current Siemens system is removed from the centralized solution's QoS file.
 	
 	\item \textbf{ignore\_nonup\_interfaces (removed)} property allows/disallows the use of interfaces that are not reported as UP (by the operating system) in the UDPv4 transport. Setting this value to 0 supports the communication scenarios in which interfaces are enabled after the participant is created. This parameter has been removed since the centralized solution do not have any interfaces that are enabled after the participant is created. Thus the centralized solution uses the default value of 1 which means interfaces that are reported as down is not supported.
 	
