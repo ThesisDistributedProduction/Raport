@@ -38,6 +38,20 @@ The blockset consists of a toolbox containing 6 blocks. Common for all blocks ex
 
 \paragraph{The Time block} returns the current time from DDS output in seconds and nanoseconds.
 
+\section{Simulink model of the centralized solution}\label{subsec:centralizedmodel}
+The Simulink model of the centralized solution is presented in \cref{centralizedSimulinkModel}. The centralized solution contains three different messagetypes, TurbineDataMessage, RequestMessage, SetpointMessage, \cref{sec:cenIdl} that all run on different topics. Because of this the centralized Simulink model contains one DomainParticipant, three Subscribers, one for each topic, and three DataReaders, one for each message type, in order to capture the communication in the centralized solution. Every message received is logged to a .mat file together with the current DDS time.
+
+\begin{figure}[!h]
+	\includegraphics[width=\textwidth]{figures/CentralizedModel}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Centralized Simulink model]{
+		\label{fig:centralizedSimulinkModel} 
+		\footnotesize{%
+			Centralized Simulink model.
+		}
+	}
+\end{figure}
+
 \section{Simulink model of the decentralized solution}\label{subsec:decentralizedmodel}
 
 \begin{figure}[!h]
@@ -51,23 +65,9 @@ The blockset consists of a toolbox containing 6 blocks. Common for all blocks ex
 	}
 \end{figure}
 
-The Simulink model of the decentralized solution is simple. The decentralized Simulink model has a DomainParticipant block in order to be able to receive data from the same domain as the turbines. It also has a Time block to enable logging and graphing of the current DDS time. Since the decentralized solution only uses one DDS message type, TurbineMessage \cref{sec:decenIdl}, to communicate between the turbines in the system, the decentralized Simulink model has only one Subscriber block and one DataReader block. The Subscriber block specifies the Topic to subscribe to and the DataReader block receives events every time a new TurbineMessage is available. The TurbineMessage that is received is logged to a .mat file together with the current DDS time for later use.
+The Simulink model of the decentralized solution is presented in \cref{decentralizedSimulinkModel}. The decentralized Simulink model has a DomainParticipant block in order to be able to receive data from the same domain as the turbines. It also has a Time block to enable logging and graphing of the current DDS time. Since the decentralized solution only uses one DDS message type, TurbineMessage \cref{sec:decenIdl}, to communicate between the turbines in the system, the decentralized Simulink model has only one Subscriber block and one DataReader block. The Subscriber block specifies the Topic to subscribe to and the DataReader block receives events every time a new TurbineMessage is available. The TurbineMessage that is received is logged to a .mat file together with the current DDS time for later use.
 
 In order to transfer data from the Simulink model to Matlab eventlisteners must be implemented in a Matlab .m file. In the decentralized solution the eventhandler listens for incoming events on the bus object that receives new data from the DataReader block. When new data is received the event fires and data can be collected from the Simulink model. Furthermore, model execution can be controlled from Matlab, as well as parameters like model runtime.
-
-\section{Simulink model of the centralized solution}\label{subsec:centralizedmodel}
-The Simulink model of the centralized solution is a bit more complex. The centralized solution contains three different messagetypes, TurbineDataMessage, RequestMessage, SetpointMessage, \cref{sec:cenIdl} that all run on different topics. Because of this the centralized Simulink model contains one DomainParticipant, three Subscribers, one for each topic, and three DataReaders, one for each message type, in order to capture the communication in the centralized solution. Every message received is logged to a .mat file together with the current DDS time.
-
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{figures/CentralizedModel}
-\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
-	\caption[Centralized Simulink model]{
-		\label{fig:centralizedSimulinkModel} 
-		\footnotesize{%
-			Centralized Simulink model.
-		}
-	}
-\end{figure}
 
 \section{Installation of DDS Blockset for Simulink}
 To install DDS Blockset for Simulink follow the steps provided by Mathworks~\cite{DDSBlocksetPilotSupportPackageUserGuide}. The installation is short but as described below additional work has to be done in order to make DDS Blockset for Simulink work properly with Matlab and Interface Definition Language files.

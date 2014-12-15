@@ -114,18 +114,23 @@ The outliers span from 0 ms to 150 ms of regulation cycle time.
 \begin{figure}[h!]
 	\centering
 	\input{figures/tikz/results/Test5_decentral_cycle_cache}
-	\caption{Decentralized solution variable number of turbines experiment 1}
-	\label{fig:exp:decen:turbines_cache}\end{figure}
+	\caption{Decentralized solution variable number of turbines experiment}
+
+\end{figure}
 
 
-\Cref{fig:exp:decen:turbines_cache} shows the change average cache reads when the number of turbines increase. The number of cache reads are below 4 from 5 turbines to 80 turbines, with an increasing trend. From 85 turbines to 95 turbines the number of cache reads increase with an exponential tendency. This can again be explained by limitations in the test setup, and the results should be disregarded.
+\Cref{fig:exp:decen:turbines_cache} shows the change in average cache reads when the number of turbines increase. The number of cache reads are below 4 from 5 turbines to 80 turbines, with an increasing trend. From 85 turbines to 95 turbines the number of cache reads increase with an exponential tendency. This can again be explained by limitations in the test setup, and the results should be disregarded.
+        n{Discussion}                                 ution is to detach the regulation cycle time from the number of turbines, by making reception of turbine state happen in parallel with the regulation cycle. As a consequence of this the term cache reads has been ioduced to the system, since the detaching of receiving states from the regulation cycle opens for the possibility, that a given state from a turbine is used multiple times in a row for regulation. 
 
-\subsection{Discussion}
-\label{sec:disc:turbinesVScycletime}
-In the current Siemens system the regulation cycle time of a single Park Pilot scales linearly with the number of turbines.
-The aim of the decentralized solution is to detach the regulation cycle time from the number of turbines, by making reception of turbine state happen in parallel with the regulation cycle. As a consequence of this the term cache reads has been introduced to the system, since the detaching of receiving states from the regulation cycle opens for the possibility, that a given state from a turbine is used multiple times in a row for regulation. 
+Looking Experiment 1, we disregard the 10 ms data sets for both \cref{subsec:Exper:perfom:1} and \cref{fig:exp:decen:sleep-cache}, due to limited experiment equipment. Running with a 10 ms sleep time, caused our experiment setup to approach maximum network adapter capacity, thus resulting in package delays.
 
-Looking at Experiment 1, we observe that the regulation cycle time is linearly dependent of the sleep time, with the exception of the 10 ms. The 10 ms sleep time data set can be disregarded for both \cref{subsec:Exper:perfom:1} and \cref{fig:exp:decen:sleep-cache} due to limited experiment equipment. Running with a 10 ms sleep time, caused our experiment setup to approach maximum CPU capacity, thus resulting in package delays.  This is expected since the sleep operation is a part of the regulation cycle. Furthermore we notice negative outliers, implying the regulation cycle time 
+Looking at \cref{subsec:Exper:perfom:1} we observe a linearly dependency between the sleep time and the regulation cycle time (with the 10 ms data set disregarded). This is expected since the sleep operation is a part of the regulation cycle. The outliers with lower values than the median, means we observe data points with a lower regulation cycle time than the sleep time. 
+
+
+
+The outliers below the median are another matter. The reception of turbine states is decoupled from the regulation cycle meaning that whenever a turbine has a new state it will distribute it immediately. With the states of all turbines available at each turbine there is no need to wait for state updates before running the regulation algorithm. Regulation cycle time is calculated from the timestamp of reception of the oldest state used in the regulation algorithm to the timestamp taken just after the newly calculated state has been distributed. Thus, if all turbines have updated their state half way into the sleep time of the regulation cycle the time from the oldest received state until a new state is distributed may be smaller than the sleep time of the regulation cycle, embodied by the outliers that have a smaller regulation cycle time than the median.
+
+
 
 Looking at \cref{fig:exp:decen:turbines} we see that the decentralized solution seems to be independent from the number of turbines, if the number of turbines is sufficiently low.
 From 5 to 80 turbines the regulation cycle time is nearly constant at 20 ms.
@@ -144,7 +149,7 @@ Disregarding the limitations imposed by the test setup observe that the regulati
 
 As stated above there is a small increase in regulation cycle time for every turbine added because the state of this turbine has to be taken into consideration when calculating new setpoints on all other turbines. This time addition is not visible in \cref{fig:exp:decen:turbines}. Thus the regulation cycle time will be affected by the addition of turbines but the effect is so small that it is indistinguishable by other factors.
 The amount of outliers in \cref{fig:exp:decen:turbines} is fairly high. This is to be expected as the regulation cycle time factors in network traffic. Thus, the outliers that is higher than the median can be explained by a delay or a loss of a package in the network. Another explanation could be that the turbines are not running synchronized with each other. This means that one turbine may receive states from other turbines just at the time when the sleep time of the regulation cycle time elapses. Thus, it is possible that some turbines may not deliver their states in time for them to be used in the current regulation cycle which forces the use of cache reads, which in turn increases the regulation cycle time.
-The outliers below the median are another matter. The reception of turbine states is decoupled from the regulation cycle meaning that whenever a turbine has a new state it will distribute it immediately. With the states of all turbines available at each turbine there is no need to wait for state updates before running the regulation algorithm. Regulation cycle time is calculated from the timestamp of reception of the oldest state used in the regulation algorithm to the timestamp taken just after the newly calculated state has been distributed. Thus, if all turbines have updated their state half way into the sleep time of the regulation cycle the time from the oldest received state until a new state is distributed may be smaller than the sleep time of the regulation cycle, embodied by the outliers that have a smaller regulation cycle time than the median.
+
 
 Still disregarding the limitations imposed by the test setup when looking at the number of cache reads we see another result. The number of cache reads increases slowly with a factor of around 1 cache read for every 30 turbines added, which gives a scale factor of $1 / 30 = 0.033$ added cache reads per turbine added.
 
