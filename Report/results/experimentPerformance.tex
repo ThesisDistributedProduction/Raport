@@ -124,7 +124,7 @@ The outliers span from 0 ms to 150 ms of regulation cycle time.
 
 Looking Experiment 1, we disregard the 10 ms data sets for both \cref{subsec:Exper:perfom:1} and \cref{fig:exp:decen:sleep-cache}, due to limited experiment equipment. Running with a 10 ms sleep time, caused our experiment setup to approach maximum network adapter capacity, thus resulting in package delays.
 
-Looking at \cref{subsec:Exper:perfom:1} we observe a linearly dependency between the sleep time and the regulation cycle time (with the 10 ms data set disregarded). This is expected since the sleep operation is a part of the regulation cycle. The outliers with lower values than the median, means we observe data points with a lower regulation cycle time than the sleep time. 
+Looking at \cref{subsec:Exper:perfom:1} we observe a linearly dependency between the sleep time and the regulation cycle time (with the 10 ms data set disregarded). This is expected since the sleep operation is a part of the regulation cycle. The outliers with lower values than the median, means we observe a lower regulation cycle time than the sleep time. By the definition of the regulation cycle time,  
 
 
 
@@ -155,3 +155,5 @@ Still disregarding the limitations imposed by the test setup when looking at the
 
 The number of cache reads can be reduced by increasing the regulation cycle time as presented in \cref{fig:exp:decen:sleep-cache}.
 Thus, the factor deciding the time of the regulation cycle is the maximum number of average cache reads accepted for a single regulation cycle.
+
+\clearpage

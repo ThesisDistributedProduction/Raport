@@ -24,24 +24,12 @@ The \ref{PS:Q:Scalability} problem asks for a comparison between the decentraliz
 	\label{fig:timingCentralVSDecentral}
 \end{figure}
 
-<<<<<<< HEAD
-The regulation time differences of the two systems is illustrated on \cref{fig:timingCentralVSDecentral}. We use the same definition for the 
-
-The cycle regulation time of the decentralized solution is defined as the difference between the receive timestamp of the oldest turbine state (tOldestState) received and the timestamp sampled right after, a new turbine state has been sent (tSent):
-
-$$regulation~cycle~time=tSent-tOldestState$$
-
-The timestamp of the oldest turbine state is used to include network traffic in the regulation cycle time, as opposed to just sampling the time locally. Note that by this definition, it is possible for regulation cycle time to be lower than the sleep time. 
-
-The aim is to compare the regulation time, therefore the turbine side centralized solution is not measured. This means that the decentralized version is at a slight disadvantage, since .
-=======
 The regulation cycle time of the decentralized solution is defined as the difference between the receive timestamp of the oldest turbine state (tOldestState) received and the timestamp sampled right after, a new turbine state has been sent (tSent):
 
 $$regulation~cycle~time=tSent-tOldestState$$
 
 The timestamp of the oldest turbine state is used to include network traffic in the regulation cycle time. Thus, if the decentralized solution is using cached data this will be reflected in the regulation cycle time, making the comparison between the centralized and decentralized solution more fair. 
 %The aim is to compare the regulation cycle time including , therefore the turbine side centralized solution is not measured. This means that the decentralized version is at a slight disadvantage, since .
->>>>>>> a876855f2981437b36be3d73dc05e7bc8748c0e6
 
 We use the following box plot type (for \cref{fig:exp:decen:sleep} and \cref{fig:exp:decen:turbines}): The central mark is the median, the edges of the box are the 25th and 75th percentiles, the whiskers extend to the most extreme data points not considered outliers, and outliers are plotted individually. The whisker length is denoted as 1.5 IQR. 
 
