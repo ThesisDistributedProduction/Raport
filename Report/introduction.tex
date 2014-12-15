@@ -42,6 +42,69 @@ Both the park regulators and the SCADA system are essential for a Siemens Wind P
 As wind energy is recognized as one of the solutions to the renewable energy problem, wind park size and capacity keeps increasing.
 The need for wind farm scalability and availability is thus not only a challenge for Siemens Wind Power but for the entire industry.
 
+The popularity of wind energy has lead to massive research within the area. Generally the research is focused on a number of subareas:
+
+\begin{itemize}
+	\item Optimization of turbine design and construction materials.
+	\item Turbine and wind farm control.
+	\item Integration of wind farms into existing power grids.
+	\item Wind flow prediction and simulation.
+	\item Wake flow optimization and simulation.
+	\item Offshore wind farms.
+\end{itemize}
+
+%\section{Decentralized systems}
+%With the coming era of Internet of Things (IoT) the focus on decentralized systems and autonomic agents is greater than ever.
+%IoT devices must be able to communicate with each other directly without the need for an intermediate central server.
+%Furthermore the IoT devices must be largely autonomous since they cannot rely on a lasting connection to a server for control.
+%
+%A new approach to control of wind farms is to utilize game theory\cite{AModelFreeApproachToWindFarmControl}.
+%The turbines in a farm must cooperate to reach the desired setpoint of a chosen output.
+%The game theory approach use an iterative learning algorithm that converges against the optimal output after n iterations.
+
+The Aeolus project was a large scale EU supported project which lasted from may 2008 to april 2011~\cite{Aoelus}. It included project partners from 
+Aalborg University, Industrial Systems and Control Ltd in Glasgow, University of Zagreb, Energy Research Centre of the Netherlands and Vestas Wind Systems A/S.
+The main objectives of the project was to research and develop predictions of flows and incorporate data from a network of sensors, as well as research and develop control paradigms that acknowledges the uncertainty in the modeling and dynamically manages the flow resource in order to optimize specific control objectives.
+The project is relevant to this thesis because several approaches to control of a wind farm was evaluated.
+
+One approach was the hierarchical approach which uses local control on the turbine level and global control on the wind farm level~\cite{HeirarchicalWindFarmControl}.
+Setpoints for the global output of the wind farm are received by the controller on the wind farm level.
+So is the output for each turbine and the maximum available output for each turbine.
+The global controller calculates setpoints for each turbine based on the global setpoint and each turbines current and possible output.
+The controllers on turbine level is responsible for reaching the setpoint calculated by the global controller as well as making each turbine reach the setpoint in the most optimal manner(gearing, avoid ice over, avoid oscillation).
+The hierarchical approach is similar to the current approach used in the Siemens case.
+
+Another approach was the decentralized feed-forward approach~\cite{DecentralisedFeedforwardControlOfWindFarms} which takes advantage of the placement of turbines in a wind farm by letting upwind turbines feed wind data to downwind turbines. 
+This allows downwind turbines to make adjustments to their production in order to exploit the coming wind in the best way.
+Furthermore, a restricted communication model is used allowing turbines only to communicate with their neighbors.
+Using this decentralized feed-forward approach to control a wind farm can help even out the output of the farm since downwind turbines has additional information regarding wind speed to come to act upon. If upwind turbines power production is also a part of the feed-forward package downwind turbines may also be able to regulate overall wind farm production by evening out spikes from upwind turbines.
+In addition, by only communicating with neighboring turbines in order to achieve improvements in output the need for a centralized node is alleviated.
+
+The European Union has a number of sponsored projects beside the Aeolus project:
+\begin{itemize}
+	\item IRPWIND, which aim to accelerate the transition towards low-carbon energy through better integration of the European research activities~\cite{IRPWIND}. The program has six subprogrammes:
+	\begin{enumerate}
+		\item Wind conditions
+		\item Aerodynamics
+		\item Structures and Materials
+		\item Wind Integration
+		\item Offshore Wind Energy
+		\item Research Infrastructure
+	\end{enumerate}
+	\item INNWIND, which focus is on accelerating the process of realizing the 20MW turbine~\cite{INNWIND}.
+	\item EERA-DTOC, which focus is on creating a software tool for optimizing offshore wind farm design and clusters of wind farms~\cite{eera-dtoc}.
+\end{itemize}
+
+Likewise the  United States of America has a number of projects most of them performed by Sandia National Laboratories or National Renewable Energy Laboratory:
+\begin{itemize}
+	\item SWiFT, which focus is on wake effects, turbine control and rotor development~\cite{SWiFT}.
+	\item Offshore Wind, which focus on large rotor development and simulation algorithms~\cite{offshoreWind}.
+	\item Active Power Control, focus on using wind turbines for active control of the power grid~\cite{activePowerControl}.
+\end{itemize}
+
+The area of the supporting software architecture and software stack is not a topic that has received much attention, presumably because the prevailing solutions are proprietary and therefore not available for public research.
+This thesis adds insight into which software components and technologies could be useful in a wind farm, thus filling in some of the gap in the research area.
+
 \section{Siemens Wind Power case}
 
 % Beskriv topologi
@@ -173,72 +236,6 @@ The scope of this thesis is limited to the following areas:
 \end{itemize}
 
 The features of the Wind Power Supervisor will not be implemented in the decentralized solution.
-
-\section{Related work}
-The popularity of wind energy has lead to massive research within the area. Generally the research is focused on a number of areas:
-
-\begin{itemize}
-	\item Optimization of turbine design and construction materials.
-	\item Turbine and wind farm control.
-	\item Integration of wind farms into existing power grids.
-	\item Wind flow prediction and simulation.
-	\item Wake flow optimization and simulation.
-	\item Offshore wind farms.
-\end{itemize}
-
-%\section{Decentralized systems}
-%With the coming era of Internet of Things (IoT) the focus on decentralized systems and autonomic agents is greater than ever.
-%IoT devices must be able to communicate with each other directly without the need for an intermediate central server.
-%Furthermore the IoT devices must be largely autonomous since they cannot rely on a lasting connection to a server for control.
-%
-%A new approach to control of wind farms is to utilize game theory\cite{AModelFreeApproachToWindFarmControl}.
-%The turbines in a farm must cooperate to reach the desired setpoint of a chosen output.
-%The game theory approach use an iterative learning algorithm that converges against the optimal output after n iterations.
-
-\subsection{Aeolus}
-The Aeolus project was a large scale EU supported project which lasted from may 2008 to april 2011~\cite{Aoelus}. It included project partners from 
-Aalborg University, Industrial Systems and Control Ltd in Glasgow, University of Zagreb, Energy Research Centre of the Netherlands and Vestas Wind Systems A/S.
-The main objectives of the project was to research and develop predictions of flows and incorporate data from a network of sensors, as well as research and develop control paradigms that acknowledges the uncertainty in the modeling and dynamically manages the flow resource in order to optimize specific control objectives.
-The project is relevant to this thesis because several approaches to control of a wind farm was evaluated.
-
-One approach was the hierarchical approach which uses local control on the turbine level and global control on the wind farm level~\cite{HeirarchicalWindFarmControl}.
-Setpoints for the global output of the wind farm are received by the controller on the wind farm level.
-So is the output for each turbine and the maximum available output for each turbine.
-The global controller calculates setpoints for each turbine based on the global setpoint and each turbines current and possible output.
-The controllers on turbine level is responsible for reaching the setpoint calculated by the global controller as well as making each turbine reach the setpoint in the most optimal manner(gearing, avoid ice over, avoid oscillation).
-The hierarchical approach is similar to the current approach used in the Siemens case.
-
-Another approach was the decentralized feed-forward approach~\cite{DecentralisedFeedforwardControlOfWindFarms} which takes advantage of the placement of turbines in a wind farm by letting upwind turbines feed wind data to downwind turbines. 
-This allows downwind turbines to make adjustments to their production in order to exploit the coming wind in the best way.
-Furthermore, a restricted communication model is used allowing turbines only to communicate with their neighbors.
-Using this decentralized feed-forward approach to control a wind farm can help even out the output of the farm since downwind turbines has additional information regarding wind speed to come to act upon. If upwind turbines power production is also a part of the feed-forward package downwind turbines may also be able to regulate overall wind farm production by evening out spikes from upwind turbines.
-In addition, by only communicating with neighboring turbines in order to achieve improvements in output the need for a centralized node is alleviated.
-
-\subsection{Other related works}
-The European Union has a number of sponsored projects beside the Aeolus project:
-\begin{itemize}
-	\item IRPWIND, which aim to accelerate the transition towards low-carbon energy through better integration of the European research activities~\cite{IRPWIND}. The program has six subprogrammes:
-	\begin{enumerate}
-		\item Wind conditions
-		\item Aerodynamics
-		\item Structures and Materials
-		\item Wind Integration
-		\item Offshore Wind Energy
-		\item Research Infrastructure
-	\end{enumerate}
-	\item INNWIND, which focus is on accelerating the process of realizing the 20MW turbine~\cite{INNWIND}.
-	\item EERA-DTOC, which focus is on creating a software tool for optimizing offshore wind farm design and clusters of wind farms~\cite{eera-dtoc}.
-\end{itemize}
-
-Likewise the  United States of America has a number of projects most of them performed by Sandia National Laboratories or National Renewable Energy Laboratory:
-\begin{itemize}
-	\item SWiFT, which focus is on wake effects, turbine control and rotor development~\cite{SWiFT}.
-	\item Offshore Wind, which focus on large rotor development and simulation algorithms~\cite{offshoreWind}.
-	\item Active Power Control, focus on using wind turbines for active control of the power grid~\cite{activePowerControl}.
-\end{itemize}
-
-The area of the supporting software architecture and software stack is not a topic that has received much attention, presumably because the prevailing solutions are proprietary and therefore not available for public research.
-This thesis adds insight into which software components and technologies could be used in a wind farm, thus filling in some of the gap in the research area.
 
 %\subsection{Game theory control}
 %A new approach to control of wind farms is to utilize game theory\cite{AModelFreeApproachToWindFarmControl}.
