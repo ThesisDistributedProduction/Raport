@@ -407,4 +407,58 @@ This section provides a detailed evaluation of every parameter used for the dece
 \end{figure}
 
 \section{Comparison to the centralized solution}
-The decentralized solution presented in this chapter is created based on the regulation cycle and 
+The decentralized solution presented in this chapter is created based on the information provided by Siemens Wind Power and the changes needed to be performed to this information in order to create the decentralized solution.
+The goal is to only change the architecture from a centralized approach to a decentralized approach, such that we can compare what influence these changes has on the scalability in terms of number of turbines.
+
+\begin{figure}[!h]
+	\centering
+	\input{figures/tikz/ProjectDiffOverviewCentralizedDecentralized}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Comparison of the current centralized solution and the decentralized solution]{
+		\label{fig:projectDiffOverviewCentralizedDecentralized}
+		\footnotesize{%
+			Comparison of the current centralized solution and the decentralized solution.
+		}
+	}
+\end{figure}
+
+
+The delta between the centralized solution and the decentralized solution is presented in \cref{tab:decentralizedVScentralized}. As presented changes are found in QoS parameters Reliability and Durability. Reliability has been changed to best effort in order to reduce cycle time. This means that dropped packages are accepted. Durability has been changed to local durability meaning that if a new turbine is discovered the current state of each turbine is sent to the new turbine.
+
+The regulation cycle has been changed as well and the changes are presented in detail in \cref{fig:cycleCentralVSDecentral}. Furthermore the architecture of the entire solution has been changed from centralized to decentralized.
+
+\begin{table}[!h]
+	\begin{tabular}{l l l}
+		\hline
+		\hline
+		~ & \textbf{Centralized solution} & \textbf{Decentralized solution} \\
+		\hline
+		\hline
+		\multicolumn{3}{l}{\textbf{QoS policies}} \\
+		\hline
+		Reliability & Strictly reliable & Best effort \\
+		\hline
+		Durability & No durability & Local durability \\
+		\hline
+		Throughput & Regular throughput & Regular throughput \\
+		\hline
+		\hline
+		\multicolumn{3}{l}{\textbf{Other}} \\
+		\hline
+		\hline
+		Regulation cycle & \multicolumn{2}{l}{See \cref{fig:cycleCentralVSDecentral} for a comparison} \\
+		\hline
+		Regulation algorithm & Naive & Naive \\
+		\hline
+		Architecture & Centralized & Decentralized \\
+		\hline
+		\hline
+	\end{tabular}
+	
+	\caption[Comparison between the the centralized solution and decentralized solution]{
+		\label{tab:decentralizedVScentralized}
+		\footnotesize{%
+			Comparison between the the centralized solution and decentralized solution.
+		} 
+	}
+\end{table}

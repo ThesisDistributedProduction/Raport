@@ -5,14 +5,14 @@ block/.style={draw, rectangle, text width=5em, text centered, minimum height=5cm
 ]
 % Place nodes label={[align=center]above:Load\\Balancer}
 
-\node [block, ultra thick]			(Siemens)													[label={[align=center]above:Current\\Siemens system}]	{};
+\node [block]			(Siemens)													[label={[align=center]above:Current\\Siemens system}]	{};
 \node []					(SimCen)		[right = of Siemens] 	{$\Delta$};
 \node [block, ultra thick]			(OurCent)		[right = of SimCen] 	[label=above:Centralized solution]	{};
 
 \begin{scope}[on background layer]
 \node [block] 		(Central) 	[fit=(Siemens) (OurCent), inner sep=30pt] {};
 \node []					(CenDece)		[right = of Central] 	{$\Delta$};
-\node [block]			(DeCent)		[right = of CenDece] 	[label=above:Decentralized solution] {};
+\node [block, ultra thick]			(DeCent)		[right = of CenDece] 	[label=above:Decentralized solution] {};
 \end{scope}
 
 \end{tikzpicture}
