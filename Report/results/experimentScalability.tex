@@ -57,14 +57,6 @@ The following procedure is used each time the experiment is performed:
 	\label{fig:exp:cen:turbines}
 \end{figure}
 
-\begin{figure}[h!]
-	\centering
-	\input{results/matlab/Decen5VSCent4}	
-	\caption{Centralized solution's median values compared with decentralized solution's median values}
-	\label{fig:exp:cenVSDecen}
-\end{figure}
-
-
 \Cref{fig:exp:cen:turbines} shows how the number of turbines influence the regulation cycle time of the centralized solution.
 For every number of turbines 450 data points have been sampled. The reason for the limited amount of samples is that when running the experiment with 95 turbines the test setup is reaching it's limits. Data transfer speeds of up to 75 Mbit/s was observed. Since the maximum theoretical data transfer speed of the test setup is 100 Mbit/s it is reasonable to assume that a number of packages have been lost due to congestion. Thus, the experiment for 95 turbines only managed to log 450 data samples within the given experiment time. In order to create a boxplot with comparable values the sample set for each number of turbines was reduced to the 450 first points.
 The limited amount of data samples account for the "holes" between outlier values. With more data samples these holes would be filled such that outliers are more evenly distributed from the top whisker to the most extreme outlier.
@@ -78,10 +70,30 @@ The outliers of \cref{fig:exp:cen:turbines} is distributed fairly close around t
 
 \subsubsection{Comparison of the decentralized solution and the centralized solution}
 \label{sec:comp:decentralizedVScentralized}
-The decentralized solution and the centralized solution is built with a very different architecture. This is reflected in the difference in the way the two solutions scale with the number of turbines. Looking at the figures for regulation cycle time in relation to the number of turbines for the decentralized and the centralized solution respectively we see that the figures reveals different trends.
+The decentralized solution and the centralized solution is built with a very different architecture. This is reflected in the difference in the way the two solutions scale with the number of turbines.
 
-The scalability of the centralized solution is linear with a factor of approximately $1.667$ ms added to regulation cycle time per turbine added to the system.
-The scalability of the decentralized solution, as described in \cref{sec:disc:turbinesVScycletime}, is small enough that it is indistinguishable from other factors in our test data and therefore we cannot calculate it. Thus the scalability of the decentralized solution is close to constant. This great improvement in scalability comes with a trade off in terms of cache reads. Adding additional turbines to the decentralized solution the number of cache reads increases with a factor of $0.033$ extra cache reads per added turbine which is still an improvement compared to the scale factor of the centralized solution. Arguably comparing the scalability of the number of cache reads in the decentralized solution with the scalability of the regulation cycle in the centralized solution is not a viable way to compare the scalability of the two solutions, but comparing the scalability of the regulation cycle of both solutions will not be a fair comparison either since the improvements in scalability of the decentralized solution comes at the price of increased numbers of cache reads.
+\cref{fig:exp:cenVSDecen} shows the medians of \cref{fig:exp:decen:turbines,fig:exp:cen:turbines} where data that has been disregarded previously has been removed. Thus, the maximum number of turbines in \cref{fig:exp:cenVSDecen} is 70. 
+
+\begin{figure}[h!]
+	\centering
+	\input{results/matlab/Decen5VSCent4}	
+	\caption{The centralized solution's median values compared with the decentralized solution's median values}
+	\label{fig:exp:cenVSDecen}
+\end{figure}
+
+Looking at \cref{fig:exp:cenVSDecen} we see that the centralized and decentralized solutions scale very differently.
+The decentralized solution scales constant with number of turbines from 5 to 70 turbines. The centralized solution scales linearly with the number of turbines from 5 to 30 turbines and from 30 to 70 turbines with a steeper slope. With the test setup used and a sleep time in the decentralized solution's regulation cycle at 20 ms the centralized solution scales better than the decentralized solution from 5 to 50 turbines. The decentralized solution scales better than the centralized solution from 50 to 70 turbines.
+If the sleep time of the regulation cycle in the decentralized solution is lowered to for instance 10 ms the decentralized solution would scale better than the centralized solution from 38 turbines on. Lowering the sleep time of the regulation cycle in the decentralized solution will make the chance of cache reads increase as illustrated in \cref{fig:exp:decen:sleep-cache}.
+
+As the test setup imposes limits on the number of turbines that can be simulated it is not possible to say anything concrete about how the scalability of the centralized and decentralized solution will be for any number of turbines higher than 70.
+A qualified guess about the scalability can be provided though. The scalability of the centralized solution is expected to keep scaling linearly with the number of turbines. The decentralized solution will keep scaling with the number of turbines but as the number of turbines increase so will the number of cache reads. If the number of cache reads increases this will be reflected in the regulation cycle time. Thus, the scalability of the decentralized solution will not keep scaling at a constant level but the impact of increased cache reads remains to be further investigated.
+
+
+
+\FloatBarrier
+
+%The scalability of the centralized solution is linear with a factor of approximately $1.667$ ms added to regulation cycle time per turbine added to the system.
+%The scalability of the decentralized solution, as described in \cref{sec:disc:turbinesVScycletime}, is small enough that it is indistinguishable from other factors in our test data and therefore we cannot calculate it. Thus the scalability of the decentralized solution is close to constant. This great improvement in scalability comes with a trade off in terms of cache reads. Adding additional turbines to the decentralized solution the number of cache reads increases with a factor of $0.033$ extra cache reads per added turbine which is still an improvement compared to the scale factor of the centralized solution. Arguably comparing the scalability of the number of cache reads in the decentralized solution with the scalability of the regulation cycle in the centralized solution is not a viable way to compare the scalability of the two solutions, but comparing the scalability of the regulation cycle of both solutions will not be a fair comparison either since the improvements in scalability of the decentralized solution comes at the price of increased numbers of cache reads.
 
 \subsubsection{Comparison of the decentralized solution and the current Siemens system}
 This section address the \ref{PS:Q:Scalability} problem of \cref{sec:problemStatement}.
