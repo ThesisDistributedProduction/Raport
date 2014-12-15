@@ -46,7 +46,7 @@ The regulation algorithm is a key component of the current Siemens system and it
 With the algorithm being a black box, the input/output parameters where studied to provide the optimal network communication around the regulation algorithm. \Cref{fig:ioCenRegAlg} presents a simple input/output overview of the regulation algorithm. The Input/output parameters are as follows:
 
 \begin{description}
-	\item The \textbf{global setpoint} of the wind farm. This is the production goal of the wind farm. %Which means all turbines combined should produce.
+	\item The \textbf{global setpoint} of the wind farm. This is the production production setpoint for the entire wind farm. %Which means all turbines combined should produce.
 	\item The \textbf{setpoint} of each turbine, calculated from the regulation algorithm. 
 	\item The \textbf{current production} of the turbine.
 	\item The \textbf{maximum production} of the turbine. The data is provided by Siemens, this parameter is primarily determined from the wind conditions around the turbine.

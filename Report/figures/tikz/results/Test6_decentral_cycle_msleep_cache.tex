@@ -2,32 +2,20 @@
 \begin{axis}
 [
 width=\resultsPlotWidthScale\textwidth,
-axis y line*=left,
+%axis y line*=left,
 xlabel=Sleep time (ms),
 ymin = 0,
-%xmin = 0,
+xmin = 10, xmax=55,
 ylabel=Average cache reads,
-%xtick={1, 2, 3, 4, 5, 6, 7, 8, 9},
-%xticklabels={10, 15, 20, 25, 30, 35, 40, 45, 50},
-%boxplot/draw direction=y,
-%grid=both,
 %ymajorgrids=true,
 %yminorgrids=true,
 ybar interval=0.7,
 ymajorgrids=true,
-%yminorgrids=true,
 minor y tick num=1
 %minor tick num=1
 ]
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
+
+
 \addplot coordinates {
 	(10 ,6.076278918444858)
 	(15 ,1.9250837336102817)
@@ -38,6 +26,7 @@ minor y tick num=1
 	(40 ,1.6464805561590268)
 	(45 ,0.46317152740208856)
 	(50 ,1.858914282814271)
+	(55 ,0)
 };
 
 %matlab info
