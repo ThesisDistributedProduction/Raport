@@ -45,11 +45,10 @@ To fully decentralize the current Siemens system, decentralization of the Wind P
 Decentralizing the data storage and aggregation onto the turbines requires a horizontally scalable distributed database, which can handle data aggregation.
 Distributing the database horizontally is important in order to handle datasets larger than the physical storage of one turbine.
 Aggregated data is used for generating data suitable for monitoring and analyses.
-To handle this MongoDB~\cite{mongodb} has been identified as the optimal component (as concluded in \cref{sec:databaseStorage} Data Storage). MongoDB supports Sharding for automatic horizontal partitioning of datasets and data aggregation across shared. MongoDB has been chosen based on other parameters related to the problems \ref{PS:Q:Availability} and \ref{PS:Q:Performance}, however to answer the answer the \ref{PS:Q:Feasibility} problem, this functionality is sufficient. 
+To handle this MongoDB~\cite{mongodb} has been identified as the optimal component (as concluded in \cref{sec:databaseStorage} Data Storage). MongoDB supports Sharding for horizontal partitioning of datasets and data aggregation across shards. MongoDB has been chosen based on other parameters related to the problem \ref{PS:Q:Availability}, however to answer the \ref{PS:Q:Feasibility} problem, this functionality is sufficient. 
 
-Handling external communication in a decentralized way while still maintaining a single entry point to the system.
-Requires multiple system capable of shearing a single entry point.
-This can be done using a load balancer with hot backups.
-The load balancer setup helps answer the question \ref{PS:Q:Availability} and to some extend \ref{PS:Q:Performance} the servers for the external interfaces are implemented in a scalable way, however the load balancer itself still needs to handle all traffic and will become a bottle neck if traffic get too high.
-To reduce this scaling problem we are recommending a load balancer which only needs to handle requests and allows servers to directly respond to clients, this setup should provide sufficient network throughput for the system to grow well beyond the current 100 concurrent connections the current Siemens systems supports.
+Handling external communication in a decentralized way while still maintaining a single entry point to the system,
+requires a solution with multiple nodes capable of sharing this single entry point.
+We imagine it done by using multiple Linux Virtual Servers sharing a single virtual IP address (see \cref{cha:resourceManagement}).
+
 \clearpage
