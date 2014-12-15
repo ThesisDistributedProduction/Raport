@@ -67,8 +67,8 @@ The turbines are all running with a cycle time of 20 ms throughout this experime
 
 \FloatBarrier
 
-The 'glitches' on the figures, where the plots shows several seconds between some of the data points, are caused by the eventhandler in Matlab handling events from DDS Blockset for Simulink (described in \cref{sec:graphicalInterface}). The eventhandler appears to be neglecting some of the events caused by the publication of turbine states, thus resulting in several seconds time interval between two data points. For the purpose of this experiment we are able to clearly see that it does the regulation, however the time frame is inaccurate.\todo{Shouldn't this be in discussion}
-%(and any of the other experiments for that matter), this is acceptable since the tool is only used to provide a run-time GUI overview of the system.
+The 'glitches' in the figures, where the plots shows several seconds between some of the data points, are properly caused by the eventhandler in Matlab handling events from DDS Blockset for Simulink (described in \cref{sec:graphicalInterface}). The eventhandler appears to be neglecting some of the events caused by the publication of turbine states, thus resulting in several seconds time interval between two data points. For the purpose of this experiment we are able to clearly see that it does the regulation, however the time frame is inaccurate.
+\todo[inline]{Forklar udfra tråd problemmer istedet for at events bare ikke bliver sent afsted, samme gælder availability GUI afsnittet.}
 
 \subsection{Discussion}
 One of the main challenges of highly available is to continue operation in the event of node crashes or loss. As presented in  \cref{fig:exp:availability_kill15,fig:exp:availability_kill10,fig:exp:availability_kill5,fig:exp:availability_kill1} the decentralized solution can handle the loss of turbines. A turbine is considered offline if it does not publish any new data to any other turbines within a 150 ms timespan, defined by the Lifespan QoS parameter of the DataWriter described in \cref{sec:decen:ddsconf}.
@@ -82,7 +82,7 @@ $$Production~increase~per~turbine = \frac{\sum\limits_{i=1}^k(p)}{n}$$
 
 Thus the expected production increase for the case where a single turbine is crashed (\cref{fig:exp:availability_kill1}) is: $$\frac{\sum\limits_{i=1}^1(666,6kW)}{29}\approx23kW$$
 
-Hence for the rest of the cases (note that the global setpoint for these cases are 2000kW, thus the production of each turbine is 66,6 kW as apposed to 666,6 kW for the case where one turbine was crashed):
+Hence for the rest of the cases (note that the global setpoint for these cases are 2000 kW, thus the production of each turbine is 66,6 kW as apposed to 666,6 kW for the case where one turbine was crashed):
 \newline\newline
 \noindent5 turbines crashed (\cref{fig:exp:availability_kill5}) $$\frac{\sum\limits_{i=1}^5(66,6kW)}{25}\approx13kW$$
 
@@ -90,8 +90,16 @@ Hence for the rest of the cases (note that the global setpoint for these cases a
 
 \noindent15 turbines crashed (\cref{fig:exp:availability_kill15}) $$\frac{\sum\limits_{i=1}^{15}(66,6kW)}{15}\approx67kW$$
 
-These expected values matches the increased productions shown in \cref{fig:exp:availability_kill5,fig:exp:availability_kill10,fig:exp:availability_kill15}. The glitches \todo{Anden brug af glitches} in the figures are caused by the simulated turbine data and is therefore accepted for the purpose of this experiment. Thus we conclude that the remaining turbines share the extra load between themselves and power production continues after turbine crashes.
-This means removing one or multiple turbines from the system does not impede the regulation of the wind farm.
+These expected values matches the increased productions shown in \cref{fig:exp:availability_kill5,fig:exp:availability_kill10,fig:exp:availability_kill15}.
+It is seen that the regulation is not instant upon discovery of the failed nodes (except for cases with the previously disused glitch). This is due to the turbine simulation not allowing the production value to make steep changes.
+
+There are some instability around the time when the turbines are killed, however this settles outside the screen shots.\todo{It would be nice with something to back this up with.}
+
+This result is that crashing one or multiple turbines in the system does not cause the regulation of the wind farm to fail, and the wind farm recovers and resumes the previous power production in a couple of seconds.
+
+The time it takes for the turbines to regulate according to crashed turbines are of course an important factor.
+This however is highly depended on how a real turbine reacts to being disconnected, and how power generated outside the control of the regulation algorithm is handled.
+We neither have a real turbine nor a the real regulation algorithm, thus we cannot conclude anything with regards to this subject.
 
 %The time it takes the decentralized solution to detect a turbine loss and recover power production is dependent on the following parameters:
 %
@@ -103,10 +111,6 @@ This means removing one or multiple turbines from the system does not impede the
 %\end{itemize}
 %
 %Thus the time for recovery of the power production when a turbine failure occurs can be calculated as $T = I + S + C + R$ which translates to $150 ms + 20 ms + C + R = 170 + C + R ms$. This time can be reduced by lowering the time it takes to detect a turbine is offline which increases the likelihood of detecting a delayed turbine as offline, or by lowering the time between regulation cycles which increases the likelihood of cache reads.
-
-The time it takes for the turbines to regulate according to crashed turbines are of course an important factor.
-\todo{Expalin why}
-However since we are using an arbitrary regulation algorithm and turbine simulations, we cannot conclude anything with regards to this subject.
 
 % The only thing we can conclude is that the turbines regulate according to multiple crashed turbines relatively fast, meaning that the time it takes for the turbines to regulate according to one or more crashes happens within an acceptable timeframe of 1 to 4 seconds. 
 
