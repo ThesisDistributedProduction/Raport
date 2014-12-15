@@ -238,12 +238,47 @@ The data transfer objects (DTO) used when sending messages from the turbines to 
 	\caption[Centralized turbine reply message]{
 		\label{fig:cenTurbineDataMessage} 
 		\footnotesize{%
-			The the reply message .idl file sent from the turbines to the Park Pilot in the centralized solution.
+			The reply message .idl file sent from the turbines to the Park Pilot in the centralized solution.
 		}
 	}
 \end{figure}
 
-The IDL definitions are defined from looking at what data to transfer between the turbines and the Park Pilot. \Cref{fig:cenTurbineDataMessage} is for example the IDL definition of the data transfer object used as reply from the turbines to the Park Pilot.
+\begin{figure}[!h]
+	\centering
+	%	\includegraphics[width=0.3\textwidth,natwidth=250,natheight=200]{turbineDataMessage.PNG} 
+	\begin{lstlisting}[language=C++,tabsize=2,basicstyle=\small]
+	struct SetpointMessage {
+		long turbineId; //@key
+		long setPoint;
+	};	
+	\end{lstlisting}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Centralized Park Pilot setpoint message]{
+		\label{fig:cenTurbineSetpointMessage} 
+		\footnotesize{%
+			The setpoint message .idl file sent from the the Park Pilot to the turbines in the centralized solution.
+		}
+	}
+\end{figure}
+
+\begin{figure}[!h]
+	\centering
+	%	\includegraphics[width=0.3\textwidth,natwidth=250,natheight=200]{turbineDataMessage.PNG} 
+	\begin{lstlisting}[language=C++,tabsize=2,basicstyle=\small]
+	struct RequestMessage {
+		long msSinceLastWrite;
+	};	
+	\end{lstlisting}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Centralized Park Pilot request message]{
+		\label{fig:cenTurbineRequestMessage} 
+		\footnotesize{%
+			The request message .idl file sent from the Park Pilot to the turbines in the centralized solution.
+		}
+	}
+\end{figure}
+
+The IDL definitions are defined by observing what data to transfer between the turbines and the Park Pilot. \Cref{fig:cenTurbineDataMessage} is for example the IDL definition of the data transfer object used as reply from the turbines to the Park Pilot containing the current state of the turbine.
 
 %\subsection{Topics}
 %
