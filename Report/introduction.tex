@@ -12,7 +12,7 @@ The current setup of a wind farm requires additional infrastructure for manageme
 In addition to the wind turbines, a wind farm at Siemens Wind Power consists of multiple park regulators for turbine control, and a Supervisory Control And Data Acquisition (SCADA) system, which handles data aggregation, data logging and external network requests.
 
 The SCADA system and park regulators does not scale automatically with the number of turbines. A park regulator can only handle power regulation for a certain amount of turbines, meaning the larger the wind farm, the more park regulators needs to be present to handle power regulation.
-The power regulation performed by each park regulator, calculates if the power production of the wind farm is correct and adjusts and distributes the power production setpoint of each turbine accordingly. This power regulation is, amongst others, based on the current state of each turbine connected to the park regulator. So in order to perform park regulations, the park regulator must first acquire the current state of each connected turbine.
+The power regulation performed by each park regulator, calculates if the power production of the wind farm is correct and adjusts and distributes the power production setpoint of each turbine accordingly. This power regulation is, amongst others, based on the current state of each turbine connected to the park regulator. In order to perform park regulations, the park regulator must first acquire the current state of each connected turbine.
 % amongst others, based on the current state of each turbine connected to the park regulator.
 %So in order to perform park regulations, the park regulator must first request the current state of each connected turbine. %in order to be able to calculate if the power production of the wind farm is correct.
 %If the power production of the wind farm needs adjustment, the park regulator calculates new power production setpoints for each connected turbine and distributes these.
@@ -35,7 +35,7 @@ The linear relation between number of turbines and the power regulation time for
 %This interdependence between turbines forces the central control system to collect data from all turbines before a single new power production value can be calculated, which is time consuming. Adding turbines will additionally increase the time the centralized control system needs to calculate new power production values.
 %To uphold a constant power production level for the entire wind farm near real-time control and regulation is necessary thus the time consumption of the centralized control system must be minimized in effect limiting the number of turbines the centralized control system is able to handle.
 
-Both the park regulators and the SCADA system are essential for a Siemens Wind Power wind farm to function. Communication within the wind farm pass through these two components, and system failure in either the SCADA system or one of the park regulators may cause parts of the wind farm unavailable, thus resulting in decreased control of the wind farm. This makes these components potential single points of failures to the wind farm. 
+Both the park regulators and the SCADA system are essential for a Siemens Wind Power wind farm to function. Communication within the wind farm pass through these two components, and system failure in either the SCADA system or one of the park regulators may cause parts of the wind farm to become unavailable, thus resulting in decreased control of the wind farm. This makes these components potential single points of failures to the wind farm. 
 
 %Despite the fact that the wind farms has grown to a size that is becoming increasingly hard to manage as a centralized control system, little research has been done in the area of decentralization a wind farm managements and controls components.
 
@@ -72,12 +72,12 @@ Setpoints for the global output of the wind farm are received by the controller 
 So is the output for each turbine and the maximum available output for each turbine.
 The global controller calculates setpoints for each turbine based on the global setpoint and each turbines current and possible output.
 The controllers on turbine level is responsible for reaching the setpoint calculated by the global controller as well as making each turbine reach the setpoint in the most optimal manner(gearing, avoid ice over, avoid oscillation).
-The hierarchical approach is similar to the current approach used in the Siemens case.
+The hierarchical approach is similar to the current approach used in the Siemens Wind Power wind farms.
 
 Another approach was the decentralized feed-forward approach~\cite{DecentralisedFeedforwardControlOfWindFarms} which takes advantage of the placement of turbines in a wind farm by letting upwind turbines feed wind data to downwind turbines. 
 This allows downwind turbines to make adjustments to their production in order to exploit the coming wind in the best way.
 Furthermore, a restricted communication model is used allowing turbines only to communicate with their neighbors.
-Using this decentralized feed-forward approach to control a wind farm can help even out the output of the farm since downwind turbines has additional information regarding wind speed to come to act upon. If upwind turbines power production is also a part of the feed-forward package downwind turbines may also be able to regulate overall wind farm production by evening out spikes from upwind turbines.
+Using this decentralized feed-forward approach to control a wind farm, can help even out the output of the farm since downwind turbines has additional information regarding future wind speed to act upon. If upwind turbines power production is also a part of the feed-forward package downwind turbines may also be able to regulate overall wind farm production by evening out spikes from upwind turbines.
 In addition, by only communicating with neighboring turbines in order to achieve improvements in output the need for a centralized node is alleviated.
 
 The European Union has a number of sponsored projects beside the Aeolus project:
@@ -99,7 +99,7 @@ Likewise the  United States of America has a number of projects most of them per
 \begin{itemize}
 	\item SWiFT, which focus is on wake effects, turbine control and rotor development~\cite{SWiFT}.
 	\item Offshore Wind, which focus on large rotor development and simulation algorithms~\cite{offshoreWind}.
-	\item Active Power Control, focus on using wind turbines for active control of the power grid~\cite{activePowerControl}.
+	\item Active Power Control, which focus on using wind turbines for active control of the power grid~\cite{activePowerControl}.
 \end{itemize}
 
 The area of the supporting software architecture and software stack is not a topic that has received much attention, presumably because the prevailing solutions are proprietary and therefore not available for public research.
@@ -113,7 +113,7 @@ This thesis adds insight into which software components and technologies could b
 \label{sec:SiemensCase}
 Siemens Wind Power builds wind farms of different sizes, ranging from a single turbine to well above one hundred turbines~\cite{simensOffShoreProjects, simensOnShoreProjects}. 
 
-The current wind farm setup is illustrated in \cref{fig:currentSiemensSetup}. Today every turbine in a wind farm at Siemens Wind Power are equipped with computers for the purpose of turbine regulation and data logging. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, stores data and handles wind park communication with the outside world. At Siemens up to eight Park Pilots and one Wind Power Supervisor are present per wind farm.
+The current wind farm setup is illustrated in \cref{fig:currentSiemensSetup}. Today every turbine in a wind farm at Siemens Wind Power are equipped with computers for the purpose of turbine regulation and data logging. Every turbine is connected to a Wind Power Supervisor, which is a central component that aggregates data, stores data and handles wind farm communication with the outside world. At Siemens up to eight Park Pilots and one Wind Power Supervisor are present per wind farm.
 
 \begin{figure}[!h]
 	\centering
@@ -131,7 +131,7 @@ For every transformer station in the wind farm there is a Park Pilot. The Park P
 
 %The Park Pilots at Siemens Wind Power spends 150 ms performing a single regulation.
 The Park Pilots at Siemens Wind Power performs a regulation every 150 ms.
-Regulation is performed continuously, making regulation a cyclic process. The calculation of setpoints for each turbine consist of a number of steps as illustrated in \cref{fig:currentSiemensCycleTime}. First the Park Pilot must request the state of each turbine in order to calculate new setpoints. The Park Pilot must wait for each turbine to answer the request. After receiving data from each turbine new setpoints are calculated and distributed to the turbines. The time buffer is added to make sure setpoints has been properly distributed and that individual turbines have time to adjust their power production according to the new setpoint before a new request for turbine data is sent. Also the time spent waiting for states may vary depending on the current traffic of the network as well as the response time of the individual turbines.
+Regulation is performed continuously, making regulation a cyclic process. The calculation of setpoints for each turbine consist of a number of steps as illustrated in \cref{fig:currentSiemensCycleTime}. First the Park Pilot must request the state of each turbine in order to calculate new setpoints. The Park Pilot must wait for each turbine to answer the request. After receiving data from each turbine new setpoints are calculated and distributed to the turbines. The time buffer is added to make sure setpoints has been properly distributed and that individual turbines have time to adjust their power production according to the new setpoint, before a new request for turbine data is sent. Also the time spent waiting for states may vary depending on the current traffic of the network, as well as the response time of the individual turbines.
 
 \begin{figure}[!h]
 	\centering
@@ -148,7 +148,7 @@ Regulation is performed continuously, making regulation a cyclic process. The ca
 Every turbine has a database for data logging purposes, this database is replicated to the Wind Power Supervisor.
 The Wind Power Supervisor does data aggregation on data from each turbine as well as store a copy of the replicated data.
 The turbines, Wind Power Supervisor and Park Pilots are connected with a gigabit network, which currently has plenty of extra capacity in terms of available bandwidth.
-Internally, the turbine has more than 50 control points and 200 measurement points.
+%Internally, a turbine has more than 50 control points and 200 measurement points.
 %The measurement points are sampled continually every 50 ms.
 
 %\begin{figure}
@@ -186,7 +186,7 @@ Today's setup at Siemens Wind Power (\cref{sec:SiemensCase}) is an example of a 
 
 \begin{itemize} 
 	\item Single point of failure. Should a Wind Power Supervisor or a Park Pilot fail, a part of the wind farm will become unavailable.
-	\item Low scalability. The Wind Power Supervisors and Park Pilots does not scale well with the number of turbines. This is reflected in the wind farm regulation performance. Today a wind farm regulation cycle time is 150 ms. This regulation cycle time is set after worst case setpoint retrieval time, worst case new setpoint calculations and worst case time it takes to broadcast new setpoints. This ultimately depends on worst case number of turbines per Park Pilot.
+	\item Low scalability. The Wind Power Supervisor and Park Pilots does not scale well with the number of turbines. This is reflected in the wind farm regulation performance. Today a wind farm regulation cycle time is 150 ms. This regulation cycle time is set after worst case setpoint retrieval time, worst case new setpoint calculations and worst case time it takes to broadcast new setpoints. This ultimately depends on worst case number of turbines per Park Pilot.
 	\item High regulation cycle time. As mentioned, the regulation cycle time of the current Siemens system is 150 ms and is a direct result of the low scalability. Siemens expects a demand for a lower regulation cycle time in the future.
 \end{itemize}
 
@@ -230,7 +230,7 @@ The decentralized solution will be implemented as a prototype, for proof of conc
 The scope of this thesis is limited to the following areas:
 
 \begin{itemize}
-	\item Analysis and identification of state of the art software components that will enable a reimplementation of the current Siemens system as a decentralized system to address the problem denoted as \ref{PS:Q:Feasibility}.
+	\item Analysis and identification of state of the art software components that will enable a re-implementation of the current Siemens system as a decentralized system to address the problem denoted as \ref{PS:Q:Feasibility}.
 	\item Implementation of a decentralized solution that duplicates central key features of a Park Pilot needed to address problems \ref{PS:Q:Availability}, \ref{PS:Q:Performance} and \ref{PS:Q:Scalability} of the problem statement.
 	\item Comparison of the decentralized solution to the current Siemens system to address problems \ref{PS:Q:Performance} and \ref{PS:Q:Scalability}.
 \end{itemize}
