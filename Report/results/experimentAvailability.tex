@@ -67,8 +67,8 @@ The turbines are all running with a cycle time of 20 ms throughout this experime
 
 \FloatBarrier
 
-The 'glitches' on the figures, where the plots shows several seconds between some of the data points, are caused by the eventhandler in Matlab handling events from DDS Blockset for Simulink (described in \cref{sec:graphicalInterface}). The eventhandler appears to be neglecting some of the events caused by the publication of turbine states, thus resulting in several seconds time interval between two data points. For the purpose of this experiment we are able to clearly see that it does the regulation, however the time frame is inaccurate.\todo{Shouldn't this be in discussion}
-%(and any of the other experiments for that matter), this is acceptable since the tool is only used to provide a run-time GUI overview of the system.
+The 'glitches' in the figures, where the plots shows several seconds between some of the data points, are properly caused by the eventhandler in Matlab handling events from DDS Blockset for Simulink (described in \cref{sec:graphicalInterface}). The eventhandler appears to be neglecting some of the events caused by the publication of turbine states, thus resulting in several seconds time interval between two data points. For the purpose of this experiment we are able to clearly see that it does the regulation, however the time frame is inaccurate.
+\todo[inline]{Forklar udfra tråd problemmer istedet for at events bare ikke bliver sent afsted, samme gælder availability GUI afsnittet.}
 
 \subsection{Discussion}
 One of the main challenges of highly available is to continue operation in the event of node crashes or loss. As presented in  \cref{fig:exp:availability_kill15,fig:exp:availability_kill10,fig:exp:availability_kill5,fig:exp:availability_kill1} the decentralized solution can handle the loss of turbines. A turbine is considered offline if it does not publish any new data to any other turbines within a 150 ms timespan, defined by the Lifespan QoS parameter of the DataWriter described in \cref{sec:decen:ddsconf}.
