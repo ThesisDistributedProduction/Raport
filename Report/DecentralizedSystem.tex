@@ -211,6 +211,27 @@ The key component used for communication is DDS (see \cref{sec:DSM} for DDS desc
 
 As with the centralized solution, Interface Definition Language (IDL) has been used for generating Data Transfer Objects for the decentralized solution. See centralized IDL \cref{sec:cenIdl} for details.
 
+\begin{figure}[!h]
+	\centering
+	%	\includegraphics[width=0.3\textwidth,natwidth=250,natheight=200]{turbineDataMessage.PNG} 
+	\begin{lstlisting}[language=C++,tabsize=2,basicstyle=\small]
+	struct TurbineMessage {
+		long turbineId; //@key
+		long maxProduction;
+		long currentProduction;
+		long setPoint;
+		long msSinceLastWrite;
+		long cacheCount;
+	};	
+	\end{lstlisting}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Decentralized turbine message]{
+		\label{fig:decenTurbineMessage} 
+		\footnotesize{%
+			The turbine message .idl file sent from the turbines to all other turbines in the decentralized solution.
+		}
+	}
+\end{figure}
 
 \subsection{Choosing Quality of Service parameters}\label{sec:decenChoosingQoS}
 
