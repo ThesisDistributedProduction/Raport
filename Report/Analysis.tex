@@ -1,6 +1,6 @@
 \chapter{State of the art}\label{cha:stateOfTheArt}
 
-The problem statement (\cref{sec:problemStatement}) presents four questions for this project. The \ref{PS:Q:Feasibility} question being the primary question, from which the other three spawns. 
+The problem statement (\cref{sec:problemStatement}) presents four questions for this project. The \ref{PS:Q:Feasibility} question being the primary question, from which the other three decends. 
 
 To answer the \ref{PS:Q:Feasibility} question we have to identify the key services performed by the Wind Power Supervisor and the Park Pilots. These services must be provided by the new decentralized system such that removing the central control points, the Wind Power Supervisor and the Park Pilots, will not diminish the new decentralized systems function compared to the current system as described by the Siemens Case in \cref{sec:SiemensCase}. The following key services has been identified:
 
@@ -25,11 +25,11 @@ The following chapters describes, analyses and discusses solutions to the needs 
 
 \begin{enumerate}[label=2.\arabic*]
 \item{\textbf{Database storage.}} The obvious solution for need \ref{Analysis:need:a} and \ref{Analysis:need:b}.
-\item{\textbf{Resource management.}} In the decentralized system, the turbines needs to be able to handle need~\ref{Analysis:need:c}. Currently Siemens windmill farms can have up to 100 communication channels open at a time. In order to avoid a single mill having to handle 100 communication channels, resource management has to be introduced to the system.
-\item{\textbf{Distributed computing.}} For the turbines to be able to perform park regulations, communication between the turbines is essential, since park regulation demands knowledge about every turbine in the farm. Distributed computing is introduced to the system as a way to keep a global state as a solution to need~\ref{Analysis:need:d}. This chapter also addresses question~\ref{PS:Q:Scalability} of the problem statement.
+\item{\textbf{Resource management.}} In the decentralized system, the turbines needs to be able to handle need~\ref{Analysis:need:c}. Currently Siemens wind farms can have up to 100 communication channels open at a time. In order to avoid a single turbine having to handle 100 communication channels, resource management has to be introduced to the system.
+\item{\textbf{Distributed computing.}} For the turbines to be able to perform park regulations, communication between the turbines is essential, since park regulation demands knowledge about every turbine in the farm. Distributed computing is introduced to the system as a way to keep a global state as a solution to need~\ref{Analysis:need:d}. This chapter also addresses problem~\ref{PS:Q:Scalability} of the problem statement.
 \end{enumerate}
 
-Question \ref{PS:Q:Availability} and \ref{PS:Q:Performance} of the problem statement are addressed by all of the chapters mentioned above.
+Problems \ref{PS:Q:Availability} and \ref{PS:Q:Performance} of the problem statement are addressed by all of the chapters mentioned above.
 
 %Problem -> Alternativer -> Sammenligning -> Endeligt valg
 %
