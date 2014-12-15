@@ -85,6 +85,11 @@ Looking at \cref{fig:exp:cenVSDecen} we see that the centralized and decentraliz
 The decentralized solution scales constant with number of turbines from 5 to 70 turbines. The centralized solution scales linearly with the number of turbines from 5 to 30 turbines and from 30 to 70 turbines with a steeper slope. With the test setup used and a sleep time in the decentralized solution's regulation cycle at 20 ms the centralized solution scales better than the decentralized solution from 5 to 50 turbines. The decentralized solution scales better than the centralized solution from 50 to 70 turbines.
 If the sleep time of the regulation cycle in the decentralized solution is lowered to for instance 10 ms the decentralized solution would scale better than the centralized solution from 38 turbines on. Lowering the sleep time of the regulation cycle in the decentralized solution will make the chance of cache reads increase as illustrated in \cref{fig:exp:decen:sleep-cache}.
 
+One of the reasons for the constant scalability of the decentralized solution is the use of multicast in opposition to the centralized solution which uses unicast.
+Using multicast the network communication is decreased compared to unicast, thus the network is less congested in the decentralized solution compared to the centralized solution.
+
+Adding a turbine to the decentralized solution adds an extra turbine state to read into the setpoint calculation in the regulation algorithm, thus adding network traffic to the system.
+
 As the test setup imposes limits on the number of turbines that can be simulated it is not possible to say anything concrete about how the scalability of the centralized and decentralized solution will be for any number of turbines higher than 70.
 A qualified guess about the scalability can be provided though. The scalability of the centralized solution is expected to keep scaling linearly with the number of turbines. The decentralized solution will keep scaling with the number of turbines but as the number of turbines increase so will the number of cache reads. If the number of cache reads increases this will be reflected in the regulation cycle time. Thus, the scalability of the decentralized solution will not keep scaling at a constant level but the impact of increased cache reads remains to be further investigated.
 
