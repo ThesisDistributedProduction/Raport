@@ -1,39 +1,16 @@
 \begin{tikzpicture}
-\begin{axis}
-[
-width=\resultsPlotWidthScale\textwidth,
-axis y line*=left,
-xlabel=Number of turbines,
-ymin = 0, ymax = 23,
-xmin = 1, xmax = 105,
-ylabel=Average Cache hits,
-%xtick={1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20},
-%xticklabels={5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100},
-%boxplot/draw direction=y,
-ybar interval=0.7,
-grid=both,
-minor tick num=1
+
+\begin{axis}[%
+	width=\resultsPlotWidthScale\textwidth,
+%	axis y line*=left,
+	xlabel=Number of turbines,
+	ymin = 0,
+	xmin = 5, xmax = 105,
+	ylabel=Average cache reads,
+	ybar interval=0.7,
+	grid=both,
+	minor tick num=1
 ]
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
-%\buildBoxPlot[black]{0}{0}{0}{0}{0}
 \addplot coordinates {
 	(5 ,0.2591015249347438)
 	(10 ,0.3423283799799435)
@@ -55,6 +32,7 @@ minor tick num=1
 	(90 ,8.473847137142263)
 	(95 ,14.663734246038112)
 	(100 ,22.06932793366117)
+	(105 ,0)
 };
 
 %	\addplot[
