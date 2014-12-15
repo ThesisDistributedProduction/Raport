@@ -640,11 +640,11 @@ The delta between the current Siemens system and the centralized solution is pre
 		\hline
 		\multicolumn{3}{l}{\textbf{QoS policies}} \\
 		\hline
-		Reliability & Unknown & Strictly reliable \\
+		Reliability & Strictly reliable (Assumption) & Strictly reliable \\
 		\hline
-		Durability & Unknown & No durability \\
+		Durability & No durability (Assumption) & No durability \\
 		\hline
-		Throughput & Unknown & Regular throughput \\
+		Throughput & Regular throughput (Assumption) & Regular throughput \\
 		\hline
 		\hline
 		\multicolumn{3}{l}{\textbf{Other}} \\
@@ -655,7 +655,7 @@ The delta between the current Siemens system and the centralized solution is pre
 		~ & ~ & delivered by\\
 		~ & ~ & Siemens Wind Power\\
 		\hline
-		Regulation algorithm & Full & Naive \\
+		Regulation algorithm & Black box & Naive \\
 		\hline
 		Architecture & Cluster based & Centralized \\
 		\hline
@@ -682,4 +682,4 @@ The current Siemens system provides a number of features which are not implement
 
 Another feature that is not implemented in the centralized solution is the ability for a turbine to recover from the loss of network. This feature is omitted because it has no real influence on the scalability of the centralized solution.
 
-The Wind Power Supervisor has not been implemented in the centralized solution. Since this thesis focus on the scalability and feasibility of a decentralized implementation of a wind farm that is able regulate power production (Park Pilot feature), the Wind Power Supervisor and its features is irrelevant for this purpose.
+The Wind Power Supervisor has not been implemented in the centralized solution. Since this thesis focus on the scalability and feasibility of a decentralized implementation of a wind farm that is able to regulate power production (Park Pilot feature), the Wind Power Supervisor and its features is irrelevant for this purpose.
