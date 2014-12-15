@@ -65,13 +65,16 @@ The turbines are all running with a cycle time of 20 ms throughout this experime
 	\label{fig:exp:availability_kill15}
 \end{figure}
 
-The 'glitches' on the figures, where the plots shows several seconds between some of the data points, are caused by DDS Blockset for Simulink (described in section \cref{sec:graphicalInterface}). The tool appears to be neglecting some of the turbine states published, for some unknown reason, thus resulting in up to several seconds between two data points. For the purpose of this experiment (and any of the other experiments for that matter), this is acceptable since the tool is only used to provide a run-time GUI overview of the system.
-
 \FloatBarrier
+
+The 'glitches' on the figures, where the plots shows several seconds between some of the data points, are caused by DDS Blockset for Simulink (described in \cref{sec:graphicalInterface}). The tool appears to be neglecting some of the turbine states published, thus resulting in several seconds time interval between two data points. For the purpose of this experiment we are able to clearly see that it does the regulation, however the time frame is inaccurate.\todo{Shouldn't this be in discussion}
+%(and any of the other experiments for that matter), this is acceptable since the tool is only used to provide a run-time GUI overview of the system.
+
 \subsection{Discussion}
-One of the main challenges of decentralized systems is to continue operation in the face of communication failure or node loss. As presented in figures \ref{fig:exp:availability_kill1} to \ref{fig:exp:availability_kill15} the decentralized solution can handle the loss of turbines. A turbine is considered offline if it does not publish any new data to any other turbines within a 150 ms timespan, defined by the Lifespan QoS parameter of the DataWriter described in \cref{sec:decen:ddsconf}.
+One of the main challenges of decentralized systems is to continue operation in the event of node failure of communication failure or node loss. As presented in  \cref{fig:exp:availability_kill15,fig:exp:availability_kill10,fig:exp:availability_kill5,fig:exp:availability_kill1} the decentralized solution can handle the loss of turbines. A turbine is considered offline if it does not publish any new data to any other turbines within a 150 ms timespan, defined by the Lifespan QoS parameter of the DataWriter described in \cref{sec:decen:ddsconf}.
 This upper limit of 150 ms is chosen because 150 ms is the upper limit of the regulation cycle time in the current Siemens system.
-After turbines has been detected as crashed the remaining turbines in the wind farm will share the load of the missing turbines, to keep the global power production of the park as close to the global setpoint as possible.
+% % % I am HERE Krause
+After turbines have been detected caused by a node failure the remaining turbines in the wind farm will share the load of the missing turbines, to keep the global power production of the wind farm as close to the global setpoint as possible.
 
 Let k = the number of turbines crashed, p = production of the crashed turbine, and n = number of remaining turbines. The expected increase of production pr. turbine when one or more turbines are crashed, is denoted as (by regulation algorithm definition explained in \cref{sec:calculateSetpoints}): $$Production~increase~per~turbine = \frac{\sum\limits_{i=1}^k(p)}{n}$$
 
