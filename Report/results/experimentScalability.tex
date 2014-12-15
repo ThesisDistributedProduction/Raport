@@ -70,6 +70,19 @@ The outliers of \cref{fig:exp:cen:turbines} is distributed fairly close around t
 
 \subsubsection{Comparison of the decentralized solution and the centralized solution}
 \label{sec:comp:decentralizedVScentralized}
+
+\begin{figure}[!h]
+	\centering
+	\input{figures/tikz/ProjectDiffOverviewCentralizedDecentralized}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Comparison of the current centralized solution and the decentralized solution]{
+		\label{fig:projectDiffOverviewCentralizedDecentralized1}
+		\footnotesize{%
+			Comparison of the current centralized solution and the decentralized solution.
+		}
+	}
+\end{figure}
+
 The decentralized solution and the centralized solution is built with a very different architecture. This is reflected in the difference in the way the two solutions scale with the number of turbines.
 
 \cref{fig:exp:cenVSDecen} shows the medians of \cref{fig:exp:decen:turbines,fig:exp:cen:turbines} where data that has been disregarded previously has been removed. Thus, the maximum number of turbines in \cref{fig:exp:cenVSDecen} is 70. 
@@ -101,6 +114,19 @@ A qualified guess about the scalability can be provided though. The scalability 
 %The scalability of the decentralized solution, as described in \cref{sec:disc:turbinesVScycletime}, is small enough that it is indistinguishable from other factors in our test data and therefore we cannot calculate it. Thus the scalability of the decentralized solution is close to constant. This great improvement in scalability comes with a trade off in terms of cache reads. Adding additional turbines to the decentralized solution the number of cache reads increases with a factor of $0.033$ extra cache reads per added turbine which is still an improvement compared to the scale factor of the centralized solution. Arguably comparing the scalability of the number of cache reads in the decentralized solution with the scalability of the regulation cycle in the centralized solution is not a viable way to compare the scalability of the two solutions, but comparing the scalability of the regulation cycle of both solutions will not be a fair comparison either since the improvements in scalability of the decentralized solution comes at the price of increased numbers of cache reads.
 
 \subsubsection{Comparison of the decentralized solution and the current Siemens system}
+
+\begin{figure}[!h]
+	\centering
+	\input{figures/tikz/ProjectDiffOverviewSiemensDecentralized}
+	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
+	\caption[Comparison of the current centralized solution and the decentralized solution]{
+		\label{fig:projectDiffOverviewSiemensDecentralized}
+		\footnotesize{%
+			Comparison of the current Siemens system and the decentralized solution.
+		}
+	}
+\end{figure}
+
 This section address the \ref{PS:Q:Scalability} problem of \cref{sec:problemStatement}.
 Comparing the decentralized solution and the current Siemens system directly is impossible given the differences in environment and architecture. Introducing a centralized solution is an attempt to bridge this gap. By comparing the decentralized solution to the centralized solution and measuring the improvements/demotions we can transfer these measures to the current Siemens system and an imagined decentralized version of the current Siemens system.
 

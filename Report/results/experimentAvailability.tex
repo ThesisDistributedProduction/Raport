@@ -67,7 +67,7 @@ The turbines are all running with a cycle time of 20 ms throughout this experime
 
 \FloatBarrier
 
-The 'glitches' on the figures, where the plots shows several seconds between some of the data points, are caused by DDS Blockset for Simulink (described in \cref{sec:graphicalInterface}). The tool appears to be neglecting some of the turbine states published, thus resulting in several seconds time interval between two data points. For the purpose of this experiment we are able to clearly see that it does the regulation, however the time frame is inaccurate.\todo{Shouldn't this be in discussion}
+The 'glitches' on the figures, where the plots shows several seconds between some of the data points, are caused by the eventhandler in Matlab handling events from DDS Blockset for Simulink (described in \cref{sec:graphicalInterface}). The eventhandler appears to be neglecting some of the events caused by the publication of turbine states, thus resulting in several seconds time interval between two data points. For the purpose of this experiment we are able to clearly see that it does the regulation, however the time frame is inaccurate.\todo{Shouldn't this be in discussion}
 %(and any of the other experiments for that matter), this is acceptable since the tool is only used to provide a run-time GUI overview of the system.
 
 \subsection{Discussion}
