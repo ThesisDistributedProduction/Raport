@@ -77,7 +77,7 @@ We use the following box plot type (for \cref{fig:exp:decen:sleep} and \cref{fig
 	\label{fig:exp:decen:sleep}
 \end{figure}
 
-\Cref{fig:exp:decen:sleep} show that the regulation cycle time and sleep time are linearly dependent. Outliers are focused around the boxes with the exception of the 10 ms data point. The 10 ms data point has box edges further apart from each other than other data points. This is caused by having too many turbine instances running on the same PC's, thus stressing the experiment equipment (see \cref{sec:hardwareSepc} for hardware specification) too much, which causes package delays. Hence the 10 ms data point cannot be completely trusted.
+\Cref{fig:exp:decen:sleep} show that the regulation cycle time and sleep time are linearly dependent. Outliers are focused around the boxes with the exception of the 10 ms data point. The 10 ms data point has box edges further apart from each other than other data points. This is caused by having too many turbine instances running on the same PC's, thus stressing the experiment equipment (see \cref{sec:hardwareSepc} for hardware specification) too much, which causes package delays. Hence the 10 ms data point should be disregarded.
 
 \begin{figure}[h!]
 	\centering
@@ -88,7 +88,7 @@ We use the following box plot type (for \cref{fig:exp:decen:sleep} and \cref{fig
 
 \FloatBarrier
 
-\Cref{fig:exp:decen:sleep-cache} show that the average cache reads is declining when increasing the sleep time. As described in \cref{sec:cachereads}, cache reads only indicates if a given state has been read before, thus the number does not increase with the number times the same state has been read. Again, the 10 ms data point cannot be completely trusted due to limited experiment equipment.
+\Cref{fig:exp:decen:sleep-cache} show that the average cache reads is declining when increasing the sleep time. As described in \cref{sec:cachereads}, cache reads only indicates if a given state has been read before, thus the number does not increase with the number times the same state has been read. Again, the 10 ms data point should be disregarded due to limited experiment equipment.
 %, a fitted function of the plot has been put on top (red), the plot is in Matlab fitted against the function $\dfrac{a}{x + b} + c$.
 
 \clearpage
@@ -115,16 +115,19 @@ The outliers span from 0 ms to 150 ms of regulation cycle time.
 	\centering
 	\input{figures/tikz/results/Test5_decentral_cycle_cache}
 	\caption{Decentralized solution variable number of turbines experiment}
-
+	\label{fig:exp:decen:turbines_cache}
 \end{figure}
 
 
 \Cref{fig:exp:decen:turbines_cache} shows the change in average cache reads when the number of turbines increase. The number of cache reads are below 4 from 5 turbines to 80 turbines, with an increasing trend. From 85 turbines to 95 turbines the number of cache reads increase with an exponential tendency. This can again be explained by limitations in the test setup, and the results should be disregarded.
-        n{Discussion}                                 ution is to detach the regulation cycle time from the number of turbines, by making reception of turbine state happen in parallel with the regulation cycle. As a consequence of this the term cache reads has been ioduced to the system, since the detaching of receiving states from the regulation cycle opens for the possibility, that a given state from a turbine is used multiple times in a row for regulation. 
+        
+        
+\subsection{Discussion} 
+The decentralized solution aims to detach the regulation cycle time from the number of turbines, by making reception of turbine state happen in parallel with the regulation cycle. As a consequence of this the term cache reads has been introduced to the system, since the detaching of receiving states from the regulation cycle opens for the possibility, that a given state from a turbine is used multiple times in a row for regulation. 
 
-Looking Experiment 1, we disregard the 10 ms data sets for both \cref{subsec:Exper:perfom:1} and \cref{fig:exp:decen:sleep-cache}, due to limited experiment equipment. Running with a 10 ms sleep time, caused our experiment setup to approach maximum network adapter capacity, thus resulting in package delays.
+Looking at Experiment 1, we disregard the 10 ms data sets for both \cref{subsec:Exper:perfom:1} and \cref{fig:exp:decen:sleep-cache}, due to limited experiment equipment. Running with a 10 ms sleep time, caused our experiment setup to approach maximum network adapter capacity, due to too many packages, thus resulting in package delays.
 
-Looking at \cref{subsec:Exper:perfom:1} we observe a linearly dependency between the sleep time and the regulation cycle time (with the 10 ms data set disregarded). This is expected since the sleep operation is a part of the regulation cycle. The outliers with lower values than the median, means we observe a lower regulation cycle time than the sleep time. By the definition of the regulation cycle time,  
+Looking at \cref{subsec:Exper:perfom:1} we observe a linearly dependency between the sleep time and the regulation cycle time (with the 10 ms data set disregarded). This is expected since the sleep operation is a part of the regulation cycle. The outliers with lower values than the median, means we observe a lower regulation cycle time than the sleep time. This happens if the decentralized solution receives a new state from all turbines during the sleep operation, thus making the oldest state .
 
 
 
