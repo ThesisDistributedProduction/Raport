@@ -64,9 +64,18 @@ The following procedure is used each time the experiment is performed:
 %	\input{figures/tikz/results/Test4_Central_cycle}
 %	\input{results/matlab/Test7_nTurbines}
 	\input{results/matlab/Test4_nTurbines}
+	
 	\caption{Centralized solution variable number of turbines}
 	\label{fig:exp:cen:turbines}
 \end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\input{results/matlab/Decen5VSCent4}	
+	\caption{Centralized solution's median values compared with decentralized solution's median values}
+	\label{fig:exp:cenVSDecen}
+\end{figure}
+
 
 \Cref{fig:exp:cen:turbines} shows how the number of turbines influence the regulation cycle time of the centralized solution.
 For every number of turbines 450 data points have been sampled. The reason for the limited amount of samples is that when running the experiment with 95 turbines the test setup is reaching it's limits. Data transfer speeds of up to 75 Mbit/s was observed. Since the maximum theoretical data transfer speed of the test setup is 100 Mbit/s it is reasonable to assume that a number of packages have been lost due to congestion. Thus, the experiment for 95 turbines only managed to log 450 data samples within the given experiment time. In order to create a boxplot with comparable values the sample set for each number of turbines was reduced to the 450 first points.
