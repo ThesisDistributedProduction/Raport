@@ -8,7 +8,7 @@
 
 %Scalability is by Bondi\cite{Bondi:2000:CSI:350391.350432} defined as \textit{the systems ability to accommodate an increasing number of elements or objects, to process growing volumes of work gracefully, and/or to be susceptible to enlargement}.
 
-The \ref{PS:Q:Performance} question asks if the proposed decentralized solution is able to keep a constant regulation cycle time independent from the number of turbines. This problem operates in a 3-dimensional space with cycle time (ms), number of cache reads and number of turbines as parameters. To study the correlation between the parameters, we isolate two parameters by making the third constant.
+The \ref{PS:Q:Performance} question asks if the proposed decentralized solution is able to keep a constant regulation cycle time independent from the number of turbines. This problem operates in a 3-dimensional space with regulation cycle time (ms), number of cache reads and number of turbines as parameters. To study the correlation between the parameters, we isolate two parameters by making the third constant.
 
 Thus to fully address \ref{PS:Q:Performance} this experiment has been divided into two experiments:
  
@@ -16,6 +16,18 @@ Thus to fully address \ref{PS:Q:Performance} this experiment has been divided in
 	\item[Experiment 1] aims to investigate the anti-correlation between the implemented sleep time of the regulation cycle and the number of cache reads for the decentralized system. This is relevant because changing the sleep time is expected to impact the number of cache reads, since an increase in sleep time increases the time Connext has to overwrite received states, thus decreasing the number of cache reads (as explained in \cref{sec:cachereads}: Cache reads). Thus the constant for this is experiment is the number of turbines.
 	\item[Experiment 2] aims to investigate the impact on the regulation cycle time and the number of cache reads when increasing the number of turbines in the decentralized solution, and thus answer the \ref{PS:Q:Performance} problem. The constant for this experiment is the sleep time.
 \end{description}
+
+The cycle regulation time of the decentralized solution is defined as the difference between the receive timestamp of the oldest turbine state(tOldestState) received and the timestamp sampled right after, a new turbine state has been sent (tSent) (as illustrated on \cref{fig:timingDecentral}):
+
+$$regulation~cycle~time=tSent-tOldestState$$
+
+\begin{figure}[b]
+	\input{figures/tikz/timingDiagramDecntral}
+	\caption{Decentralized regulation time}
+	\label{fig:timingDecentral}
+\end{figure}
+
+The timestamp of the oldest turbine state is used to include network traffic in the regulation cycle time, as opposed to just sampling the time locally. Note that by this definition, it is possible for regulation cycle time to be lower than the sleep time, even though the sleep operation is a part of the regulation cycle. 
 
 
 \subsection{Experiment 1: How sleep time impacts the regulation cycle time and the number of cache reads}
@@ -25,11 +37,13 @@ The experiment is performed with cycle time t=\testCycletimeNumbers.
 
 The following procedure is used each time the experiment is performed:
 \begin{enumerate}
-	\item Start the system with a cycle time of t ms and 21 turbines.
+	\item Start the system with a cycle time of t ms and 50 turbines.
 	\item Make sure the system is stable.
 	\item Start logging the regulation cycle time and the number of cache reads.
-	\item Stop logging when 1000 data points are reached.
+	\item Stop logging after 50 seconds.
 \end{enumerate}
+
+50 seconds of logging provided 59000 data samples as the lowest amount of data samples for a single data set (the data set using 50 ms sleep time). Thus each data set of this experiment has been plotted using 59000 data samples.
 
 \subsection{Experiment 2: How the number of turbines impacts the regulation cycle time and the number of cache reads}
 \label{subsec:Exper:perfom:2}
@@ -41,27 +55,15 @@ The test system is expected to be running only one instance in a real life imple
 
 The following procedure is used each time the experiment is performed:
 \begin{enumerate}
-	\item Start the system with N turbines.
+	\item Start the system with n turbines.
 	\item Make sure the system is stable.
 	\item Start logging the reported regulation run time and the number of cache reads.
-	\item Stop logging when 1000 data points are reached.
+	\item Stop logging after 50 seconds.
 \end{enumerate}
 
+50 seconds of logging provided 14500 data samples as the lowest amount of data samples for a single data set (the data using 5 turbines). Thus each data set of this experiment has been plotted using 14500 data samples.
 
-\subsection{Results}
-
-\label{sec:exp:performance}
-The cycle regulation time is defined as the difference between the receive timestamp of the oldest turbine state(tOldestState) received and the timestamp sampled right after, a new turbine state has been sent (tSent) (as illustrated on \cref{fig:timingDecentral}):
-
-$$regulation~cycle~time=tSent-tOldestState$$
-
-\begin{figure}[b]
-	\input{figures/tikz/timingDiagramDecntral}
-	\caption{Decentralized regulation time}
-	\label{fig:timingDecentral}
-\end{figure}
-
-The timestamp of the oldest turbine state is used to include network traffic in the regulation cycle time, as opposed to just sampling the time locally.
+\subsection{Results} \label{sec:exp:performance}
 
 We use the following box plot type (for \cref{fig:exp:decen:sleep} and \cref{fig:exp:decen:turbines}): The central mark is the median, the edges of the box are the 25th and 75th percentiles, the whiskers extend to the most extreme data points not considered outliers, and outliers are plotted individually. The whisker length is denoted as 1.5 IQR. 
 
@@ -97,48 +99,57 @@ We use the following box plot type (for \cref{fig:exp:decen:sleep} and \cref{fig
 %	\input{figures/tikz/results/Test5_decentral_cycle}
 	\input{results/matlab/Test5_nTurbines}
 	
-	\caption{Decentralized solution variable number of turbines experiment}
+	\caption{Decentralized solution variable number of turbines experiment 1}
 	\label{fig:exp:decen:turbines}
 \end{figure}
 
 \Cref{fig:exp:decen:turbines} shows how the regulation cycle time of the decentralized solution changes with the number of turbines.
-The median of the regulation cycle time is nearly  constant from 5 to 80 turbines.
-The quartiles are with the exception of the 5 turbines experiment of almost constant until 80 turbines, the same applies to the maximum values.
-The extreme regulation cycle time values all stop close to 150 ms.
-As the number of turbines increase the number of outliers increase as well.
-When the number of turbines reach 85 the distribution of datapoints starts to widen. The outliers take on more extreme values as well. This can be explained by limitations in the test setup. Thus, results from 85 turbines to 100 turbines are not to be taken into account.
+When the number of turbines reach 85, the distribution of datapoints starts to widen. The outliers take on more extreme values as well. This can be explained by limitations in the test setup. Thus, results from 85 turbines to 100 turbines are not to be taken into account.
 It should be noted that all the data with a cycle time above 132~ms are collected from the same test machine.
+
+Looking at data points from from 5 to 80 turbines, the median of the regulation cycle time is nearly constant.
+The quartiles are with the exception of the 5 turbines experiment of almost constant until 80 turbines. The upper outliers are focused around the quartiles until 60 turbines. The lower outliers are more inconsistent and less focused around the quartiles.
+The outliers span from 0 ms to 150 ms of regulation cycle time.
 
 \begin{figure}[h!]
 	\centering
 	\input{figures/tikz/results/Test5_decentral_cycle_cache}
 	\caption{Decentralized solution variable number of turbines experiment}
-	\label{fig:exp:decen:turbines_cache}
+
 \end{figure}
 
 
-\cref{fig:exp:decen:turbines_cache} shows the change in number of cache reads when the number of turbines increase. The number of cache reads are below 4 from 5 turbines to 80 turbines, with an increasing trend. From 85 turbines to 95 turbines the number of cache reads increase exponentially. This can again be explained by limitations in the test setup, and the results should be disregarded.
+\Cref{fig:exp:decen:turbines_cache} shows the change in average cache reads when the number of turbines increase. The number of cache reads are below 4 from 5 turbines to 80 turbines, with an increasing trend. From 85 turbines to 95 turbines the number of cache reads increase with an exponential tendency. This can again be explained by limitations in the test setup, and the results should be disregarded.
+        n{Discussion}                                 ution is to detach the regulation cycle time from the number of turbines, by making reception of turbine state happen in parallel with the regulation cycle. As a consequence of this the term cache reads has been ioduced to the system, since the detaching of receiving states from the regulation cycle opens for the possibility, that a given state from a turbine is used multiple times in a row for regulation. 
 
-\subsection{Discussion}
-\label{sec:disc:turbinesVScycletime}
-In the current Siemens system the regulation cycle time of a single Park Pilot scales linearly with the number of turbines.
-The aim of the decentralized solution is to detach the regulation cycle time from the number of turbines. 
-Looking at \cref{fig:exp:decen:turbines} we see that the decentralized solution seems to be independent of the number of turbines, if the number of turbines is sufficiently low.
+Looking Experiment 1, we disregard the 10 ms data sets for both \cref{subsec:Exper:perfom:1} and \cref{fig:exp:decen:sleep-cache}, due to limited experiment equipment. Running with a 10 ms sleep time, caused our experiment setup to approach maximum network adapter capacity, thus resulting in package delays.
+
+Looking at \cref{subsec:Exper:perfom:1} we observe a linearly dependency between the sleep time and the regulation cycle time (with the 10 ms data set disregarded). This is expected since the sleep operation is a part of the regulation cycle. The outliers with lower values than the median, means we observe data points with a lower regulation cycle time than the sleep time. 
+
+
+
+The outliers below the median are another matter. The reception of turbine states is decoupled from the regulation cycle meaning that whenever a turbine has a new state it will distribute it immediately. With the states of all turbines available at each turbine there is no need to wait for state updates before running the regulation algorithm. Regulation cycle time is calculated from the timestamp of reception of the oldest state used in the regulation algorithm to the timestamp taken just after the newly calculated state has been distributed. Thus, if all turbines have updated their state half way into the sleep time of the regulation cycle the time from the oldest received state until a new state is distributed may be smaller than the sleep time of the regulation cycle, embodied by the outliers that have a smaller regulation cycle time than the median.
+
+
+
+Looking at \cref{fig:exp:decen:turbines} we see that the decentralized solution seems to be independent from the number of turbines, if the number of turbines is sufficiently low.
 From 5 to 80 turbines the regulation cycle time is nearly constant at 20 ms.
-The near constant regulation cycle time is caused by the fact that the regulation cycle in the decentralized solution is not forced to wait for data before running the regulation algorithm because data is continually shared between turbines. Adding a turbine to the decentralized solution adds an extra turbine state to factor into the setpoint calculation in the regulation algorithm. This and the added network traffic for the new turbine is the consequence of adding new turbines.
+The near constant regulation cycle time is caused by the fact that the regulation cycle in the decentralized solution is not forced to wait for data, before running the regulation algorithm because data is continually received in parallel with the regulation cycle. Adding a turbine to the decentralized solution adds an extra turbine state to read into the setpoint calculation in the regulation algorithm, thus adding network traffic to the system. 
 
 When looking at regulation cycle time of the decentralized solution we must also look at the number of cache reads.
 As explained in \cref{sec:exp:performance} a cache read happens when a turbine does not provide a new turbine state package before the next regulation cycle is started.
-This forces the regulation cycle to use old data read from cache.
+This forces the regulation cycle to use old turbine states from cache.
 Looking at \cref{fig:exp:decen:turbines_cache} we see that the average number of cache reads in the decentralized solution are below 4 and increasing slightly until we reach 80 turbines. From there the number of cache reads increase exponentially.
 
-The increase in regulation cycle time and cache reads when the number of turbines reaches 85 can be explained by the fact that the network equipment of the test setup is approaching maximum throughput capacity which may cause lost or delayed network packages.\todo{Er det korrekt?}
-Since regulation cycle time in the decentralized system is dependent on the reception time of the oldest turbine state package as explained in \cref{sec:exp:performance} the loss or delay of network packages has a direct impact on regulation cycle time.
-Similarly lost or delayed network packages increases the use of cached data. The increased regulation cycle time and cache reads are thus not a limitation of the decentralized solution but a limitation imposed by the test setup. In order to create a realistic comparison we must disregard the results that are a direct effect of the limitations of our test setup.
+The increase in regulation cycle time and cache reads when the number of turbines reaches 85 can be explained by the fact equipment used for this experiment is approaching maximum CPU capacity, which results in package delays. We use one computer for logging and two computers for simulating turbines, thus, when simulating 80 turbines, 40 turbines are run on the same computer.
+Since regulation cycle time in the decentralized system is dependent on the reception time of the oldest turbine state package, the delayed packages has a direct impact on regulation cycle time.
+Thus similarly lost or delayed network packages increases the use of cached data. The increased regulation cycle time and cache reads are thus not a limitation of the decentralized solution but a limitation imposed by the test setup. In order to create a realistic comparison we must disregard the results that are a direct effect of the limitations of our test setup.
 
-Disregarding the limitations imposed by the test setup we see that the regulation cycle time is constant. In terms of regulation cycle time the decentralized solution scales indefinitely. As stated above there is a small increase in regulation cycle time for every turbine added because the state of this turbine has to be taken into consideration when calculating new setpoints on all other turbines. This time addition is not visible in \cref{fig:exp:decen:turbines}. Thus the regulation cycle time will be affected by the addition of turbines but the effect is so small that it is indistinguishable by other factors.
+Disregarding the limitations imposed by the test setup observe that the regulation cycle time is constant to the limit of turbines we can simulate. 
+
+As stated above there is a small increase in regulation cycle time for every turbine added because the state of this turbine has to be taken into consideration when calculating new setpoints on all other turbines. This time addition is not visible in \cref{fig:exp:decen:turbines}. Thus the regulation cycle time will be affected by the addition of turbines but the effect is so small that it is indistinguishable by other factors.
 The amount of outliers in \cref{fig:exp:decen:turbines} is fairly high. This is to be expected as the regulation cycle time factors in network traffic. Thus, the outliers that is higher than the median can be explained by a delay or a loss of a package in the network. Another explanation could be that the turbines are not running synchronized with each other. This means that one turbine may receive states from other turbines just at the time when the sleep time of the regulation cycle time elapses. Thus, it is possible that some turbines may not deliver their states in time for them to be used in the current regulation cycle which forces the use of cache reads, which in turn increases the regulation cycle time.
-The outliers below the median are another matter. The reception of turbine states is decoupled from the regulation cycle meaning that whenever a turbine has a new state it will distribute it immediately. With the states of all turbines available at each turbine there is no need to wait for state updates before running the regulation algorithm. Regulation cycle time is calculated from the timestamp of reception of the oldest state used in the regulation algorithm to the timestamp taken just after the newly calculated state has been distributed. Thus, if all turbines have updated their state half way into the sleep time of the regulation cycle the time from the oldest received state until a new state is distributed may be smaller than the sleep time of the regulation cycle, embodied by the outliers that have a smaller regulation cycle time than the median.
+
 
 Still disregarding the limitations imposed by the test setup when looking at the number of cache reads we see another result. The number of cache reads increases slowly with a factor of around 1 cache read for every 30 turbines added, which gives a scale factor of $1 / 30 = 0.033$ added cache reads per turbine added.
 
