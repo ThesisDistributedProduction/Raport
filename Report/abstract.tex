@@ -7,19 +7,17 @@ Because of this wind farm size and power production steadily increases.
 %The number of turbines in a single wind farm can reach more than 500.
 Control of the increasing number of turbines in wind farms is becoming problematic.
 %
-The traditional hierarchical control approach with central control points responsible for regulation of turbine power production does not scale well with the number of turbines, and introduce single points of failure.
+The traditional hierarchical control approach with central control points responsible for regulation of turbine power production does not scale well with the number of turbines, and contains single points of failure.
 %
-This thesis aims to take a different approach to control of wind farms.
-%
-In place of the hierarchical control approach the aim is to decentralize the control of turbines.
+The present thesis aims to decentralize the control of turbines in order to increase the number of turbines handled per control unit and remove single points of failure. 
 %
 %This is done by letting each turbine regulate it's own power production in accordance with the power production of all other turbines in the wind farm.
-This is achieved by letting the turbines regulate power production themselves while cooperating to reach the power production setpoint of the wind farm.
+This is achieved by letting the turbines regulate power production themselves while cooperating to reach the power production setpoint of the wind farm. Data storage and aggregation, resource management and communication are identified as key areas for decentralization.
 %In place of the hierarchical control approach the aim is to decentralize the control of turbines in a wind farm by letting each turbine control it's own power production in accordance with the power production of all other turbines in the wind farm.
 %In place of the hierarchical control approach this thesis aim to let every turbine control itself in accordance with the power production of other turbines, in effect decentralizing the control of the wind farm.
-Decentralizing the control of turbines will increase the scalability of the wind farm as increasing the number of turbines will also increase the number of resources available to perform regulation of power production.
-%
-As well as increased scalability, decentralizing wind farm control will increase availability, as there no longer exist a single point in the farm that every turbine is dependent on.
+MongoDB, Linux Virtual Server and RTI Connext DDS has been identified as optimal components for handling these key areas. 
+A decentralized prototype of a wind farm, performing power regulation using RTI Connext DDS for communication is presented.
+The prototype is evaluated and compared to a prototype of an existing Siemens Wind Power wind farm. Within the limits set by the test environment, the decentralized prototype outperforms the prototype of an existing Siemens Wind Power wind farm, as the decentralized prototype is shown to scale constant with the number of turbines.
 
 \chapter{Resumé}
 Vindenergi er bredt anerkendt som en af de mest omkostningseffektive vedvarende energikilder.
