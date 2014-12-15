@@ -41,11 +41,6 @@ As such it is hard to deduce from a screenshot that the decentralized solution i
 
 To fully decentralize the current Siemens system, decentralization of the Wind Power Supervisor must also be covered. The purpose of the Wind Park Supervisor is to log data from every turbine within the farm and handle external communication. Thus the Wind Park Supervisor consists of tree primary features: Data storage and data aggregation and external communication. 
 
-<<<<<<< HEAD
-Decentralizing the data storage and aggregation onto the turbines requires a horizontally scalable distributed database, which can handle data aggregation. Distributing the database horizontally is important in order to handle datasets larger than the physical storage of one turbine and data aggregation is needed for the case where an external request requires data to be aggregated. To handle this MongoDB~\cite{mongodb} has been identified as the optimal component (as concluded in \cref{sec:databaseStorage} Data Storage). MongoDB supports Sharding for automatic horizontal partitioning of datasets and data aggregation. MongoDB has been chosen based on other parameters related to the problems \ref{PS:Q:Availability} and \cref{PS:Q:Performance}, however to answer the answer the \ref{PS:Q:Feasibility} problem, this functionality is sufficient. 
-
-Handling external communication decentralized means, BLABLA \todo{KRAUSE} has been identified as the optimal component.
-=======
 Decentralizing the data storage and aggregation onto the turbines requires a horizontally scalable distributed database, which can handle data aggregation.
 Distributing the database horizontally is important in order to handle datasets larger than the physical storage of one turbine.
 Aggregated data is used for generating data suitable for monitoring and analyses.
@@ -56,6 +51,4 @@ Requires multiple system capable of shearing a single entry point.
 This can be done using a load balancer with hot backups.
 The load balancer setup helps answer the question \ref{PS:Q:Availability} and to some extend \ref{PS:Q:Performance} the servers for the external interfaces are implemented in a scalable way, however the load balancer itself still needs to handle all traffic and will become a bottle neck if traffic get too high.
 To reduce this scaling problem we are recommending a load balancer which only needs to handle requests and allows servers to directly respond to clients, this setup should provide sufficient network throughput for the system to grow well beyond the current 100 concurrent connections the current Siemens systems supports.
->>>>>>> a876855f2981437b36be3d73dc05e7bc8748c0e6
-
 \clearpage
