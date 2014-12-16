@@ -39,7 +39,7 @@ The blockset consists of a toolbox containing 6 blocks. Common for all blocks ex
 \paragraph{The Time block} returns the current time from DDS output in seconds and nanoseconds.
 
 \section{Simulink model of the centralized solution}\label{subsec:centralizedmodel}
-The Simulink model of the centralized solution is presented in \cref{centralizedSimulinkModel}. The centralized solution contains three different messagetypes, TurbineDataMessage, RequestMessage, SetpointMessage, \cref{sec:cenIdl} that all run on different topics. Because of this the centralized Simulink model contains one DomainParticipant, three Subscribers, one for each topic, and three DataReaders, one for each message type, in order to capture the communication in the centralized solution. Every message received is logged to a .mat file together with the current DDS time.
+The Simulink model of the centralized solution is presented in \cref{fig:centralizedSimulinkModel}. The centralized solution contains three different messagetypes, TurbineDataMessage, RequestMessage, SetpointMessage, \cref{sec:cenIdl} that all run on different topics. Because of this the centralized Simulink model contains one DomainParticipant, three Subscribers, one for each topic, and three DataReaders, one for each message type, in order to capture the communication in the centralized solution. Every message received is logged to a .mat file together with the current DDS time.
 
 \begin{figure}[!h]
 	\includegraphics[width=\textwidth]{figures/CentralizedModel}
