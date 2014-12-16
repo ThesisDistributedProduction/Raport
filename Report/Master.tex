@@ -30,6 +30,7 @@
 \usepackage{ulem}
 \usepackage{placeins}
 \usepackage{nameref}
+\usepackage[danish,english]{babel}
 
 \definecolor{maroon}{rgb}{0.5,0,0}
 \definecolor{darkgreen}{rgb}{0,0.5,0}
@@ -86,6 +87,8 @@
 \copypagestyle{plain}{book}
 \makeevenhead{plain}{}{}{}
 \makeoddhead{plain}{}{}{}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}	% funktion der laver en horisontal streg
 
 %**************** Headlines ****************************************************
 % konfiguration af kapitel titel font samt fonte til sections
@@ -195,6 +198,14 @@
 \usetikzlibrary{arrows, chains, graphs}
 
 
+%-Frontpage logo----------------------------------------
+\definecolor{ase_blue}{RGB}{10,55,136}
+\definecolor{au_red}{rgb}{0.75,0,0}
+\sodef\an{}{0.05em}{.5em plus.6em}{1em plus.1em minus.1em}
+\newcommand\stext[1]{\an{\scshape#1}}
+\newcommand{\logoHuge}{\fontsize{0.55cm}{0.8cm}\selectfont}
+%-------------------------------------------------------
+
 \graphicspath{{figures/}}
 \sidecaptionvpos{figure}{t} %sidecaption aligned med toppen af billede
 \usepackage{caption}
@@ -256,6 +267,7 @@
 %\includeonly{Loadbalancing} %Hvis man ikke vil kompilere det hele hver gang
 \begin{document}
 \frontmatter
+\include{frontpage}
 \include{abstract}
 
 \cleartorecto

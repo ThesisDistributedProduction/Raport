@@ -1,85 +1,113 @@
+% Frontpage - Titlingpage from Memoir class 
+\begin{titlingpage}
+  
+  \thispagestyle{empty}
+  
+  % Define the colourbar on the frontpage
+  \begin{tikzpicture}[remember picture,overlay]
+    \coordinate [below=2.5cm] (midpoint) at (current page.north);
 
-%\begin{document}
-\begin{titlingpage} \vspace*{5mm} \centering
-%\huge \textsc{\ann{Johnny Rieper}} \par
-%\small \an{2007\,0114} \vspace{3mm} \par
-%\fontsize{1.2cm}{1cm}\selectfont \MakeUppercase{\an{Simulations on}}
-\vspace{3mm} \par
+    \node [name=colourbar,
+    anchor=base,
+    fill=ase_blue,
+    %fill=au_red,
+    text = white,
+    minimum width=\paperwidth,
+    minimum height=1cm] at (midpoint) {\logoHuge{\hspace{-4cm}\textsc{{Aarhus University}}}};
 
-%\fontsize{1.2cm}{1cm}\selectfont \MakeUppercase{\an{Matching Techniques}}
-\Huge \MakeUppercase{\an{Distributed Computation}} \vspace{3mm} \par
-\Large \MakeUppercase{\an{in }} \vspace{5mm} \par
-\LARGE \MakeUppercase{\an{a Production Environment}} \vspace{3mm} \par
-\vspace{3mm} \par
-%\Large {\an{Introducing Hidden Markov Models \&}}  \par
-%\Large {\an{Dynamic Time Warping}} \vspace{5mm} \par
+    % Define the point where the logo will go
+    \coordinate [right=4cm] (ase_logo) at (colourbar.west);
 
-%\fontsize{1.0cm}{1cm}\selectfont \MakeUppercase{\an{her}}
-%\vspace{5mm} \par
-\large \sodef\ann{}{0.13em}{0.5em}{0em}
-\small \textsc{\ann{by}} \par
-\vspace{2mm} \par
-\Large \textsc{\ann{Theis Jeppe Nickelsen}} \par
-\small \an{201300249} \vspace{3mm} \par
-\Large \textsc{\ann{Stefan Krause-Kj\ae r}} \par
-\small \an{201300256} \vspace{3mm} \par
-\Large \textsc{\ann{Thomas Thisgaard Steffensen}} \par
-\small \an{201300250} \vspace{3mm} \par
-\enlargethispage{15mm} \vspace{20mm} \par
+    % Set coordinate system origin
+    \begin{scope}[shift=(ase_logo)]
+      % Draw the outline
+       %\draw node[fill,circle,minimum size=2cm] {}
+      %\filldraw [white] (1.3,0.85) -- (-2.3,0.85) -- (-2.3,-0.85) -- (1.3,-0.85) --cycle;
+      \node [xshift=-0.5cm, circle, draw=white, fill=white, minimum size =3.5cm] {};
+      % Include the logo
+      \node [xshift=-0.5cm]{\includegraphics[width=3cm]{figures/segla1s}};
+    \end{scope}
+  \end{tikzpicture}
 
-%\begin{figure}[t]
-%\raggedleft
-%\includegraphics[trim=0 0 0 0,clip,keepaspectratio,width=5cm]{redlogo.eps} \par
-%\end{figure}
+% Temporary center margins
+\begin{adjustwidth}{1.0cm}{1.0cm}
+	%\vspace*{\stretch{0.7}}
+	\vspace*{3cm}
+	\centering
+	{ \setlength{\baselineskip}{32pt}
+		\HRule %--------------------------------------------------------------
+		\vspace*{1.2\onelineskip}
+		{\Huge \stext{Implementation and evaluation of a decentralized wind turbine control system using DDS}
+		\HRule} %--------------------------------------------------------------	
+		
+		\vspace*{1\onelineskip}
+		\par
+		%\includegraphics[width=5cm]{Figures/Titlepage}
+		\vspace*{1\onelineskip}
+		\par\vspace*{6\onelineskip}
+		% Make a table to make the --- align
+		\Large\stext{By}\\
+		\vspace*{1\onelineskip}
+		\LARGE\textsc{Thomas Thisgaard Steffensen}\\
+		\small 201300250\\
+		\vspace*{0.1\onelineskip}
+		\LARGE\textsc{Theis Nickelsen}\\
+		\small 201300249\\
+		\vspace*{0.1\onelineskip}
+		\LARGE\textsc{Stefan Stagstrup Krause-Kjær}\\
+		\small 201300256\\
+		
 
-
-%\begin{figure}[h]
-%\centering
-%\includegraphics[width=3.0cm]{segla1b} \par
-%\end{figure}
-
-\begin{figure}[b]
-%\centering
-\begin{pspicture}(5,5)
-\rput[bl](0,0){\colorbox{webred}{\parbox{\textwidth}{\color{white} \qquad \qquad \qquad \qquad \qquad \qquad \large\textsc{\ann{\textbf{Aarhus University}}}}}}
-\rput[bl](.6,-0.51){\pscirclebox*[framesep=-10pt]{\includegraphics[scale=1]{figures/segla1s}}}
-%\psset{linewidth=0.1,arrows=->,arrowscale=2}%
-%\psline(6,3)(4,4.6)\uput[-45](6,3){Ear}
-%\psline(6,1.5)(2,1.5)\uput[0](6,1.5){Mouth}
-\end{pspicture}
-\end{figure}
-
-\vspace{15mm} \vfill \par
-
-\normalsize\textsc{\ann{Master's Thesis}}\par
-\vspace{2mm}
-\normalsize\textsc{\ann{Supervisor: Christian Fischer Pedersen}}\par
-\vspace{2mm}
-\normalsize \scshape \sodef\ann{}{0.13em}{0.6em}{0em}
-{\ann{Thesis on Distributed Computing}} \par
-\vspace{2mm}
-\ann{Aarhus School of Engineering} \par
-%\ann{University of Aarhus} \par
-\vspace{2mm}
-\an{September 2014}
-
-%\colorbox{webred}{\color{webblue}text}
-\vspace{0mm} \par
-
-
-\newpage
+		\vspace*{1\onelineskip}
+	}
+\end{adjustwidth}
+	\vfill
+	\large\stext{Department of Engineering}\\
+	\large\stext{Supervisor: Christian Ficher Pedersen}\hfill
+	\stext{December 17, 2014}
+	
+	\enlargethispage{3.5\onelineskip}
+\clearpage
+\thispagestyle{empty}
+\null
+\clearpage
+\centering
+\scshape
+\vspace*{3.5cm}
+		\huge\stext{Master's Thesis}\\
+		\vspace*{3\onelineskip}
+		\LARGE\stext{Aarhus University}\\
+		\stext{Department of Engineering}\\
+		\vspace*{10\onelineskip}
+		\normalsize
+\flushleft	\vfill	
+\begin{tabular}{l}
+				\stext{Supervisor: Christian Ficher Pedersen, Aarhus University}\\
+		\end{tabular}\\
+		\vspace*{5\onelineskip}
 \thispagestyle{empty} % fjerne evt. sidehoved og fod
 % \small forstyrrer ikke da vi er inden i et environment
 \small
-\strut\vfill % pres alt ned i bunden af siden
-\copyright\ Theis Jeppe Nickelsen, Stefan Krause-Kj\ae r, Thomas Thisgaard Steffensen 2014\\[\baselineskip]
-This Thesis is printed with Computer Modern 10pt\\
-Layout and typography by the author using \LaTeX\\
+\strut % pres alt ned i bunden af siden
+%\copyright\ Jesper T. Jensen, Jacob H. Jeppesen, Sune B. Laursen 2014\\[\baselineskip]
+%This Thesis is printed with Computer Modern 10pt\\
+%Layout and typography by the author using \LaTeX\\
 %All simulated graphs designed by author in \textsc{Matlab}\texttrademark\\
-%Remaining figures designed by author using PSTricks.
+%Remaining figures designed by author using PowerPoint\texttrademark.
+\noindent\begin{tabular}{ll}
+\makebox[2.9in]{\hrulefill} & \makebox[1in]{\hrulefill}\\
+Thomas Thisgaard Steffensen & Date\\[12ex]% adds space between the two sets of signatures
+\makebox[2.9in]{\hrulefill} & \makebox[1in]{\hrulefill}\\
+Theis Nickelsen& Date\\[12ex]
+\makebox[2.9in]{\hrulefill} & \makebox[1in]{\hrulefill}\\
+Stefan Stagstrup Krause-Kjær & Date\\
+\end{tabular}
 
 \end{titlingpage}
 
 
-%\endinput
-%\end{document}
+
+
+
+
+
