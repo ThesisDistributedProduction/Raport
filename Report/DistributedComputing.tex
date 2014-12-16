@@ -380,9 +380,13 @@ The standard is an API specification and an interoperability wire-protocol that 
 	}
 \end{figure}
 
-DDS has no central broker meaning all cache and queuing of messages happens at the client. As there is no central broker clients sends messages directly to each other using multicast in order to limit the number of packages in the network. The decentral architecture of DDS allows for great scalability since there is no central points that will be congested if the number of packages in the network increase.
+DDS has no central broker meaning all cache and queuing of messages happens at the client. As there is no central broker, clients sends messages directly to each other using multicast in order to limit the number of packages in the network. The decentral architecture of DDS allows for great scalability since there is no central points that will be congested if the number of packages in the network increase.
 
-As DDS is the best candidate for a middleware for the decentralized solution it will be presented in depth in the following section.
+\subsection{Conclusion}
+
+Having central brokers introduces single points of failure and communication overhead to the system. With DDS being the only publish/subscribe middleware without a central broker, DDS has been chosen as communication standard. 
+
+The the decentralized prototype is built using DDS, DDS will be presented in depth in the following section.
 %As DDS is the best candidate for a middleware for the decentralized solution it will be investigated in depth in the following section to ensure it's ability to scale.
 
 \section{Data Distribution Service for Real-Time Systems}
@@ -490,7 +494,7 @@ After this phase has been completed all \textit{DomainParticipants} in the syste
 	}
 \end{figure}
 
-Since the SEDP registers all the \textit{DataWriters} and \textit{DataReaders} in the system the protocol scales poorly~\cite{(CFDP)}. The discovery time and number of packets sent grows as the number of endpoints increase. This affects the scalability of the system directly. To avoid the increase in discovery time different protocols has been proposed to solve the scalability problem. 
+Since the SEDP registers all the \textit{DataWriters} and \textit{DataReaders} in the system the protocol scales poorly~\cite{CFDP}. The discovery time and number of packets sent grows as the number of endpoints increase. This affects the scalability of the system directly. To avoid the increase in discovery time different protocols has been proposed to solve the scalability problem. 
 
 \paragraph{Content-based Filtering Discovery Protocol(CFDP)} is similar to SDP during the SPDP phase but it differs in the SEDP phase where changes has been made in order to facilitate content-based discovery of endpoints. The filtering allows the \textit{DomainParticipant} to reduce the number of discovery messages to the number of endpoints that needs to communicate with the \textit{DomainParticipant} and its local endpoints. Currently CFDP has only been tested using unicast and here the protocol outperforms SDP in terms of network usage, packages sent and discovery time. However if multicast is used as the underlying transport protocol SDP outperforms CFDP. This happens because SDP only needs one multicast for all \textit{DomainParticipants}. CFDP in contrast will need one multicast address for each content filter used. This limitation in CFDP is proposed as a subject for further research.
 
@@ -531,3 +535,5 @@ Using the QoS of DDS a system can be configured to fit its environment and its r
 
 \subsection{Conclusion}
 The Data Distribution Service enables both communication using publish/subscribe as well as the ability to maintain a global shared state by preserving message history. Coupled with the fact that the middleware provides automatic node discovery, cross-platform support and fine grained control using Quality of Service parameters the Data Distribution Service is the best choice of middleware for the Siemens Case (\cref{sec:SiemensCase}).
+
+Since Siemens is currently using RTI Connext DDS~\cite{siemensdds}, RTI Connext DDS has been chosen as communication component. 
