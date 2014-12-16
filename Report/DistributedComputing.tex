@@ -437,17 +437,17 @@ RTI Connext provides a number of entities that must be present in a system in or
 
 \begin{description}
 	\item [DomainParticipant]
-		\textit{Domains} represent logical, isolated, communication networks. Entities existing in different \textit{Domains} are unable to communicate with each other. The \textit{DomainParticipant} is created with an integer value specifying the \textit{Domain} it belongs to. The \textit{DomainParticipants} owns the \textit{Topics}, \textit{Publishers} and \textit{Subscribers} in effect making them belong to a specific \textit{Domain}.
+		Domains represent logical, isolated, communication networks. Entities existing in different Domains are unable to communicate with each other. The DomainParticipant is created with an integer value specifying the Domain it belongs to. The DomainParticipants owns the Topics, Publishers and Subscribers in effect making them belong to a specific Domain.
 	
-	\item [Publisher] A \textit{Publisher} owns and manages a number of \textit{DataWriters}. The \textit{Publisher} is responsible for the publishing of data provided by the \textit{DataWriters}. One \textit{Publisher} can publish data from several \textit{DataWriters} on several different \textit{Topics}.
+	\item [Publisher] A Publisher owns and manages a number of DataWriters. The Publisher is responsible for the publishing of data provided by the DataWriters. One Publisher can publish data from several DataWriters on several different Topics.
 	
-	\item [Subscriber] A \textit{Subscriber} owns and manages a number of \textit{DataReaders}. The \textit{Subscriber} is responsible for the receipt of published data on behalf of the \textit{DataReaders}. One \textit{Subscriber} can receive data for several \textit{DataReaders} on several different \textit{Topics}. 
+	\item [Subscriber] A Subscriber owns and manages a number of DataReaders. The Subscriber is responsible for the receipt of published data on behalf of the DataReaders. One Subscriber can receive data for several DataReaders on several different Topics. 
 	
-	\item [Topic] \textit{Topics} interconnect \textit{DataReaders} and \textit{DataWriters}. \textit{DataWriters} can subscribe to a \textit{Topic} and receive data each time a \textit{DataReader} publishes data to the same \textit{Topic}.
+	\item [Topic] Topics interconnect DataReaders and DataWriters. DataWriters can subscribe to a Topic and receive data each time a DataReader publishes data to the same Topic.
 	
-	\item [DataWriter] A \textit{Datawriter} is owned by a single \textit{Publisher}. It is associated with a single \textit{Topic} and is able to send data to this \textit{Topic} using the owning \textit{Publisher}.
+	\item [DataWriter] A Datawriter is owned by a single Publisher. It is associated with a single Topic and is able to send data to this Topic using the owning Publisher.
 	
-	\item [DataReader] A \textit{DataReader} is owned by a single \textit{Subscriber}. It is associated with a single \textit{Topic} and is able to receive data published to this \textit{Topic} using the owning \textit{DataReader}.
+	\item [DataReader] A DataReader is owned by a single Subscriber. It is associated with a single Topic and is able to receive data published to this Topic using the owning DataReader.
 \end{description}
 
 \begin{figure}
@@ -473,11 +473,11 @@ The protocol is split into two phases:
 	\item Simple Endpoint Discovery Protocol
 \end{itemize}
 
-The Simple Participant Discovery Protocol(SPDP) phase facilitates the discovery of \textit{DomainParticipants} across the network.
-After this phase has been completed all \textit{DomainParticipants} in the system has registered the necessary information to enable future communication with each other.
+The Simple Participant Discovery Protocol(SPDP) phase facilitates the discovery of DomainParticipants across the network.
+After this phase has been completed all DomainParticipants in the system has registered the necessary information to enable future communication with each other.
 
-The Simple Endpoint Discovery Protocol(SEDP) phase facilitates the discovery of \textit{DataWriters} and \textit{DataReaders} across the network.
-After this phase has been completed all \textit{DomainParticipants} in the system has registered the necessesary information to enable \textit{DataWriters} and \textit{DataReaders} to communicate.
+The Simple Endpoint Discovery Protocol(SEDP) phase facilitates the discovery of DataWriters and DataReaders across the network.
+After this phase has been completed all DomainParticipants in the system has registered the necessesary information to enable DataWriters and DataReaders to communicate.
 
 \begin{figure}
 	\centering
@@ -491,15 +491,15 @@ After this phase has been completed all \textit{DomainParticipants} in the syste
 	}
 \end{figure}
 
-Since the SEDP registers all the \textit{DataWriters} and \textit{DataReaders} in the system the protocol scales poorly~\cite{CFDP}. The discovery time and number of packets sent grows as the number of endpoints increase. This affects the scalability of the system directly. To avoid the increase in discovery time different protocols has been proposed to solve the scalability problem. 
+Since the SEDP registers all the DataWriters and DataReaders in the system the protocol scales poorly~\cite{CFDP}. The discovery time and number of packets sent grows as the number of endpoints increase. This affects the scalability of the system directly. To avoid the increase in discovery time different protocols has been proposed to solve the scalability problem. 
 
-\paragraph{Content-based Filtering Discovery Protocol(CFDP)} is similar to SDP during the SPDP phase but it differs in the SEDP phase where changes has been made in order to facilitate content-based discovery of endpoints. The filtering allows the \textit{DomainParticipant} to reduce the number of discovery messages to the number of endpoints that needs to communicate with the \textit{DomainParticipant} and its local endpoints. Currently CFDP has only been tested using unicast and here the protocol outperforms SDP in terms of network usage, packages sent and discovery time. However if multicast is used as the underlying transport protocol SDP outperforms CFDP. This happens because SDP only needs one multicast for all \textit{DomainParticipants}. CFDP in contrast will need one multicast address for each content filter used. This limitation in CFDP is proposed as a subject for further research.
+\paragraph{Content-based Filtering Discovery Protocol(CFDP)} is similar to SDP during the SPDP phase but it differs in the SEDP phase where changes has been made in order to facilitate content-based discovery of endpoints. The filtering allows the DomainParticipant to reduce the number of discovery messages to the number of endpoints that needs to communicate with the DomainParticipant and its local endpoints. Currently CFDP has only been tested using unicast and here the protocol outperforms SDP in terms of network usage, packages sent and discovery time. However if multicast is used as the underlying transport protocol SDP outperforms CFDP. This happens because SDP only needs one multicast for all DomainParticipants. CFDP in contrast will need one multicast address for each content filter used. This limitation in CFDP is proposed as a subject for further research.
 
 Since CFDP does not outperform SDP when using multicast, CFDP is not suited as the discovery protocol for the system described in this thesis.
 
-\paragraph{A discovery protocol based on Bloom filters} has been proposed as well~\cite{monedero2009dds}. Similar to CFDP the Bloom filter approach aims to reduce the number of packets that needs to be exchanged in order to discover endpoints in the system. The Bloom filter approach introduces a Bloom filter for each \textit{DomainParticipant} that contains information describing the local endpoints. During the SPDP phase the Bloom filters are distributed to all \textit{DomainParticipants}. In this way information of all endpoints in the system has been distributed when the SEDP phase begins allowing the \textit{DomainParticipants} to decrease the number of discovery messages sent to the number of endpoints that it must know in order to facilitate communication for its local \textit{DataReaders} and \textit{DataWriters}. 
+\paragraph{A discovery protocol based on Bloom filters} has been proposed as well~\cite{monedero2009dds}. Similar to CFDP the Bloom filter approach aims to reduce the number of packets that needs to be exchanged in order to discover endpoints in the system. The Bloom filter approach introduces a Bloom filter for each DomainParticipant that contains information describing the local endpoints. During the SPDP phase the Bloom filters are distributed to all DomainParticipants. In this way information of all endpoints in the system has been distributed when the SEDP phase begins allowing the DomainParticipants to decrease the number of discovery messages sent to the number of endpoints that it must know in order to facilitate communication for its local DataReaders and DataWriters. 
 
-Again the main advantage of using Bloom filters is found in the unicast scenario. In a multicast scenario there still are advantages of using the Bloom filter approach because the \textit{DomainParticipants} are able to limit the number of discovery messages compared to SDP. The advantage of using the Bloom filter approach increases as the ratio between endpoints and \textit{DomainParticipants} increase.
+Again the main advantage of using Bloom filters is found in the unicast scenario. In a multicast scenario there still are advantages of using the Bloom filter approach because the DomainParticipants are able to limit the number of discovery messages compared to SDP. The advantage of using the Bloom filter approach increases as the ratio between endpoints and DomainParticipants increase.
 
 Since a wind farm has a limited number of endpoints, less than 300 turbines, the decrease in discovery time by using the Bloom filter approach would be minor. Therefore the Bloom filter approach is not further investigated in this thesis. \newline
 
@@ -519,7 +519,7 @@ DDS provides Quality of Service(QoS) parameters to enable very fine grained cont
 		
 	\item [Reliability] This parameter regulates the reliable delivery of messages in the system, which affect the operation of the turbines and their regulation.
 		
-	\item [Liveness] The Liveness parameter specifies how liveness of a \textit{DataWriter} is determined. This allows the system to detect when a turbine is no longer available and to respond in an appropriate way.
+	\item [Liveness] The Liveness parameter specifies how liveness of a DataWriter is determined. This allows the system to detect when a turbine is no longer available and to respond in an appropriate way.
 \end{description}
 
 Using the QoS of DDS a system can be configured to fit its environment and its requirements very tightly allowing efficient and reliable operation. QoS will be elaborated further in chapters \cref{cha:existingSystem} and \cref{cha:decentralizedSystem}.
