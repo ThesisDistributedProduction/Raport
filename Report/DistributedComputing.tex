@@ -1,24 +1,24 @@
-\section{Distributed computing}
+\section{Communication}
+%\section{Distributed computing}
 
 As mentioned, The Wind Power Supervisor (WPS) and the Park Pilot does not scale well with the number of turbines, which forces Siemens to set the regulation cycle time after worst case scenarios (see \cref{sec:SiemensCase} for details). 
 
 %The primary problem that Siemens want solved is improving scalability, in terms of increasing the number of turbines per park pilot. This problem is partly solved by decentralizing the solution by removing the need for an actual Park Pilot. However, even with a decentralized solution, in order to make the system scale in the sense that adding turbines does not impact the regulation cycle time, requesting states from all turbines must be removed from the regulation algorithm, since this part of the algorithm scales linearly.
 
-The regulation cycle time of the current Siemens system is set to 150 ms and Siemens wants the regulation cycle time reduced to 10 ms. This is a major performance improvement and as such not a strict demand from the Siemens case, meaning any reduction in the 150 ms cycle time will be accepted. The goal for the decentralized solution to the Siemens case is therefore to reduce the regulation cycle time as much as possible, and still be able to regulate.
+The regulation cycle time of the current Siemens system does not scale well with the number of turbines in the wind farm. This is currently limiting the regulation cycle time to 150 ms and forces them to use multiple park pilots. The park pilots them self are single points of failures, for the group of turbines they regulate.
+The goal for the decentralized solution in relation to the Siemens case, is therefore to create a system that scales with the number of turbines yet having no single point of failure.
+
+%The regulation cycle time of the current Siemens system is set to 150 ms and Siemens wants the regulation cycle time reduced to 10 ms. This is a major performance improvement and as such not a strict demand from the Siemens case, meaning any reduction in the 150 ms cycle time will be accepted. The goal for the decentralized solution to the Siemens case is therefore to reduce the regulation cycle time as much as possible, and still be able to regulate.
 
 Looking at the park regulation cycle \cref{sec:SiemensCase}, the reason for it being slow is primarily the communication overhead involved, when requesting setpoints from every turbine and sending new setpoints to every turbine, and that this communication overhead increases with the number of turbines involved with the regulation. So to reduce the regulation cycle time, this communication overhead needs to be reduced, by letting each turbine perform the regulation cycle and calculate their own setpoints. 
 
 %Removing the communication overhead from the regulation algorithm involves detaching sharing of data from the algorithm. In order to do this
 
-For the Park Pilot to be able to compute the regulation algorithm, the Park Pilot needs information about every turbine in the farm. In the same way, when decentralizing the Park Pilot, if a turbine is to compute the regulation algorithm, the turbine needs information about every other turbine. This means the wind farm needs a global shared state, where information about every turbine in the wind farm is available to every turbine performing the regulation algorithm. 
+For the Park Pilot to be able to compute the regulation algorithm, the Park Pilot needs information about every turbine in the wind farm. In the same way, when decentralizing the Park Pilot, if a turbine is to compute the regulation algorithm, the turbine needs information about every other turbine. This means the wind farm needs a global shared state, where information about every turbine in the wind farm is available to every turbine performing the regulation algorithm. 
 
 %This is a major performance improvement and for that reason, performing the regulation sequence using a distributed database only is not enough, since reading/writing to the disk takes valuable milliseconds. Therefore regulation information needs to be kept in memory in order to keep regulation cycle time as low as possible. 
 
-This chapter describes and discusses different distributed computing paradigms as a way of making a global state for the turbines to compute the regulation algorithm themselves. The goal is to find the paradigm best suited for the Siemens case. Furthermore, the chapter describes relevant technologies within the chosen paradigm and discusses which technology is the best fit for the Siemens case.
-
-The chapter uses the following definition by Andrews~\cite{andrews2000foundations} for distributed computing: \textit{In distributed computing, each node or process has its own local memory and communication happens via message passing.}
-
-
+This chapter describes and discusses different communications paradigms as a way of making a global state for the turbines to compute the regulation algorithm themselves. The goal is to find the paradigm best suited for the Siemens case. Furthermore, the chapter describes relevant technologies within the chosen paradigm and discusses which technology is the best fit for the Siemens case.
 
 %Furthermore, when decentralizing the Wind Power Supervisor onto the turbines, the turbines obviously needs to be able to handle external data aggregation . For the heavy tasks, in terms of CPU power, distributed computing becomes relevant as a way of improving performance by combining the CPU power residing inside the turbines to compute a common task.
 
@@ -100,7 +100,7 @@ The publish/subscribe paradigm is event driven and corresponds to the observer d
 
 \subsection{Remote procedure call}
 \label{sec:analysis:rpc}
-Remote procedure call (RPC) is a communications paradigm built for client/server architecture~\cite{Microsoft2003RPC}, which makes remote interactions appear the same way as local interactions. The goal is to make the process of executing code on a remote machine as simple as calling a local function~\cite{dusseau2014intro} by factoring out common tasks, such as security, synchronization, and data flow handling. This explains the paradigms popularity in distributed computing. However distribution cannot be made completely transparent to the application, because it gives rise to further types of potential failures, like communication failures, that have to be dealt with explicitly~\cite{coulouris2005distributed}. 
+Remote procedure call (RPC) is a communications paradigm built for client/server architecture~\cite{Microsoft2003RPC}, which makes remote interactions appear the same way as local interactions. The goal is to make the process of executing code on a remote machine as simple as calling a local function~\cite{dusseau2014intro} by factoring out common tasks, such as security, synchronization, and data flow handling. This explains the paradigms popularity in distributed systems. However distribution cannot be made completely transparent to the application, because it gives rise to further types of potential failures, like communication failures, that have to be dealt with explicitly~\cite{coulouris2005distributed}. 
 
 The idea of RPC is quite simple. When a remote procedure is invoked, the calling environment is suspended, the parameters are passed across the network to the environment where the procedure is to execute and the desired procedure is executed at that location. When execution is finished, return values are sent back to the calling environment, where execution resumes~\cite{birrell1984implementing}.
 

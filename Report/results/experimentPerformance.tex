@@ -27,7 +27,7 @@ $$regulation~cycle~time=tSent-tOldestState$$
 	\label{fig:timingDecentral}
 \end{figure}
 
-The timestamp of the oldest turbine state is used to include network traffic in the regulation cycle time, as opposed to just sampling the time locally. Note that by this definition, it is possible for regulation cycle time to be lower than the sleep time, even though the sleep operation is a part of the regulation cycle. 
+The timestamp of the oldest turbine state is used to include network traffic in the regulation cycle time, as opposed to just sampling the time locally. Thus, if the decentralized solution is using cached data this will be reflected in the regulation cycle time. Note that by this definition, it is possible for regulation cycle time to be lower than the sleep time, even though the sleep operation is a part of the regulation cycle. 
 
 
 \subsection{Experiment 1: How sleep time impacts the regulation cycle time and the number of cache reads}
@@ -51,7 +51,7 @@ The purpose of this experiment is to answer the \ref{PS:Q:Performance} problem, 
 
 The experiments are performed with n=\testTurbineNumbers ~turbines. The sleep time is set to 20 ms and is constant for this experiment.
 
-The test system is expected to be running only one instance in a real life implementation, therefore the machine logging the data will only run one instance and the supporting machines will run the rest generating system load.
+The test system is expected to be running only one instance in a real life implementation, therefore the machine logging the data will only run one instance and the supporting machines will run the rest, generating system load.
 
 The following procedure is used each time the experiment is performed:
 \begin{enumerate}
