@@ -14,7 +14,7 @@ The traditional hierarchical control approach with central control points respon
 The present thesis aims to decentralize the control of turbines in order to increase the number of turbines handled per control unit and remove single points of failure. 
 %
 %This is done by letting each turbine regulate it's own power production in accordance with the power production of all other turbines in the wind farm.
-This is achieved by letting the turbines regulate power production themselves, while cooperating to reach the power production setpoint of the wind farm. Data storage and aggregation, resource management and communication are identified as key areas for decentralization.
+This is achieved by letting the turbines regulate power production themselves, while cooperating to reach the power production setpoint of the wind farm. Data storage and aggregation, load balancing and communication are identified as key areas for decentralization.
 %In place of the hierarchical control approach the aim is to decentralize the control of turbines in a wind farm by letting each turbine control it's own power production in accordance with the power production of all other turbines in the wind farm.
 %In place of the hierarchical control approach this thesis aim to let every turbine control itself in accordance with the power production of other turbines, in effect decentralizing the control of the wind farm.
 MongoDB, Linux Virtual Server and RTI Connext Data Distribution Service for Real-Time Systems (DDS) has been identified as optimal components for handling these key areas. 
@@ -30,7 +30,7 @@ Kontrol af det stigende antal møller i en vindmøllepark er problematisk.
 Den traditionelle hierarkiske kontrol tilgang med centrale kontrolpunkter, der har ansvar for at regulere turbinernes elproduktion skalerer ikke godt med antallet af turbiner, og introducerer single points of failure.
 Det nærværende speciale har til formål at decentralisere kontrollen af turbiner for at øge antallet af turbiner håndteret per kontrol enhed og fjerne single points of failure.
 Dette opnås ved at lade turbinerne regulere deres elproduktion selv, mens de samarbejder for at nå vindmølleparkens sætpunkt for elproduktion.
-Data lagring og indsamling, ressource håndtering og kommunikation bliver identificeret som nøgleområder med hensyn til decentralisering.  
+Data lagring og indsamling, load balancer og kommunikation bliver identificeret som nøgleområder med hensyn til decentralisering.  
 MongoDB, Linux Virtual Server og RTI Connext Data Distribution Service for Real-Time Systems (DDS) er blevet identificeret som værende optimale komponenter til håndtering af disse nøgleområder.
 En decentraliseret prototype af en vindmøllepark, der udfører strøm regulering ved brug af RTI Connext DDS til kommunikation, bliver præsenteret. 
 Prototypen bliver evalueret og sammenlignet med en prototype af en eksisterende Siemens Wind Power vindmøllepark. 
