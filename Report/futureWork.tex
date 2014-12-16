@@ -1,9 +1,27 @@
-\section{Future work}
+\chapter{Future work}
 \label{sec:futWork}
 During the work with this thesis we found the following areas which could be interesting for further research:
 
-\begin{itemize}
-	\item Further experiments
-	\item Load balancing and mongodb
-	\item Clustering
-\end{itemize}
+\section{Full scale experiment}
+The current test setup is limited in the number of turbines that can be simultaneously simulated. This has prevented exploring the true limits of a decentralized solution.
+A test setup with 1000 or more turbines would press the decentralized solution beyond the current limits of the centralized solution, thereby proving that a decentralized approach scales significantly better than the centralized. Currently Siemens Wind Power has wind farms typically are not this large\cite{simensOnShoreProjects,simensOffShoreProjects}. 
+
+
+\section{Identify the hardware limitation of the distributed solution's scalability}
+In the experiments it is seen how the decentralized solution scales in terms of cycle times, however the hardware performance parameters are not part of the experiments.
+Parameters like memory consumption, network throughput and processing time used, if these parameters are plotted against the number of turbines, a trend might emerge that could tell how many turbines the system could support with for example a system with a gigabit network adapter.
+
+
+\section{Implement missing system components}
+During the research phase a number of components where identified which would need to be used in a fully distributed version of the current Siemens system.
+A lot of complications could arise when build such a system. The identified components needs to tested and verified to work together and that they fulfill the requirements of a decentralized solutions. 
+
+
+\section{Clustered decentralized solution}
+The decentralized solution is not expected to scale infinitely, every time a turbine is added to the system we also add more load to the cpu and network adapter.
+Therefore a system where nodes work together in smaller groups called clusters, would allow limiting the number of nodes witch are included in the cluster's regulation cycle. 
+The clusters would only communicate together sparingly in order for the system to achieve a balanced production across clusters.
+The clusters must be designed to be large enough to be stable in the event of a node failure.
+This should push the scalability limit much further.
+
+
