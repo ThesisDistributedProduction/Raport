@@ -3,12 +3,12 @@
 
 \textit{How can we best re-implement the current Siemens system (\cref{sec:SiemensCase}) as a system where the Wind Power Supervisor and the Park Pilots are decentralized?}\newline\newline
 
-\noindent To answer whether or not the current Siemens system can be fully decentralized, the discussion section of this experiment also contains a discussion with regards to the components analyzed in \cref{cha:stateOfTheArt}: \nameref{cha:stateOfTheArt}. \todo{Why the chapter name ref?}
+\noindent To answer whether or not the current Siemens system can be fully decentralized, the discussion section of this experiment also contains a discussion with regards to the components analyzed in state of the art, see \cref{cha:stateOfTheArt}. \todo{Why the chapter name ref?}
 
 
 \subsection{Experiments}
 
-The \ref{PS:Q:Feasibility} problem address the possibility of reimplementing the current Siemens system as a decentralized system. The following experiment aims to investigate if the decentralized solution is able to regulate the power production of each turbine in order to maintain the global power production setpoint.
+The \ref{PS:Q:Feasibility} problem address the possibility of reimplementing the current Siemens system as a decentralized system. The following experiment aims to investigate if the decentralized solution is able to regulate the power production of each turbine, in order to maintain the global power production setpoint.
 %
 The experiment has the following procedure:
 \begin{enumerate}
@@ -31,7 +31,7 @@ The experiment has the following procedure:
 	}
 \end{figure}
 
-Presented in \cref{fig:graphicalInterface} is a screenshot of the graphical interface made with DDS Blockset for Simulink (described in section \cref{sec:graphicalInterface}). The x-axis show Time in seconds and the y-axis show kW production. The screenshot is taken while the decentralized solution runs 10 turbines.
+Presented in \cref{fig:graphicalInterface} is a screenshot of the graphical interface made with DDS Blockset for Simulink (described in section \cref{sec:graphicalInterface}). The x-axis show time in seconds and the y-axis show kW production. The screenshot is taken while the decentralized solution runs 10 turbines.
 The global setpoint for power production is illustrated by the red line and is showing a value of just below 5000 kW. The global power production is illustrated by the black line also just below 5000 kW.
 The blue line illustrates the maximum available power production for the wind farm which, during this experiment, was above 10,000 kW. The lines at the bottom shows values of around 500 kW and they each represents the current power production of each turbine.
 
