@@ -1,10 +1,10 @@
-	\tikzstyle{fact}=[rectangle, draw=none, rounded corners=1mm, fill=blue, drop shadow,
+	\tikzstyle{fact}=[rectangle, draw=none, rounded corners=1mm, fill=blue,
 	text centered, anchor=north, text=white]
-	\tikzstyle{source}=[circle, draw=none, fill=orange, circular drop shadow,
+	\tikzstyle{source}=[circle, draw=none, fill=black,
 	text centered, anchor=north, text=white]
-	\tikzstyle{target}=[circle, draw=none, fill=blue, circular drop shadow,
+	\tikzstyle{target}=[circle, draw=none, fill=gray,
 	text centered, anchor=north, text=white]
-	\tikzstyle{other}=[circle, draw=black!50, fill=white, circular drop shadow,
+	\tikzstyle{other}=[circle, draw=black!50, fill=white,
 	text centered, anchor=north, text=white]
 	%\tikzstyle{comment}=[rectangle, draw=black, fill=black!60, rounded corners, drop shadow,
 	%anchor=west, text=white, text width=6.5cm]
@@ -21,7 +21,7 @@
 		\begin{pgfonlayer}{background}
 			\path (Source.west |- Target2.north)+(-0.4,0.4) node (a) {};
 			\path (Target1.east |- Target3.south)+(0.4,-0.4) node (b) {};
-			\path [fill=yellow!40,rounded corners, draw=black!50, dashed] (a) rectangle (b); 
+			\path [fill=white,rounded corners, draw=black!50, dashed] (a) rectangle (b); 
 		\end{pgfonlayer}
 	\end{tikzpicture}
 	\caption{Unitcast}
@@ -41,7 +41,7 @@
 		\begin{pgfonlayer}{background}
 		\path (Source.west |- Target2.north)+(-0.4,0.4) node (a) {};
 		\path (Target1.east |- Target3.south)+(0.4,-0.4) node (b) {};
-		\path [fill=yellow!40,rounded corners, draw=black!50, dashed] (a) rectangle (b); 
+		\path [fill=white,rounded corners, draw=black!50, dashed] (a) rectangle (b); 
 		\end{pgfonlayer}
 	\end{tikzpicture}
 	\caption{Broadcast}
@@ -61,7 +61,7 @@
 		\begin{pgfonlayer}{background}
 			\path (Source.west |- Target2.north)+(-0.4,0.4) node (a) {};
 			\path (Target1.east |- Target3.south)+(0.4,-0.4) node (b) {};
-			\path [fill=yellow!40,rounded corners, draw=black!50, dashed] (a) rectangle (b); 
+			\path [fill=white,rounded corners, draw=black!50, dashed] (a) rectangle (b); 
 		\end{pgfonlayer}
 	\end{tikzpicture}
 	\caption{Multicast}
