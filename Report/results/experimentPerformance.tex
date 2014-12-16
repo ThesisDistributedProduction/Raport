@@ -8,7 +8,7 @@
 
 %Scalability is by Bondi\cite{Bondi:2000:CSI:350391.350432} defined as \textit{the systems ability to accommodate an increasing number of elements or objects, to process growing volumes of work gracefully, and/or to be susceptible to enlargement}.
 
-The \ref{PS:Q:Performance} question asks if the proposed decentralized solution is able to keep a constant regulation cycle time independent from the number of turbines. This problem operates in a 3-dimensional space with regulation cycle time (ms), number of cache reads and number of turbines as parameters. To study the correlation between the parameters, we isolate two parameters by making the third constant.
+The \ref{PS:Q:Performance} problem address if the proposed decentralized solution is able to keep a constant regulation cycle time independent from the number of turbines. This problem operates in a 3-dimensional space with regulation cycle time (ms), number of cache reads and number of turbines as parameters. To study the correlation between the parameters, we isolate two parameters by making the third constant.
 
 Thus to fully address \ref{PS:Q:Performance} this experiment has been divided into two experiments:
  
@@ -88,7 +88,7 @@ We use the following box plot type (for \cref{fig:exp:decen:sleep} and \cref{fig
 
 \FloatBarrier
 
-\Cref{fig:exp:decen:sleep-cache} show that the average cache reads is declining when increasing the sleep time. As described in \cref{sec:cachereads}, cache reads only indicates if a given state has been read before, thus the number does not increase with the number times the same state has been read. Again, the 10 ms data point should be disregarded due to limited experiment equipment.
+\Cref{fig:exp:decen:sleep-cache} show that the average cache reads is declining when increasing the sleep time. As described in \cref{sec:cachereads}, cache reads only indicates if a given state has been read before, thus the number does not increase with the number of times the same state has been read. Again, the 10 ms data point should be disregarded due to limitations of the test setup.
 %, a fitted function of the plot has been put on top (red), the plot is in Matlab fitted against the function $\dfrac{a}{x + b} + c$.
 
 \clearpage
@@ -122,9 +122,9 @@ The outliers span from 0 ms to 150 ms of regulation cycle time.
         
         
 \subsection{Discussion} 
-The decentralized solution aims to detach the regulation cycle time from the number of turbines, by making reception of turbine state happen in parallel with the regulation cycle. As a consequence of this the term cache reads has been introduced to the system, since the detaching of receiving states from the regulation cycle opens for the possibility, that a given state from a turbine is used multiple times in a row for regulation. 
+The decentralized solution aims to detach the regulation cycle time from the number of turbines, by making reception of turbine state happen in parallel with the regulation cycle. As a consequence of this the term cache reads has been introduced to the system, since the detaching of receiving states from the regulation cycle opens for the possibility, that a given state from a turbine is used multiple times for regulation. 
 
-Looking at Experiment 1, we disregard the 10 ms data sets for both \cref{subsec:Exper:perfom:1} and \cref{fig:exp:decen:sleep-cache}, due to limited experiment equipment. Running with a 10 ms sleep time, caused our experiment setup to approach maximum network adapter capacity, due to too many packages, thus resulting in package delays, obscuring the experiment results.
+Looking at Experiment 1, we disregard the 10 ms data sets for both \cref{subsec:Exper:perfom:1} and \cref{fig:exp:decen:sleep-cache}, due to limited experiment equipment. Running with a 10 ms sleep time, caused our experiment setup to approach maximum network adapter capacity, due to too many packages in the network, thus resulting in package delays, obscuring the experiment results.
 
 Looking at \cref{fig:exp:decen:sleep} we observe a linearly dependency between the sleep time and the regulation cycle time (with the 10 ms data set disregarded). This is expected since the sleep operation is a part of the regulation cycle. 
 
