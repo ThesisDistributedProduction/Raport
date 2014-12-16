@@ -61,19 +61,15 @@ The downside however is the lack of the ACID properties which results in decreas
 
 The schema-less databases can be divided roughly into four categories~\cite{Fowler:IntroNoSQL, Moniruzzaman:NoSQLDatabaseNewEraOfDatabasesForBigDataAnalysis}:
 
-\begin{itemize}
-	\item \textbf{Document databases} \\
-	The document databases are primarily used to store semi structured data in the form of documents. The data is stored in attribute name-value pairs, where the attributes may vary between rows (non strict schema).
+\begin{description}
+	\item \textbf{Document databases} The document databases are primarily used to store semi structured data in the form of documents. The data is stored in attribute name-value pairs, where the attributes may vary between rows (non strict schema).
 	
-	\item \textbf{Key-value databases} \\
-	The key-value databases are primarily used for fast lookup of data based on a key. The data is stored in key-value pairs.
+	\item \textbf{Key-value databases} The key-value databases are primarily used for fast lookup of data based on a key. The data is stored in key-value pairs.
 	
-	\item \textbf{Column-family databases} \\
-	The column-family stores are primarily used for distributed data storage, batch processing of data and analytical processing for statistical use. The data is stored as key-value pairs where the value part contains columns of related data.
+	\item \textbf{Column-family databases} The column-family stores are primarily used for distributed data storage, batch processing of data and analytical processing for statistical use. The data is stored as key-value pairs where the value part contains columns of related data.
 	
-	\item \textbf{Graph databases} \\
-	Graph databases are primarily used to describe relationships between data. Data is stored as nodes and edges. Nodes contain key-value pairs of data and edges describe the relationship between nodes.
-\end{itemize}
+	\item \textbf{Graph databases} Graph databases are primarily used to describe relationships between data. Data is stored as nodes and edges. Nodes contain key-value pairs of data and edges describe the relationship between nodes.
+\end{description}
 
 %\subsubsection{Document databases}
 %The document databases are designed to contain documents.
@@ -325,11 +321,11 @@ Other features like distributed concurrency control and distributed query proces
 
 NewSQL data stores are divided into three categories~\cite{Prasanns:NewSQLTheNewWayToHandleBigData}:
 
-\begin{itemize}
-\item New databases: Completely new data storage systems designed for scalability and throughput.
-\item New MySQL storage engine: Keep the existing MySQL interface and redesign the data storage engine in order to achieve scalability.
-\item Transparent clustering and sharding: Provide extra features for transparent clustering and sharding on top of traditional SQL data store systems. 
-\end{itemize}
+\begin{description}
+\item [New databases] Completely new data storage systems designed for scalability and throughput.
+\item [New MySQL storage engine] Keep the existing MySQL interface and redesign the data storage engine in order to achieve scalability.
+\item [Transparent clustering and sharding] Provide extra features for transparent clustering and sharding on top of traditional SQL data store systems. 
+\end{description}
 
 \subsection{SQL, NoSQL or NewSQL?}
 This thesis aims to create a decentralized system with scalability and availability as the most important goals.

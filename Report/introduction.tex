@@ -184,11 +184,11 @@ The turbines, Wind Power Supervisor and Park Pilots are connected with a gigabit
 \label{sec:ThesisMotivation}
 Today's setup at Siemens Wind Power (\cref{sec:SiemensCase}) is an example of a system wished to be made decentralized. The current setup poses the following challenges to Siemens:  
 
-\begin{itemize} 
-	\item Single point of failure. Should a Wind Power Supervisor or a Park Pilot fail, a part of the wind farm will become unavailable.
-	\item Low scalability. The Wind Power Supervisor and Park Pilots does not scale well with the number of turbines. This is reflected in the wind farm regulation performance. Today a wind farm regulation cycle time is 150 ms. This regulation cycle time is set after worst case setpoint retrieval time, worst case new setpoint calculations and worst case time it takes to broadcast new setpoints. This ultimately depends on worst case number of turbines per Park Pilot.
-	\item High regulation cycle time. As mentioned, the regulation cycle time of the current Siemens system is 150 ms and is a direct result of the low scalability. Siemens expects a demand for a lower regulation cycle time in the future.
-\end{itemize}
+\begin{description} 
+	\item [Single points of failure] Should a Wind Power Supervisor or a Park Pilot fail, a part of the wind farm will become unavailable.
+	\item [Low scalability] The Wind Power Supervisor and Park Pilots does not scale well with the number of turbines. This is reflected in the wind farm regulation performance. Today a wind farm regulation cycle time is 150 ms. This regulation cycle time is set after worst case setpoint retrieval time, worst case new setpoint calculations and worst case time it takes to broadcast new setpoints. This ultimately depends on worst case number of turbines per Park Pilot.
+	\item [High regulation cycle time] As mentioned, the regulation cycle time of the current Siemens system is 150 ms and is a direct result of the low scalability. Siemens expects a demand for a lower regulation cycle time in the future.
+\end{description}
 
 Siemens wishes to decentralize the Wind Power Supervisor and Park Pilots by distributing their functionality to the turbines, utilizing the free computing capacity of the computers already residing in every turbine. This would increase availability by removing single points of failure. Furthermore, this would increase scalability of the system, opening for performance optimizations of the wind farm regulation cycle time by decreasing the coupling between the regulation cycle time and the number of turbines. 
 

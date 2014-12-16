@@ -90,7 +90,6 @@ This section describes the components of a regulation cycle in the centralized s
 		\label{fig:getStatesOfTurbines} 
 		\footnotesize{%
 			First part of the regulation cycle: Getting the state of all turbines.
-			\todo[inline]{Hvilken bedre forståelse får man ved at have mellem ledet på?}
 		}
 	}
 \end{figure}
@@ -162,7 +161,6 @@ void CentralizedParkPilot::regAlgorithm(
 		\label{fig:cenRegAlgCode} 
 		\footnotesize{%
 			Code for the centralized regulation algorithm used to calculate setpoints.
-			\todo[inline]{Høre det ikke til i et appendix? Måske kan det omskrives til mere kompakt psedu kode og stadigvæk bruges.}
 		}
 	}
 \end{figure}
@@ -215,7 +213,6 @@ After calculating the setpoints (\cref{sec:calculateSetpoints}), the Park Pilot 
 \end{figure}
 
 The main purpose of Turbine Outlet object is to register and publish setpoints to each turbine. Upon instantiation, the Turbine Outlet registers the turbine id as a RTI Connext key~\cite{rtiConnextUsersManual} to the setpoint topic and saves the handle object. Saving the handle upon registration and using the handle when writing improves performance~\cite{DDSInstanceHandlet}, which is why the handle is saved with the object. Lastly the object writes the data to the topic.
-\todo[inline]{Does the metioning of the handle object bring anything new to the reader except for confusion of a new tearm? To my knowledge handle object only help preallocate and therefore only improve performance during startup which we dont messure...}
 
 The Setpoint Listener object listens on a Content Filtered Topic~\cite{rtiConnextUsersManual}, the listener only reacts to messages with a key that equals the turbines id. When Setpoint Listener object is invoked, the new setpoint is saved to the Turbine object, which updates the state of the turbine.
 
@@ -306,12 +303,11 @@ Quality of Service (QoS) parameters are parameters used to determine the behavio
 
 In order to decide the QoS parameters for the centralized solution, the QoS XML file from the current system at Siemens was provided by Siemens and can be found in \cref{appendix:siemensQosFile}. Thus QoS parameters for the centralized solution has been set using this file, which presents many different QoS profiles.
 
-The Siemens QoS XML file specifies one DomainParticipantFactory profile. This profile has been applied to the solution and parameters irrelevant to the purpose of this thesis has been removed from the profile.\todo[inline]{Gives very little to no information, explain what has been removed or delete?}
+The Siemens QoS XML file specifies one DomainParticipantFactory profile. This profile has been applied to the solution and parameters irrelevant to the purpose of this thesis has been removed from the profile.
 
 The Siemens QoS XML file specifies two DomainParticipant profiles. One using UDPv4 and one using DTLS as transport plugin. The one using UDPv4 has been chosen for the centralized solution, since DTLS encryption and decryption is an unnecessary overhead, that either should be used for both the centralized- and the decentralized solution or for neither, in order for the two solutions to be compared on equal terms. Thus for simplicity neither of the solutions use DTLS.
 
-As for DataReaders, DataWriters and Topics, the file specifies multiple profiles the use of which is unknown. Thus it is unknown which ones has been used for the part of the system that is implemented with the centralized solution. Furthermore since the centralized solution is a simplified version of the current Siemens system it will not need the number of DataReaders, DataWriters and Topics that the current Siemens system apply.
-\todo[inline]{The difference should be explained, we need to argue the use better...}
+As for DataReaders, DataWriters and Topics, the file specifies multiple profiles, the use of which is unknown. Thus it is unknown which ones has been used for the part of the system that is implemented with the centralized solution. Furthermore since the centralized solution is a simplified version of the current Siemens system it will not need the number of different DataReaders, DataWriters and Topics that the current Siemens system apply.
 
 Each QoS parameter in every QoS profile has been evaluated and the parameters relevant to the purpose of this theses has been applied to the centralized solution, based on assumptions about the current Siemens system. The QoS XML file roughly presents profiles that combines the following parameters in different ways:
 
@@ -322,8 +318,7 @@ Each QoS parameter in every QoS profile has been evaluated and the parameters re
 	
 	\item \textbf{Reliable} profiles are configured to make sure that data sent is received and missed samples are resent. DataWriters will send samples reliably to DataReaders, buffering sent data until they have been acknowledged as being received by DataReaders and resending any samples that may have been lost during transport. The DataWrite buffer of this configuration is set to the size of one message, which means only the newest message is resent. This implies that an unacknowledged sample may be overwritten and thus lost. 
 	
-	\item \textbf{Strictly reliable} profiles are configured like reliable profiles, but with a larger DataWriter buffer. Increasing the DataWriter buffer size will decrease the chance of unacknowledged samples being overwritten. Thus DataReaders are ensured all messages sent by the DataWriters.
-	\todo[inline]{Som jeg for står reliability så er strict reliability når data er garanteret at nå frem og systemet blokere hvis bufferen bliver fuld}
+	\item \textbf{Strictly reliable} profiles are configured like reliable profiles, but with a larger DataWriter buffer. Increasing the DataWriter buffer size will decrease the chance of unacknowledged samples being overwritten. Thus DataReaders are ensured all messages sent by the DataWriters up to the size of the DataWriter buffer.
 	
 \end{itemize}
 
@@ -659,8 +654,6 @@ The delta between the current Siemens system and the centralized solution is pre
 		Regulation algorithm & Black box & Naive \\
 		\hline
 		Architecture & Cluster based & Centralized \\
-		\hline
-		Wind Power Supervisor & \checkmark & \text{x} \\
 		\hline
 		\hline
 	\end{tabular}

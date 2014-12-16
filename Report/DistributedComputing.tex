@@ -435,25 +435,20 @@ Communicating via multicating is efficient and ensures that each node can be con
 \subsection{Main DDS entities}
 RTI Connext provides a number of entities that must be present in a system in order to enable commmunication.
 
-\begin{itemize}
-	\item \textbf{DomainParticipant} \\
+\begin{description}
+	\item [DomainParticipant]
 		\textit{Domains} represent logical, isolated, communication networks. Entities existing in different \textit{Domains} are unable to communicate with each other. The \textit{DomainParticipant} is created with an integer value specifying the \textit{Domain} it belongs to. The \textit{DomainParticipants} owns the \textit{Topics}, \textit{Publishers} and \textit{Subscribers} in effect making them belong to a specific \textit{Domain}.
 	
-	\item \textbf{Publisher} \\
-		A \textit{Publisher} owns and manages a number of \textit{DataWriters}. The \textit{Publisher} is responsible for the publishing of data provided by the \textit{DataWriters}. One \textit{Publisher} can publish data from several \textit{DataWriters} on several different \textit{Topics}.
+	\item [Publisher] A \textit{Publisher} owns and manages a number of \textit{DataWriters}. The \textit{Publisher} is responsible for the publishing of data provided by the \textit{DataWriters}. One \textit{Publisher} can publish data from several \textit{DataWriters} on several different \textit{Topics}.
 	
-	\item \textbf{Subscriber} \\
-		A \textit{Subscriber} owns and manages a number of \textit{DataReaders}. The \textit{Subscriber} is responsible for the receipt of published data on behalf of the \textit{DataReaders}. One \textit{Subscriber} can receive data for several \textit{DataReaders} on several different \textit{Topics}. 
+	\item [Subscriber] A \textit{Subscriber} owns and manages a number of \textit{DataReaders}. The \textit{Subscriber} is responsible for the receipt of published data on behalf of the \textit{DataReaders}. One \textit{Subscriber} can receive data for several \textit{DataReaders} on several different \textit{Topics}. 
 	
-	\item \textbf{Topic} \\
-		\textit{Topics} interconnect \textit{DataReaders} and \textit{DataWriters}. \textit{DataWriters} can subscribe to a \textit{Topic} and receive data each time a \textit{DataReader} publishes data to the same \textit{Topic}.
+	\item [Topic] \textit{Topics} interconnect \textit{DataReaders} and \textit{DataWriters}. \textit{DataWriters} can subscribe to a \textit{Topic} and receive data each time a \textit{DataReader} publishes data to the same \textit{Topic}.
 	
-	\item \textbf{DataWriter} \\
-		A \textit{Datawriter} is owned by a single \textit{Publisher}. It is associated with a single \textit{Topic} and is able to send data to this \textit{Topic} using the owning \textit{Publisher}.
+	\item [DataWriter] A \textit{Datawriter} is owned by a single \textit{Publisher}. It is associated with a single \textit{Topic} and is able to send data to this \textit{Topic} using the owning \textit{Publisher}.
 	
-	\item \textbf{DataReader} \\
-		A \textit{DataReader} is owned by a single \textit{Subscriber}. It is associated with a single \textit{Topic} and is able to receive data published to this \textit{Topic} using the owning \textit{DataReader}.
-\end{itemize}
+	\item [DataReader] A \textit{DataReader} is owned by a single \textit{Subscriber}. It is associated with a single \textit{Topic} and is able to receive data published to this \textit{Topic} using the owning \textit{DataReader}.
+\end{description}
 
 \begin{figure}
 	\centering
@@ -513,25 +508,19 @@ The Simple Discovery Protocol does not scale well with the number of endpoints. 
 \subsection{Quality of Service}
 DDS provides Quality of Service(QoS) parameters to enable very fine grained control over the behavior of the deployed DDS entities in a system. To create a decentralized system several of the QoS parameters are interesting.
 
-\begin{itemize}
-	\item \textbf{Multicast} \\
-		Enabling multicast in the system will decrease the network traffic in the system, which in turn increases scalability.
+\begin{description}
+	\item [Multicast] Enabling multicast in the system will decrease the network traffic in the system, which in turn increases scalability.
 		
-	\item \textbf{History} \\
-		The History parameter will enable the system to keep a log of messages received during operation thus eliminating the need for another storage option. This saves the system from using additional resources for storing and retrieving values from a file or a local database.
+	\item [History] The History parameter will enable the system to keep a log of messages received during operation thus eliminating the need for another storage option. This saves the system from using additional resources for storing and retrieving values from a file or a local database.
 		
-	\item \textbf{Lifespan} \\
-		The History parameter enables the system to keep a log of messages but the history may only be relevant for a specified amount of time. In order not to keep irrelevant messages it can be specified how long they are relevant.
+	\item [Lifespan] The History parameter enables the system to keep a log of messages but the history may only be relevant for a specified amount of time. In order not to keep irrelevant messages it can be specified how long they are relevant.
 	
-	\item \textbf{Durability} \\
-		To make sure a new turbine can start operation the Durability parameter can be used in order to update the new turbine with the history of messages in the system. In this way the turbine does not need to wait to receive new data from individual turbines to start regulation, instead it can start regulation as soon as the history is received.
+	\item [Durability] To make sure a new turbine can start operation the Durability parameter can be used in order to update the new turbine with the history of messages in the system. In this way the turbine does not need to wait to receive new data from individual turbines to start regulation, instead it can start regulation as soon as the history is received.
 		
-	\item \textbf{Reliability} \\
-		This parameter regulates the reliable delivery of messages in the system, which affect the operation of the turbines and their regulation.
+	\item [Reliability] This parameter regulates the reliable delivery of messages in the system, which affect the operation of the turbines and their regulation.
 		
-	\item \textbf{Liveness} \\
-		The Liveness parameter specifies how liveness of a \textit{DataWriter} is determined. This allows the system to detect when a turbine is no longer available and to respond in an appropriate way.
-\end{itemize}
+	\item [Liveness] The Liveness parameter specifies how liveness of a \textit{DataWriter} is determined. This allows the system to detect when a turbine is no longer available and to respond in an appropriate way.
+\end{description}
 
 Using the QoS of DDS a system can be configured to fit its environment and its requirements very tightly allowing efficient and reliable operation. QoS will be elaborated further in chapters \cref{cha:existingSystem} and \cref{cha:decentralizedSystem}.
 

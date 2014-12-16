@@ -127,11 +127,11 @@ Before running the regulation cycle illustrated in \cref{fig:decenRegCycle}, an 
 
 \Cref{fig:decenRegCycle} presents three objects:
 
-\begin{itemize}
-	\item The \textbf{Park Pilot} object which handles the regulation cycle. As opposed to the centralized solution, the Park Pilot object is now instantiated on every turbine in the wind farm, instead of being a single external component.
-	\item The \textbf{Turbine} object which serves as the interface to the underlying Turbine. The Turbine object for the purpose of this thesis is just a simulation of an actual turbine. Thus this object handles communication with a database with actual turbine data provided by Siemens Wind Power.
-	\item \textbf{Connext} is the underlying DDS framework used for communication, thus this is not an object instantiated by the Park Pilot. It is however what enables reception of data in parallel with the regulation cycle. 
-\end{itemize}
+\begin{description}
+	\item [Park Pilot] object which handles the regulation cycle. As opposed to the centralized solution, the Park Pilot object is now instantiated on every turbine in the wind farm, instead of being a single external component.
+	\item [The Turbine] object which serves as the interface to the underlying Turbine. The Turbine object for the purpose of this thesis is just a simulation of an actual turbine. Thus this object handles communication with a database with actual turbine data provided by Siemens Wind Power.
+	\item [Connext] is the underlying DDS framework used for communication, thus this is not an object instantiated by the Park Pilot. It is however what enables reception of data in parallel with the regulation cycle. 
+\end{description}
 
 The Park Pilot publishes the state of the present turbine and reads the states of every turbine within the wind farm. Afterwards the regulation algorithm is performed and a setpoint for the present turbine is calculated and used to set a new state.
 
@@ -240,7 +240,7 @@ The Quality of Service (QoS) parameters for the decentralized solution is based 
 \begin{description}
 	\item[Reliability] of messaging has been changed to best effort messaging in order to reduce the regulation cycle time. This means package drops are allowed for the decentralized solution.
 	\item[Durability] of the decentralized solution has been changed to local durability. This means that the current state of every turbine is sent to newly discovered turbines. Note that with best effort messaging there is no guarantee that the states are received, since package drops are allowed. Durability for the regulation cycle has only minor relevance, since newly arrived turbines will receive all states within a short amount of time after being discovered. Thus this setting has only been applied, since an attempt to receive states upon startup is better than receiving no states at all. However, for real life purposes, the turbines should probably be configured with a default setpoint, which is used until data from all turbines has been received, in combination with this setting. 
-	\item[Throughput] remains the same as the throughput setting of the centralized solution but for a slightly different reason. New turbine states must be sent as soon as possible, which removes the need for batching. \todo{Hvorfor gør det batching irrelevant?} Thus regular throughput has been chosen for the decentralized solution. 
+	\item[Throughput] remains the same as the throughput setting of the centralized solution but for a slightly different reason. New turbine states must be sent as soon as possible, which removes the need for batching. Thus regular throughput has been chosen for the decentralized solution. 
 	\item[Multicast] has been enabled to reduce regulation cycle time and network traffic, as explained in \cref{sec:regCycleChanges}.
 \end{description}
 
