@@ -79,7 +79,7 @@ A downside to the DSM abstraction is that it introduces overhead to the system, 
 
 Publish/subscribe is a messaging pattern where communication is interest based instead of address based. Messages are characterized into classes and sent by publishers, without knowledge of how many subscribers there may be. Nodes can then subscribe to one or more classes of interest, without knowledge of how many publishers there are, providing a more decoupled, scalable and flexible interaction model.
 
-\begin{figure}
+\begin{figure}[b]
 	\centering
 	\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{PublishSubscribe.png} 
 	\captionsetup{format=plain,font=footnotesize,labelfont={bf,defaultCapFont},labelsep=quad,singlelinecheck=no}
@@ -392,8 +392,7 @@ The the decentralized prototype is built using DDS, DDS will be presented in dep
 
 \section{Data Distribution Service for Real-Time Systems}
 \label{sec:DDS}
-The DDS standard provides a number of services that a decentralized system like the one this thesis aims to create could profit from.
-Services include amongst others:
+The DDS standard provides a number of services relevant to a decentralized solution like the one this thesis aims to create:
 
 \begin{itemize}
 	\item Automatic node discovery
