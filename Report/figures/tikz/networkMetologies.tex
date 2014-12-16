@@ -8,6 +8,8 @@
 	text centered, anchor=north, text=white]
 	%\tikzstyle{comment}=[rectangle, draw=black, fill=black!60, rounded corners, drop shadow,
 	%anchor=west, text=white, text width=6.5cm]
+\begin{minipage}{.33\textwidth}
+	\centering
 	\begin{tikzpicture}[node distance=0.8cm]
 		\node (Source) [source] {};
 		\node (Target1) [target,right=of Source] {} edge [<-] (Source);
@@ -24,9 +26,11 @@
 	\end{tikzpicture}
 	\caption{Unitcast}
 	\label{fig:networkUnicast}
-	
-	\vspace{10pt}
-		\begin{tikzpicture}[node distance=0.8cm]	
+\end{minipage}
+%
+\begin{minipage}{.3\textwidth}
+	\centering
+	\begin{tikzpicture}[node distance=0.8cm]
 		\node (Source) [source] {};
 		\node (Target1) [target,right=of Source] {} edge [<-] (Source);
 		\node (Target2) [target,above=of Target1] {} edge [<-] (Source);
@@ -35,15 +39,17 @@
 		\node (Target3) [target,below=of Source] {} edge [<-] (Source);
 		
 		\begin{pgfonlayer}{background}
-			\path (Source.west |- Target2.north)+(-0.4,0.4) node (a) {};
-			\path (Target1.east |- Target3.south)+(0.4,-0.4) node (b) {};
-			\path [fill=yellow!40,rounded corners, draw=black!50, dashed] (a) rectangle (b); 
+		\path (Source.west |- Target2.north)+(-0.4,0.4) node (a) {};
+		\path (Target1.east |- Target3.south)+(0.4,-0.4) node (b) {};
+		\path [fill=yellow!40,rounded corners, draw=black!50, dashed] (a) rectangle (b); 
 		\end{pgfonlayer}
 	\end{tikzpicture}
 	\caption{Broadcast}
 	\label{fig:networkBroadcast}
-			
-	\vspace{10pt}
+\end{minipage}
+%			
+\begin{minipage}{.33\textwidth}
+	\centering
 	\begin{tikzpicture}[node distance=0.8cm]	
 		\node (Source) [source] {};
 		\node (Target1) [target,right=of Source] {} edge [<-] (Source);
@@ -60,4 +66,4 @@
 	\end{tikzpicture}
 	\caption{Multicast}
 	\label{fig:networkMulticast}
-		
+\end{minipage}
