@@ -358,7 +358,7 @@ This section provides a detailed evaluation of every parameter used for the dece
 	Furthermore, this parameter also indirectly controls how many and which turbines should be used for the regulation algorithm. If a state is older than 150 ms, the state is automatically removed from the receive buffer, thus it is removed from the data that is read and used for the regulation algorithm. As the regulation algorithm automatically scales with the number of turbines, from which a state has been received within the latest 150 ms, the turbine which have not sent a new state within 150 ms will be considered offline. For this reason the lifespan parameter is responsible for the tolerance of the decentralized solution. If a turbines fails, the state of the turbine will eventually expire, thus removing the turbine from the regulation algorithm.
 \end{itemize}
 
-\begin{figure}[!h]
+\begin{figure}[t]
 \begin{lstlisting}[language=XML]
 <datawriter_qos>
 	<publication_name>
@@ -384,7 +384,7 @@ This section provides a detailed evaluation of every parameter used for the dece
 	\item \textbf{multicast} specifies the multicast addresses on which DataReaders receives data from DataWriters. 
 \end{itemize}
 
-\begin{figure}[!h]
+\begin{figure}[!t]
 \begin{lstlisting}[language=XML]
 <datareader_qos>
 	<subscription_name>
@@ -427,7 +427,7 @@ The delta between the centralized solution and the decentralized solution is pre
 
 The regulation cycle has been changed as well and the changes are presented in detail in \cref{fig:cycleCentralVSDecentral}. Furthermore the architecture of the entire solution has been changed from centralized to decentralized.
 
-\begin{table}[!h]
+\begin{table}[!t]
 	\begin{tabular}{l l l}
 		\hline
 		\hline
